@@ -88,17 +88,4 @@ public class ProgramFilesEntity {
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
-
-//    private UserInfoEntity userIdTemp;
-//
-//    @ManyToOne
-//    public
-//    @javax.persistence.JoinColumn(name = "user_id", referencedColumnName = "id")
-//    UserInfoEntity getUserIdTemp() {
-//        return userIdTemp;
-//    }
-//
-//    public void setUserIdTemp(UserInfoEntity userIdTemp) {
-//        this.userIdTemp = userIdTemp;
-//    }
 }
