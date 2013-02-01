@@ -12,7 +12,7 @@ import java.util.List;
 public class UserInfoEntity {
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -82,7 +82,6 @@ public class UserInfoEntity {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private List<ProgramFilesEntity> programFiles;
-
 
     public List<ProgramFilesEntity> getProgramFiles() {
         return programFiles;

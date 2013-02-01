@@ -8,7 +8,7 @@
 <body>
 <form:form method="post" action="/e-Testing/SaveProgram" commandName="program" encType="multipart/form-data">
 <c:if test="${not empty student.id}">
-    <input type="hidden" id="id" name="id"
+    <input type="hidden" id="studentId" name="studentId"
            value="${student.id}"/>
 </c:if>
       <div style="margin-left: 1100px">

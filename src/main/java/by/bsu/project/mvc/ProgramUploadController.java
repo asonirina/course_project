@@ -15,9 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Alina Glumova
  */
@@ -27,8 +24,6 @@ public class ProgramUploadController {
 
     @Autowired
     private UserInfoService userInfoService;
-
-    private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<ProgramFilesEntity>();
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -47,18 +42,15 @@ public class ProgramUploadController {
 
     @RequestMapping(value = "/SaveProgram")
     public String processUploadPreview(
-            @RequestParam("file") MultipartFile file,@RequestParam(value = "id", required = false) Long id,
+            @RequestParam("file") MultipartFile file,@RequestParam(value = "studentId", required = false) Long studentId,
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity) throws Exception {
 
         String fileName = file.getOriginalFilename();
-        programFilesEntity.setUserId(id);
         programFilesEntity.setFile(file.getBytes());
         programFilesEntity.setFileName(fileName);
         programFilesEntity.setContentType(file.getContentType());
-        programFilesEntityList.add(programFilesEntity);
-
-        UserInfoEntity userInfoEntity = userInfoService.getStudentById(id);
-        userInfoEntity.setProgramFiles(programFilesEntityList);
+        UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
+        userInfoEntity.getProgramFiles().add(programFilesEntity);
 
         userInfoService.save(userInfoEntity);
         return "redirect:/e-Testing/UploadProgramStatus";
