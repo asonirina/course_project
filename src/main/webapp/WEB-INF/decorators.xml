@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<decorators defaultdir="/jsp/decorator">
+    <decorator name="layout" page="layout.jsp">
+        <pattern>/e-Testing/*</pattern>
+    </decorator>
+</decorators>

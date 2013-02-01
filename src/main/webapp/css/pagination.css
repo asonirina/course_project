@@ -1,0 +1,49 @@
+.pagingItem {
+    margin: 0 2px;
+    padding: 0 2px;
+    background-color: #EEE;
+    border: 1px solid #818181;
+    color: #000000;
+    font-size: 0.9em;
+    line-height: 1.5em;
+}
+
+.pagingItem:hover {
+    color: #fff;
+    background-color: #999999;
+    text-decoration: none;
+}
+
+.pagingItemCurrent {
+    padding: 0 2px;
+    margin: 0 2px;
+    font-weight: normal;
+    color: #fffefd;
+    background-color: #eeeeee;
+    border: 1px solid #bababa;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.pagingItemCurrent:hover {
+    color: #fff;
+    background-color: #999999;
+    text-decoration: none;
+}
+
+.pagingButton {
+    background: transparent;
+    padding: 7px 5px;
+    font-size: 13px;
+    font-family: "MS Sans Serif";
+    font-weight: normal;
+    cursor: pointer;
+    width:100px;
+}
+
+.pagingButton:hover {
+    color: #fff;
+    background-color: #999999;
+    text-decoration: none;
+}
+
