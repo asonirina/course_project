@@ -1,5 +1,6 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alina Glumova
@@ -23,6 +26,8 @@ public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
 
     @RequestMapping(value = "/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page, Model model) {
@@ -44,6 +49,7 @@ public class UserInfoController {
 
     @RequestMapping(value = "/SaveStudent", method = RequestMethod.POST)
     public String save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity) {
+        userInfoEntity.setProgramFiles(programFilesEntityList);
         userInfoService.save(userInfoEntity);
         return "redirect:/e-Testing/ViewStudent?id=" + userInfoEntity.getId();
     }
@@ -55,6 +61,7 @@ public class UserInfoController {
         } else {
             userInfoEntity = new UserInfoEntity();
         }
+        programFilesEntityList = userInfoEntity.getProgramFiles();
         return new ModelAndView("EditStudent", "student", userInfoEntity);
     }
 

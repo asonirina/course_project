@@ -45,9 +45,8 @@ public class ProgramUploadController {
             @RequestParam("file") MultipartFile file,@RequestParam(value = "studentId", required = false) Long studentId,
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity) throws Exception {
 
-        String fileName = file.getOriginalFilename();
         programFilesEntity.setFile(file.getBytes());
-        programFilesEntity.setFileName(fileName);
+        programFilesEntity.setFileName(file.getOriginalFilename());
         programFilesEntity.setContentType(file.getContentType());
         UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
         userInfoEntity.getProgramFiles().add(programFilesEntity);
