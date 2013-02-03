@@ -17,19 +17,19 @@
     </c:if>
     <div style="text-align: center">
         <form:label path="firstName">Имя</form:label>
-        <form:input path="firstName" value="${student.firstName}" cssStyle="margin-left: 100px"/><br><br>
+        <form:input path="firstName" value="${student.firstName}" cssStyle="margin-left: 100px"/><br>
 
         <form:label path="secondName">Фамилия</form:label>
-        <form:input path="secondName" value="${student.secondName}" cssStyle="margin-left: 71"/><br><br>
+        <form:input path="secondName" value="${student.secondName}" cssStyle="margin-left: 71"/><br>
 
         <form:label path="form">Класс</form:label>
-        <form:input path="form" value="${student.form}" cssStyle="margin-left: 91"/><br><br>
+        <form:input path="form" value="${student.form}" cssStyle="margin-left: 91"/><br>
 
         <form:label path="login">Логин</form:label>
-        <form:input path="login" value="${student.login}" cssStyle="margin-left: 90"/><br><br>
+        <form:input path="login" value="${student.login}" cssStyle="margin-left: 89"/><br>
 
         <form:label path="password">Пароль</form:label>
-        <form:password path="password" value="${student.password}" cssStyle="margin-left: 82"/><br><br>
+        <form:password path="password" value="${student.password}" cssStyle="margin-left: 81"/><br><br>
 
         <input type="submit" class="button" value="Сохранить"/>
         <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"

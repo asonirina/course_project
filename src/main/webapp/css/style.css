@@ -182,8 +182,9 @@ h1{
 
 #page-footer {
     width: 770px;
-    padding: 20px 100px;;
-    text-align: right;
+    padding: 20px 100px;
+    margin-left: 500px;
+    /*text-align: right;*/
     color: #12526d;
 }
 

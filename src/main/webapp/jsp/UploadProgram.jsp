@@ -19,7 +19,7 @@
     <form:input path="programName" value="${program.programName}" cssStyle="margin-left: 100px"/><br><br>
 
     <span style="margin-left: 130px;"></span><c:out value="Фаил на проверку"/></span>
-    <input type="file" value="${program.file}" name="file" style="margin-left: 136px"><br><br>
+    <input type="file" value="${program.file}" name="file" style="margin-left: 137px"><br><br>
 
     <div style="text-align: center;">
        <input type="submit" class="button" value="Отправить"/>
