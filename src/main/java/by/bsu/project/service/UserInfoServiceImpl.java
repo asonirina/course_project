@@ -1,6 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
+import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     public void save(UserInfoEntity userInfoEntity) {
-       userInfoDAO.save(userInfoEntity);
+        userInfoDAO.save(userInfoEntity);
+    }
+
+    @Transactional
+    public ProgramFilesEntity getFileById(Long id) {
+        return userInfoDAO.getFileById(id);
     }
 
     @Transactional
@@ -39,7 +45,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public Long studentsCountList () {
+    public Long studentsCountList() {
         return userInfoDAO.studentsCountList();
     }
 }

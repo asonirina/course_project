@@ -10,12 +10,12 @@
 <body>
     <c:forEach var="student" items="${studentList}">
 
-        <label>Имя</label>
-        <span style="margin-left: 100px"><c:out value="${student.firstName}"/></span><br><br>
-        <label>Фамилия</label>
-        <span style="margin-left: 65px"><c:out value="${student.secondName}"/></span><br><br>
-        <label>Класс</label>
-        <span style="margin-left: 88px"><c:out value="${student.form}"/></span><br>
+        <span style="margin-left: 100px"><label>Имя</label></span>
+        <span style="margin-left: 100px"><c:out value="${student.firstName}"/></span><br>
+        <span style="margin-left: 100px"><label>Фамилия</label></span>
+        <span style="margin-left: 69px"><c:out value="${student.secondName}"/></span><br>
+        <span style="margin-left: 100px"><label>Класс</label></span>
+        <span style="margin-left: 89px"><c:out value="${student.form}"/></span><br>
 
         <div style="text-align: right;">
             <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"

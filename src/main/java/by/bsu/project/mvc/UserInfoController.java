@@ -7,6 +7,7 @@ import by.bsu.project.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,18 +81,17 @@ public class UserInfoController {
         return new ModelAndView("redirect:/e-Testing/StudentList.html");
     }
 
-//    @RequestMapping("/Download/{programId}")
-//    public String download(@PathVariable("programId")
-//                           Long programId, HttpServletResponse response) throws Exception {
-//            response.setHeader("Content-Disposition", "inline;filename=\"" +userInfoService.getStudentById(programId).getProgramFiles().get(0).getFileName()+ "\"");
-//            OutputStream out = response.getOutputStream();
-//            response.setContentType(userInfoService.getStudentById(programId).getProgramFiles().get(0).getContentType());
-//            IOUtils.copy(Hibernate.createBlob(userInfoService.getStudentById(programId).getProgramFiles().get(0).getFile()).getBinaryStream(), out);
-//            out.flush();
-//            out.close();
-//
-//            return null;
-//    }
+    @RequestMapping("/e-Testing/Download")
+    public String download(@RequestParam(value = "programId", required = false)
+                           Long programId, HttpServletResponse response,ProgramFilesEntity programFilesEntity) throws Exception {
+
+            programFilesEntity = userInfoService.getFileById(programId);
+            response.setHeader("Content-Disposition", "inline;filename=\"" +programFilesEntity.getFileName()+ "\"");
+            response.setContentType(programFilesEntity.getContentType());
+            response.setContentLength(programFilesEntity.getFile().length);
+            FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+            return null;
+    }
 
     @RequestMapping(value = "/e-Testing/MainAdminPage")
     public ModelAndView displayMainAdminPage() {

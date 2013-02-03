@@ -1,5 +1,6 @@
 package by.bsu.project.dao;
 
+import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -47,6 +48,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public UserInfoEntity getStudentById(Long id) {
         return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where id = :id").
+                setParameter("id", id).uniqueResult();
+    }
+
+    @Override
+    public ProgramFilesEntity getFileById(Long id) {
+        return (ProgramFilesEntity) sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where id = :id").
                 setParameter("id", id).uniqueResult();
     }
 
