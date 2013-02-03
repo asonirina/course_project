@@ -7,14 +7,15 @@
 
 <link rel="stylesheet" type="text/css" href="/css/pagination.css">
 
+<span class="paginationTG">
 <c:if test="${paging1.pageCount > 1}">
 
-    <span class="pagingButton">
-            <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(0))%>">First page</a>
+    <span class="nextpage">
+            <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(0))%>">First</a>
 		</span>
 
     <c:if test="${!paging1.firstPage}">
-		<span class="pagingButton">
+		<span class="nextpage">
             <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(paging1.getPage() - 1))%>">Prev</a>
 		</span>
     </c:if>
@@ -26,12 +27,10 @@
                        end="${paging1.page + 1}" var="i">
                 <c:choose>
                     <c:when test="${paging1.page == i}">
-                        <span class="pagingItemCurrent">${i+1}</span>
+                        <span class="currentpage">${i+1}</span>
                     </c:when>
                     <c:otherwise>
-				<span class="pagingItem">
                     <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(jspContext.getAttribute("i")))%>">${i+1}</a>
-				</span>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
@@ -41,12 +40,10 @@
                        end="${paging1.page + 2}" var="i">
                 <c:choose>
                     <c:when test="${paging1.page == i}">
-                        <span class="pagingItemCurrent">${i+1}</span>
+                        <span class="currentpage">${i+1}</span>
                     </c:when>
                     <c:otherwise>
-				<span class="pagingItem">
                     <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(jspContext.getAttribute("i")))%>">${i+1}</a>
-				</span>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
@@ -59,12 +56,10 @@
                    end="${paging1.page + 1}" var="i">
             <c:choose>
                 <c:when test="${paging1.page == i}">
-                    <span class="pagingItemCurrent">${i+1}</span>
+                    <span class="currentpage">${i+1}</span>
                 </c:when>
                 <c:otherwise>
-				<span class="pagingItem">
                     <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(jspContext.getAttribute("i")))%>">${i+1}</a>
-				</span>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
@@ -77,12 +72,10 @@
                        end="${paging1.page }" var="i">
                 <c:choose>
                     <c:when test="${paging1.page == i}">
-                        <span class="pagingItemCurrent">${i+1}</span>
+                        <span class="currentpage">${i+1}</span>
                     </c:when>
                     <c:otherwise>
-				<span class="pagingItem">
                     <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(jspContext.getAttribute("i")))%>">${i+1}</a>
-				</span>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
@@ -92,12 +85,10 @@
                        end="${paging1.page }" var="i">
                 <c:choose>
                     <c:when test="${paging1.page == i}">
-                        <span class="pagingItemCurrent">${i+1}</span>
+                        <span class="currentpage">${i+1}</span>
                     </c:when>
                     <c:otherwise>
-				<span class="pagingItem">
                     <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(jspContext.getAttribute("i")))%>">${i+1}</a>
-				</span>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
@@ -106,13 +97,14 @@
 
 
     <c:if test="${!paging1.lastPage}">
-		<span class="pagingButton">
+		<span class="nextpage">
             <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(paging1.getPage() + 1))%>">Next</a>
 		</span>
     </c:if>
 
-     <span class="pagingButton">
-            <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(paging1.getPageCount()-1))%>">Last page</a>
+     <span class="nextpage">
+            <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(paging1.getPageCount()-1))%>">Last</a>
 		</span>
 
 </c:if>
+    </span>

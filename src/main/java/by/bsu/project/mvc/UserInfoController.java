@@ -29,7 +29,7 @@ public class UserInfoController {
 
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
 
-    @RequestMapping(value = "/StudentList")
+    @RequestMapping(value = "/e-Testing/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page, Model model) {
         Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
         int pageNumber = 0;
@@ -47,14 +47,14 @@ public class UserInfoController {
         return new ModelAndView("StudentList");
     }
 
-    @RequestMapping(value = "/SaveStudent", method = RequestMethod.POST)
+    @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
     public String save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity) {
         userInfoEntity.setProgramFiles(programFilesEntityList);
         userInfoService.save(userInfoEntity);
-        return "redirect:/e-Testing/ViewStudent?id=" + userInfoEntity.getId();
+        return "redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId();
     }
 
-    @RequestMapping(value = "/EditStudent")
+    @RequestMapping(value = "/e-Testing/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity) {
         if (null != id) {
             userInfoEntity = userInfoService.getStudentById(id);
@@ -65,19 +65,19 @@ public class UserInfoController {
         return new ModelAndView("EditStudent", "student", userInfoEntity);
     }
 
-    @RequestMapping("/ViewStudent")
+    @RequestMapping("/e-Testing/ViewStudent")
     public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity,
-                                 Model model,HttpServletResponse response) {
+                                 Model model, HttpServletResponse response) {
         userInfoEntity = userInfoService.getStudentById(id);
         model.addAttribute("student", userInfoEntity);
         model.addAttribute("programList", userInfoEntity.getProgramFiles());
         return new ModelAndView("ViewStudent");
     }
 
-    @RequestMapping("/DeleteStudent")
+    @RequestMapping("/e-Testing/DeleteStudent")
     public ModelAndView deleteNews(@RequestParam(value = "id", required = false) Long id) {
         userInfoService.deleteStudentById(id);
-        return new ModelAndView("redirect:/e-Testing/StudentList");
+        return new ModelAndView("redirect:/e-Testing/StudentList.html");
     }
 
 //    @RequestMapping("/Download/{programId}")
@@ -92,4 +92,14 @@ public class UserInfoController {
 //
 //            return null;
 //    }
+
+    @RequestMapping(value = "/e-Testing/MainAdminPage")
+    public ModelAndView displayMainAdminPage() {
+        return new ModelAndView("MainAdminPage");
+    }
+
+    @RequestMapping(value = "/e-Testing/MainStudentPage")
+    public ModelAndView displayMainStudentPage() {
+        return new ModelAndView("MainStudentPage");
+    }
 }

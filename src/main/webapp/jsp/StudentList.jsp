@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-<form action="/e-Testing/DeleteStudent" method="post">
     <c:forEach var="student" items="${studentList}">
 
         <label>Имя</label>
@@ -16,29 +15,22 @@
         <label>Фамилия</label>
         <span style="margin-left: 65px"><c:out value="${student.secondName}"/></span><br><br>
         <label>Класс</label>
-        <span style="margin-left: 88px"><c:out value="${student.form}"/></span><br><br>
+        <span style="margin-left: 88px"><c:out value="${student.form}"/></span><br>
 
-        <div style="text-align: end;">
-            <a href="<c:url value="/e-Testing/ViewStudent?id=${student.id}"/>"><input type="button"
+        <div style="text-align: right;">
+            <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"
                                                                         value="Посмотреть"
-                                                                        name="view" class="inputStyle"/></a>
-            <a href="<c:url value="/e-Testing/EditStudent?id=${student.id}"/>"><input type="button"
+                                                                        name="view" class="button"/></a>
+            <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>"><input type="button"
                                                                                         value="Редактировать"
-                                                                                        name="edit" class="inputStyle"/></a>
-
-            <%--<input type="checkbox" name="id" value=${student.id}><br><br>--%>
+                                                                                        name="edit" class="button"/></a>
         </div>
-
+        <HR color="#52A8E8" size="1">
     </c:forEach>
-    <%--<div style="text-align: end">--%>
-        <%--<input type="submit" class="inputStyle" onclick="return confirm('Вы действительно хотите удалить этих пользователей?')"--%>
-               <%--value="Удалить"/>--%>
-    <%--</div>--%>
-</form>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
-    <c:url value="/e-Testing/StudentList" var="pagedLink">
+    <c:url value="/e-Testing/StudentList.html" var="pagedLink">
         <c:param name="page" value="~"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>

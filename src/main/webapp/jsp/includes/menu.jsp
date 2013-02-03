@@ -3,9 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<ul>
-    <li><a href="<c:url value="/e-Testing/StudentList"/>">Посмотреть список студентов</a></li>
-    <li><a href="<c:url value="/e-Testing/EditStudent"/>">Добавить студента</a></li>
-</ul>
+    <div class="home"><a href="<c:url value="/e-Testing/MainAdminPage.html"/>"></a></div>
+
+    <ul>
+        <li><a href="<c:url value="/e-Testing/EditStudent.html"/>">Добавить нового ученика<span>Добавить</span></a></li>
+        <li><a href="<c:url value="/e-Testing/StudentList.html"/>">Список студентов<span>Список</span></a></li>
+    </ul>
+
 </body>
 </html>

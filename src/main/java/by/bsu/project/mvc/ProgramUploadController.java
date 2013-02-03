@@ -31,7 +31,7 @@ public class ProgramUploadController {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 
-    @RequestMapping(value = "/UploadProgram")
+    @RequestMapping(value = "/e-Testing/UploadProgram")
     public ModelAndView displayUploadFile(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity,
                                        ProgramFilesEntity programFilesEntity, Model model) throws Exception {
         userInfoEntity = userInfoService.getStudentById(id);
@@ -40,7 +40,7 @@ public class ProgramUploadController {
         return new ModelAndView("UploadProgram", "program", programFilesEntity);
     }
 
-    @RequestMapping(value = "/SaveProgram")
+    @RequestMapping(value = "/e-Testing/SaveProgram")
     public String processUploadPreview(
             @RequestParam("file") MultipartFile file,@RequestParam(value = "studentId", required = false) Long studentId,
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity) throws Exception {
@@ -52,12 +52,11 @@ public class ProgramUploadController {
         userInfoEntity.getProgramFiles().add(programFilesEntity);
 
         userInfoService.save(userInfoEntity);
-        return "redirect:/e-Testing/UploadProgramStatus";
+        return "redirect:/e-Testing/UploadProgramStatus.html";
     }
 
-    @RequestMapping(value = "/UploadProgramStatus")
+    @RequestMapping(value = "/e-Testing/UploadProgramStatus")
     public ModelAndView processUploadPreview() {
-
         return new ModelAndView("UploadProgramStatus");
     }
 }

@@ -1,49 +1,36 @@
-.pagingItem {
-    margin: 0 2px;
-    padding: 0 2px;
-    background-color: #EEE;
-    border: 1px solid #818181;
-    color: #000000;
-    font-size: 0.9em;
-    line-height: 1.5em;
+/************************* PAGINATION **************************************/
+.paginationTG{
+    float: left;
+    font:11px Tahoma, Verdana, Arial, "Trebuchet MS", Helvetica, sans-serif;
+    color:#3d3d3d;
+    text-align: center;
+    top: 80%;
+    width:100%;
 }
 
-.pagingItem:hover {
-    color: #fff;
-    background-color: #999999;
+.paginationTG a, .paginationTG a:visited{
+    padding: 5px 8px;
+    text-decoration: none;
+    background-color: inherit;
+    color: #0191D0;
+    font-weight: bold;
+}
+
+.paginationTG a:hover, .paginationTG a:active{
+    color: #ffffff;
+    background: url(/images/pagination_bg.png) no-repeat top center;
     text-decoration: none;
 }
 
-.pagingItemCurrent {
-    padding: 0 2px;
-    margin: 0 2px;
-    font-weight: normal;
-    color: #fffefd;
-    background-color: #eeeeee;
-    border: 1px solid #bababa;
-    color: #666;
-    font-size: 0.9em;
+.paginationTG currentpage {
+    font-weight: bold;
+    padding: 5px 9px;
+    background: url(/images/pagination_bg.png) no-repeat top center;
+    background-color: inherit;
+    color: #ffffff;
 }
 
-.pagingItemCurrent:hover {
-    color: #fff;
-    background-color: #999999;
-    text-decoration: none;
-}
 
-.pagingButton {
-    background: transparent;
-    padding: 7px 5px;
-    font-size: 13px;
-    font-family: "MS Sans Serif";
-    font-weight: normal;
-    cursor: pointer;
-    width:100px;
+.paginationTG nextpage{
+    font-weight: bold;
 }
-
-.pagingButton:hover {
-    color: #fff;
-    background-color: #999999;
-    text-decoration: none;
-}
-
