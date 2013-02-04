@@ -14,27 +14,27 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class AccessController {
 
-	@RequestMapping("/login")
+	@RequestMapping("/e-Testing/Login")
 	public String login(Model model, @RequestParam(required=false) String message) {
 		model.addAttribute("message", message);
 
 		return "access/login";
 	}
 	
-	@RequestMapping(value = "/denied")
+	@RequestMapping(value = "/e-Testing/Denied")
  	public String denied() {
 		return "access/denied";
 	}
 	
-	@RequestMapping(value = "/login/failure")
+	@RequestMapping(value = "/e-Testing/Login/Failure")
  	public String loginFailure() {
 		String message = "Login Failure!";
-		return "redirect:/login.html?message="+message;
+		return "redirect:/e-Testing/Login.html?message="+message;
 	}
 	
-	@RequestMapping(value = "/logout/success")
+	@RequestMapping(value = "/e-Testing/Logout/Success")
  	public String logoutSuccess() {
 		String message = "Logout Success!";
-		return "redirect:/login.html?message="+message;
+		return "redirect:/e-Testing/Login.html?message="+message;
 	}
 }
