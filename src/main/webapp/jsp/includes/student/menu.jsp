@@ -5,7 +5,7 @@
 <body>
 <div class="home"><a href="<c:url value="/e-Testing/MainStudentPage.html"/>"></a></div>
 
-<<ul>
+<ul>
     <li><a href="<c:url value="/e-Testing/UploadProgram.html"/>">Проверить программу<span>Загрузить</span></a></li>
     <%--<li><a href="<c:url value="/e-Testing/StudentList.html"/>">Список студентов<span>Список</span></a></li>--%>
 </ul>
