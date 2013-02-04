@@ -4,9 +4,6 @@
 <%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
 
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
 <body>
     <c:forEach var="student" items="${studentList}">
 

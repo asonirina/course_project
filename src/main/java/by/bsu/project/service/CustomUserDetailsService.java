@@ -47,7 +47,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                     getAuthorities(role));
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

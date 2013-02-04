@@ -2,9 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
 <body>
 <form:form method="post" action="/e-Testing/SaveProgram.html" commandName="program" encType="multipart/form-data">
 <c:if test="${not empty student.id}">

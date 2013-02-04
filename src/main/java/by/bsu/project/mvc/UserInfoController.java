@@ -68,7 +68,7 @@ public class UserInfoController {
 
     @RequestMapping("/e-Testing/ViewStudent")
     public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity,
-                                 Model model, HttpServletResponse response) {
+                                 Model model) {
         userInfoEntity = userInfoService.getStudentById(id);
         model.addAttribute("student", userInfoEntity);
         model.addAttribute("programList", userInfoEntity.getProgramFiles());

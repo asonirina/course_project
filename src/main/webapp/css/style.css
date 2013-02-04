@@ -23,6 +23,14 @@ h1{
     /*text-align: center;*/
 }
 
+.errorblock {
+    color: #ff0000;
+    background-color: #ffEEEE;
+    border: 3px solid #d32208;
+    padding: 8px;
+    margin: 16px;
+}
+
 #page-container {
     width: 970px;
     margin: 0 auto;

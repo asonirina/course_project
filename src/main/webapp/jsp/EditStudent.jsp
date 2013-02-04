@@ -5,9 +5,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
 <body>
 <form:form method="post" action="/e-Testing/SaveStudent.html" commandName="student">
 

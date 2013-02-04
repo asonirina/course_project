@@ -10,4 +10,9 @@
         <pattern>/e-Testing/UploadProgramStatus.html</pattern>
         <pattern>/e-Testing/MainStudentPage.html</pattern>
     </decorator>
+
+    <decorator name="layoutLogin" page="layoutLogin.jsp">
+        <pattern>/login.html</pattern>
+        <pattern>/denied.html</pattern>
+    </decorator>
 </decorators>

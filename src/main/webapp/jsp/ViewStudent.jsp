@@ -4,9 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="sitemesh-page" uri="http://www.opensymphony.com/sitemesh/page" %>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
 <body>
 
     <span style="margin-left: 200px"><c:out value="Имя"/></span>
