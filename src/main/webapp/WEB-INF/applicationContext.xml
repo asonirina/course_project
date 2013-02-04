@@ -53,4 +53,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="user" class="by.bsu.project.entity.UserInfoEntity"/>
+
 </beans>

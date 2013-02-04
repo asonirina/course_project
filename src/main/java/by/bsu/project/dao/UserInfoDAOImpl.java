@@ -61,4 +61,10 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     public boolean isExist(Long id) {
         return id == null ? false : null != (UserInfoEntity) sessionFactory.getCurrentSession().load(UserInfoEntity.class, id);
     }
+
+    @Override
+    public UserInfoEntity findStudentByLogin(String login) {
+        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where login = :login").
+                setParameter("login",login).uniqueResult();
+    }
 }

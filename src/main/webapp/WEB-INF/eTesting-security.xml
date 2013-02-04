@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <http pattern="/resources" security="none"/>
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/login.html" access="permitAll"/>
+        <intercept-url pattern="/logout.html" access="permitAll"/>
+        <intercept-url pattern="/denied.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgram.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/SaveProgram.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgramStatus.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/StudentList.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/SaveStudent.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/EditStudent.html" access="hasRole('ROLE_ADMIN')"/>
+
+        <form-login login-page="/login.html"
+                    authentication-failure-url="/login/failure.html"
+                    default-target-url="/"/>
+
+        <access-denied-handler error-page="/denied.html"/>
+
+        <logout invalidate-session="true"
+                logout-success-url="/logout/success.html"
+                logout-url="/logout"/>
+    </http>
+
+    <beans:bean id="customUserDetailsService" class="by.bsu.project.service.CustomUserDetailsService"/>
+    <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService">
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

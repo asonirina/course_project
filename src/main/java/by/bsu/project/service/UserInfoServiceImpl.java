@@ -48,4 +48,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Long studentsCountList() {
         return userInfoDAO.studentsCountList();
     }
+
+    @Transactional
+    public UserInfoEntity findStudentByLogin(String login) {
+        return userInfoDAO.findStudentByLogin(login);
+    }
 }

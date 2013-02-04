@@ -15,4 +15,5 @@ public interface UserInfoService {
     public ProgramFilesEntity getFileById(Long id);
     public List<UserInfoEntity> studentsList(int pageNumber);
     public Long studentsCountList ();
+    public UserInfoEntity findStudentByLogin(String login);
 }
