@@ -3,10 +3,6 @@
 <html>
 
 <body>
-
-<h1 id="banner">Unauthorized</h1>
-<hr/>
-
-<p class="message">Access denied!</p>
+<div class="errorblock">Доступ запрещен!</div>
 </body>
 </html>

@@ -12,7 +12,7 @@
     </decorator>
 
     <decorator name="layoutLogin" page="layoutLogin.jsp">
-        <pattern>/login.html</pattern>
-        <pattern>/denied.html</pattern>
+        <pattern>/e-Testing/Login.html</pattern>
+        <pattern>/e-Testing/Denied.html</pattern>
     </decorator>
 </decorators>
