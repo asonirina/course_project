@@ -8,26 +8,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AccessController {
 
-	@RequestMapping("/login")
+	@RequestMapping("/e-Testing/Login")
 	public String login(Model model, @RequestParam(required=false) String message) {
 		model.addAttribute("message", message);
 
 		return "access/login";
 	}
 	
-	@RequestMapping(value = "/denied")
+	@RequestMapping(value = "/e-Testing/Denied")
  	public String denied() {
 		return "access/denied";
 	}
 	
-	@RequestMapping(value = "/login/failure")
+	@RequestMapping(value = "/e-Testing/Login/Failure")
  	public String loginFailure() {
-		return "redirect:/login.html?message="+"Invalid username or password or username is blocked";
+		return "redirect:/e-Testing/Login.html?message="+"Invalid username or password or username is blocked";
 	}
 	
-	@RequestMapping(value = "/logout/success")
+	@RequestMapping(value = "/e-Testing/Logout/Success")
  	public String logoutSuccess() {
 		String message = "Logout Success!";
-		return "redirect:/login.html?message="+message;
+		return "redirect:/e-Testing/Login.html?message="+message;
 	}
 }
