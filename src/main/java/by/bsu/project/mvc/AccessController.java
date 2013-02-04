@@ -22,7 +22,8 @@ public class AccessController {
 	
 	@RequestMapping(value = "/login/failure")
  	public String loginFailure() {
-		return "redirect:/login.html?message="+"Invalid username or password or username is blocked";
+		String message = "Login Failure!";
+		return "redirect:/login.html?message="+message;
 	}
 	
 	@RequestMapping(value = "/logout/success")
