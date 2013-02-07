@@ -31,6 +31,23 @@ h1{
     margin: 16px;
 }
 
+/* класс сообщений о правильно введенных данных */
+.correct {
+    color: green;
+    font-size: 12px;
+}
+/* класс сообщений об ошибках */
+.acorrect {
+    color: red;
+    font-size: 12px;
+}
+.span_info {
+    width: 150px;
+    color: #666;
+    font-size: 12px;
+    vertical-align: top;
+}
+
 #page-container {
     width: 970px;
     margin: 0 auto;
