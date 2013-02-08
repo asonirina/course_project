@@ -1,8 +1,8 @@
 function checkAll() {
-    var valid = true;
+    var valid = false;
     var x;
     var check_zeroLength = document.getElementById('check_zeroLength').value;
-    alert(check_zeroLength)
+    alert(check_zeroLength);
     if (check_zeroLength == 1) {
         valid = true;
     } else {
