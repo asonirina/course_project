@@ -3,6 +3,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <body>
+
+<c:if test="${not empty errors}">
+<div id="output" class="errorblock">
+    <c:forEach var="errors" items="${errors}">
+        <c:out value="${errors}"/><br>
+    </c:forEach>
+</div>
+</c:if>
+
 <form:form method="post" action="/e-Testing/SaveProgram.html" commandName="program" encType="multipart/form-data">
 <c:if test="${not empty student.id}">
     <input type="hidden" id="studentId" name="studentId"

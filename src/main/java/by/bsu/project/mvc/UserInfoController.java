@@ -31,7 +31,9 @@ public class UserInfoController {
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
 
     @RequestMapping(value = "/e-Testing/StudentList")
-    public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page, Model model) {
+    public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
+                                            Model model) {
+
         Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
         int pageNumber = 0;
         if (null != page) {
@@ -45,6 +47,7 @@ public class UserInfoController {
             model.addAttribute("paging1", paging1);
         }
         model.addAttribute("studentList", userInfoService.studentsList(pageNumber));
+
         return new ModelAndView("StudentList");
     }
 
@@ -52,44 +55,53 @@ public class UserInfoController {
     public String save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity) {
         userInfoEntity.setProgramFiles(programFilesEntityList);
         userInfoService.save(userInfoEntity);
+
         return "redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId();
     }
 
     @RequestMapping(value = "/e-Testing/EditStudent")
-    public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity) {
+    public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
+                                       UserInfoEntity userInfoEntity) {
         if (null != id) {
             userInfoEntity = userInfoService.getStudentById(id);
         } else {
             userInfoEntity = new UserInfoEntity();
         }
         programFilesEntityList = userInfoEntity.getProgramFiles();
+
         return new ModelAndView("EditStudent", "student", userInfoEntity);
     }
 
     @RequestMapping("/e-Testing/ViewStudent")
-    public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id, UserInfoEntity userInfoEntity,
+    public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id,
+                                 UserInfoEntity userInfoEntity,
                                  Model model) {
+
         userInfoEntity = userInfoService.getStudentById(id);
         model.addAttribute("student", userInfoEntity);
         model.addAttribute("programList", userInfoEntity.getProgramFiles());
+
         return new ModelAndView("ViewStudent");
     }
 
     @RequestMapping("/e-Testing/DeleteStudent")
     public ModelAndView deleteNews(@RequestParam(value = "id", required = false) Long id) {
         userInfoService.deleteStudentById(id);
+
         return new ModelAndView("redirect:/e-Testing/StudentList.html");
     }
 
     @RequestMapping("/e-Testing/Download")
-    public String download(@RequestParam(value = "programId", required = false)
-                           Long programId, HttpServletResponse response,ProgramFilesEntity programFilesEntity) throws Exception {
+    public String download(@RequestParam(value = "programId", required = false) Long programId,
+                           HttpServletResponse response,
+                           ProgramFilesEntity programFilesEntity) throws Exception {
 
             programFilesEntity = userInfoService.getFileById(programId);
             response.setHeader("Content-Disposition", "inline;filename=\"" +programFilesEntity.getFileName()+ "\"");
             response.setContentType(programFilesEntity.getContentType());
             response.setContentLength(programFilesEntity.getFile().length);
             FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+
             return null;
     }
 

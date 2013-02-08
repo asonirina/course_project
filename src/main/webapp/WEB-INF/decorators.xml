@@ -7,6 +7,7 @@
 
     <decorator name="layoutStudent" page="layoutStudent.jsp">
         <pattern>/e-Testing/UploadProgram.html</pattern>
+        <pattern>/e-Testing/SaveProgram.html</pattern>
         <pattern>/e-Testing/UploadProgramStatus.html</pattern>
         <pattern>/e-Testing/MainStudentPage.html</pattern>
     </decorator>
