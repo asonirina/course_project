@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="/css/pagination.css">
 
 <span class="paginationTG">
-<c:if test="${paging1.pageCount > 1}">
+<c:if test="${paging1.getPageCount() > 1}">
 
     <span class="nextpage">
             <a href="<%=StringUtils.replace(pagedLink, "~", String.valueOf(0))%>">First</a>
@@ -22,7 +22,7 @@
 
     <%--First page paging1--%>
     <c:if test="${paging1.page == paging1.firstLinkedPage}">
-        <c:if test="${paging1.pageSize == 1}">
+        <c:if test="${paging1.getPageCount()-1 == 1}">
             <c:forEach begin="${paging1.page}"
                        end="${paging1.page + 1}" var="i">
                 <c:choose>
@@ -35,7 +35,7 @@
                 </c:choose>
             </c:forEach>
         </c:if>
-        <c:if test="${paging1.pageSize > 1}">
+        <c:if test="${paging1.getPageCount()-1 > 1}">
             <c:forEach begin="${paging1.page}"
                        end="${paging1.page + 2}" var="i">
                 <c:choose>
@@ -67,9 +67,9 @@
 
     <%--Last page pging--%>
     <c:if test="${paging1.page == paging1.lastLinkedPage}">
-        <c:if test="${paging1.pageSize == 1}">
+        <c:if test="${paging1.getPageCount()-1 == 1}">
             <c:forEach begin="${paging1.page - 1}"
-                       end="${paging1.page }" var="i">
+                       end="${paging1.page}" var="i">
                 <c:choose>
                     <c:when test="${paging1.page == i}">
                         <span class="currentpage">${i+1}</span>
@@ -80,7 +80,7 @@
                 </c:choose>
             </c:forEach>
         </c:if>
-        <c:if test="${paging1.pageSize > 1}">
+        <c:if test="${paging1.getPageCount()-1 > 1}">
             <c:forEach begin="${paging1.page - 2}"
                        end="${paging1.page }" var="i">
                 <c:choose>

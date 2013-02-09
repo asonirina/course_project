@@ -35,18 +35,7 @@ public class UserInfoController {
                                             Model model) {
 
         Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
-        int pageNumber = 0;
-        if (null != page) {
-            model.addAttribute("page", page);
-            pageNumber = page;
-            paging1.setPage(page);
-            model.addAttribute("paging1", paging1);
-        } else {
-            model.addAttribute("page", "0");
-            paging1.setPage(0);
-            model.addAttribute("paging1", paging1);
-        }
-        model.addAttribute("studentList", userInfoService.studentsList(pageNumber));
+        model.addAttribute("studentList", userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
 
         return new ModelAndView("StudentList");
     }
@@ -74,12 +63,15 @@ public class UserInfoController {
 
     @RequestMapping("/e-Testing/ViewStudent")
     public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id,
+                                 @RequestParam(value = "page", required = false) Integer page,
                                  UserInfoEntity userInfoEntity,
                                  Model model) {
 
         userInfoEntity = userInfoService.getStudentById(id);
         model.addAttribute("student", userInfoEntity);
-        model.addAttribute("programList", userInfoEntity.getProgramFiles());
+        Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
+        model.addAttribute("programList", userInfoService.programsList(
+                userInfoService.setPage(page, paging1, model), id));
 
         return new ModelAndView("ViewStudent");
     }
@@ -96,13 +88,13 @@ public class UserInfoController {
                            HttpServletResponse response,
                            ProgramFilesEntity programFilesEntity) throws Exception {
 
-            programFilesEntity = userInfoService.getFileById(programId);
-            response.setHeader("Content-Disposition", "inline;filename=\"" +programFilesEntity.getFileName()+ "\"");
-            response.setContentType(programFilesEntity.getContentType());
-            response.setContentLength(programFilesEntity.getFile().length);
-            FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+        programFilesEntity = userInfoService.getFileById(programId);
+        response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
+        response.setContentType(programFilesEntity.getContentType());
+        response.setContentLength(programFilesEntity.getFile().length);
+        FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
 
-            return null;
+        return null;
     }
 
     @RequestMapping(value = "/e-Testing/MainAdminPage")
