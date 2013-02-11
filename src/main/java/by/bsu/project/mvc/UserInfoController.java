@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,20 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+
+    @RequestMapping(value = "/e-Testing/ChangePassword")
+    public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
+                                       @RequestParam(value = "password1", required = false) String password1,
+                                       @RequestParam(value = "password2", required = false) String password2,
+                                       HttpServletRequest request) {
+        String login = request.getRemoteUser();
+        UserInfoEntity user = userInfoService.findStudentByLogin(login);
+        if (oldPassword != null && oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
+            user.setPassword(password1);
+            userInfoService.save(user);
+        }
+        return new ModelAndView("ChangePassword");
+    }
 
     @RequestMapping(value = "/e-Testing/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
@@ -96,13 +111,13 @@ public class UserInfoController {
                            HttpServletResponse response,
                            ProgramFilesEntity programFilesEntity) throws Exception {
 
-            programFilesEntity = userInfoService.getFileById(programId);
-            response.setHeader("Content-Disposition", "inline;filename=\"" +programFilesEntity.getFileName()+ "\"");
-            response.setContentType(programFilesEntity.getContentType());
-            response.setContentLength(programFilesEntity.getFile().length);
-            FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+        programFilesEntity = userInfoService.getFileById(programId);
+        response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
+        response.setContentType(programFilesEntity.getContentType());
+        response.setContentLength(programFilesEntity.getFile().length);
+        FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
 
-            return null;
+        return null;
     }
 
     @RequestMapping(value = "/e-Testing/MainAdminPage")
@@ -112,6 +127,7 @@ public class UserInfoController {
 
     @RequestMapping(value = "/e-Testing/MainStudentPage")
     public ModelAndView displayMainStudentPage(@RequestParam(value = "id", required = false) Long id) {
+        System.out.println(id);
         return new ModelAndView("MainStudentPage");
     }
 }

@@ -1,6 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.model.SpringUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +39,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
             else role = 2;
 
-            return new User(
+            return new SpringUser(
+                    entity.getId(),
                     entity.getLogin(),
                     entity.getPassword().toLowerCase(),
                     enabled,
