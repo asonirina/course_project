@@ -118,8 +118,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/e-Testing/MainStudentPage")
-    public ModelAndView displayMainStudentPage(@RequestParam(value = "id", required = false) Long id) {
-        System.out.println(id);
+    public ModelAndView displayMainStudentPage() {
         return new ModelAndView("MainStudentPage");
     }
 }
