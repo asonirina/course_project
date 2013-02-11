@@ -21,15 +21,20 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public List<UserInfoEntity> studentsList(int pageNumber) {
-        Query criteria = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity order by id asc ");
-        criteria.setFirstResult(3 * (pageNumber));
-        criteria.setMaxResults(3);
-        return criteria.list();
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity order by id asc ");
+        return getSubList(query, pageNumber);
+    }
+
+    public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where userId = :id").
+                setParameter("id", id);
+        return getSubList(query, pageNumber);
+
     }
 
     @Override
     public Long studentsCountList() {
-        return (Long)sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity").uniqueResult();
+        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity").uniqueResult();
     }
 
     public void save(UserInfoEntity userInfoEntity) {
@@ -42,7 +47,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public void deleteStudentById(Long id) {
-        sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(UserInfoEntity.class,id));
+        sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(UserInfoEntity.class, id));
     }
 
     @Override
@@ -65,6 +70,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public UserInfoEntity findStudentByLogin(String login) {
         return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where login = :login").
-                setParameter("login",login).uniqueResult();
+                setParameter("login", login).uniqueResult();
+    }
+
+    private List getSubList(Query query, int pageNumber) {
+        query.setFirstResult(3 * (pageNumber));
+        query.setMaxResults(3);
+        return query.list();
     }
 }

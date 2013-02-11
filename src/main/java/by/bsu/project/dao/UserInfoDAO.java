@@ -17,4 +17,5 @@ public interface UserInfoDAO {
     public List<UserInfoEntity> studentsList(int pageNumber);
     public Long studentsCountList();
     public UserInfoEntity findStudentByLogin(String login);
+    public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
 }

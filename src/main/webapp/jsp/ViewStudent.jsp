@@ -3,6 +3,8 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="sitemesh-page" uri="http://www.opensymphony.com/sitemesh/page" %>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
+
 <html>
 <body>
 
@@ -32,6 +34,14 @@
 
       <HR color="#52A8E8" size="1">
   </c:forEach>
+
+    <%-- // create link for pages, "~" will be replaced with the proper page number --%>
+    <div class="paging">
+        <c:url value="/e-Testing/ViewStudent.html?id=${student.id}" var="pagedLink">
+            <c:param name="page" value="~"/>
+        </c:url>
+        <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
+    </div>
 
   <div style="text-align: right">
   <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>"><input type="button"
