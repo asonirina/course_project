@@ -8,22 +8,18 @@
 </head>
 <body>
 <form method="post">
-    <table>
-        <tr>
-    <td><label>Старый пароль</label></td>
-            <td> <input name="oldPassword" type="password"> </td>
-        </tr>
-    <tr>
-        <td> <label>Новый пароль</label></td>
-        <td><input name="password1" type="password">   </td>
-    <tr/>
-        <tr>
-            <td> <label>Повторите новый пароль</label> </td>
-            <td><input name="password2" type="password"> </td>
-    <tr/>
-    </table>
-    <input type="submit" class="button" value="Изменить"/>
+    <span style="margin-left: 200px;"><c:out value="Старый пароль"/></span>
+    <input name="oldPassword" id="oldPassword" type="password" style="margin-left: 79px;"/><br>
+
+    <span style="margin-left: 200px;"><c:out value="Новый пароль"/></span>
+    <input name="password1" id="password1" type="password" style="margin-left: 85px;"/><br>
+
+    <span style="margin-left: 200px;"><c:out value="Повторите новый пароль"/></span>
+    <input name="password2" id="password2" type="password" style="margin-left: 20px;" /><br><br>
+
+    <input type="submit" class="button" value="Сменить пароль" style="margin-left: 320px;"/>
+
 </form>
 
-
 </body>
+</html>
