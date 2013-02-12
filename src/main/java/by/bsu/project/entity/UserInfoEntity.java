@@ -25,7 +25,7 @@ public class UserInfoEntity {
     @Column(name = "Form")
     private String form;
 
-    @Column(name = "Login")
+    @Column(name = "Login", unique = true)
     private String login;
 
     @Column(name = "Password")

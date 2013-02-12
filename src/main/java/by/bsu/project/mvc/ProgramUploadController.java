@@ -2,9 +2,11 @@ package by.bsu.project.mvc;
 
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.model.SpringUser;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,7 +29,7 @@ public class ProgramUploadController {
 
     @Autowired
     private UserInfoService userInfoService;
-    private List<String>    errors;
+    private List<String> errors;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -37,14 +39,14 @@ public class ProgramUploadController {
 
     @RequestMapping(value = "/e-Testing/UploadProgram")
     public ModelAndView displayUploadFile(
-            @RequestParam(value = "id", required = false) Long id,
             UserInfoEntity userInfoEntity,
             ProgramFilesEntity programFilesEntity,
             Model model) throws Exception {
 
-        userInfoEntity = userInfoService.getStudentById(id);
+        SpringUser user = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userInfoEntity = userInfoService.getStudentById(user.getId());
         programFilesEntity = new ProgramFilesEntity();
-        model.addAttribute("student",userInfoEntity);
+        model.addAttribute("student", userInfoEntity);
         return new ModelAndView("UploadProgram", "program", programFilesEntity);
     }
 
@@ -56,9 +58,9 @@ public class ProgramUploadController {
             Model model) throws Exception {
 
         UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
-        errors = Validator.validate(file, programFilesEntity.getProgramName());
+        errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
-        if(errors.size() != 0) {
+        if (errors.size() != 0) {
             model.addAttribute("errors", errors);
             model.addAttribute("student", userInfoEntity);
             return new ModelAndView("UploadProgram", "program", programFilesEntity);

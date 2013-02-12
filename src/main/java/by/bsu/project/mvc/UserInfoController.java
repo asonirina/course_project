@@ -4,6 +4,7 @@ import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
+import by.bsu.project.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,26 +29,25 @@ public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
-
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+    private List<String> errors;
 
     @RequestMapping(value = "/e-Testing/ChangePassword")
     public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
                                        @RequestParam(value = "password1", required = false) String password1,
                                        @RequestParam(value = "password2", required = false) String password2,
                                        HttpServletRequest request) {
-        if (oldPassword != null){
-        String login = request.getRemoteUser();
-        UserInfoEntity user = userInfoService.findStudentByLogin(login);
-        if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
-            user.setPassword(password1);
-            userInfoService.save(user);
-            if(user.getForm().equals("admin")){
-            return new ModelAndView("redirect:/e-Testing/MaiAdminPage.html");
+        if (oldPassword != null) {
+            String login = request.getRemoteUser();
+            UserInfoEntity user = userInfoService.findStudentByLogin(login);
+            if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
+                user.setPassword(password1);
+                userInfoService.save(user);
+                if (user.getForm().equals("admin")) {
+                    return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
+                } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
             }
-            else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
-        }
-            return new ModelAndView("ChangePassword","message","Error!!!");
+            return new ModelAndView("ChangePassword", "message", "Пароль введен не верно!");
         }
         return new ModelAndView("ChangePassword");
     }
@@ -63,11 +63,20 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
-    public String save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity) {
+    public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
+
+        errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
         userInfoEntity.setProgramFiles(programFilesEntityList);
+
+        if (errors.size() != 0) {
+            model.addAttribute("errors", errors);
+            model.addAttribute("student", userInfoEntity);
+            return new ModelAndView("EditStudent");
+        }
+
         userInfoService.save(userInfoEntity);
 
-        return "redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId();
+        return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
     }
 
     @RequestMapping(value = "/e-Testing/EditStudent")

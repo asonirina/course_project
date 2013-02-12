@@ -7,6 +7,15 @@
     <script type="text/javascript" src="/js/validator.js"></script>
 </head>
 <body>
+
+<c:if test="${not empty errors}">
+    <div id="output" class="errorblock">
+        <c:forEach var="errors" items="${errors}">
+            <c:out value="${errors}"/><br>
+        </c:forEach>
+    </div>
+</c:if>
+
 <form:form method="post" action="/e-Testing/SaveStudent.html" commandName="student" onsubmit="return checkAll();">
 
     <c:if test="${not empty student.id}">

@@ -1,5 +1,6 @@
 package by.bsu.project.validator;
 
+import by.bsu.project.service.UserInfoService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Validator {
 
     private static List<String> errors = new ArrayList<>();
 
-    public static List<String> validate(MultipartFile file, String programName) {
+    public static List<String> validateFile(MultipartFile file, String programName) {
         errors.clear();
 
         if (file.getSize() == 0) {
@@ -27,10 +28,19 @@ public class Validator {
             }
         }
 
-        if(programName == null || programName.length() == 0) {
+        if (programName == null || programName.length() == 0) {
             errors.add("Укажите название лабораторной.");
         }
 
+        return errors;
+    }
+
+    public static List<String> validateLogin(String login, UserInfoService userInfoService) {
+        errors.clear();
+
+        if (userInfoService.findStudentByLogin(login) != null) {
+            errors.add("Логин должен быть уникальным. Такой логин есть в базе.");
+        }
 
         return errors;
     }
