@@ -36,11 +36,18 @@ public class UserInfoController {
                                        @RequestParam(value = "password1", required = false) String password1,
                                        @RequestParam(value = "password2", required = false) String password2,
                                        HttpServletRequest request) {
+        if (oldPassword != null){
         String login = request.getRemoteUser();
         UserInfoEntity user = userInfoService.findStudentByLogin(login);
-        if (oldPassword != null && oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
+        if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
             user.setPassword(password1);
             userInfoService.save(user);
+            if(user.getForm().equals("admin")){
+            return new ModelAndView("redirect:/e-Testing/MaiAdminPage.html");
+            }
+            else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
+        }
+            return new ModelAndView("ChangePassword","message","Error!!!");
         }
         return new ModelAndView("ChangePassword");
     }
