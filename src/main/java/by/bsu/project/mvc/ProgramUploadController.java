@@ -79,6 +79,7 @@ public class ProgramUploadController {
         programFilesEntity.setFile(file.getBytes());
         programFilesEntity.setFileName(file.getOriginalFilename());
         programFilesEntity.setContentType(file.getContentType());
+        programFilesEntity.setStatus(status);
         userInfoEntity.getProgramFiles().add(programFilesEntity);
 
         userInfoService.save(userInfoEntity);
