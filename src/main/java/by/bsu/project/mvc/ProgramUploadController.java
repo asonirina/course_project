@@ -59,22 +59,20 @@ public class ProgramUploadController {
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity,
             Model model) throws Exception {
 
+        String status;
+
         UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
         errors = Validator.validateFile(file, programFilesEntity.getProgramName());
-
-        boolean b = checkCppFile(file);
-        System.out.println(b);
-
-        String status;
-        if (b) {
-            status = "passed";
-        } else status = "fail";
 
         if (errors.size() != 0) {
             model.addAttribute("errors", errors);
             model.addAttribute("student", userInfoEntity);
             return new ModelAndView("UploadProgram", "program", programFilesEntity);
         }
+
+        if (checkCppFile(file)) {
+            status = "passed";
+        } else status = "fail";
 
         programFilesEntity.setFile(file.getBytes());
         programFilesEntity.setFileName(file.getOriginalFilename());
