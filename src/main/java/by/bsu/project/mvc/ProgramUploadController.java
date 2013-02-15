@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,6 +62,14 @@ public class ProgramUploadController {
         UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
         errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
+        boolean b = checkCppFile(file);
+        System.out.println(b);
+
+        String status;
+        if (b) {
+            status = "passed";
+        } else status = "fail";
+
         if (errors.size() != 0) {
             model.addAttribute("errors", errors);
             model.addAttribute("student", userInfoEntity);
@@ -72,11 +82,60 @@ public class ProgramUploadController {
         userInfoEntity.getProgramFiles().add(programFilesEntity);
 
         userInfoService.save(userInfoEntity);
-        return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
+        return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html?status=" + status);
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
-    public ModelAndView processUploadPreview() {
-        return new ModelAndView("UploadProgramStatus");
+    public ModelAndView processUploadPreview(
+            @RequestParam(value = "status", required = false) String status) {
+        return new ModelAndView("UploadProgramStatus", "status", status);
     }
+
+    private boolean checkCppFile(MultipartFile program) throws Exception {
+
+        File file = new File("C:/files/" + program.getOriginalFilename());
+
+        program.transferTo(file);
+
+        Process p = Runtime.getRuntime().exec("cmd /C C:/Dev-Cpp/bin/c++.exe C:/files/" + program.getOriginalFilename());
+        p.waitFor();
+
+        System.out.println(p.getOutputStream().toString());
+
+        String[] cmd = {"C:/tomcat/bin/a.exe"};
+        Process p1 = Runtime.getRuntime().exec(cmd);
+        p1.waitFor();
+
+        return validate();
+    }
+
+    private boolean validate() throws Exception {
+        File out = new File("C:/tomcat/bin/out.txt");
+        File right = new File("C:/tomcat/bin/hello.txt");
+        List<String> out1 = getList(out);
+        List<String> right1 = getList(right);
+        if (out1.size() != right1.size()) {
+            return false;
+        }
+        for (int i = 0; i < out1.size(); ++i) {
+            if (!out1.get(i).equals(right1.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List getList(File file) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+        List<String> result = new ArrayList<String>();
+        String line = br.readLine();
+        while (line != null) {
+            result.add(line);
+            line = br.readLine();
+        }
+
+        br.close();
+        return result;
+    }
+
 }
