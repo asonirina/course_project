@@ -21,7 +21,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public List<UserInfoEntity> studentsList(int pageNumber) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity order by id asc ");
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form != 'admin'  order by id asc");
         return getSubList(query, pageNumber);
     }
 

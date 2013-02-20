@@ -1,6 +1,7 @@
 package by.bsu.project.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author Alina Glumova
@@ -33,6 +34,9 @@ public class ProgramFilesEntity {
     @Column(name = "content_type")
     private String contentType;
 
+    @Column(name = "added_time")
+    private Date uploadProgramTime;
+
     public Long getId() {
         return id;
     }
@@ -63,6 +67,14 @@ public class ProgramFilesEntity {
 
     public void setProgramName(String programName) {
         this.programName = programName;
+    }
+
+    public Date getUploadProgramTime() {
+        return uploadProgramTime;
+    }
+
+    public void setUploadProgramTime(Date uploadProgramTime) {
+        this.uploadProgramTime = uploadProgramTime;
     }
 
     public byte[] getFile() {

@@ -23,6 +23,8 @@
   <c:forEach var="program" items="${programList}">
     <span style="margin-left: 200px"><c:out value="Название лабораторной"/></span>
     <span style="margin-left: 113px;"><c:out value="${program.programName}"/></span><br>
+    <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
+    <span style="margin-left: 146px"><c:out value="${program.uploadProgramTime}"/></span><br>
     <span style="margin-left: 200px"><c:out value="Статус"/></span>
     <span style="margin-left: 213px"><c:out value="${program.status}"/></span><br>
 
