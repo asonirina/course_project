@@ -6,6 +6,7 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
+import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -76,9 +77,11 @@ public class ProgramUploadController {
             return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
         }
 
-        //if (checkCppFile(file)) {
+        ProgramFilesUtil util = new ProgramFilesUtil(file);
+
+        if (util.checkFile()) {
         programStatus = PASSED_STATUS;
-        //} else programStatus = FAILED_STATUS;
+        } else programStatus = FAILED_STATUS;
 
         programFilesEntity.setFile(file.getBytes());
         programFilesEntity.setFileName(file.getOriginalFilename());
@@ -110,48 +113,6 @@ public class ProgramUploadController {
                 userInfoService.setPage(page, paging1, model), user.getId()));
 
         return new ModelAndView("UploadProgramsHistory");
-    }
-
-    private boolean checkCppFile(MultipartFile program) throws Exception {
-
-        File file = new File("C:/files/" + program.getOriginalFilename());
-        program.transferTo(file);
-        Process p = Runtime.getRuntime().exec("cmd /C C:/Dev-Cpp/bin/c++.exe C:/files/" + program.getOriginalFilename());
-        p.waitFor();
-        String[] cmd = {"C:/tomcat/bin/a.exe"};
-        Process p1 = Runtime.getRuntime().exec(cmd);
-        p1.waitFor();
-
-        return validate();
-    }
-
-    private boolean validate() throws Exception {
-        File out = new File("C:/tomcat/bin/out.txt");
-        File right = new File("C:/tomcat/bin/hello.txt");
-        List out1 = getList(out);
-        List right1 = getList(right);
-        if (out1.size() != right1.size()) {
-            return false;
-        }
-        for (int i = 0; i < out1.size(); ++i) {
-            if (!out1.get(i).equals(right1.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private List getList(File file) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-        List<String> result = new ArrayList<>();
-        String line = br.readLine();
-        while (line != null) {
-            result.add(line);
-            line = br.readLine();
-        }
-
-        br.close();
-        return result;
     }
 
     private SpringUser getUser() {
