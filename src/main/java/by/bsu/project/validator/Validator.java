@@ -1,5 +1,7 @@
 package by.bsu.project.validator;
 
+import by.bsu.project.constants.ETestingConstants;
+import by.bsu.project.constants.ErrorsMessages;
 import by.bsu.project.service.UserInfoService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,18 +20,18 @@ public class Validator {
         errors.clear();
 
         if (file.getSize() == 0) {
-            errors.add("Загрузите файл на проверку!");
+            errors.add(ErrorsMessages.UNLOAD_FILE);
         } else {
             String extension = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
 
-            if (!(extension.equals(".c") || extension.equals(".cpp") ||
-                    extension.equals(".p") || extension.equals(".pas"))) {
-                errors.add("Допустимые расширения файлов *.c, *.cpp, *.p или *.pas");
+            if (!(extension.equals(ETestingConstants.POSTFIX_C) || extension.equals(ETestingConstants.POSTFIX_CPP) ||
+                    extension.equals(ETestingConstants.POSTFIX_PASCAL_P) || extension.equals(ETestingConstants.POSTFIX_PASCAL_PAS))) {
+                errors.add(ErrorsMessages.VALID_OPTIONS);
             }
         }
 
         if (programName == null || programName.length() == 0) {
-            errors.add("Укажите название лабораторной.");
+            errors.add(ErrorsMessages.PROGRAM_NAME_REQUIRED);
         }
 
         return errors;
@@ -39,7 +41,7 @@ public class Validator {
         errors.clear();
 
         if (userInfoService.findStudentByLogin(login) != null) {
-            errors.add("Логин должен быть уникальным. Такой логин есть в базе.");
+            errors.add(ErrorsMessages.UNIQUE_LOGIN);
         }
 
         return errors;

@@ -5,29 +5,22 @@ import java.io.Serializable;
 public class Paging implements Serializable {
 
     public static final int DEFAULT_PAGE_SIZE = 3;
-
     public static final int DEFAULT_MAX_LINKED_PAGES = 3;
-
-    private int pageSize = DEFAULT_PAGE_SIZE;
-
     private int page = 0;
-
     private int pageCount;
-
     private boolean newPageSet;
-
     private int maxLinkedPages = DEFAULT_MAX_LINKED_PAGES;
 
 
     public Paging(int size) {
-          setPageCount(size);
+        setPageCount(size);
     }
 
     /**
      * Return the current page size.
      */
     public int getPageSize() {
-        return this.pageSize;
+        return DEFAULT_PAGE_SIZE;
     }
 
     /**
@@ -74,7 +67,7 @@ public class Paging implements Serializable {
         return (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages);
     }
 
-    public void setPageCount (int pageCount) {
+    public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -89,7 +82,7 @@ public class Paging implements Serializable {
      * Return if the current page is the last one.
      */
     public boolean isLastPage() {
-        return getPage() == getPageCount() -1;
+        return getPage() == getPageCount() - 1;
     }
 
     /**

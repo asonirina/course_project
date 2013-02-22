@@ -1,8 +1,10 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
+import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,12 @@ import java.util.List;
 @Controller
 public class ProgramUploadController {
 
+    private final static String PASSED_STATUS = "passed";
+    private final static String FAILED_STATUS = "failed";
+
     @Autowired
     private UserInfoService userInfoService;
-    private List<String> errors;
+    private SpringUser user;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -46,11 +51,11 @@ public class ProgramUploadController {
             ProgramFilesEntity programFilesEntity,
             Model model) throws Exception {
 
-        SpringUser user = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user = getUser();
         userInfoEntity = userInfoService.getStudentById(user.getId());
         programFilesEntity = new ProgramFilesEntity();
-        model.addAttribute("student", userInfoEntity);
-        return new ModelAndView("UploadProgram", "program", programFilesEntity);
+        model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+        return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
     }
 
     @RequestMapping(value = "/e-Testing/SaveProgram")
@@ -60,30 +65,30 @@ public class ProgramUploadController {
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity,
             Model model) throws Exception {
 
-        String status;
+        String programStatus;
 
         UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
-        errors = Validator.validateFile(file, programFilesEntity.getProgramName());
+        List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
         if (errors.size() != 0) {
-            model.addAttribute("errors", errors);
-            model.addAttribute("student", userInfoEntity);
-            return new ModelAndView("UploadProgram", "program", programFilesEntity);
+            model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
+            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
         }
 
-        if (checkCppFile(file)) {
-            status = "passed";
-        } else status = "fail";
+        //if (checkCppFile(file)) {
+        programStatus = PASSED_STATUS;
+        //} else programStatus = FAILED_STATUS;
 
         programFilesEntity.setFile(file.getBytes());
         programFilesEntity.setFileName(file.getOriginalFilename());
         programFilesEntity.setContentType(file.getContentType());
         programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
-        programFilesEntity.setStatus(status);
+        programFilesEntity.setStatus(programStatus);
         userInfoEntity.getProgramFiles().add(programFilesEntity);
 
         userInfoService.save(userInfoEntity);
-        return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html?status=" + status);
+        return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html?status=" + programStatus);
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
@@ -92,17 +97,27 @@ public class ProgramUploadController {
         return new ModelAndView("UploadProgramStatus", "status", status);
     }
 
+    @RequestMapping(value = "/e-Testing/UploadProgramsHistory")
+    public ModelAndView processHistoryPreview(
+            @RequestParam(value = "page", required = false) Integer page,
+            UserInfoEntity userInfoEntity,
+            Model model) {
+
+        user = getUser();
+        userInfoEntity = userInfoService.getStudentById(user.getId());
+        Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
+        model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
+                userInfoService.setPage(page, paging1, model), user.getId()));
+
+        return new ModelAndView("UploadProgramsHistory");
+    }
+
     private boolean checkCppFile(MultipartFile program) throws Exception {
 
         File file = new File("C:/files/" + program.getOriginalFilename());
-
         program.transferTo(file);
-
         Process p = Runtime.getRuntime().exec("cmd /C C:/Dev-Cpp/bin/c++.exe C:/files/" + program.getOriginalFilename());
         p.waitFor();
-
-        System.out.println(p.getOutputStream().toString());
-
         String[] cmd = {"C:/tomcat/bin/a.exe"};
         Process p1 = Runtime.getRuntime().exec(cmd);
         p1.waitFor();
@@ -113,8 +128,8 @@ public class ProgramUploadController {
     private boolean validate() throws Exception {
         File out = new File("C:/tomcat/bin/out.txt");
         File right = new File("C:/tomcat/bin/hello.txt");
-        List<String> out1 = getList(out);
-        List<String> right1 = getList(right);
+        List out1 = getList(out);
+        List right1 = getList(right);
         if (out1.size() != right1.size()) {
             return false;
         }
@@ -128,7 +143,7 @@ public class ProgramUploadController {
 
     private List getList(File file) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         String line = br.readLine();
         while (line != null) {
             result.add(line);
@@ -139,4 +154,7 @@ public class ProgramUploadController {
         return result;
     }
 
+    private SpringUser getUser() {
+        return (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }

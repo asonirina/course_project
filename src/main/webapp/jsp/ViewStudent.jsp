@@ -26,7 +26,7 @@
     <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
     <span style="margin-left: 146px"><c:out value="${program.uploadProgramTime}"/></span><br>
     <span style="margin-left: 200px"><c:out value="Статус"/></span>
-    <span style="margin-left: 213px"><c:out value="${program.status}"/></span><br>
+    <span style="margin-left: 217px"><c:out value="${program.status}"/></span><br>
 
     <c:if test="${not empty program.file}">
     <span style="margin-left: 200px"><c:out value="Программа"/></span>

@@ -64,7 +64,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public int setPage(Integer page, Paging paging1, Model model) {
         int pageNumber = 0;
         if (null != page) {
-            if (page > paging1.getPageCount() - 1) {
+            if (page > paging1.getPageCount() - 1 || page < 0) {
                 setFirstPage(model, paging1, 0);
 
                 return 0;

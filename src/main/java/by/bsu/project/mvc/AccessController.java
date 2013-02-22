@@ -1,5 +1,7 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.constants.ETestingConstants;
+import by.bsu.project.constants.ErrorsMessages;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,7 @@ public class AccessController {
 
     @RequestMapping("/e-Testing/Login")
     public String login(Model model, @RequestParam(required = false) String message) {
-        model.addAttribute("message", message);
+        model.addAttribute(ETestingConstants.MODEL_MESSAGE, message);
 
         return "access/login";
     }
@@ -22,7 +24,7 @@ public class AccessController {
 
     @RequestMapping(value = "/e-Testing/Login/Failure")
     public String loginFailure() {
-        return "redirect:/e-Testing/Login.html?message=" + "Invalid username or password or username is blocked";
+        return "redirect:/e-Testing/Login.html?message=" + ErrorsMessages.INVALID_USERNAME;
     }
 
     @RequestMapping(value = "/e-Testing/Logout/Success")

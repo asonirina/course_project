@@ -1,5 +1,7 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.constants.ETestingConstants;
+import by.bsu.project.constants.ErrorsMessages;
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.paging.Paging;
@@ -30,7 +32,6 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
-    private List<String> errors;
 
     @RequestMapping(value = "/e-Testing/ChangePassword")
     public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
@@ -43,11 +44,11 @@ public class UserInfoController {
             if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
                 user.setPassword(password1);
                 userInfoService.save(user);
-                if (user.getForm().equals("admin")) {
+                if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
                     return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
                 } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
             }
-            return new ModelAndView("ChangePassword", "message", "Пароль введен не верно!");
+            return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
         }
         return new ModelAndView("ChangePassword");
     }
@@ -57,7 +58,8 @@ public class UserInfoController {
                                             Model model) {
 
         Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
-        model.addAttribute("studentList", userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
+        model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
+                userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
 
         return new ModelAndView("StudentList");
     }
@@ -65,12 +67,12 @@ public class UserInfoController {
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
 
-        errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
+        List<String> errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
         userInfoEntity.setProgramFiles(programFilesEntityList);
 
         if (errors.size() != 0) {
-            model.addAttribute("errors", errors);
-            model.addAttribute("student", userInfoEntity);
+            model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
+            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
             return new ModelAndView("EditStudent");
         }
 
@@ -89,7 +91,7 @@ public class UserInfoController {
         }
         programFilesEntityList = userInfoEntity.getProgramFiles();
 
-        return new ModelAndView("EditStudent", "student", userInfoEntity);
+        return new ModelAndView("EditStudent", ETestingConstants.MODEL_STUDENT, userInfoEntity);
     }
 
     @RequestMapping("/e-Testing/ViewStudent")
@@ -99,9 +101,9 @@ public class UserInfoController {
                                  Model model) {
 
         userInfoEntity = userInfoService.getStudentById(id);
-        model.addAttribute("student", userInfoEntity);
+        model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
         Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
-        model.addAttribute("programList", userInfoService.programsList(
+        model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
                 userInfoService.setPage(page, paging1, model), id));
 
         return new ModelAndView("ViewStudent");

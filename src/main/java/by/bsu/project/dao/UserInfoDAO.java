@@ -14,7 +14,7 @@ public interface UserInfoDAO {
     public UserInfoEntity getStudentById(Long id);
     public ProgramFilesEntity getFileById(Long id);
     public void deleteStudentById(Long id);
-    public List<UserInfoEntity> studentsList(int pageNumber);
+    public List studentsList(int pageNumber);
     public Long studentsCountList();
     public UserInfoEntity findStudentByLogin(String login);
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
