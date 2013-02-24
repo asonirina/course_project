@@ -21,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,10 +75,10 @@ public class ProgramUploadController {
             return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
         }
 
-        ProgramFilesUtil util = new ProgramFilesUtil(file);
+        ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
 
-        if (util.checkFile()) {
-        programStatus = PASSED_STATUS;
+        if (programFilesUtil.checkFile()) {
+            programStatus = PASSED_STATUS;
         } else programStatus = FAILED_STATUS;
 
         programFilesEntity.setFile(file.getBytes());
