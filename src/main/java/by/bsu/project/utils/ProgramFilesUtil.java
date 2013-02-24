@@ -38,8 +38,7 @@ public class ProgramFilesUtil {
     }
 
     private boolean compile(String cmd) throws Exception {
-        File exe = new File("C:/tomcat/bin/" + file.getOriginalFilename());
-        file.transferTo(exe);
+        file.transferTo(new File("C:/tomcat/bin/" + file.getOriginalFilename()));
 
         Process p = Runtime.getRuntime().exec(cmd);
         p.waitFor();
@@ -59,10 +58,8 @@ public class ProgramFilesUtil {
     }
 
     private boolean compareFiles() throws Exception {
-        File out = new File("C:/tomcat/bin/out.txt");
-        File right = new File("C:/tomcat/bin/hello.txt");
-        List out1 = getList(out);
-        List right1 = getList(right);
+        List out1 = getList(new File("C:/tomcat/bin/out.txt"));
+        List right1 = getList(new File("C:/tomcat/bin/hello.txt"));
 
         if (out1.size() != right1.size()) {
             return false;
