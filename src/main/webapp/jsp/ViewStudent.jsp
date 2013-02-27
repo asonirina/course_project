@@ -6,6 +6,8 @@
 <%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
 
 <html>
+<head>
+</head>
 <body>
 
     <span style="margin-left: 200px"><c:out value="Имя"/></span>

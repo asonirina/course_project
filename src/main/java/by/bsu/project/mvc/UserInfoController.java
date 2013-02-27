@@ -38,60 +38,79 @@ public class UserInfoController {
                                        @RequestParam(value = "password1", required = false) String password1,
                                        @RequestParam(value = "password2", required = false) String password2,
                                        HttpServletRequest request) {
-        if (oldPassword != null) {
-            String login = request.getRemoteUser();
-            UserInfoEntity user = userInfoService.findStudentByLogin(login);
-            if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
-                user.setPassword(password1);
-                userInfoService.save(user);
-                if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
-                    return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
-                } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
+        try {
+            if (oldPassword != null) {
+                String login = request.getRemoteUser();
+                UserInfoEntity user = userInfoService.findStudentByLogin(login);
+                if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
+                    user.setPassword(password1);
+                    userInfoService.save(user);
+                    if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
+                        return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
+                    } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
+                }
+                return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
             }
-            return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
+            return new ModelAndView("ChangePassword");
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
         }
-        return new ModelAndView("ChangePassword");
     }
 
     @RequestMapping(value = "/e-Testing/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
                                             Model model) {
 
-        Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
-        model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
-                userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
+        try {
+            Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
+            model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
+                    userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
 
-        return new ModelAndView("StudentList");
+            return new ModelAndView("StudentList");
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
 
-        List<String> errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
-        userInfoEntity.setProgramFiles(programFilesEntityList);
+        try {
+            List<String> errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
+            userInfoEntity.setProgramFiles(programFilesEntityList);
 
-        if (errors.size() != 0) {
-            model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
-            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-            return new ModelAndView("EditStudent");
+            if (errors.size() != 0) {
+                model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
+                model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+                return new ModelAndView("EditStudent");
+            }
+
+            userInfoService.save(userInfoEntity);
+
+            return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
         }
-
-        userInfoService.save(userInfoEntity);
-
-        return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
     }
 
     @RequestMapping(value = "/e-Testing/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
                                        UserInfoEntity userInfoEntity) {
-        if (null != id) {
-            userInfoEntity = userInfoService.getStudentById(id);
-        } else {
-            userInfoEntity = new UserInfoEntity();
-        }
-        programFilesEntityList = userInfoEntity.getProgramFiles();
+        try {
+            if (null != id) {
+                userInfoEntity = userInfoService.getStudentById(id);
+            } else {
+                userInfoEntity = new UserInfoEntity();
+            }
+            programFilesEntityList = userInfoEntity.getProgramFiles();
 
-        return new ModelAndView("EditStudent", ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            return new ModelAndView("EditStudent", ETestingConstants.MODEL_STUDENT, userInfoEntity);
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping("/e-Testing/ViewStudent")
@@ -99,35 +118,48 @@ public class UserInfoController {
                                  @RequestParam(value = "page", required = false) Integer page,
                                  UserInfoEntity userInfoEntity,
                                  Model model) {
+        try {
+            userInfoEntity = userInfoService.getStudentById(id);
+            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
+            model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
+                    userInfoService.setPage(page, paging1, model), id));
 
-        userInfoEntity = userInfoService.getStudentById(id);
-        model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-        Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
-        model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
-                userInfoService.setPage(page, paging1, model), id));
+            return new ModelAndView("ViewStudent");
 
-        return new ModelAndView("ViewStudent");
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping("/e-Testing/DeleteStudent")
     public ModelAndView deleteNews(@RequestParam(value = "id", required = false) Long id) {
-        userInfoService.deleteStudentById(id);
+        try {
+            userInfoService.deleteStudentById(id);
 
-        return new ModelAndView("redirect:/e-Testing/StudentList.html");
+            return new ModelAndView("redirect:/e-Testing/StudentList.html");
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping("/e-Testing/Download")
     public String download(@RequestParam(value = "programId", required = false) Long programId,
                            HttpServletResponse response,
-                           ProgramFilesEntity programFilesEntity) throws Exception {
+                           ProgramFilesEntity programFilesEntity) {
+        try {
+            programFilesEntity = userInfoService.getFileById(programId);
+            response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
+            response.setContentType(programFilesEntity.getContentType());
+            response.setContentLength(programFilesEntity.getFile().length);
+            FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
 
-        programFilesEntity = userInfoService.getFileById(programId);
-        response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
-        response.setContentType(programFilesEntity.getContentType());
-        response.setContentLength(programFilesEntity.getFile().length);
-        FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+            return null;
 
-        return null;
+        } catch (Exception ex) {
+            return "redirect:/e-Testing/error503.html";
+        }
     }
 
     @RequestMapping(value = "/e-Testing/MainAdminPage")

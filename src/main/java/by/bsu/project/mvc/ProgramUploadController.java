@@ -34,6 +34,8 @@ public class ProgramUploadController {
     private final static String PASSED_STATUS = "passed";
     private final static String FAILED_STATUS = "failed";
 
+    private String programStatus;
+
     @Autowired
     private UserInfoService userInfoService;
     private SpringUser user;
@@ -48,13 +50,17 @@ public class ProgramUploadController {
     public ModelAndView displayUploadFile(
             UserInfoEntity userInfoEntity,
             ProgramFilesEntity programFilesEntity,
-            Model model) throws Exception {
+            Model model) {
+        try {
+            user = getUser();
+            userInfoEntity = userInfoService.getStudentById(user.getId());
+            programFilesEntity = new ProgramFilesEntity();
+            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
 
-        user = getUser();
-        userInfoEntity = userInfoService.getStudentById(user.getId());
-        programFilesEntity = new ProgramFilesEntity();
-        model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-        return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping(value = "/e-Testing/SaveProgram")
@@ -62,40 +68,42 @@ public class ProgramUploadController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "studentId", required = false) Long studentId,
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity,
-            Model model) throws Exception {
+            Model model) {
 
-        String programStatus;
+        try {
+            UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
+            List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
-        UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
-        List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
+            if (errors.size() != 0) {
+                model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
+                model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+                return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+            }
 
-        if (errors.size() != 0) {
-            model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
-            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-            return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
+
+            if (programFilesUtil.checkFile()) {
+                programStatus = PASSED_STATUS;
+            } else programStatus = FAILED_STATUS;
+
+            programFilesEntity.setFile(file.getBytes());
+            programFilesEntity.setFileName(file.getOriginalFilename());
+            programFilesEntity.setContentType(file.getContentType());
+            programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
+            programFilesEntity.setStatus(programStatus);
+            userInfoEntity.getProgramFiles().add(programFilesEntity);
+
+            userInfoService.save(userInfoEntity);
+            return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
         }
-
-        ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
-
-        if (programFilesUtil.checkFile()) {
-            programStatus = PASSED_STATUS;
-        } else programStatus = FAILED_STATUS;
-
-        programFilesEntity.setFile(file.getBytes());
-        programFilesEntity.setFileName(file.getOriginalFilename());
-        programFilesEntity.setContentType(file.getContentType());
-        programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
-        programFilesEntity.setStatus(programStatus);
-        userInfoEntity.getProgramFiles().add(programFilesEntity);
-
-        userInfoService.save(userInfoEntity);
-        return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html?status=" + programStatus);
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
-    public ModelAndView processUploadPreview(
-            @RequestParam(value = "status", required = false) String status) {
-        return new ModelAndView("UploadProgramStatus", "status", status);
+    public ModelAndView processUploadPreview() {
+        return new ModelAndView("UploadProgramStatus", "status", programStatus);
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramsHistory")
@@ -104,13 +112,23 @@ public class ProgramUploadController {
             UserInfoEntity userInfoEntity,
             Model model) {
 
-        user = getUser();
-        userInfoEntity = userInfoService.getStudentById(user.getId());
-        Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
-        model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
-                userInfoService.setPage(page, paging1, model), user.getId()));
+        try {
+            user = getUser();
+            userInfoEntity = userInfoService.getStudentById(user.getId());
+            Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
+            model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
+                    userInfoService.setPage(page, paging1, model), user.getId()));
 
-        return new ModelAndView("UploadProgramsHistory");
+            return new ModelAndView("UploadProgramsHistory");
+
+        } catch (Exception ex) {
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/error503")
+    public ModelAndView errorPage() {
+        return new ModelAndView("errors/error503");
     }
 
     private SpringUser getUser() {

@@ -17,5 +17,7 @@
     <decorator name="layoutLogin" page="layoutLogin.jsp">
         <pattern>/e-Testing/Login.html</pattern>
         <pattern>/e-Testing/Denied.html</pattern>
+        <pattern>/e-Testing/error503.html</pattern>
+        <pattern>/e-Testing/error404.html</pattern>
     </decorator>
 </decorators>
