@@ -27,9 +27,14 @@
     <span style="margin-left: 113px;"><c:out value="${program.programName}"/></span><br>
     <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
     <span style="margin-left: 146px"><c:out value="${program.uploadProgramTime}"/></span><br>
-    <span style="margin-left: 200px"><c:out value="Статус"/></span>
-    <span style="margin-left: 217px"><c:out value="${program.status}"/></span><br>
-
+      <c:if test="${program.status == 'passed'}">
+        <span style="margin-left: 200px"><c:out value="Статус"/></span>
+        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
+      </c:if>
+      <c:if test="${program.status == 'failed'}">
+        <span style="margin-left: 200px"><c:out value="Статус"/></span>
+        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
+      </c:if>
     <c:if test="${not empty program.file}">
     <span style="margin-left: 200px"><c:out value="Программа"/></span>
     <a href="<c:url value="/e-Testing/Download.html?programId=${program.id}"/>" style="margin-left: 193px;">
