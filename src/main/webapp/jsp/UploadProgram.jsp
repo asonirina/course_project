@@ -22,7 +22,16 @@
       </div>
 
     <form:label path="programName" cssStyle="margin-left: 130px;">Название лабораторной</form:label>
-    <form:input path="programName" value="${program.programName}" cssStyle="margin-left: 100px"/><br><br>
+    <form:select path="programName" cssStyle="margin-left: 100px">
+        <form:option value="1" label="Лабораторная 1"/>
+        <form:option value="2" label="Лабораторная 2"/>
+        <form:option value="3" label="Лабораторная 3"/>
+        <form:option value="4" label="Лабораторная 4"/>
+        <form:option value="5" label="Лабораторная 5"/>
+        <form:option value="6" label="Лабораторная 6"/>
+        <form:option value="7" label="Лабораторная 7"/>
+    </form:select><br><br>
+    <%--<form:input path="programName" value="${program.programName}" cssStyle="margin-left: 100px"/><br><br>--%>
 
     <span style="margin-left: 130px;"></span><c:out value="Фаил на проверку"/></span>
     <input type="file" value="${program.file}" name="file" style="margin-left: 137px"><br><br>

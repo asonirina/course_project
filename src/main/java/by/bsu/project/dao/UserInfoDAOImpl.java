@@ -29,7 +29,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where userId = :id").
+        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where userId = :id order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id);
         return getSubList(query, pageNumber);
 

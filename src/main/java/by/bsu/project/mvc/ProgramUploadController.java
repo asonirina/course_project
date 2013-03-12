@@ -34,8 +34,7 @@ public class ProgramUploadController {
     private final static String PASSED_STATUS = "passed";
     private final static String FAILED_STATUS = "failed";
 
-    private String programStatus;
-
+    private Long currentFileId;
     @Autowired
     private UserInfoService userInfoService;
     private SpringUser user;
@@ -81,10 +80,11 @@ public class ProgramUploadController {
             }
 
             ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
-
+            String programStatus;
             if (programFilesUtil.checkFile()) {
                 programStatus = PASSED_STATUS;
-            } else programStatus = FAILED_STATUS;
+            } else
+                programStatus = FAILED_STATUS;
 
             programFilesEntity.setFile(file.getBytes());
             programFilesEntity.setFileName(file.getOriginalFilename());
@@ -94,6 +94,7 @@ public class ProgramUploadController {
             userInfoEntity.getProgramFiles().add(programFilesEntity);
 
             userInfoService.save(userInfoEntity);
+            currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
         } catch (Exception ex) {
@@ -102,8 +103,10 @@ public class ProgramUploadController {
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
-    public ModelAndView processUploadPreview() {
-        return new ModelAndView("UploadProgramStatus", "status", programStatus);
+    public ModelAndView processUploadPreview(Model model) {
+
+        model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
+        return new ModelAndView("UploadProgramStatus");
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramsHistory")
