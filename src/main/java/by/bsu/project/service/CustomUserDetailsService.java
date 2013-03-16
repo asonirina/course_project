@@ -3,6 +3,7 @@ package by.bsu.project.service;
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final static String ROLE_ADMIN = "ROLE_ADMIN";
     private final static String ROLE_USER  = "ROLE_USER";
+    private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
 
     @Autowired
     private UserInfoService userInfoService;
@@ -50,8 +52,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                     accountNonLocked,
                     getAuthorities(role));
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            logger.error("Unable to load user " + ex.getMessage());
+            throw new RuntimeException(ex);
         }
     }
 

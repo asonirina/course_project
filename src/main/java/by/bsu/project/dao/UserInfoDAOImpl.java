@@ -37,7 +37,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public Long studentsCountList() {
-        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity").uniqueResult();
+        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form != 'admin'").uniqueResult();
     }
 
     public void save(UserInfoEntity userInfoEntity) {

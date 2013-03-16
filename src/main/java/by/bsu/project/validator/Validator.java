@@ -14,6 +14,8 @@ import java.util.List;
 
 public class Validator {
 
+    private static final Integer MAX_FILE_SIZE_KB = 200;
+
     private static List<String> errors = new ArrayList<>();
 
     public static List<String> validateFile(MultipartFile file, String programName) {
@@ -22,16 +24,16 @@ public class Validator {
         if (file.getSize() == 0) {
             errors.add(ErrorsMessages.UNLOAD_FILE);
         } else {
+            if (file.getSize()/1000 > MAX_FILE_SIZE_KB) {
+                errors.add(ErrorsMessages.INVALID_SIZE_OF_FILE);
+            }
+
             String extension = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
 
             if (!(extension.equals(ETestingConstants.POSTFIX_C) || extension.equals(ETestingConstants.POSTFIX_CPP) ||
                     extension.equals(ETestingConstants.POSTFIX_PASCAL_P) || extension.equals(ETestingConstants.POSTFIX_PASCAL_PAS))) {
                 errors.add(ErrorsMessages.VALID_OPTIONS);
             }
-        }
-
-        if (programName == null || programName.length() == 0) {
-            errors.add(ErrorsMessages.PROGRAM_NAME_REQUIRED);
         }
 
         return errors;

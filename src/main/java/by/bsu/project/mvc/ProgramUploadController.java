@@ -6,7 +6,6 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
-import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
+import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.List;
-
 /**
  * @author Alina Glumova
  */
@@ -33,6 +32,7 @@ public class ProgramUploadController {
 
     private final static String PASSED_STATUS = "passed";
     private final static String FAILED_STATUS = "failed";
+    private static final Logger logger = Logger.getLogger(ProgramUploadController.class);
 
     private Long currentFileId;
     @Autowired
@@ -58,6 +58,7 @@ public class ProgramUploadController {
             return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
 
         } catch (Exception ex) {
+            logger.error("Unable to display upload file page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -79,11 +80,11 @@ public class ProgramUploadController {
                 return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             }
 
-            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
+//            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
             String programStatus;
-            if (programFilesUtil.checkFile()) {
-                programStatus = PASSED_STATUS;
-            } else
+//            if (programFilesUtil.checkFile()) {
+//                programStatus = PASSED_STATUS;
+//            } else
                 programStatus = FAILED_STATUS;
 
             programFilesEntity.setFile(file.getBytes());
@@ -98,6 +99,7 @@ public class ProgramUploadController {
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
         } catch (Exception ex) {
+            logger.error("Unable to save entity " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -125,6 +127,7 @@ public class ProgramUploadController {
             return new ModelAndView("UploadProgramsHistory");
 
         } catch (Exception ex) {
+            logger.error("Unable to display upload file history page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }

@@ -7,6 +7,7 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,9 @@ public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
+
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(UserInfoController.class);
 
     @RequestMapping(value = "/e-Testing/ChangePassword")
     public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
@@ -54,6 +57,7 @@ public class UserInfoController {
             return new ModelAndView("ChangePassword");
 
         } catch (Exception ex) {
+            logger.error("Unable to change password " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -69,6 +73,7 @@ public class UserInfoController {
 
             return new ModelAndView("StudentList");
         } catch (Exception ex) {
+            logger.error("Unable to display students list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -91,6 +96,7 @@ public class UserInfoController {
             return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
 
         } catch (Exception ex) {
+            logger.error("Unable to save student " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -109,12 +115,13 @@ public class UserInfoController {
             return new ModelAndView("EditStudent", ETestingConstants.MODEL_STUDENT, userInfoEntity);
 
         } catch (Exception ex) {
+            logger.error("Unable to edit student " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
 
     @RequestMapping("/e-Testing/ViewStudent")
-    public ModelAndView newsView(@RequestParam(value = "id", required = false) Long id,
+    public ModelAndView studentView(@RequestParam(value = "id", required = false) Long id,
                                  @RequestParam(value = "page", required = false) Integer page,
                                  UserInfoEntity userInfoEntity,
                                  Model model) {
@@ -128,18 +135,20 @@ public class UserInfoController {
             return new ModelAndView("ViewStudent");
 
         } catch (Exception ex) {
+            logger.error("Unable to display student " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
 
     @RequestMapping("/e-Testing/DeleteStudent")
-    public ModelAndView deleteNews(@RequestParam(value = "id", required = false) Long id) {
+    public ModelAndView deleteStudent(@RequestParam(value = "id", required = false) Long id) {
         try {
             userInfoService.deleteStudentById(id);
 
             return new ModelAndView("redirect:/e-Testing/StudentList.html");
 
         } catch (Exception ex) {
+            logger.error("Unable to delete student " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
     }
@@ -158,6 +167,7 @@ public class UserInfoController {
             return null;
 
         } catch (Exception ex) {
+            logger.error("Unable to download file " + ex.getMessage());
             return "redirect:/e-Testing/error503.html";
         }
     }
