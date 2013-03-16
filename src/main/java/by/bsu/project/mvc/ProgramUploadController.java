@@ -9,7 +9,7 @@ import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
-import com.google.common.util.concurrent.UncheckedTimeoutException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
-import org.apache.log4j.Logger;
-
 
 import java.util.Date;
 import java.util.List;
@@ -89,9 +87,9 @@ public class ProgramUploadController {
             String programStatus;
 
 
-            if (programFilesUtil.checkFile()) {
-                programStatus = PASSED_STATUS;
-            } else
+//            if (programFilesUtil.checkFile()) {
+//                programStatus = PASSED_STATUS;
+//            } else
                 programStatus = FAILED_STATUS;
 
             programFilesEntity.setFile(Compresser.compress(file.getBytes()));
@@ -106,7 +104,6 @@ public class ProgramUploadController {
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Unable to save entity " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }

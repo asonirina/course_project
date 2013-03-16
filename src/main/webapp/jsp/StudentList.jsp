@@ -2,9 +2,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <body>
+<form:form method="post" action="/e-Testing/GetStudentListByForm.html" commandName="students">
+    <form:label  path="form" cssStyle="margin-left: 570px;"><c:out value="Класс"/></form:label>
+    <form:select path="form" cssStyle="margin-left: 10px">
+    <form:option value="6" label="6"/>
+    <form:option value="7" label="7"/>
+    <form:option value="8" label="8"/>
+    <form:option value="9" label="9"/>
+    <form:option value="10" label="10"/>
+    <form:option value="11" label="11"/>
+    <form:option value="" label="Все"/>
+   </form:select>
+    <input type="submit" style="margin-left: 10px;" class="button" value="Выбрать"/><br><br>
+ </form:form>
+
     <c:forEach var="student" items="${studentList}">
 
         <span style="margin-left: 100px"><label>Имя</label></span>
