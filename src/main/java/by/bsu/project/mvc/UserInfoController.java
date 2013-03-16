@@ -1,5 +1,6 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.compressing.Compresser;
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.constants.ErrorsMessages;
 import by.bsu.project.entity.ProgramFilesEntity;
@@ -122,9 +123,9 @@ public class UserInfoController {
 
     @RequestMapping("/e-Testing/ViewStudent")
     public ModelAndView studentView(@RequestParam(value = "id", required = false) Long id,
-                                 @RequestParam(value = "page", required = false) Integer page,
-                                 UserInfoEntity userInfoEntity,
-                                 Model model) {
+                                    @RequestParam(value = "page", required = false) Integer page,
+                                    UserInfoEntity userInfoEntity,
+                                    Model model) {
         try {
             userInfoEntity = userInfoService.getStudentById(id);
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
@@ -162,7 +163,10 @@ public class UserInfoController {
             response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
             response.setContentType(programFilesEntity.getContentType());
             response.setContentLength(programFilesEntity.getFile().length);
-            FileCopyUtils.copy(programFilesEntity.getFile(), response.getOutputStream());
+
+            System.out.println(programFilesEntity.getFile());
+            byte[] file = Compresser.decompress(programFilesEntity.getFile());
+            FileCopyUtils.copy(file, response.getOutputStream());
 
             return null;
 

@@ -1,12 +1,15 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.compressing.Compresser;
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
+import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
+import com.google.common.util.concurrent.UncheckedTimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,8 +24,10 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.log4j.Logger;
 
+
 import java.util.Date;
 import java.util.List;
+
 /**
  * @author Alina Glumova
  */
@@ -80,14 +85,16 @@ public class ProgramUploadController {
                 return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             }
 
-//            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file);
+            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file,userInfoEntity,programFilesEntity.getProgramName());
             String programStatus;
-//            if (programFilesUtil.checkFile()) {
-//                programStatus = PASSED_STATUS;
-//            } else
+
+
+            if (programFilesUtil.checkFile()) {
+                programStatus = PASSED_STATUS;
+            } else
                 programStatus = FAILED_STATUS;
 
-            programFilesEntity.setFile(file.getBytes());
+            programFilesEntity.setFile(Compresser.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
@@ -99,6 +106,7 @@ public class ProgramUploadController {
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.error("Unable to save entity " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
