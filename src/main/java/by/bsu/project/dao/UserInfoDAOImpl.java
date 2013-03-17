@@ -24,7 +24,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public List<UserInfoEntity> studentsList(int pageNumber) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form != 'admin'  order by id asc");
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form != 'admin'  order by secondName");
         return getSubList(query, pageNumber);
     }
 
@@ -83,7 +83,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form").
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form order by secondName").
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
         return getSubList(query, pageNumber);
     }
