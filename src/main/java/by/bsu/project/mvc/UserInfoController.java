@@ -5,9 +5,11 @@ import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.constants.ErrorsMessages;
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.huffman.Huffman;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,10 +166,11 @@ public class UserInfoController {
             programFilesEntity = userInfoService.getFileById(programId);
             response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
             response.setContentType(programFilesEntity.getContentType());
-            response.setContentLength(programFilesEntity.getFile().length);
 
-            System.out.println(programFilesEntity.getFile());
-            byte[] file = Compresser.decompress(programFilesEntity.getFile());
+
+            byte[] file = Huffman.expand(programFilesEntity.getFile());
+            response.setContentLength(file.length);
+
             FileCopyUtils.copy(file, response.getOutputStream());
 
             return null;

@@ -29,7 +29,6 @@ public class ProgramFilesUtil {
         this.file = file;
         this.programName = user.getForm() + '.' + programName;
         dir = user.getLogin() + programName;
-        System.out.println(dir);
 
         new File(dir).mkdir();
         cmdC = "C:/tcc/tcc.exe " + path + dir + "/" + file.getOriginalFilename();
