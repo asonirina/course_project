@@ -21,7 +21,7 @@
       <c:out value="Hello, ${student.firstName} ${student.secondName}"/>
       </div>
 
-    <form:label path="programName" cssStyle="margin-left: 130px;">Название лабораторной</form:label>
+    <form:label path="programName" cssStyle="margin-left: 130px;"><c:out value="Название лабораторной"/></form:label>
     <form:select path="programName" cssStyle="margin-left: 100px">
         <form:option value="1" label="Лабораторная 1"/>
         <form:option value="2" label="Лабораторная 2"/>

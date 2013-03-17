@@ -9,7 +9,6 @@ import by.bsu.project.huffman.Huffman;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +37,7 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+    private String form = null;
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(UserInfoController.class);
 
@@ -72,15 +72,28 @@ public class UserInfoController {
                                             Model model) {
 
         try {
-            Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
-            model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
-                    userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
-
+            if (form == null || form.isEmpty()) {
+                Paging paging1 = new Paging(userInfoService.studentsCountList().intValue());
+                model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
+                        userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
+                model.addAttribute("students", new UserInfoEntity());
+            } else {
+                Paging paging1 = new Paging(userInfoService.studentsByFormCountList(form).intValue());
+                model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
+                        userInfoService.studentListByForm(userInfoService.setPage(page, paging1, model), form));
+                model.addAttribute("students", new UserInfoEntity());
+            }
             return new ModelAndView("StudentList");
         } catch (Exception ex) {
             logger.error("Unable to display students list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
+    }
+
+    @RequestMapping(value = "/e-Testing/GetStudentListByForm")
+    public ModelAndView getStudentListById(@ModelAttribute("StudentList") UserInfoEntity userInfoEntity) {
+        form = userInfoEntity.getForm();
+        return new ModelAndView("redirect:/e-Testing/StudentList.html");
     }
 
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)

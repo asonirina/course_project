@@ -20,4 +20,6 @@ public interface UserInfoService {
     public UserInfoEntity findStudentByLogin(String login);
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
     public int setPage(Integer page, Paging paging1, Model model);
+    public List<UserInfoEntity> studentListByForm(int pageNumber, String form);
+    public Long studentsByFormCountList(String form);
 }

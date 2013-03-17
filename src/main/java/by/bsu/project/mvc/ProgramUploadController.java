@@ -86,18 +86,16 @@ public class ProgramUploadController {
                 return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             }
 
-            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file, userInfoEntity, programFilesEntity.getProgramName());
+            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file,userInfoEntity,programFilesEntity.getProgramName());
             String programStatus;
 
 
 //            if (programFilesUtil.checkFile()) {
 //                programStatus = PASSED_STATUS;
 //            } else
-            programStatus = FAILED_STATUS;
+                programStatus = FAILED_STATUS;
 
-            byte[] arr = Huffman.compress(file.getBytes());
-
-            programFilesEntity.setFile(arr);
+            programFilesEntity.setFile(Compresser.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));

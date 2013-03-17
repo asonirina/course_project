@@ -40,6 +40,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form != 'admin'").uniqueResult();
     }
 
+    @Override
+    public Long studentsByFormCountList(String form) {
+        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form =:form").
+                setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
+    }
+
     public void save(UserInfoEntity userInfoEntity) {
         if (isExist(userInfoEntity.getId())) {
             sessionFactory.getCurrentSession().update(userInfoEntity);
@@ -74,6 +80,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     public UserInfoEntity findStudentByLogin(String login) {
         return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where login = :login").
                 setParameter(ETestingConstants.TABLE_FIELD_LOGIN, login).uniqueResult();
+    }
+
+    public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form").
+                setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
+        return getSubList(query, pageNumber);
     }
 
     private List getSubList(Query query, int pageNumber) {

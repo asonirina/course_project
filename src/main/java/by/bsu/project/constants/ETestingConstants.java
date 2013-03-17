@@ -17,4 +17,5 @@ public class ETestingConstants {
 
     public final static String TABLE_FIELD_LOGIN  = "login";
     public final static String TABLE_FIELD_ID     = "id";
+    public final static String TABLE_FIELD_FORM   = "form";
 }

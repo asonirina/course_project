@@ -61,6 +61,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDAO.findStudentByLogin(login);
     }
 
+    @Transactional
+    public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
+       return userInfoDAO.studentListByForm(pageNumber, form);
+    }
+
+    @Transactional
+    public Long studentsByFormCountList(String form) {
+        return userInfoDAO.studentsByFormCountList(form);
+    }
+
     public int setPage(Integer page, Paging paging1, Model model) {
         int pageNumber = 0;
         if (null != page) {
