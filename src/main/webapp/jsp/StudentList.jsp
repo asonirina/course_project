@@ -7,7 +7,7 @@
 <html>
 <body>
 <form:form method="post" action="/e-Testing/GetStudentListByForm.html" commandName="students">
-    <form:label  path="form" cssStyle="margin-left: 570px;"><c:out value="Класс"/></form:label>
+    <form:label  path="form" cssStyle="margin-left: 560px;"><c:out value="Класс"/></form:label>
     <form:select path="form" cssStyle="margin-left: 10px">
     <form:option value="6" label="6"/>
     <form:option value="7" label="7"/>
