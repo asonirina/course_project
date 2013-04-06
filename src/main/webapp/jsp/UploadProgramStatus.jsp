@@ -13,6 +13,13 @@
             <c:if test="${program.status == 'failed'}">
                 <span style="margin-left: 200px"><c:out value="Статус"/></span>
                 <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
+                <c:if test="${not empty messages}">
+                <div style="margin-left: 200px; color: red;"><c:out value="Ошибка компиляции"/></div>
+                <c:forEach var="line" items="${messages}">
+                   <div style="margin-left: 200px"><c:out value="${line}"/></div>
+                </c:forEach>
+                </c:if>
             </c:if>
+
 </body>
 </html>

@@ -2,6 +2,7 @@ package by.bsu.project.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Alina Glumova

@@ -22,6 +22,8 @@ public class ProgramFilesUtil {
     private String cmdCpp;
     private String cmdPascal;
     private String path = "C:/tomcat/bin/";
+    private List<String> messages = new ArrayList<>();
+    private List<String> testResults = new ArrayList<>();
 
     private String dir;
 
@@ -49,31 +51,72 @@ public class ProgramFilesUtil {
             cmd = cmdC;
         }
 
-        return compile(cmd);
+        return compile(cmd, postfix);
     }
 
 
-    private boolean compile(String cmd) throws Exception {
+    private boolean compile(String cmd, String postfix) throws Exception {
         file.transferTo(new File(path + dir + "/" + file.getOriginalFilename()));
-//        Checker checker = new TimeChecker();
-//        TimeLimiter limiter = new SimpleTimeLimiter();
-//        Checker proxy = limiter.newProxy(checker, Checker.class, 10000, TimeUnit.MILLISECONDS);
+
         Process process = Runtime.getRuntime().exec(cmd, null, new File(dir));
-//        try {
-//            proxy.compileFile(process);
-//        } catch (UncheckedTimeoutException e) {
-//            e.printStackTrace();
-//            process.destroy();
-//            return false;
-//        }
 
-        process.waitFor();
+        int result = process.waitFor();
 
+        if (result == 0) {
+            return checkAllInputFiles();
+        } else {
 
-        return checkAllInputFiles();
+            if (postfix.equals(ETestingConstants.POSTFIX_CPP)) {
+                getDigitalMarsMessages(process.getInputStream());
+            }
+            if (postfix.equals(ETestingConstants.POSTFIX_PASCAL_PAS) || postfix.equals(ETestingConstants.POSTFIX_PASCAL_P)) {
+                getFreePascalMessages(process.getInputStream());
+            }
+            if (postfix.equals(ETestingConstants.POSTFIX_C)) {
+                getTinyCCompilerMessages(process.getErrorStream());
+            }
+            deleteDir(dir);
+            return false;
+        }
+    }
+
+    private void getDigitalMarsMessages(InputStream in) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        while (br.ready()) {
+            line = br.readLine();
+            if (line.contains("Error:")) {
+                messages.add(line.substring(line.lastIndexOf("Error:")));
+            }
+
+        }
+    }
+
+    private void getFreePascalMessages(InputStream in) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        while (br.ready()) {
+            line = br.readLine();
+            if (line.startsWith("Fatal:")) {
+                messages.add(line);
+            }
+        }
+    }
+
+    private void getTinyCCompilerMessages(InputStream in) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        while (br.ready()) {
+            line = br.readLine();
+        }
+        messages.add(line.substring(line.lastIndexOf(":") + 1));
     }
 
     private boolean checkAllInputFiles() throws Exception {
+        boolean res = true;
         File inDir = new File("tasks/" + programName + "/in");
 
         for (int i = 0; i < inDir.list().length; ++i) {
@@ -84,26 +127,27 @@ public class ProgramFilesUtil {
                     .exec(path + dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
             Checker checker = new TimeChecker();
             TimeLimiter limiter = new SimpleTimeLimiter();
-            Checker proxy = limiter.newProxy(checker, Checker.class, 10000, TimeUnit.MILLISECONDS);
+            Checker proxy = limiter.newProxy(checker, Checker.class, 120000, TimeUnit.MILLISECONDS);
             try {
                 proxy.compileFile(p);
             } catch (UncheckedTimeoutException e) {
                 e.printStackTrace();
                 p.destroy();
-                deleteDir(dir);
-                return false;
+                testResults.add("not passed");
+                res = false;
             }
-            //  p.waitFor();
 
 
             if (!compareFiles()) {
-                deleteDir(dir);
-                return false;
+                res = false;
+                testResults.add("not passed");
+            } else {
+                testResults.add("passed");
             }
         }
         deleteDir(dir);
 
-        return true;
+        return res;
     }
 
     private void deleteDir(String dir) {
@@ -154,4 +198,11 @@ public class ProgramFilesUtil {
         return result;
     }
 
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public List<String> getTestResults() {
+        return testResults;
+    }
 }

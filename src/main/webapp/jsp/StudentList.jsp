@@ -17,7 +17,7 @@
     <form:option value="11" label="11"/>
     <form:option value="" label="Все"/>
    </form:select>
-    <input type="submit" style="margin-left: 10px;" class="button" value="Выбрать"/><br><br>
+   <input type="submit" style="text-align: left" class="button" value="Выбрать"/><br><br>
  </form:form>
 
     <c:forEach var="student" items="${studentList}">

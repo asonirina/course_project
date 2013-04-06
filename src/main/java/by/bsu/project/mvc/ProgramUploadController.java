@@ -1,6 +1,5 @@
 package by.bsu.project.mvc;
 
-import by.bsu.project.compressing.Compresser;
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
@@ -10,7 +9,6 @@ import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
-import com.google.common.util.concurrent.UncheckedTimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.log4j.Logger;
-
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +38,8 @@ public class ProgramUploadController {
     private static final Logger logger = Logger.getLogger(ProgramUploadController.class);
 
     private Long currentFileId;
+    private ProgramFilesUtil programFilesUtil;
+
     @Autowired
     private UserInfoService userInfoService;
     private SpringUser user;
@@ -86,16 +85,16 @@ public class ProgramUploadController {
                 return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             }
 
-            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(file,userInfoEntity,programFilesEntity.getProgramName());
+            programFilesUtil = new ProgramFilesUtil(file, userInfoEntity, programFilesEntity.getProgramName());
             String programStatus;
 
-
-//            if (programFilesUtil.checkFile()) {
-//                programStatus = PASSED_STATUS;
-//            } else
+            if (programFilesUtil.checkFile()) {
+                programStatus = PASSED_STATUS;
+            } else {
                 programStatus = FAILED_STATUS;
+            }
 
-            programFilesEntity.setFile(Compresser.compress(file.getBytes()));
+            programFilesEntity.setFile(Huffman.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
@@ -115,8 +114,9 @@ public class ProgramUploadController {
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
     public ModelAndView processUploadPreview(Model model) {
-
+        model.addAttribute("res",programFilesUtil.getTestResults());
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
+        model.addAttribute(ETestingConstants.MODEL_MESSAGES, programFilesUtil.getMessages());
         return new ModelAndView("UploadProgramStatus");
     }
 

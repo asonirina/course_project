@@ -18,8 +18,10 @@
         <intercept-url pattern="/e-Testing/Logout.html" access="permitAll"/>
         <intercept-url pattern="/e-Testing/Denied.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/*" access="isAuthenticated()"/>
+        <intercept-url pattern="/e-Testing/ChangePassword.html" access="isAuthenticated()"/>
         <intercept-url pattern="/e-Testing/UploadProgram.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/SaveProgram.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgramHistory.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/UploadProgramStatus.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/MainStudentPage.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/MainAdminPage.html" access="hasRole('ROLE_ADMIN')"/>
