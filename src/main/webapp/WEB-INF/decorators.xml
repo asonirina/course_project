@@ -10,8 +10,8 @@
         <pattern>/e-Testing/SaveProgram.html</pattern>
         <pattern>/e-Testing/UploadProgramStatus.html</pattern>
         <pattern>/e-Testing/MainStudentPage.html</pattern>
-        <pattern>/e-Testing/ChangePassword.html</pattern>
         <pattern>/e-Testing/UploadProgramsHistory.html</pattern>
+        <pattern>/e-Testing/ChangeStudentPassword.html</pattern>
     </decorator>
 
     <decorator name="layoutLogin" page="layoutLogin.jsp">

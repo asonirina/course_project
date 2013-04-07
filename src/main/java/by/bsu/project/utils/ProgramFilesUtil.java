@@ -5,14 +5,14 @@ import by.bsu.project.entity.UserInfoEntity;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.io.FileUtils;
 
 
 public class ProgramFilesUtil {
@@ -26,6 +26,8 @@ public class ProgramFilesUtil {
     private List<String> testResults = new ArrayList<>();
 
     private String dir;
+
+    private static final Logger logger = Logger.getLogger(ProgramFilesUtil.class);
 
     public ProgramFilesUtil(MultipartFile file, UserInfoEntity user, String programName) throws Exception {
         this.file = file;
@@ -131,18 +133,17 @@ public class ProgramFilesUtil {
             try {
                 proxy.compileFile(p);
             } catch (UncheckedTimeoutException e) {
-                e.printStackTrace();
+                logger.error("Unable to compile file " + e.getMessage());
                 p.destroy();
-                testResults.add("not passed");
+                testResults.add(ETestingConstants.FAILED_STATUS);
                 res = false;
             }
 
-
             if (!compareFiles()) {
                 res = false;
-                testResults.add("not passed");
+                testResults.add(ETestingConstants.FAILED_STATUS);
             } else {
-                testResults.add("passed");
+                testResults.add(ETestingConstants.PASSED_STATUS);
             }
         }
         deleteDir(dir);

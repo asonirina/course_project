@@ -33,8 +33,6 @@ import java.util.List;
 @Controller
 public class ProgramUploadController {
 
-    private final static String PASSED_STATUS = "passed";
-    private final static String FAILED_STATUS = "failed";
     private static final Logger logger = Logger.getLogger(ProgramUploadController.class);
 
     private Long currentFileId;
@@ -89,9 +87,9 @@ public class ProgramUploadController {
             String programStatus;
 
             if (programFilesUtil.checkFile()) {
-                programStatus = PASSED_STATUS;
+                programStatus = ETestingConstants.PASSED_STATUS;
             } else {
-                programStatus = FAILED_STATUS;
+                programStatus = ETestingConstants.FAILED_STATUS;
             }
 
             programFilesEntity.setFile(Huffman.compress(file.getBytes()));
@@ -106,7 +104,6 @@ public class ProgramUploadController {
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Unable to save entity " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }

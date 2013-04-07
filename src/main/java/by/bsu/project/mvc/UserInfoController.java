@@ -1,6 +1,5 @@
 package by.bsu.project.mvc;
 
-import by.bsu.project.compressing.Compresser;
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.constants.ErrorsMessages;
 import by.bsu.project.entity.ProgramFilesEntity;
@@ -22,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,25 +43,15 @@ public class UserInfoController {
                                        @RequestParam(value = "password1", required = false) String password1,
                                        @RequestParam(value = "password2", required = false) String password2,
                                        HttpServletRequest request) {
-        try {
-            if (oldPassword != null) {
-                String login = request.getRemoteUser();
-                UserInfoEntity user = userInfoService.findStudentByLogin(login);
-                if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
-                    user.setPassword(password1);
-                    userInfoService.save(user);
-                    if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
-                        return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
-                    } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
-                }
-                return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
-            }
-            return new ModelAndView("ChangePassword");
+        return changeUserPassword(oldPassword, password1, password2, request);
+    }
 
-        } catch (Exception ex) {
-            logger.error("Unable to change password " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
-        }
+    @RequestMapping(value = "/e-Testing/ChangeStudentPassword")
+    public ModelAndView changeStudentPassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
+                                              @RequestParam(value = "password1", required = false) String password1,
+                                              @RequestParam(value = "password2", required = false) String password2,
+                                              HttpServletRequest request) {
+        return changeUserPassword(oldPassword, password1, password2, request);
     }
 
     @RequestMapping(value = "/e-Testing/StudentList")
@@ -202,5 +189,30 @@ public class UserInfoController {
     @RequestMapping(value = "/e-Testing/MainStudentPage")
     public ModelAndView displayMainStudentPage() {
         return new ModelAndView("MainStudentPage");
+    }
+
+    private ModelAndView changeUserPassword(String oldPassword,
+                                            String password1,
+                                            String password2,
+                                            HttpServletRequest request) {
+        try {
+            if (oldPassword != null) {
+                String login = request.getRemoteUser();
+                UserInfoEntity user = userInfoService.findStudentByLogin(login);
+                if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
+                    user.setPassword(password1);
+                    userInfoService.save(user);
+                    if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
+                        return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
+                    } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
+                }
+                return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
+            }
+            return new ModelAndView("ChangePassword");
+
+        } catch (Exception ex) {
+            logger.error("Unable to change password " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 }
