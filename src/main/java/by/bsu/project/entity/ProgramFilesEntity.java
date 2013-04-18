@@ -38,6 +38,9 @@ public class ProgramFilesEntity {
     @Column(name = "added_time")
     private Date uploadProgramTime;
 
+    @Column(name = "testResults")
+    private byte[] testResults;
+
     public Long getId() {
         return id;
     }
@@ -100,5 +103,13 @@ public class ProgramFilesEntity {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public byte[] getTestResults() {
+        return testResults;
+    }
+
+    public void setTestResults(byte[] testResults) {
+        this.testResults = testResults;
     }
 }

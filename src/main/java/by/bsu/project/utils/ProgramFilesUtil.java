@@ -23,7 +23,7 @@ public class ProgramFilesUtil {
     private String cmdPascal;
     private String path = "C:/tomcat/bin/";
     private List<String> messages = new ArrayList<>();
-    private List<String> testResults = new ArrayList<>();
+    private StringBuffer testResults = new StringBuffer();
 
     private String dir;
 
@@ -135,15 +135,15 @@ public class ProgramFilesUtil {
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to compile file " + e.getMessage());
                 p.destroy();
-                testResults.add(ETestingConstants.FAILED_STATUS);
+                testResults.append(i+1).append(":"+ETestingConstants.FAILED_STATUS+'\n');
                 res = false;
             }
 
             if (!compareFiles()) {
                 res = false;
-                testResults.add(ETestingConstants.FAILED_STATUS);
+                testResults.append(i+1).append(":"+ETestingConstants.FAILED_STATUS+'\n');
             } else {
-                testResults.add(ETestingConstants.PASSED_STATUS);
+                testResults.append(i+1).append(":"+ETestingConstants.PASSED_STATUS+'\n');
             }
         }
         deleteDir(dir);
@@ -203,7 +203,7 @@ public class ProgramFilesUtil {
         return messages;
     }
 
-    public List<String> getTestResults() {
-        return testResults;
+    public byte[] getTestResults() {
+        return testResults.toString().getBytes();
     }
 }

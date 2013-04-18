@@ -97,6 +97,7 @@ public class ProgramUploadController {
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setStatus(programStatus);
+            programFilesEntity.setTestResults(programFilesUtil.getTestResults());
             userInfoEntity.getProgramFiles().add(programFilesEntity);
 
             userInfoService.save(userInfoEntity);
@@ -111,9 +112,9 @@ public class ProgramUploadController {
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
     public ModelAndView processUploadPreview(Model model) {
-        model.addAttribute("res",programFilesUtil.getTestResults());
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
         model.addAttribute(ETestingConstants.MODEL_MESSAGES, programFilesUtil.getMessages());
+        model.addAttribute(ETestingConstants.MODEL_TEST_RESULTS, programFilesUtil.getTestResults());
         return new ModelAndView("UploadProgramStatus");
     }
 
