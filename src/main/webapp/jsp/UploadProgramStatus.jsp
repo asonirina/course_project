@@ -20,6 +20,11 @@
                 </c:forEach>
                 </c:if>
             </c:if>
+            <c:if test="${not empty program.testResults}">
+                <span style="margin-left: 200px"><c:out value="Результаты тестов"/></span>
+                <a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">
+                    <input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>
+            </c:if>
 
 </body>
 </html>

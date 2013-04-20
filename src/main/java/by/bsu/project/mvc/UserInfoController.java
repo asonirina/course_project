@@ -176,7 +176,29 @@ public class UserInfoController {
             return null;
 
         } catch (Exception ex) {
-            logger.error("Unable to download file " + ex.getMessage());
+            logger.error("Unable to download program file " + ex.getMessage());
+            return "redirect:/e-Testing/error503.html";
+        }
+    }
+
+    @RequestMapping("/e-Testing/DownloadResults")
+    public String downloadResults(@RequestParam(value = "programId", required = false) Long programId,
+                                  HttpServletResponse response,
+                                  ProgramFilesEntity programFilesEntity) {
+        try {
+            programFilesEntity = userInfoService.getFileById(programId);
+            response.setHeader("Content-Disposition", "inline;filename=\"" + ETestingConstants.MODEL_TEST_RESULTS + ".txt\"");
+            response.setContentType(programFilesEntity.getContentType());
+
+            byte[] file = programFilesEntity.getTestResults();
+            response.setContentLength(file.length);
+
+            FileCopyUtils.copy(file, response.getOutputStream());
+
+            return null;
+
+        } catch (Exception ex) {
+            logger.error("Unable to download test results file " + ex.getMessage());
             return "redirect:/e-Testing/error503.html";
         }
     }

@@ -9,6 +9,7 @@ import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
-import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.List;
@@ -114,7 +114,6 @@ public class ProgramUploadController {
     public ModelAndView processUploadPreview(Model model) {
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
         model.addAttribute(ETestingConstants.MODEL_MESSAGES, programFilesUtil.getMessages());
-        model.addAttribute(ETestingConstants.MODEL_TEST_RESULTS, programFilesUtil.getTestResults());
         return new ModelAndView("UploadProgramStatus");
     }
 

@@ -40,7 +40,11 @@
     <a href="<c:url value="/e-Testing/Download.html?programId=${program.id}"/>" style="margin-left: 193px;">
         <input type="image" value="${program.fileName}" src="/images/download.png"></a><br>
     </c:if>
-
+    <c:if test="${not empty program.testResults}">
+        <span style="margin-left: 200px"><c:out value="Результаты тестов"/></span>
+        <a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">
+            <input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>
+    </c:if>
       <HR color="#52A8E8" size="1">
   </c:forEach>
 
