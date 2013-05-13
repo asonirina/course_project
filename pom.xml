@@ -224,6 +224,13 @@
             <version>r03</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

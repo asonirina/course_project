@@ -5,6 +5,7 @@ import by.bsu.project.entity.UserInfoEntity;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 public class ProgramFilesUtil {
     private MultipartFile file;
@@ -35,9 +35,10 @@ public class ProgramFilesUtil {
         dir = user.getLogin() + programName;
 
         new File(dir).mkdir();
-        cmdC = "C:/tcc/tcc.exe " + path + dir + "/" + file.getOriginalFilename();
-        cmdCpp = "C:/dm/bin/dmc.exe " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
-        cmdPascal = "C:/FPC1/2.2.0/bin/i386-win32/fpc.exe " + path + dir + "/" + file.getOriginalFilename();
+        PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
+        cmdC = config.getProperty("c")+" " + path + dir + "/" + file.getOriginalFilename();
+        cmdCpp = config.getProperty("cpp")+" " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
+        cmdPascal = config.getProperty("pas")+" " + path + dir + "/" + file.getOriginalFilename();
 
     }
 
