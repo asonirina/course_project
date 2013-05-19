@@ -14,19 +14,19 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="by.bsu.project"/>
+    <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
 
     <mvc:annotation-driven />
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          destroy-method="close"
-          p:driverClassName="com.mysql.jdbc.Driver"
-          p:url="jdbc:mysql://localhost:3306/etesting"
-          p:username="root"
-          p:password="root"
-            />
-
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <!--DataBaseConfig -->
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+          p:driverClassName="${jdbc.driverClassName}"
+          p:url="${jdbc.databaseurl}" p:username="${jdbc.username}"
+          p:password="${jdbc.password}"/>
 
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -35,17 +35,9 @@
         <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
-                <prop key="hibernate.connection.useUnicode">true</prop>
-                <prop key="hibernate.connection.characterSetResults">UTF-8</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="hibernate.show_sql">${jdbc.show_sql}</prop>
                 <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/etesting</prop>
-                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
-                <prop key="hibernate.connection.username">root</prop>
-                <prop key="hibernate.connection.password">root</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
     </bean>
