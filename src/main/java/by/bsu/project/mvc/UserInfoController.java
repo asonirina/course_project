@@ -87,10 +87,13 @@ public class UserInfoController {
     public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
 
         try {
-            List<String> errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
+            List<String> errors = null;
+            if (userInfoEntity.getId() == null) {
+                errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
+            }
             userInfoEntity.setProgramFiles(programFilesEntityList);
 
-            if (errors.size() != 0) {
+            if (errors != null && errors.size() != 0) {
                 model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
                 model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
                 return new ModelAndView("EditStudent");
