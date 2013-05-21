@@ -5,6 +5,9 @@
 <html>
 <head>
     <script type="text/javascript" src="/js/validator.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="/js/validate.min.js" type="text/javascript"></script>
+    <script src="/js/init.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -15,56 +18,53 @@
         </c:forEach>
     </div>
 </c:if>
-
-<form:form method="post" action="/e-Testing/SaveStudent.html" commandName="student" onsubmit="return checkAll();">
+<div class="wrapper">
+<form:form method="post" id="form" class="blocks" action="/e-Testing/SaveStudent.html" commandName="student">
 
     <c:if test="${not empty student.id}">
         <input type="hidden" id="id" name="id"
                value="${student.id}"/>
     </c:if>
 
-    <form:label path="firstName" cssStyle="margin-left: 200px;">Имя</form:label>
-    <form:input path="firstName" value="${student.firstName}" cssStyle="margin-left: 101px"
-                onkeypress="checkZeroLength('firstName','correctFirstName')"
-                onfocus="checkZeroLength('firstName','correctFirstName')"
-                onkeyup="checkZeroLength('firstName','correctFirstName')"/>
-    <span class="span_info"><span id="correctFirstName"></span></span><br>
-
-    <form:label path="secondName" cssStyle="margin-left: 200px;">Фамилия</form:label>
-    <form:input path="secondName" value="${student.secondName}" cssStyle="margin-left: 71"
-                onkeypress="checkZeroLength('secondName','correctSecondName')"
-                onfocus="checkZeroLength('secondName','correctSecondName')"
-                onkeyup="checkZeroLength('secondName','correctSecondName')"/>
-    <span class="span_info"><span id="correctSecondName"></span></span><br>
-
-    <form:label path="form" cssStyle="margin-left: 200px;">Класс</form:label>
-    <form:input path="form" value="${student.form}" cssStyle="margin-left: 91"
-                onkeypress="checkZeroLength('form','correctForm')"
-                onfocus="checkZeroLength('form','correctForm')"
-                onkeyup="checkZeroLength('form','correctForm')"/>
-    <span class="span_info"><span id="correctForm"></span></span><br>
-
-    <form:label path="login" cssStyle="margin-left: 200px;">Логин</form:label>
-    <form:input path="login" value="${student.login}" cssStyle="margin-left: 89"
-                onkeypress="checkZeroLength('login','correctLogin')"
-                onfocus="checkZeroLength('login','correctLogin')"
-                onkeyup="checkZeroLength('login','correctLogin')"/>
-    <span class="span_info"><span id="correctLogin"></span></span><br>
-
-    <form:label path="password" cssStyle="margin-left: 200px;">Пароль</form:label>
-    <form:password path="password" value="${student.password}" cssStyle="margin-left: 81"
-                   onkeypress="checkZeroLength('password','correctPassword')"
-                   onfocus="checkZeroLength('password','correctPassword')"
-                   onkeyup="checkZeroLength('password','correctPassword')"/>
-    <span class="span_info"><span id="correctPassword"></span></span><br><br>
-
+    <p>
+    <form:label path="firstName">Имя</form:label>
+    <form:input path="firstName" value="${student.firstName}"
+                class="text" name="firstName"/>
+    </p>
+    <p>
+    <form:label path="secondName">Фамилия</form:label>
+    <form:input path="secondName" value="${student.secondName}"
+                class="text" name="secondName"/>
+    </p>
+    <p>
+    <form:label path="form">Класс</form:label>
+    <form:input path="form" value="${student.form}"
+                class="text" name="form" />
+    </p>
+    <p>
+    <form:label path="login">Логин</form:label>
+    <form:input path="login" value="${student.login}"
+                class="text" name="login"/>
+    </p>
+    <p>
+    <form:label path="password">Пароль</form:label>
+    <form:password path="password" value="${student.password}"
+                   class="text" name="password"/>
+    </p>
+    <p>
+    <br>
     <div style="text-align: center">
-        <input type="submit" class="button" value="Сохранить"/>
-        <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"
-                                                                                       value="Отмена"
-                                                                                       name="canceled" class="button"/></a>
+        <input type="submit" class="btn" value="Сохранить" style="margin-left: 540px"/>
+    <a href="<c:url value="/e-Testing/StudentList.html"/>"><input type="button"
+            value="Отмена"
+            name="canceled" class="btn" style="margin-left: 10px"/></a>
+         <%--<a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"--%>
+                                                                                       <%--value="Отмена"--%>
+                                                                                       <%--name="canceled" class="btn"/></a>--%>
     </div>
-    <input type="hidden" name="check_zeroLength" id="check_zeroLength" value="0"/>
+    </p>
+
 </form:form>
+</div>
 </body>
 </html>
