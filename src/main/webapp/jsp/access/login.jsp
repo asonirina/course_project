@@ -9,14 +9,22 @@
     <div class="errorblock"><c:out value="${message}"/></div>
     </c:if>
 
-	<form class="login-form" action="j_spring_security_check" method="post" >
-	  <span style="margin-left: 230px"><label for="j_username">Логин:</label></span>
-	  <span style="margin-left: 28px"><input id="j_username" name="j_username" type="text"/></span><br><br>
 
-	  <span style="margin-left: 230px"><label for="j_password">Пароль:</label></span>
-	  <span style="margin-left: 20px"><input id="j_password" name="j_password" type="password"/></span><br><br>
+	<form id="loginForm" action="j_spring_security_check" method="post" >
+        <div class="field">
+            <label for="j_username">Логин:</label>
+            <div class="input"><input id="j_username" name="j_username" type="text"/></div>
+        </div>
+        <div class="field">
+            <a href="#" id="forgot">Забыли пароль?</a>
+            <label for="j_password">Пароль:</label>
+            <div class="input"><input id="j_password" name="j_password" type="password"/></div>
+        </div>
+        <div class="submit">
+            <input type="submit" value="Войти"/>
+            <label id="remember"><input name="" type="checkbox" value="" /> Запомнить меня</label>
+        </div>
 
-			<input type="submit" value="Авторизоваться" class="button" style="margin-left: 300px"/>
 	</form>
 
 </body>

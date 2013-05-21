@@ -184,9 +184,9 @@ h1{
 }
 
 #content-container {
-    padding: 20px 30px;
-    background: url(/images/templatemo_content.png) repeat-y;
-}
+     padding: 20px 30px;
+     /*background: url(/images/templatemo_content.png) repeat-y;*/
+ }
 
 
 #content-container p {
