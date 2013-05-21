@@ -21,8 +21,10 @@
             <div class="input"><input id="j_password" name="j_password" type="password"/></div>
         </div>
         <div class="submit">
-            <input type="submit" value="Войти"/>
-            <label id="remember"><input name="" type="checkbox" value="" /> Запомнить меня</label>
+            <button type="submit" name="submit">
+            <span>Войти</span>
+            </button>
+            <label id="remember"><input name="" type="checkbox" value=""/> Запомнить меня</label>
         </div>
 
 	</form>
