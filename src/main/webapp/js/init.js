@@ -16,7 +16,16 @@ $(function(){
 			},
             password: {
 				required: true
-			}
+			},
+            oldPassword: {
+                required: true
+            },
+            password1: {
+                required: true
+            },
+            password2: {
+                required: true
+            }
 		},
 		messages: {
             firstName: {
@@ -33,7 +42,16 @@ $(function(){
             },
             password: {
                 required: 'Обязательное поле'
-			}
+			},
+            oldPassword: {
+                required: 'Обязательное поле'
+            } ,
+            password1: {
+                required: 'Обязательное поле'
+            } ,
+            password2: {
+                required: 'Обязательное поле'
+            }
 		},
 		success: function(label) {
 			label.html('OK').removeClass('error').addClass('ok');
