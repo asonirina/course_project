@@ -130,9 +130,9 @@ public class ProgramFilesUtil {
                     .exec(path + dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
             Checker checker = new TimeChecker();
             TimeLimiter limiter = new SimpleTimeLimiter();
-            Checker proxy = limiter.newProxy(checker, Checker.class, 120000, TimeUnit.MILLISECONDS);
+            Checker proxy = limiter.newProxy(checker, Checker.class, 60000, TimeUnit.MILLISECONDS);
             try {
-                proxy.compileFile(p);
+                proxy.runProcess(p);
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to compile file " + e.getMessage());
                 p.destroy();

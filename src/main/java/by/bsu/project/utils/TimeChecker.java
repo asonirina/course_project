@@ -7,7 +7,7 @@ public class TimeChecker  implements Checker{
 
 
     @Override
-    public int compileFile(Process process) throws InterruptedException{
+    public int runProcess(Process process) throws InterruptedException{
         return process.waitFor();
     }
 }

@@ -8,5 +8,6 @@
     <session-factory>
         <mapping class="by.bsu.project.entity.UserInfoEntity" />
         <mapping class="by.bsu.project.entity.ProgramFilesEntity" />
+        <mapping class="by.bsu.project.plagiat.model.AttributeCounting" />
     </session-factory>
 </hibernate-configuration>

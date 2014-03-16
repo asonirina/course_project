@@ -34,6 +34,30 @@ CREATE TABLE `program_files` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2340 COMMENT='InnoDB free: 11264 kB';
 
+
+#
+# Structure for the `attribute_countings` table : 
+#
+
+CREATE TABLE `attribute_countings` (
+  `id` int(11) NOT NULL auto_increment,
+  `ProgrName` varchar(50) NOT NULL,
+  `imports` int(3) NOT NULL,
+  `functions` int(3) NOT NULL,
+  `calls` int(3) NOT NULL,
+  `assigns` int(3) NOT NULL,
+  `pluses` int(3) NOT NULL,
+  `minuses` int(3) NOT NULL,
+  `multiples` int(3) NOT NULL,
+  `divides` int(3) NOT NULL,
+  `variables` int(3) NOT NULL,
+  `ifs` int(3) NOT NULL,
+  `cycles` int(3) NOT NULL,
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
+
+
 #
 # Structure for the `user_info` table : 
 #
