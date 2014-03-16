@@ -1,0 +1,16 @@
+#### Eclipse
+.project
+.settings
+.classpath
+target
+test-output
+test.log.*
+
+#### Idea ###
+.idea
+*.iml
+
+
+####  local
+_pom.xml
+qaa.log
