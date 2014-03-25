@@ -6,6 +6,7 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
+import by.bsu.project.plagiat.model.TreeNode;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -136,6 +138,21 @@ public class ProgramUploadController {
             logger.error("Unable to display upload file history page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html");
         }
+    }
+
+
+
+    @RequestMapping(value = "/e-Testing/viewTree")
+    public ModelAndView viewTree(Model model) {
+        List<TreeNode> nodes = new ArrayList<>();
+        TreeNode node1 = new TreeNode("123", "");
+        TreeNode node2 = new TreeNode("456", "123");
+        TreeNode node3 = new TreeNode("789", "123");
+        nodes.add(node1);
+        nodes.add(node2);
+        nodes.add(node3);
+        model.addAttribute(ETestingConstants.TREE_NODES, nodes);
+        return new ModelAndView("tree/viewTree");
     }
 
     @RequestMapping(value = "/e-Testing/error503")

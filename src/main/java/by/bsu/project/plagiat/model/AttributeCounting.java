@@ -10,7 +10,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "attribute_countings")
 public class AttributeCounting {
+    public AttributeCounting() {
 
+    }
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,7 +20,7 @@ public class AttributeCounting {
 
 
     @Column(name = "progrName")
-    private Integer progrName;
+    private String progrName;
 
 
     @Column(name = "imports")
@@ -53,6 +55,10 @@ public class AttributeCounting {
 
     @Column(name = "cycles")
     private Integer cycles;
+
+    public AttributeCounting(String progrName) {
+        this.progrName = progrName;
+    }
 
 
     public Integer getImports() {
@@ -143,11 +149,11 @@ public class AttributeCounting {
         this.cycles = cycles;
     }
 
-    public Integer getProgrName() {
+    public String getProgrName() {
         return progrName;
     }
 
-    public void setProgrName(Integer progrName) {
+    public void setProgrName(String progrName) {
         this.progrName = progrName;
     }
 }
