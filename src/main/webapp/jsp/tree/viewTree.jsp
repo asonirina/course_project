@@ -21,7 +21,7 @@
 
                 <c:forEach items="${treeNodes}" var="node" varStatus="status">
 
-                [{v:'${node.name}', f:'${node.name}'}, '${node.operation}', 'The President']
+                [{v:'${node.id}', f:'${node.name}'}, '${node.parentId}', 'The President']
 
                 <c:if test="${!status.last}">
                 ,

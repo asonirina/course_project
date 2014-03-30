@@ -30,7 +30,7 @@ public class Validator {
 
             String extension = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
 
-            if (!(extension.equals(ETestingConstants.POSTFIX_C) || extension.equals(ETestingConstants.POSTFIX_CPP) ||
+            if (!(extension.equals(ETestingConstants.POSTFIX_JAVA) ||extension.equals(ETestingConstants.POSTFIX_C) || extension.equals(ETestingConstants.POSTFIX_CPP) ||
                     extension.equals(ETestingConstants.POSTFIX_PASCAL_P) || extension.equals(ETestingConstants.POSTFIX_PASCAL_PAS))) {
                 errors.add(ErrorsMessages.VALID_OPTIONS);
             }

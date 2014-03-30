@@ -21,6 +21,7 @@ public class ProgramFilesUtil {
     private String cmdC;
     private String cmdCpp;
     private String cmdPascal;
+    private String cmdJava;
     private String path = "C:/tomcat/bin/";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
@@ -36,9 +37,10 @@ public class ProgramFilesUtil {
 
         new File(dir).mkdir();
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-        cmdC = config.getProperty("c")+" " + path + dir + "/" + file.getOriginalFilename();
-        cmdCpp = config.getProperty("cpp")+" " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
-        cmdPascal = config.getProperty("pas")+" " + path + dir + "/" + file.getOriginalFilename();
+        cmdC = config.getProperty("c") + " " + path + dir + "/" + file.getOriginalFilename();
+        cmdCpp = config.getProperty("cpp") + " " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
+        cmdPascal = config.getProperty("pas") + " " + path + dir + "/" + file.getOriginalFilename();
+        cmdJava = config.getProperty("java") + " " + file.getOriginalFilename();
 
     }
 
@@ -52,6 +54,8 @@ public class ProgramFilesUtil {
             cmd = cmdPascal;
         } else if (postfix.equals(ETestingConstants.POSTFIX_C)) {
             cmd = cmdC;
+        } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
+            cmd = cmdJava;
         }
 
         return compile(cmd, postfix);
@@ -66,7 +70,7 @@ public class ProgramFilesUtil {
         int result = process.waitFor();
 
         if (result == 0) {
-            return checkAllInputFiles();
+            return checkAllInputFiles(postfix);
         } else {
 
             if (postfix.equals(ETestingConstants.POSTFIX_CPP)) {
@@ -118,7 +122,7 @@ public class ProgramFilesUtil {
         messages.add(line.substring(line.lastIndexOf(":") + 1));
     }
 
-    private boolean checkAllInputFiles() throws Exception {
+    private boolean checkAllInputFiles(String postfix) throws Exception {
         boolean res = true;
         File inDir = new File("tasks/" + programName + "/in");
 
@@ -126,8 +130,13 @@ public class ProgramFilesUtil {
             FileUtils.copyFile(new File("tasks/" + programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
             FileUtils.copyFile(new File("tasks/" + programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
 
-            Process p = Runtime.getRuntime()
-                    .exec(path + dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
+            Process p = null;
+            if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
+                p = Runtime.getRuntime().exec("java -cp " + path + dir + " Test", null, new File(dir));
+            } else {
+                p = Runtime.getRuntime()
+                        .exec(path + dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
+            }
             Checker checker = new TimeChecker();
             TimeLimiter limiter = new SimpleTimeLimiter();
             Checker proxy = limiter.newProxy(checker, Checker.class, 60000, TimeUnit.MILLISECONDS);
@@ -136,15 +145,15 @@ public class ProgramFilesUtil {
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to compile file " + e.getMessage());
                 p.destroy();
-                testResults.append(i+1).append(":"+ETestingConstants.FAILED_STATUS+'\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + '\n');
                 res = false;
             }
 
             if (!compareFiles()) {
                 res = false;
-                testResults.append(i+1).append(":"+ETestingConstants.FAILED_STATUS+'\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + '\n');
             } else {
-                testResults.append(i+1).append(":"+ETestingConstants.PASSED_STATUS+'\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.PASSED_STATUS + '\n');
             }
         }
         deleteDir(dir);

@@ -5,6 +5,7 @@ public class ETestingConstants {
     public final static String POSTFIX_CPP        = ".cpp";
     public final static String POSTFIX_PASCAL_P   = ".p";
     public final static String POSTFIX_PASCAL_PAS = ".pas";
+    public final static String POSTFIX_JAVA = ".java";
 
     public final static String ADMIN_ROLE         = "admin";
 

@@ -6,10 +6,12 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
+import by.bsu.project.plagiat.model.TreeHelper;
 import by.bsu.project.plagiat.model.TreeNode;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
+import com.sun.deploy.panel.TreeBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -143,14 +144,11 @@ public class ProgramUploadController {
 
 
     @RequestMapping(value = "/e-Testing/viewTree")
-    public ModelAndView viewTree(Model model) {
-        List<TreeNode> nodes = new ArrayList<>();
-        TreeNode node1 = new TreeNode("123", "");
-        TreeNode node2 = new TreeNode("456", "123");
-        TreeNode node3 = new TreeNode("789", "123");
-        nodes.add(node1);
-        nodes.add(node2);
-        nodes.add(node3);
+    public ModelAndView viewTree( @RequestParam(value = "programId", required = false) Long programId,
+            Model model) {
+        byte[] file = Huffman.expand(userInfoService.getFileById(programId).getFile());
+        TreeHelper builder = new TreeHelper();
+        List<TreeNode> nodes = builder.getTree(file);
         model.addAttribute(ETestingConstants.TREE_NODES, nodes);
         return new ModelAndView("tree/viewTree");
     }
