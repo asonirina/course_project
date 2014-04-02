@@ -182,13 +182,19 @@ public class TreeHelper {
                     break;
                 }
                 case 25: { // [LESS THAN]
-                    doLessThan((CommonTree) child, node);
+                    doBinOperator((CommonTree) child, node, Operation.LESS_THAN);
                     break;
                 }
                 case 148: { //[POST_INC]
                     doPostInc((CommonTree) child, node);
                     break;
                 }
+
+                case 147: { //[POST_DEC]
+                    doPostDec((CommonTree) child, node);
+                    break;
+                }
+
                 case 167: {  // [DECIMAL_LITERAL]
                     doDecimalLiteral((CommonTree)child, node);
                    break;
@@ -201,6 +207,21 @@ public class TreeHelper {
                 case 144: {  //[METHOD_CALL]
                     doMethodCall((CommonTree)child, node);
                    break;
+                }
+
+                case 6:{
+                    doBinOperator((CommonTree)child, node, Operation.ASSIGN);
+                    break;
+                }
+
+                case 38: {
+                    doBinOperator((CommonTree)child, node, Operation.PLUS);
+                            break;
+                }
+
+                case 30:{
+                    doBinOperator((CommonTree)child, node, Operation.MINUS);
+                    break;
                 }
                 default: {
                     break;
@@ -225,25 +246,56 @@ public class TreeHelper {
         nodes.add(postInc);
     }
 
-    private String doLessThan(CommonTree t, TreeNode node) {
+    private void doPostDec(CommonTree t, TreeNode node) {
+        String name = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+                case 164:{
+                    name = doIdent((CommonTree)child);
+                }
+            }
+        }
+
+        TreeNode postInc = new TreeNode(h++, name+"--", node);
+        nodes.add(postInc);
+    }
+
+    private String doBinOperator(CommonTree t, TreeNode node, Operation operation) {
         String arr[] = new String[2];
+        TreeNode bin = new TreeNode(h++, "", node);
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
             switch (child.getType()) {
                 case 164: {
                     arr[i] = doIdent((CommonTree) child);
+                    break;
                 }
 
                 case 167: {
                     arr[i] = doDecimalLiteral((CommonTree) child);
+                    break;
+                }
+
+                case 170: {
+                    arr[i] = doStringLiteral((CommonTree) child);
+                    break;
+                }
+
+                case 38: {
+                    arr[i] = doBinOperator((CommonTree) child, bin, Operation.PLUS);
+                    break;
+                }
+                case 30: {
+                    arr[i] = doBinOperator((CommonTree) child, bin, Operation.MINUS);
+                    break;
                 }
             }
         }
-        TreeNode lessThan = new TreeNode(h++, arr[0] + " < " + arr[1], node);
-        nodes.add(lessThan);
-        return lessThan.getName();
+        bin.setName(arr[0] + operation.getSymbol() + arr[1]);
+        nodes.add(bin);
+        return bin.getName();
     }
-
     private String doDecimalLiteral(CommonTree t) {
         return t.getText();
     }
@@ -284,6 +336,10 @@ public class TreeHelper {
     private void doStringLiteral(CommonTree t, TreeNode node) {
         TreeNode decimal = new TreeNode(h++, t.getText(), node);
         nodes.add(decimal);
+    }
+
+    private String doStringLiteral(CommonTree t) {
+        return t.getText();
     }
 
     private void doConstructorCall(CommonTree t, TreeNode node) {
@@ -465,13 +521,27 @@ public class TreeHelper {
                     doExpr((CommonTree) child, node);
                     break;
                 }
+
+                case 74: {
+                    doIf((CommonTree) child, node);
+                    break;
+                }
                 default: {
                     break;
                 }
             }
         }
     }
-
+    private void doIf(CommonTree t, TreeNode node) {
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+//                case 146:{   // [PARENTESIZED_EXPR]
+//                  doParentesizeExpr
+//                }
+            }
+        }
+    }
     private void doClassTopLevelScope(CommonTree t, TreeNode node) {
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
