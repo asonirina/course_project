@@ -8,7 +8,11 @@ public enum Operation {
     PLUS(" + "),
     MINUS(" - "),
     LESS_THAN(" < "),
-    ASSIGN(" = ");
+    GREATER_THAN(" > "),
+    ASSIGN(" = "),
+    EQUAL (" == "),
+    NOT_EQUAL(" != "),
+    LOGICAL_AND(" && ");
 
     private String symbol;
 

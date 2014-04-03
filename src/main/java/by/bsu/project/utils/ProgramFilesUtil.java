@@ -75,12 +75,12 @@ public class ProgramFilesUtil {
 
             if (postfix.equals(ETestingConstants.POSTFIX_CPP)) {
                 getDigitalMarsMessages(process.getInputStream());
-            }
-            if (postfix.equals(ETestingConstants.POSTFIX_PASCAL_PAS) || postfix.equals(ETestingConstants.POSTFIX_PASCAL_P)) {
+            } else if (postfix.equals(ETestingConstants.POSTFIX_PASCAL_PAS) || postfix.equals(ETestingConstants.POSTFIX_PASCAL_P)) {
                 getFreePascalMessages(process.getInputStream());
-            }
-            if (postfix.equals(ETestingConstants.POSTFIX_C)) {
+            } else if (postfix.equals(ETestingConstants.POSTFIX_C)) {
                 getTinyCCompilerMessages(process.getErrorStream());
+            } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
+                getJavaMessages(process.getErrorStream());
             }
             deleteDir(dir);
             return false;
@@ -109,6 +109,18 @@ public class ProgramFilesUtil {
             if (line.startsWith("Fatal:")) {
                 messages.add(line);
             }
+        }
+    }
+
+    private void getJavaMessages(InputStream in) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        while (br.ready()) {
+            line = br.readLine();
+//            if (line.startsWith("Fatal:")) {
+                messages.add(line);
+//            }
         }
     }
 
