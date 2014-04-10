@@ -105,7 +105,7 @@ public class TreeHelper {
 
     }
 
-    private void doVarDeclaration(CommonTree t, TreeNode node) {
+    private String doVarDeclaration(CommonTree t, TreeNode node) {
         String scope = "";
         String type = "";
         String name = "";
@@ -131,6 +131,7 @@ public class TreeHelper {
         }
         varDeclarationNode.setName(scope + type + name);
         nodes.add(varDeclarationNode);
+        return type+name;
     }
 
     private String doVarDeclaratorList(CommonTree t, TreeNode node) {
@@ -161,7 +162,7 @@ public class TreeHelper {
                 }
                 //-------------------------------------------------
                 case 126: {
-                    doExpr((CommonTree) child, node);
+                    name += " = "+doExpr((CommonTree) child, node);
                     break;
                 }
                 //-------------------------------------------------
@@ -183,12 +184,12 @@ public class TreeHelper {
                     break;
                 }
                 case 148: { //[POST_INC]
-                    doPostInc((CommonTree) child, node);
+                    res = doPostInc((CommonTree) child, node);
                     break;
                 }
 
                 case 147: { //[POST_DEC]
-                    doPostDec((CommonTree) child, node);
+                    res = doPostDec((CommonTree) child, node);
                     break;
                 }
 
@@ -205,12 +206,12 @@ public class TreeHelper {
                     break;
                 }
 
-                case 99:{   // TRUE
+                case 99: {   // TRUE
                     res = doLiteral((CommonTree) child, node, Type.BOOL);
                     break;
                 }
 
-                case 69:{ // FALSE
+                case 69: { // FALSE
                     res = doLiteral((CommonTree) child, node, Type.BOOL);
                     break;
                 }
@@ -268,7 +269,7 @@ public class TreeHelper {
         return res;
     }
 
-    private void doPostInc(CommonTree t, TreeNode node) {
+    private String doPostInc(CommonTree t, TreeNode node) {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
@@ -281,9 +282,10 @@ public class TreeHelper {
 
         TreeNode postInc = new TreeNode(h++, name + "++", node);
         nodes.add(postInc);
+        return postInc.getName();
     }
 
-    private void doPostDec(CommonTree t, TreeNode node) {
+    private String doPostDec(CommonTree t, TreeNode node) {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
@@ -294,8 +296,9 @@ public class TreeHelper {
             }
         }
 
-        TreeNode postInc = new TreeNode(h++, name + "--", node);
-        nodes.add(postInc);
+        TreeNode postDec = new TreeNode(h++, name + "--", node);
+        nodes.add(postDec);
+        return postDec.getName();
     }
 
     private String doBinOperator(CommonTree t, TreeNode node, Operation operation) {
@@ -511,7 +514,6 @@ public class TreeHelper {
 
     }
 
-
     private void formalParamList(CommonTree t, List<String> params) {
         for (int i = 0; i < t.getChildCount(); i++) {
             params.add(formalParam((CommonTree) t.getChild(i)));
@@ -607,6 +609,10 @@ public class TreeHelper {
                     doWhile((CommonTree) child, node);
                     break;
                 }
+                case 73: {
+                    doFor((CommonTree) child, node);
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -654,6 +660,89 @@ public class TreeHelper {
         }
         whileNode.setName("while (" + name + ")");
         nodes.add(whileNode);
+    }
+
+    private void doFor(CommonTree t, TreeNode node) {
+        TreeNode forNode = new TreeNode(h++, "", node);
+        String name = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+                case 131: {   // [FOR_INIT]
+                    name += doForInit((CommonTree) child, forNode) + " ; ";
+                    break;
+                }
+                case 129: {   // [FOR_CONDITION]
+                    name += doForCondition((CommonTree) child, forNode) + " ; ";
+                    break;
+                }
+
+                case 132: {   // [FOR_CONDITION]
+                    name += doForUpdate((CommonTree) child, forNode);
+                    break;
+                }
+
+                case 117: {   // [FOR_CONDITION]
+                    doBlockScope((CommonTree) child, forNode);
+                    break;
+                }
+
+            }
+        }
+        forNode.setName("for (" + name + ")");
+        nodes.add(forNode);
+    }
+
+
+    private String doForInit(CommonTree t, TreeNode node) {
+//        TreeNode forInit = new TreeNode(h++, "", node);
+        String name = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+                case 160: {   // [VAR_DECLARATION]
+                    name = doVarDeclaration((CommonTree) child, node);
+                    break;
+                }
+            }
+        }
+//        forInit.setName(name);
+//        nodes.add(forInit);
+        return name;
+    }
+
+    private String doForCondition(CommonTree t, TreeNode node) {
+//        TreeNode forCond = new TreeNode(h++, "", node);
+        String name = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+                case 126: {   // [VAR_DECLARATION]
+                    name = doExpr((CommonTree) child, node);
+                    break;
+                }
+            }
+        }
+//        forCond.setName(name);
+//        nodes.add(forCond);
+        return name;
+    }
+
+    private String doForUpdate(CommonTree t, TreeNode node) {
+//        TreeNode forUpdate = new TreeNode(h++, "", node);
+        String name = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            switch (child.getType()) {
+                case 126: {   // [VAR_DECLARATION]
+                    name = doExpr((CommonTree) child, node);
+                    break;
+                }
+            }
+        }
+//        forUpdate.setName(name);
+//        nodes.add(forUpdate);
+        return name;
     }
 
     private String doParenthesizedExpr(CommonTree t, TreeNode node) {
