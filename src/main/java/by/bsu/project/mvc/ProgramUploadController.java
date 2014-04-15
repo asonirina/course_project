@@ -6,6 +6,7 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
+import by.bsu.project.plagiat.model.AttributeCounting;
 import by.bsu.project.plagiat.model.TreeHelper;
 import by.bsu.project.plagiat.model.TreeNode;
 import by.bsu.project.service.UserInfoService;
@@ -103,6 +104,10 @@ public class ProgramUploadController {
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
             userInfoEntity.getProgramFiles().add(programFilesEntity);
 
+            TreeHelper helper = new TreeHelper(programFilesEntity.getProgramName());
+            helper.getTree(programFilesEntity.getFile());
+            AttributeCounting ac = helper.getAc();
+
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
@@ -147,7 +152,7 @@ public class ProgramUploadController {
     public ModelAndView viewTree( @RequestParam(value = "programId", required = false) Long programId,
             Model model) {
         byte[] file = Huffman.expand(userInfoService.getFileById(programId).getFile());
-        TreeHelper builder = new TreeHelper();
+        TreeHelper builder = new TreeHelper(String.valueOf(programId));
         List<TreeNode> nodes = builder.getTree(file);
         model.addAttribute(ETestingConstants.TREE_NODES, nodes);
         return new ModelAndView("tree/viewTree1");

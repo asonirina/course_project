@@ -22,44 +22,82 @@ public class AttributeCounting {
     @Column(name = "progrName")
     private String progrName;
 
-
     @Column(name = "imports")
-    private Integer imports;
+    private Integer imports = 0;
 
     @Column(name = "functions")
-    private Integer functions;
+    private Integer functions = 0;
 
     @Column(name = "calls")
-    private Integer calls;
+    private Integer calls = 0;
 
     @Column(name = "assigns")
-    private Integer assigns;
+    private Integer assigns = 0;
 
     @Column(name = "pluses")
-    private Integer pluses;
+    private Integer pluses = 0;
 
     @Column(name = "minuses")
-    private Integer minuses;
+    private Integer minuses = 0;
 
     @Column(name = "multiples")
-    private Integer multiples;
+    private Integer multiples = 0;
 
     @Column(name = "divides")
-    private Integer divides;
+    private Integer divides = 0;
 
     @Column(name = "variables")
-    private Integer variables;
+    private Integer variables = 0;
 
     @Column(name = "ifs")
-    private Integer ifs;
+    private Integer ifs = 0;
 
     @Column(name = "cycles")
-    private Integer cycles;
+    private Integer cycles = 0;
 
     public AttributeCounting(String progrName) {
         this.progrName = progrName;
     }
 
+    public void incIfs() {
+        this.ifs++;
+    }
+
+    public void incPlus() {
+        this.pluses++;
+    }
+
+    public void incAssign() {
+        this.assigns++;
+    }
+
+    public void incMinus() {
+        this.minuses++;
+    }
+
+    public void incCall() {
+        this.calls++;
+    }
+
+    public void incVar() {
+        this.variables++;
+    }
+
+    public void incMethod() {
+        this.functions++;
+    }
+
+    public void incCycle() {
+        this.cycles++;
+    }
+
+    public String getProgrName() {
+        return progrName;
+    }
+
+    public void setProgrName(String progrName) {
+        this.progrName = progrName;
+    }
 
     public Integer getImports() {
         return imports;
@@ -149,11 +187,7 @@ public class AttributeCounting {
         this.cycles = cycles;
     }
 
-    public String getProgrName() {
-        return progrName;
-    }
-
-    public void setProgrName(String progrName) {
-        this.progrName = progrName;
+    public Long getId() {
+        return id;
     }
 }

@@ -16,11 +16,20 @@ import java.util.List;
  */
 public class TreeHelper {
     private long h = 0;
+    private AttributeCounting ac;
     private final TreeAdaptor adaptor = new CommonTreeAdaptor() {
         public Object create(Token payload) {
             return new CommonTree(payload);
         }
     };
+
+    public AttributeCounting getAc() {
+        return ac;
+    }
+
+    public TreeHelper(String id) {
+        ac = new AttributeCounting(id);
+    }
 
     private List<TreeNode> nodes = new ArrayList<>();
 
@@ -131,7 +140,7 @@ public class TreeHelper {
         }
         varDeclarationNode.setName(scope + type + name);
         nodes.add(varDeclarationNode);
-        return type+name;
+        return type + name;
     }
 
     private String doVarDeclaratorList(CommonTree t, TreeNode node) {
@@ -162,7 +171,7 @@ public class TreeHelper {
                 }
                 //-------------------------------------------------
                 case 126: {
-                    name += " = "+doExpr((CommonTree) child, node);
+                    name += " = " + doExpr((CommonTree) child, node);
                     break;
                 }
                 //-------------------------------------------------
@@ -282,6 +291,8 @@ public class TreeHelper {
 
         TreeNode postInc = new TreeNode(h++, name + "++", node);
         nodes.add(postInc);
+        ac.incPlus();
+        ac.incAssign();
         return postInc.getName();
     }
 
@@ -298,6 +309,8 @@ public class TreeHelper {
 
         TreeNode postDec = new TreeNode(h++, name + "--", node);
         nodes.add(postDec);
+        ac.incMinus();
+        ac.incAssign();
         return postDec.getName();
     }
 
@@ -339,15 +352,18 @@ public class TreeHelper {
 
                 case 38: {
                     arr[i] = doBinOperator((CommonTree) child, bin, Operation.PLUS);
+                    ac.incPlus();
                     break;
                 }
                 case 30: {
                     arr[i] = doBinOperator((CommonTree) child, bin, Operation.MINUS);
+                    ac.incMinus();
                     break;
                 }
 
                 case 6: {
                     arr[i] = doBinOperator((CommonTree) child, bin, Operation.ASSIGN);
+                    ac.incAssign();
                     break;
                 }
 
@@ -404,6 +420,7 @@ public class TreeHelper {
         }
         methodCall.setName(name);
         nodes.add(methodCall);
+        ac.incCall();
         return name;
     }
 
@@ -442,6 +459,8 @@ public class TreeHelper {
 
             }
         }
+
+        ac.incCall();
     }
 
     private String doQualifiedTypeIdent(CommonTree t) {
@@ -454,6 +473,7 @@ public class TreeHelper {
                 }
             }
         }
+        ac.incVar();
         return name;
     }
 
@@ -511,7 +531,7 @@ public class TreeHelper {
         }
         methodNode.setName(scope + type + name + "(" + StringUtils.join(params, ", ") + ")");
         nodes.add(methodNode);
-
+        ac.incMethod();
     }
 
     private void formalParamList(CommonTree t, List<String> params) {
@@ -639,6 +659,7 @@ public class TreeHelper {
         }
         ifNode.setName("if (" + name + ")");
         nodes.add(ifNode);
+        ac.incIfs();
     }
 
     private void doWhile(CommonTree t, TreeNode node) {
@@ -660,6 +681,7 @@ public class TreeHelper {
         }
         whileNode.setName("while (" + name + ")");
         nodes.add(whileNode);
+        ac.incCycle();
     }
 
     private void doFor(CommonTree t, TreeNode node) {
@@ -691,6 +713,7 @@ public class TreeHelper {
         }
         forNode.setName("for (" + name + ")");
         nodes.add(forNode);
+        ac.incCycle();
     }
 
 
