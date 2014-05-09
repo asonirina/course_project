@@ -1,5 +1,6 @@
 package by.bsu.project.plagiat.model;
 
+import by.bsu.project.entity.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
@@ -35,7 +36,6 @@ public class TreeHelper {
 
     public List<TreeNode> getTree(byte[] bytes) {
         try {
-            //ANTLRInputStream in = new ANTLRInputStream(new FileInputStream("D://Test.java"));
             ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(bytes));
             JavaLexer lexer = new JavaLexer(in);
             CommonTokenStream tokens = new CommonTokenStream(lexer);

@@ -26,6 +26,7 @@ CREATE TABLE `program_files` (
   `id` int(11) NOT NULL auto_increment,
   `status` varchar(20) default NULL,
   `program_name` varchar(50) NOT NULL,
+  `plagiat` int(3),
   `file` longblob,
   `file_name` varchar(20) NOT NULL,
   `content_type` varchar(100) default NULL,
@@ -79,14 +80,8 @@ CREATE TABLE `user_info` (
 #
 
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
-  (5,'Nataliya','Karpovich','admin','karpovichna','1234'),
-  (6,'test1','test','11V','test1','test'),
-  (7,'1','1','11','test2','test'),
-  (8,'test','test','11V','test3','test'),
-  (9,'test','test','11V','test4','test'),
-  (10,'test','test','11V','test5','test'),
-  (11,'test','test','11V','test6','test'),
-  (13,'dsd','21','11','test7','1');
+  (1,'Nataliya','Karpovich','admin','karpovichna','1234'),
+  (2,'Iryna','Ason','11','test','test');
 COMMIT;
 
 

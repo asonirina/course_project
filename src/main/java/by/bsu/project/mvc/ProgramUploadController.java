@@ -6,13 +6,14 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
-import by.bsu.project.plagiat.model.AttributeCounting;
+import by.bsu.project.entity.AttributeCounting;
 import by.bsu.project.plagiat.model.TreeHelper;
 import by.bsu.project.plagiat.model.TreeNode;
+import by.bsu.project.plagiat.util.AttributeCountingUtil;
+import by.bsu.project.service.AttributeService;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
-import com.sun.deploy.panel.TreeBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +45,8 @@ public class ProgramUploadController {
 
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private AttributeService attributeService;
     private SpringUser user;
 
     @InitBinder
@@ -102,12 +105,19 @@ public class ProgramUploadController {
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setStatus(programStatus);
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
-            userInfoEntity.getProgramFiles().add(programFilesEntity);
 
             TreeHelper helper = new TreeHelper(programFilesEntity.getProgramName());
-            helper.getTree(programFilesEntity.getFile());
+            helper.getTree(Huffman.expand(programFilesEntity.getFile()));
             AttributeCounting ac = helper.getAc();
+            ac.setProgrName(programFilesEntity.getProgramName());
 
+            int plagiat = AttributeCountingUtil.checkAC(attributeService.getByProgrName(ac), ac);
+            if (plagiat <= 30) {
+                attributeService.save(ac);
+            }
+
+            programFilesEntity.setPlagiat(plagiat);
+            userInfoEntity.getProgramFiles().add(programFilesEntity);
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
@@ -147,10 +157,9 @@ public class ProgramUploadController {
     }
 
 
-
     @RequestMapping(value = "/e-Testing/viewTree")
-    public ModelAndView viewTree( @RequestParam(value = "programId", required = false) Long programId,
-            Model model) {
+    public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId,
+                                 Model model) {
         byte[] file = Huffman.expand(userInfoService.getFileById(programId).getFile());
         TreeHelper builder = new TreeHelper(String.valueOf(programId));
         List<TreeNode> nodes = builder.getTree(file);

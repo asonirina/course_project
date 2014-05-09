@@ -1,4 +1,4 @@
-package by.bsu.project.plagiat.model;
+package by.bsu.project.entity;
 
 import javax.persistence.*;
 

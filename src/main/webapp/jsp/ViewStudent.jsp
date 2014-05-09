@@ -49,6 +49,12 @@
         <a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">
             <input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>
     </c:if>
+
+    <c:if test="${not empty program.plagiat}">
+        <span style="margin-left: 200px"><c:out value="Степень похожести"/></span>
+        <span style="margin-left: 146px"><c:out value="${program.plagiat} %"/></span><br>
+    </c:if>
+
     <HR color="#52A8E8" size="1">
 </c:forEach>
 

@@ -26,4 +26,5 @@ public class ETestingConstants {
     public final static String FAILED_STATUS = "failed";
 
     public final static String TREE_NODES = "treeNodes";
+    public final static String PROGRAM_NAME = "progrName";
 }
