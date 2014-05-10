@@ -41,8 +41,11 @@ public class ProgramFilesEntity {
     @Column(name = "testResults")
     private byte[] testResults;
 
-    @Column(name = "plagiat")
-    private Integer plagiat;
+    @Column(name = "plagiat1")
+    private Integer plagiat1;
+
+    @Column(name = "plagiat2")
+    private Integer plagiat2;
 
     public Long getId() {
         return id;
@@ -116,11 +119,19 @@ public class ProgramFilesEntity {
         this.testResults = testResults;
     }
 
-    public Integer getPlagiat() {
-        return plagiat;
+    public Integer getPlagiat1() {
+        return plagiat1;
     }
 
-    public void setPlagiat(Integer plagiat) {
-        this.plagiat = plagiat;
+    public void setPlagiat1(Integer plagiat1) {
+        this.plagiat1 = plagiat1;
+    }
+
+    public Integer getPlagiat2() {
+        return plagiat2;
+    }
+
+    public void setPlagiat2(Integer plagiat2) {
+        this.plagiat2 = plagiat2;
     }
 }

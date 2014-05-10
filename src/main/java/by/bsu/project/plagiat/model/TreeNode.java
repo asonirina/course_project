@@ -1,5 +1,6 @@
 package by.bsu.project.plagiat.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +19,12 @@ public class TreeNode {
         this.name = name;
         this.parent = node;
         this.parentId = (parent != null) ? parent.getId() : null;
+        if (parent != null) {
+            parent.addChild(this);
+        }
     }
 
-    private List<TreeNode> children;
+    private List<TreeNode> children = new ArrayList<>();
 
     public TreeNode getParent() {
         return parent;
@@ -64,5 +68,9 @@ public class TreeNode {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    private void addChild(TreeNode node) {
+        children.add(node);
     }
 }

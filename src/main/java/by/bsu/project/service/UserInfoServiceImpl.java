@@ -63,12 +63,18 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
-       return userInfoDAO.studentListByForm(pageNumber, form);
+        return userInfoDAO.studentListByForm(pageNumber, form);
     }
 
     @Transactional
     public Long studentsByFormCountList(String form) {
         return userInfoDAO.studentsByFormCountList(form);
+    }
+
+    @Transactional
+    @Override
+    public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
+        return userInfoDAO.getProgramsByName(entity.getProgramName());
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {

@@ -16,12 +16,6 @@
             var data = google.visualization.arrayToDataTable([
                 ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
 
-//                ['0', null, 5, 0],
-//                ['1', '0', 5, 0],
-//                ['2', '0', 5, 0],
-//                ['3', '0', 5, 0],
-//                ['4', '0', 5, 0],
-//                ['5', '0', 5, 0]
                 <c:forEach items="${treeNodes}" var="node" varStatus="status">
 
                 [{v:'${node.id}', f:'${node.id}'+" : "+'${node.name}'}, '${node.parentId}', 1, Math.random()]

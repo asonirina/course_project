@@ -10,6 +10,7 @@ import by.bsu.project.entity.AttributeCounting;
 import by.bsu.project.plagiat.model.TreeHelper;
 import by.bsu.project.plagiat.model.TreeNode;
 import by.bsu.project.plagiat.util.AttributeCountingUtil;
+import by.bsu.project.plagiat.util.TreeCompareUtil;
 import by.bsu.project.service.AttributeService;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
@@ -107,16 +108,19 @@ public class ProgramUploadController {
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
 
             TreeHelper helper = new TreeHelper(programFilesEntity.getProgramName());
-            helper.getTree(Huffman.expand(programFilesEntity.getFile()));
+            List<TreeNode>nodes = helper.getTree(Huffman.expand(programFilesEntity.getFile()));
             AttributeCounting ac = helper.getAc();
             ac.setProgrName(programFilesEntity.getProgramName());
 
-            int plagiat = AttributeCountingUtil.checkAC(attributeService.getByProgrName(ac), ac);
-            if (plagiat <= 30) {
+            int plagiat1 = AttributeCountingUtil.checkAC(attributeService.getByProgrName(ac), ac);
+            if (plagiat1 <= 30) {
                 attributeService.save(ac);
             }
 
-            programFilesEntity.setPlagiat(plagiat);
+            int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
+
+            programFilesEntity.setPlagiat1(plagiat1);
+            programFilesEntity.setPlagiat2(plagiat2);
             userInfoEntity.getProgramFiles().add(programFilesEntity);
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();

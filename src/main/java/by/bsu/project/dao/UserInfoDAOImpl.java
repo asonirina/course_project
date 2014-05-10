@@ -36,6 +36,14 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
+    public List<ProgramFilesEntity> getProgramsByName(String name) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where programName = :progrName").
+                setParameter(ETestingConstants.PROGRAM_NAME, name);
+        return query.list();
+
+    }
+
+    @Override
     public Long studentsCountList() {
         return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form != 'admin'").uniqueResult();
     }

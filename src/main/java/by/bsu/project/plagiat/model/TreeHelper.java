@@ -139,6 +139,7 @@ public class TreeHelper {
             }
         }
         varDeclarationNode.setName(scope + type + name);
+        varDeclarationNode.setOperation("var_"+type);
         nodes.add(varDeclarationNode);
         return type + name;
     }
@@ -291,6 +292,7 @@ public class TreeHelper {
 
         TreeNode postInc = new TreeNode(h++, name + "++", node);
         nodes.add(postInc);
+        postInc.setOperation("post_inc");
         ac.incPlus();
         ac.incAssign();
         return postInc.getName();
@@ -309,6 +311,7 @@ public class TreeHelper {
 
         TreeNode postDec = new TreeNode(h++, name + "--", node);
         nodes.add(postDec);
+        postDec.setOperation("post_dec");
         ac.incMinus();
         ac.incAssign();
         return postDec.getName();
@@ -394,6 +397,7 @@ public class TreeHelper {
             }
         }
         bin.setName(arr[0] + operation.getSymbol() + arr[1]);
+        bin.setOperation(operation.getSymbol());
         nodes.add(bin);
         return bin.getName();
     }
@@ -419,6 +423,7 @@ public class TreeHelper {
             }
         }
         methodCall.setName(name);
+        methodCall.setOperation("method_call");
         nodes.add(methodCall);
         ac.incCall();
         return name;
@@ -530,6 +535,7 @@ public class TreeHelper {
             }
         }
         methodNode.setName(scope + type + name + "(" + StringUtils.join(params, ", ") + ")");
+        methodNode.setOperation("method");
         nodes.add(methodNode);
         ac.incMethod();
     }
@@ -658,6 +664,7 @@ public class TreeHelper {
             }
         }
         ifNode.setName("if (" + name + ")");
+        ifNode.setOperation("if");
         nodes.add(ifNode);
         ac.incIfs();
     }
@@ -680,6 +687,7 @@ public class TreeHelper {
             }
         }
         whileNode.setName("while (" + name + ")");
+        whileNode.setOperation("cycle");
         nodes.add(whileNode);
         ac.incCycle();
     }
@@ -712,6 +720,7 @@ public class TreeHelper {
             }
         }
         forNode.setName("for (" + name + ")");
+        forNode.setOperation("cycle");
         nodes.add(forNode);
         ac.incCycle();
     }

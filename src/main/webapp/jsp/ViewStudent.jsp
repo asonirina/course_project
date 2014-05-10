@@ -50,9 +50,14 @@
             <input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>
     </c:if>
 
-    <c:if test="${not empty program.plagiat}">
-        <span style="margin-left: 200px"><c:out value="Степень похожести"/></span>
-        <span style="margin-left: 146px"><c:out value="${program.plagiat} %"/></span><br>
+    <c:if test="${not empty program.plagiat1}">
+        <span style="margin-left: 200px"><c:out value="Степень похожести 1"/></span>
+        <span style="margin-left: 146px"><c:out value="${program.plagiat1} %"/></span><br>
+    </c:if>
+
+    <c:if test="${not empty program.plagiat2}">
+        <span style="margin-left: 200px"><c:out value="Степень похожести 2"/></span>
+        <span style="margin-left: 146px"><c:out value="${program.plagiat2} %"/></span><br>
     </c:if>
 
     <HR color="#52A8E8" size="1">

@@ -11,13 +11,6 @@ import java.util.List;
  */
 public class AttributeCountingUtil {
 
-    public static AttributeCounting getACByProgramFile(ProgramFilesEntity filesEntity) {
-        AttributeCounting ac = new AttributeCounting(filesEntity.getProgramName());
-        String content = String.valueOf(filesEntity.getFile());
-
-        return ac;
-    }
-
     public static int checkAC(List<AttributeCounting> list, AttributeCounting ac) {
         if (list.isEmpty()) {
             return 0;
