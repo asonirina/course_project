@@ -23,7 +23,7 @@
 
         .link {
             fill: none;
-            stroke: #ccc;
+            stroke: green;
             stroke-width: 2px;
         }
 
@@ -139,7 +139,7 @@
 
         nodeEnter.append("circle")
                 .attr("r", 1e-6)
-                .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+                .style("fill", function(d) { return d._children ? "yellow" : "#fff"; });
 
         nodeEnter.append("text")
                 .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -155,7 +155,7 @@
 
         nodeUpdate.select("circle")
                 .attr("r", 4.5)
-                .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+                .style("fill", function(d) { return d._children ? "yellow" : "#fff"; });
 
         nodeUpdate.select("text")
                 .style("fill-opacity", 1);
