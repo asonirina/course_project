@@ -13,6 +13,7 @@ public class TreeNode {
     private String name;
     private String operation;
     private TreeNode parent;
+    private String parentName;
 
     public TreeNode(Long id, String name, TreeNode node) {
         this.id = id;
@@ -21,6 +22,7 @@ public class TreeNode {
         this.parentId = (parent != null) ? parent.getId() : null;
         if (parent != null) {
             parent.addChild(this);
+            parentName = node.getName();
         }
     }
 
@@ -44,6 +46,9 @@ public class TreeNode {
 
     public void setName(String name) {
         this.name = name;
+        for (TreeNode node: children) {
+            node.setParentName(name);
+        }
     }
 
     public void setOperation(String operation) {
@@ -72,5 +77,13 @@ public class TreeNode {
 
     private void addChild(TreeNode node) {
         children.add(node);
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

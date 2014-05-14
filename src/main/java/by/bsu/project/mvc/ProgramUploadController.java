@@ -168,7 +168,7 @@ public class ProgramUploadController {
         TreeHelper builder = new TreeHelper(String.valueOf(programId));
         List<TreeNode> nodes = builder.getTree(file);
         model.addAttribute(ETestingConstants.TREE_NODES, nodes);
-        return new ModelAndView("tree/viewTree1");
+        return new ModelAndView("tree/viewTree2");
     }
 
     @RequestMapping(value = "/e-Testing/error503")
