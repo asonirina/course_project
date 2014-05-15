@@ -209,16 +209,13 @@ h1{
     width: 770px;
     padding: 20px 100px;
     margin-left: 500px;
-    /*text-align: right;*/
     color: #12526d;
+    text-align: center;
 }
 
 #page-footer a {
     color: #000;
 }
-
-/* end of footer */
-
 
 .button{
     cursor:pointer;
