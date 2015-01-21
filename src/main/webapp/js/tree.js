@@ -14,7 +14,7 @@ data.forEach(function (node) {
     }
 });
 
-var ost = (window.innerWidth - 850) / 2;
+var ost = (window.innerWidth - 900) / 2;
 var margin = {top:20, right:ost, bottom:20, left:ost},
     width = window.innerWidth - margin.right - margin.left,
     height = window.innerHeight - margin.top - margin.bottom;

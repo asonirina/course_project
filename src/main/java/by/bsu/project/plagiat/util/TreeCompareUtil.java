@@ -16,13 +16,13 @@ import java.util.List;
  */
 public class TreeCompareUtil {
     public static int checkTrees(List<ProgramFilesEntity> programs, List<TreeNode> tree) {
-        String source[] = getString(tree);
+        String source[] = getTokenizedString(tree);
         int max = 0;
         for (ProgramFilesEntity entity : programs) {
             TreeHelper builder = new TreeHelper(String.valueOf(entity.getId()));
             List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
-            String arr[] = getString(nodes);
-            int sim = (int) (100 * Math.exp(-4 * Math.pow(DLevenstein(source, arr), 2) / (source.length * arr.length)));
+            String arr[] = getTokenizedString(nodes);
+            int sim = (int) (100 * Math.exp(- Math.pow(DLevenstein(source, arr), 2) / (source.length * arr.length)));
             if (max < sim) {
                 max = sim;
             }
@@ -31,7 +31,7 @@ public class TreeCompareUtil {
         return max;
     }
 
-    private static String[] getString(List<TreeNode> list) {
+    private static String[] getTokenizedString(List<TreeNode> list) {
         List<String> res = new ArrayList<>();
         Collections.sort(list, new CustomComparator());
         for (TreeNode node : list) {

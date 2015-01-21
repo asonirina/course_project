@@ -94,11 +94,13 @@ public class ProgramUploadController {
             programFilesUtil = new ProgramFilesUtil(file, userInfoEntity, programFilesEntity.getProgramName());
             String programStatus;
 
-            if (programFilesUtil.checkFile()) {
-                programStatus = ETestingConstants.PASSED_STATUS;
-            } else {
-                programStatus = ETestingConstants.FAILED_STATUS;
-            }
+//            if (programFilesUtil.checkFile()) {
+//                programStatus = ETestingConstants.PASSED_STATUS;
+//            } else {
+//                programStatus = ETestingConstants.FAILED_STATUS;
+//            }
+
+            programStatus = ETestingConstants.PASSED_STATUS;
 
             programFilesEntity.setFile(Huffman.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());

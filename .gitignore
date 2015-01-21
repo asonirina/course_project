@@ -7,6 +7,9 @@ test-output
 test.log.*
 
 #### Idea ###
+antlr
+compilers
+grammars
 .idea
 *.iml
 
