@@ -43,7 +43,7 @@ public class TreeCompareUtil {
         return res.toArray(new String[res.size()]);
     }
 
-
+    // todo: make flexible measure, depending on type om compared values, example while - for = 0.5 ect
     private static int m(String a, String b) {
         if (!a.equals(b)) {
             return 1;
