@@ -1,9 +1,6 @@
-attribute dao
--save  +
--get by program name  +
-
-attr service
--save          +
--get           +
--compareTo     +
--show statistics  +
+change measure
+add any simple comparator by original code
+add another module for plagiarism
+check java, cpp, pascal parsers for the same <NAME>
+hinton diagrams
+neural net

@@ -44,7 +44,7 @@ public class TreeCompareUtil {
     }
 
     // todo: make flexible measure, depending on type om compared values, example while - for = 0.5 ect
-    private static int m(String a, String b) {
+    private static int measure(String a, String b) {
         if (!a.equals(b)) {
             return 1;
         }
@@ -72,7 +72,7 @@ public class TreeCompareUtil {
             for (int j = 0; j <= n; j++) {
                 if (j == 0) d2[j] = i;
                 else {
-                    int cost = m(s1[i - 1], s2[j - 1]);
+                    int cost = measure(s1[i - 1], s2[j - 1]);
                     if (d2[j - 1] < d1[j] && d2[j - 1] < d1[j - 1] + cost)
                         d2[j] = d2[j - 1] + 1;
                     else if (d1[j] < d1[j - 1] + cost)
