@@ -1,0 +1,742 @@
+/**
+ * Analisador lexico e sintático para linguagem de programacao Pascal.
+ * Inclui as definicoes regulares padrao e as palavras
+ * mais usadas nos arquivos exemplo presentes na
+ * pasta example/
+ *
+ * Thiago Moretto, 06/04/2007 v0.1
+ * Thiago Moretto, 19/06/2007 v0.2
+ */
+
+options {
+  LOOKAHEAD = 2;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = true;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = true;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = false;
+  FORCE_LA_CHECK = true;
+}
+
+PARSER_BEGIN(JPascal)
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
+
+import java.util.Vector;
+
+public class JPascal {
+
+  static boolean verbose = false, quiet = false, report = false, ready = false, ck_syntax = false, out_syntax = false;
+
+  static FileInputStream in;
+
+  static Vector identifiers = new Vector();
+
+  static Vector procedures = new Vector();
+
+  static public class Configuration {
+
+	  private void parseOptions(String args[]) {
+	  	Options opt = new Options();
+		Option opfile = new Option("f", "file", true, "arquivo fonte em pascal");
+		opfile.setArgName("source");
+		opt.addOption(opfile);
+		opt.addOption("r", "report", false, "gera um relatorio simples sobre os tokens");
+		opt.addOption("c", "sintax", false, "verifica a sintaxe de entrada e emite erro se encontrar erro");
+		opt.addOption("v", "verbose", false, "exibe informacoes extras durante a execucao");
+
+		CommandLineParser posix = new PosixParser();
+
+		try {
+			CommandLine cmd = posix.parse(opt, args);
+
+			if(cmd.hasOption("v")) {
+				out_syntax = true;
+			}
+			
+			if(cmd.hasOption("c")) {
+				ck_syntax = true;
+			}			
+
+			if(!cmd.hasOption("f")) {
+				err("error: required parameter -f not found");
+				usage(opt);
+
+			} else {
+				File inputfile = new File(cmd.getOptionValue("f").trim());
+				if(!inputfile.exists()) {
+					// try append .pas extension
+					String fname = inputfile.getAbsolutePath();
+					fname = fname.concat(".pas");
+					inputfile = new File(fname);
+
+					if(!inputfile.exists()) {
+						err("error: file not found");
+						inputfile = null;
+					}
+				}
+
+				ready=false;
+				if (inputfile!=null) { // ready
+					if(!inputfile.canRead()) {
+						err("error: file can't readable");
+						inputfile = null;
+					}
+					if(cmd.hasOption("r"))
+						report=true;
+
+					ready = true;
+					in = new FileInputStream(inputfile);
+				}
+			}
+		} catch (java.io.FileNotFoundException e) {
+			e.printStackTrace();
+			usage(opt);
+		} catch (org.apache.commons.cli.ParseException e) {
+			usage(opt);
+		}
+	 }
+  }
+
+  public static void main(String args[]) throws ParseException {
+	Configuration cfg = new Configuration();
+	cfg.parseOptions(args);
+	JPascal parser;
+
+	if(ready) {
+		Token token;
+		parser = new JPascal(in);
+		if(ck_syntax) {
+			try {
+				while(true) {
+					parser.Program();
+				}
+			} catch (ParseException e) {
+				e.printStackTrace(System.err);
+			}
+		} if(report) {
+			generateReport(parser);
+		} if (!ck_syntax && !report) {
+		 	for(;;) {
+		 		token = parser.getNextToken();
+		 		out(kindOf(token));
+				if(kindOf(token).equals("<EOF>"))
+					break;
+		 	}
+		}
+	}
+  }
+
+  public static void generateReport(JPascal parser) {
+	Token token;
+	try {
+	  	for(;;) {
+		  	token = parser.getNextToken();
+		  	out(String.format("line:%03d-%03d column:%03d-%03d kind:%-15s lexeme:%-50s",
+				token.beginLine, token.endLine, token.beginColumn, token.endColumn, kindOf(token), token.image));
+			if(kindOf(token).equals("<EOF>"))
+				break;
+	  	}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+  }
+
+  static public void verbose(String message) {
+	 if(verbose) out(message);
+  }
+
+  static public void out(String message) {
+    if(out_syntax)
+	System.out.println(message);
+  }
+
+  static public void err(String message) {
+	System.err.println(message);
+  }
+
+  public static String kindOf(Token token) {
+	return JPascalConstants.tokenImage[token.kind];
+  }
+
+  public static void usage(Options opt) {
+	HelpFormatter help = new HelpFormatter();
+	help.printHelp("jpascal", opt, true);
+  }
+
+  public static void show(String message) {
+  	System.out.println(message);
+  }
+}
+
+PARSER_END(JPascal)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "(*" : WithinComment0
+| "{"  : WithinComment1
+}
+
+<WithinComment0> SKIP :
+{
+  "*)" : DEFAULT
+}
+
+<WithinComment0> MORE :
+{
+  <~[]>
+}
+
+<WithinComment1> SKIP :
+{
+  "}" : DEFAULT
+}
+
+<WithinComment1> MORE :
+{
+  <~[]>
+}
+
+TOKEN : {
+  <NUMBER: <DECIMAL> <FRAC> (<EXP>)? >
+| <#DECIMAL: ["0"-"9"] (["0"-"9"])* >
+| <#FRAC: ("." (["0"-"9"])+)? >
+| <#EXP: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| <STRING_LITERAL: "'" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "'">
+}
+
+TOKEN : {
+  <AND: "and">
+| <BEGIN: "begin">
+| <CASE: "case">
+| <CONST: "const">
+| <DIV: "div">
+| <DO: "do">
+| <DOWNTO: "downto">
+| <ELSE: "else">
+| <END: "end">
+| <EXTERN: "extern" | "external">
+| <FOR: "for">
+| <FORWARD: "forward">
+| <FUNCTION: "function">
+| <GOTO: "goto">
+| <IF: "if">
+| <IN: "in">
+| <LABEL: "label">
+| <INTERFACE: "interface">
+| <IMPLEMENTATION: "implementation">
+| <MOD: "mod">
+| <NIL: "nil">
+| <MAXINT: "maxint">
+| <NOT: "not">
+| <OF: "of">
+| <OR: "or">
+| <OTHERWISE: "otherwise">
+| <PACKED: "packed">
+| <PROCEDURE: "procedure">
+| <PROGRAM: "program">
+| <RECORD: "record">
+| <REPEAT: "repeat">
+| <SETOF: "setof">
+| <THEN: "then">
+| <TO: "to">
+| <TYPE: "type">
+| <UNIT: "unit">
+| <UNTIL: "until">
+| <USES: "uses">
+| <VAR: "var">
+| <WHILE: "while">
+| <WITH: "with">
+}
+
+TOKEN : {
+  <SINGLE: "single">
+| <POINTER: "pointer">
+| <STRING: "string">
+}
+
+TOKEN : {
+  <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
+| <#LETTER: ["_","A"-"Z","a"-"z"]>
+| <#DIGIT: ["0"-"9"]>
+}
+
+TOKEN : {
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < COLON: ":" >
+| < PLUS: "+" >
+| < MINUS:	"-" >
+| < MULTIPLY: "*" >
+| < STARSTAR: "**" >
+| < DIVIDE: "/" >
+| < DOT: "." >
+| < DOTDOT:	".." >
+| < ASSIGN: ":=" >
+| < EQ: "=" >
+| < LE:	"<=" >
+| < GE:	">=" >
+| < NE:	"<>" >
+| < GT:	">" >
+| < LT:	"<" >
+| < ADDR: "@" >
+| < UPARROW: "^" >
+| < SQUOTE: "'" >
+| < DQUOTE: "\"" >
+}
+
+void Program():
+{ 
+	Token program = null; 
+}
+{
+	( "program" program=identifier() [ "(" identifier_list() ")" ] ";" block() "." )
+	| <EOF>
+	{ 
+		if (program != null) {	
+			out("program: "+ program.image);
+		} else {
+			out("eof");
+			out(String.format("verificao da sintaxe completa sem errors"));
+			out(String.format("%d tokens presentes tabela de simbolos", identifiers.size()));
+			System.exit(0);
+		}
+	}
+}
+
+void block():
+{}
+{
+	(parts())* // Zero ou mais vezes
+		
+	compound_statement()
+
+	{
+		out("block");
+	}
+}
+
+void parts():
+{}
+{
+	  label_declaration_part() 
+	| const_declaration_part() 
+	| type_declaration_part() 
+	| var_declaration_part() 
+	| subroutine_declaration_part()
+}
+
+void label_declaration_part(): {}
+{
+	<LABEL> <NUMBER> ( "," <NUMBER> )* ";"
+	{
+		out("label_declaration_part");
+	}
+}
+
+void const_declaration_part(): {}
+{
+	<CONST> const_definition() ( ";" const_definition() )* ";"
+	{
+		out("const_declaration_part");
+	}
+}
+
+void const_definition(): {}
+{
+	identifier() "=" _const()
+	{
+		out("const_definition");
+	}
+}
+
+void type_declaration_part(): {}
+{
+	<TYPE> type_definition() ( ";" type_definition() )* ";"
+	{
+		out("type_declaration_part");
+	}
+}
+
+void type_definition(): {}
+{
+	identifier() "=" type()
+	{
+		out("type_definition");
+	}
+}
+
+void type(): {}
+{
+	"^" identifier()
+	| identifier() "[" simple_type() ( "," simple_type())* "]" <OF> identifier()
+	| <SETOF> simple_type()
+	| <RECORD> field_list() <END>
+	| simple_type()
+	{
+		out("type");
+	}
+}
+
+void simple_type(): {}
+{
+	identifier()
+	| "(" identifier() ( "," identifier())* ")"
+	| _const() ".." _const()
+	{
+		out("simple_type");
+	}
+}
+
+void _const(): {}
+{
+	<STRING>
+	| [ "+" | "-" ]  _const2()
+	{
+		out("const");
+	}
+}
+
+void _const2(): {}
+{
+	  identifier()
+	| <NUMBER>
+}	
+
+void field_list(): {}
+{
+	identifier_list() ":" type() ( ";" identifier_list() ":" type() )*
+	{
+		out("field_list");
+	}
+}
+
+void var_declaration_part(): {}
+{
+	<VAR> var_declaration() ( ";" var_declaration() )* ";"
+	{
+		out("var_declaration_part");
+	}
+}
+
+void var_declaration(): {}
+{
+	identifier_list() ":" type()	
+	{
+		out("var_declaration");
+	}
+}
+
+Vector identifier_list(): {
+	Vector identifier_list;
+	identifier_list = new Vector();
+}
+{
+	single_identifier(identifier_list) ( "," single_identifier(identifier_list) )*
+	{
+		out("identifier_list: "+ identifier_list);
+		return identifier_list;
+	}
+}
+
+Token identifier(): {
+	Token identifier;
+}
+{
+	identifier=<IDENTIFIER>
+	{
+		identifiers.add(identifier);
+		return identifier;
+	}
+}
+
+void single_identifier(Vector identifier_list): {
+	Token identifier;
+}
+{
+	identifier=identifier()
+	{
+		if(identifier_list != null) {
+			identifier_list.add(identifier);
+		}
+	}
+}
+
+void subroutine_declaration_part(): {}
+{
+	  procedure_declaration() (";")?
+	| function_declaration() (";")?
+	{
+		out("subroutine_declaration_part");
+	}
+}
+
+void procedure_declaration(): {
+	Token procedure;
+}
+{
+	<PROCEDURE> procedure=identifier() [ formal_parameters() ] ";" block()
+	{
+		out("procedure_declaration: "+procedure);
+		procedures.add(procedure);
+	}
+}
+
+void function_declaration(): {
+	Token function;
+}
+{
+	<FUNCTION> function=identifier() [ formal_parameters() ] ":" (identifier())? identifier() ";" block()
+	{
+		out("function_declaration: "+function);
+		procedures.add(function);
+	}
+}
+
+void formal_parameters(): {}
+{
+	"(" param_section() ( ";" param_section() )* ")"
+	{
+		out("formal_parameters");
+	}
+}
+
+void param_section(): { }
+{
+	  [ <VAR> ] identifier_list() ":" type()
+	| <FUNCTION> identifier_list() ":" type()
+	| <PROCEDURE> identifier_list()
+	{
+		out("param_section");
+	}
+}
+
+void compound_statement():
+{}
+{
+	<BEGIN> labeled_statement() ( ";" labeled_statement() )* "end"
+	{
+		out("compound_statement");
+	}
+}
+
+void labeled_statement(): {}
+{
+	[ <NUMBER> ":" ] statement()
+	{
+		out("labeled_statement");
+	}
+}
+
+void statement(): {}
+{
+	( assign_statement()
+	| procedure_call()
+	| if_statement()
+	| case_statement()
+	| while_statement()
+	| repeat_statement()
+	| for_statement()
+	| with_statement()
+	| goto_statement()
+	| compound_statement() ) ?
+	{
+		out("statement");
+	}
+}
+
+void assign_statement(): {}
+{
+	identifier() [ infipo() ] ":=" expr()
+	{
+		out("assign_statement");
+	}
+}
+
+void procedure_call(): {}
+{
+	identifier() [ "(" expr_list() ")" ]	
+	{
+		out("procedure_call");
+	}
+}
+
+void if_statement(): {}
+{
+	"if" expr() "then" statement() [ "else" statement() ]
+	{
+		out("if_statement");
+	}
+}
+
+void while_statement(): {}
+{
+	"while" expr() "do" statement()
+	{
+		out("while_statement");
+	}
+}
+
+void repeat_statement(): {}
+{
+	"repeat" statement() ( ";" statement() )* "until" expr()
+	{
+		out("repeat_statement");
+	}
+}
+
+void for_statement(): {}
+{
+	"for" identifier() infipo() ":=" expr() ( "to" | "downto" ) expr() "do" statement()
+	{
+		out("for_statement");
+	}
+}
+
+void with_statement(): {}
+{
+	"with" identifier() infipo() ( "," identifier() infipo() )* "do" statement()
+	{
+		out("with_statement");
+	}
+}
+
+void case_statement(): {}
+{
+	"case" expr() "of" _case() ( ";" _case() )* <END>
+	{
+		out("case_statement");
+	}
+}
+
+void _case(): {}
+{
+	( <NUMBER> | identifier() ) ":" statement()
+}
+
+void goto_statement(): {}
+{
+	"goto" <NUMBER>
+	{
+		out("goto_statement");
+	}
+}
+
+void infipo(): {}
+{
+	  ( "[" expr() ( "," expr() )* "]" infipo() )?
+  	| ( "." identifier() infipo() )?
+	| ( "^" infipo() )?
+	{
+		out("infipo");
+	}
+ }
+
+void expr_list(): {}
+{
+	expr() ( "," expr() )*
+	{
+		out("expr_list");
+	}
+}
+
+void expr(): {}
+{
+	simple_expr() [ relop() simple_expr() ]
+	{
+		out("expr");
+	}
+}
+
+void relop(): {}
+{
+	  "="
+	| "<"
+	| ">"
+	| "<>"
+	| ">="
+	| "<="
+	| "in"
+	{
+		out("relop");
+	}
+}
+
+void simple_expr(): {}
+{
+	[ "+" | "-" ] term() ( addop() term() )*
+	{
+		out("simple_expr");
+	}
+}
+
+void addop(): {}
+{
+	  "+"
+	| "-"
+	| "or"
+	{
+		out("addop");
+	}
+}
+
+void term(): {}
+{
+	factor() ( mulop() factor() )*
+	{
+		out("term");
+	}
+}
+
+void mulop(): {}
+{
+	  "*"
+	| "/"
+	| "div"
+	| "mod"
+	| "and"
+	{
+		out("mulop");
+	}
+}
+
+void factor(): {}
+{
+	  <NUMBER>
+	| <STRING>
+	| identifier() "(" expr_list() ")"
+	| identifier() infipo()
+	| "(" expr() ")"
+	| "not" factor()
+	{
+		out("factor");
+	}
+}

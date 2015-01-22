@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <http pattern="/resources" security="none"/>
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/e-Testing/Login.html" access="permitAll"/>
+        <intercept-url pattern="/e-Testing/Logout.html" access="permitAll"/>
+        <intercept-url pattern="/e-Testing/Denied.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/*" access="isAuthenticated()"/>
+        <intercept-url pattern="/e-Testing/ChangePassword.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/ChangeStudentPassword.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgram.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/SaveProgram.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgramHistory.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/UploadProgramStatus.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/MainStudentPage.html" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/e-Testing/MainAdminPage.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/StudentList.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/SaveStudent.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/EditStudent.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/viewTree.html" access="hasRole('ROLE_ADMIN')"/>
+
+        <form-login login-page="/e-Testing/Login.html"
+                    authentication-failure-url="/e-Testing/Login/Failure.html"
+                    default-target-url="/"/>
+
+        <access-denied-handler error-page="/e-Testing/Denied.html"/>
+
+        <logout invalidate-session="true"
+                logout-success-url="/e-Testing/Logout/Success.html"
+                logout-url="/e-Testing/Logout.html"/>
+    </http>
+
+    <beans:bean id="customUserDetailsService" class="by.bsu.project.service.CustomUserDetailsService"/>
+    <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService">
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

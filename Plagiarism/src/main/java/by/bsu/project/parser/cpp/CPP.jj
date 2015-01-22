@@ -1,0 +1,773 @@
+/*
+ * Copyright � 1999-2000 The University of Warwick. All Rights Reserved.
+ */
+
+
+/**
+ * JavaCC source for a C++ tokeniser.
+ *
+ * @author Ben Hart
+ * @author Mike Joy
+ * @author Weiliang Zhang
+ * @version 7 Aug 2002
+ */
+
+options {
+  IGNORE_CASE=true;
+  //STATIC = false;
+}
+
+PARSER_BEGIN(CPP)
+
+package com.by.iason.plagiat.cpp;
+
+import java.io.*;
+import java.util.Date;
+
+class CPP {
+
+  /**
+   * The stream used to save the output file.
+   */
+  static PrintStream save;
+
+  /**
+   * The new file containing the output of this tokeniser.
+   */
+  static File outputFile = null;
+
+  /**
+   * Keep track of the line number from the file read in. Used to print #line xxx in the outputFile.
+   */
+  static int lineNo = 1;
+
+  static boolean print=false;
+  static boolean seenNewLine=false;
+
+  /**
+   * Reinitialise all the variables, and get on with parsing the whatever's in the input stream.
+   *
+   * @param is - the input stream to parse.
+   * @param f - the file to save the results of this tokeniser to.
+   */
+  static void ReInit(InputStream is, File f) {    
+    // Don't need to reinitialise the PrintStream, it's done for us.
+    CPP.outputFile = f;
+    CPP.lineNo=1;
+
+    CPP.seenNewLine=false;
+    CPP.print=false;
+
+    CPP.ReInit(is);
+  } // ReInit
+
+
+  /**
+   * Print the current line number into the new file.
+   */
+  static void printLineNo() {
+    if (print) {
+      save.println();
+      save.print("#line "+lineNo);
+      print = false;
+    }
+  } // printLine
+
+
+  /**
+   * Print the passed string into the new file.
+   *
+   * @param stringToPrint the string to print.
+   */
+  static void toPrint(String stringToPrint) {
+    printLineNo();
+    if (seenNewLine)
+      save.println();
+    seenNewLine = false;
+    save.print(stringToPrint);
+  } // toPrint
+
+
+  public static void main(String args[]) throws ParseException {
+    CPP parser = new CPP(System.in);
+    parser.Input();
+  }
+
+} // CPP
+PARSER_END(CPP)
+
+TOKEN_MGR_DECLS : {
+}
+
+/* Basic Blocks */
+TOKEN : {
+  <newLine : "\n" | "\r" | "\r\n"> {
+    CPP.lineNo++;
+    if (CPP.seenNewLine)
+      CPP.print=true;
+    CPP.seenNewLine=true;
+  }
+}
+
+TOKEN : {
+  <hashLine : "#line ">
+}
+
+
+/*
+ * Comments - remove them.
+ */
+TOKEN : {
+  <singleLineComment : "//"> {
+    CPP.toPrint("<IN_LINE_COMMENT>");
+    CPP.print = true;
+  } : inSingleLineComment
+}
+
+TOKEN : {
+  <multiLineComment : "/*"> {
+    CPP.toPrint("<MULTI_LINE_COMMENT>");
+    CPP.print = true;
+  } : inAnyMultiLineComment
+}
+
+<inSingleLineComment> SKIP : {
+  < <newLine> > {
+    CPP.lineNo++;
+    CPP.seenNewLine = true;
+  } : DEFAULT
+}
+
+<inAnyMultiLineComment> SKIP : {
+  < <newLine> > {
+    CPP.lineNo++;
+  } : inAnyMultiLineComment
+|
+  <endAnyMultiLineComment : "*/"> {
+  } : DEFAULT
+}
+
+<inSingleLineComment, inAnyMultiLineComment> SKIP : {
+  < ~[] >
+}
+
+
+/**
+ * Reserved Words
+ */
+TOKEN : {
+  < GOTO: "goto" > {
+    CPP.toPrint("<RSVD>");
+  } // Not used - reserved
+}
+
+/**
+ * Types
+ */
+TOKEN : {
+  < TYPE: "boolean" | "byte" | "char" | "double" | "void" | "long" | "String" > {
+    CPP.toPrint("<TYPE>");
+  }
+}
+
+/**
+ * Literals
+ */
+TOKEN : {
+  < AUTO: "auto" > {
+    CPP.toPrint("<AUTO>");
+  }
+|
+  < BREAK: "break" > {
+    CPP.toPrint("<BREAK>");
+  }
+|
+  < CASE: "case" > {
+    CPP.toPrint("<CASE>");
+  }
+|
+  < CATCH: "catch" > {
+    CPP.toPrint("<CATCH>");
+  }
+|
+  < CLASS: "class" > {
+    CPP.toPrint("<CLASS>");
+  }
+|
+  < CONTINUE: "continue" > {
+    CPP.toPrint("<BREAK>");
+  }
+|
+  < _DEFAULT: "default" > {
+    CPP.toPrint("<CASE>");
+  }
+|
+  < DELETE: "delete" > {
+    CPP.toPrint("<DELETE>");
+  }
+|
+  < DO: "do" > {
+    CPP.toPrint("<LOOP>");
+  }
+|
+  < ELSE: "else" > {
+    CPP.toPrint("<IF>");
+  }
+|
+  < ENUM: "enum" > {
+    CPP.toPrint("<ENUM>");
+  }
+|
+  < EXTERN: "extern" > {
+    CPP.toPrint("<EXTERN>");
+  }
+|
+  < FALSE: "false" > {
+    CPP.toPrint("<BOOL>");
+  }
+|
+  < FINALLY: "finally" > {
+    CPP.toPrint("<FINALLY>");
+  }
+|
+  < FLOAT: "float" > {
+    CPP.toPrint("<TYPE>");
+  }
+|
+  < FOR: "for" > {
+    CPP.toPrint("<LOOP>");
+  }
+|
+  < FRIEND: "friend" > {
+    CPP.toPrint("<FRIEND>");
+  }
+|
+  < IF: "if" > {
+    CPP.toPrint("<IF>");
+  }
+|
+  < IMPLEMENTS: "implements" > {
+    CPP.toPrint("<MODIFIER>");
+  }
+|
+  < IMPORT: "import" > {
+    CPP.toPrint("<IMPORT>");
+  }
+|
+  < INLINE: "inline" > {
+    CPP.toPrint("<INLINE>");
+  }
+|
+  < INT: "int" > {
+    CPP.toPrint("<TYPE>");
+  }
+|
+  < INTERFACE: "interface" > {
+    CPP.toPrint("<MODIFIER>");
+  }
+|
+  < NATIVE: "native" > {
+    CPP.toPrint("<NATIVE>");
+  }
+|
+  < NEW: "new" > {
+    CPP.toPrint("<NEW>");
+  }
+|
+  < NULL: "null" > {
+    CPP.toPrint("<NULL>");
+  }
+|
+  < PACKAGE: "package"> {
+    CPP.toPrint("<PACKAGE>");
+  }
+|
+  < REDECLARED: "redeclared" > {
+    CPP.toPrint("<REDECLARED>");
+  }
+|
+  < REGISTER: "register" > {
+    CPP.toPrint("<REGISTER>");
+  }
+|
+  < RETURN: "return" > {
+    CPP.toPrint("<RETURN>");
+  }
+|
+  < SHORT: "short" > {
+    CPP.toPrint("<TYPE>");
+  }
+|
+ < SIGNED: "signed" > {
+    CPP.toPrint("<SIGNED>");
+  }
+|
+  < SIZEOF: "sizeof" > {
+    CPP.toPrint("<SIZEOF>");
+  }
+|
+  < STATIC: "static" > {
+    CPP.toPrint("<STATIC>");
+  }
+|
+  < STRUCT: "struct" > {
+    CPP.toPrint("<STRUCT>");
+  }
+|
+  < SUPER: "super" > {
+    CPP.toPrint("<SUPER>");
+  }
+|
+  < SWITCH: "switch" > {
+    CPP.toPrint("<CASE>");
+  }
+|
+  < THIS: "this." > {
+    CPP.toPrint("");  }
+|
+  < THROW: "throw" > {
+    CPP.toPrint("<TRY>");
+  }
+|
+  < TRUE: "true" > {
+    CPP.toPrint("<BOOL>");
+  }
+|
+  < TRY: "try" > {
+    CPP.toPrint("<TRY>");
+  }
+|
+  < UNION: "union" > {
+    CPP.toPrint("<UNION>");
+  }
+|
+  < UNSIGNED: "unsigned" > {
+    CPP.toPrint("<UNSIGNED>");
+  }
+|
+  < VIRTUAL: "virtual" > {
+    CPP.toPrint("<VIRTUAL>");
+  }
+|
+  < WHILE: "while" > {
+    CPP.toPrint("<LOOP>");
+  }
+}
+
+/**
+ * Modifiers
+ */
+TOKEN : {
+  < MODIFIERS : "abstract" | "final" | "private" | "protected" | "public" | "static" | "synchronized" | "throw" | "volatile" | "const"> {
+    CPP.toPrint("<MODIFIER>");
+  }
+}
+
+/**
+ * Identifiers
+ */
+TOKEN : {
+  < IDENTIFIER: ( <LETTER> ) | ( <LETTER> (<LETTER>|<DIGIT>)* ) > {
+    CPP.toPrint("<IDT>");
+  }
+|
+  < #LETTER: ["a"-"z","A"-"Z","_","$"] >
+|
+  < #DIGIT: ["0"-"9"] >
+}
+
+/**
+ * Number Literals.
+ */
+TOKEN : {
+  < INTEGER_LITERAL: <DECIMAL_LITERAL> (["l","L"])? | <HEX_LITERAL> (["l","L"])? | <OCTAL_LITERAL> (["l","L"])? > {
+    CPP.toPrint("<VALUE>"); // This is gonna break #lines
+  }
+|
+  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+|
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+|
+
+  < FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"] > {
+    CPP.toPrint("<VALUE>");
+  }
+|
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < CHARACTER_LITERAL:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'" > {
+    CPP.toPrint("<VALUE>");
+  }
+|
+  < STRING_LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\"" > {
+    CPP.toPrint("<VALUE>");
+  }
+}
+
+/**
+ * Separators
+ */
+TOKEN : {
+  < LPAREN: "(" > {
+    CPP.toPrint("(");
+  }
+|
+  < RPAREN: ")" > {
+    CPP.toPrint(")");
+  }
+|
+  < LBRACE: "{" > {
+    CPP.toPrint("{");
+  }
+|
+  < RBRACE: "}" > {
+    CPP.toPrint("}");
+  }
+|
+  < LBRACKET: "[" > {
+    CPP.toPrint("[");
+  }
+|
+  < RBRACKET: "]" > {
+    CPP.toPrint("]");
+  }
+|
+  < SEMICOLON: ";" > {
+    CPP.toPrint("");
+  }
+|
+  < COMMA: "," > {
+    CPP.toPrint(",");
+  }
+|
+  < DOT: "." > {
+    CPP.toPrint(".");
+  }
+|
+  < QUESTIONMARK: "?" > {
+    CPP.toPrint("?");
+  }
+|
+  < ELLIPSIS: "..." > {
+    CPP.toPrint("...");
+  }
+}
+
+/**
+ * Operators.
+ */
+TOKEN : {
+  < ASSIGN: "=" > {
+    CPP.toPrint("=");
+  }
+|
+  < GT: ">" > {
+    CPP.toPrint("==");
+  }
+|
+  < LT: "<" > {
+    CPP.toPrint("==");
+  }
+|
+  < BANG: "!" > {
+    CPP.toPrint("");
+  }
+|
+  < TILDE: "~" > {
+    CPP.toPrint("~");
+  }
+|
+  < SCOPE: "::" > {
+    CPP.toPrint("::");
+  }
+|
+  < COLON: ":" > {
+    CPP.toPrint(":");
+  }
+|
+  < EQ: "==" > {
+    CPP.toPrint("==");
+  }
+|
+  < LE: "<=" > {
+    CPP.toPrint("==");
+  }
+|
+  < GE: ">=" > {
+    CPP.toPrint("==");
+  }
+|
+  < NE: "!=" > {
+    CPP.toPrint("==");
+  }
+|
+  < SC_OR: "||" > {
+    CPP.toPrint("&&");
+  }
+|
+  < SC_AND: "&&" > {
+    CPP.toPrint("&&");
+  }
+|
+  < INCR: "++" > {
+    CPP.toPrint("+=<NUM>");
+  }
+|
+  < DECR: "--" > {
+    CPP.toPrint("-=<NUM>");
+  }
+|
+  < PLUS: "+" > {
+    CPP.toPrint("+");
+  }
+|
+  < MINUS: "-" > {
+    CPP.toPrint("-");
+  }
+|
+  < STAR: "*" > {
+    CPP.toPrint("*");
+  }
+|
+  < SLASH: "/" > {
+    CPP.toPrint("/");
+  }
+|
+  < BIT_AND: "&" > {
+    CPP.toPrint("&");
+  }
+|
+  < BIT_OR: "|" > {
+    CPP.toPrint("&");
+  }
+|
+  < XOR: "^" > {
+    CPP.toPrint("&");
+  }
+|
+  < REM: "%" > {
+    CPP.toPrint("%");
+  }
+}
+
+TOKEN : {
+  < SHIFT: "<<" | ">>" | ">>>" > {
+    CPP.toPrint("<<");
+  }
+}
+
+TOKEN : {
+  < POINTERTO: "->" > {
+    CPP.toPrint("->");
+  }
+|
+  < DOTSTAR: ".*" > {
+    CPP.toPrint("->");
+  }
+|
+  < ARROWSTAR: "->*" > {
+    CPP.toPrint("->");
+  }
+}
+
+TOKEN : {
+  < PLUSASSIGN: "+=" > {
+    CPP.toPrint("+=");
+  }
+|
+  < MINUSASSIGN: "-=" > {
+    CPP.toPrint("-=");
+  }
+|
+  < STARASSIGN: "*=" > {
+    CPP.toPrint("*=");
+  }
+|
+  < SLASHASSIGN: "/=" > {
+    CPP.toPrint("/=");
+  }
+}
+
+TOKEN : {
+  < ANDASSIGN: "&=" | "|=" | "^=" > {
+    CPP.toPrint("&=");
+  }
+|
+  < REMASSIGN: "%=" > {
+    CPP.toPrint("%=");
+  }
+|
+  < SHIFTASSIGN: "<<=" | ">>=" | ">>>=" > {
+    CPP.toPrint("<<=");
+  }
+}
+
+/**
+ * White Space
+ */
+SKIP : {
+ <"\f" | " " | "\t">
+}
+
+TOKEN : {
+  <others : ~["a"-"z"] >
+}
+
+void anyOldLines () : {
+}
+{
+  <singleLineComment>
+|
+  <multiLineComment>
+|
+  <hashLine><INTEGER_LITERAL> {
+    seenNewLine=false;
+    lineNo=Integer.parseInt(getToken(0).image);
+    print=true;
+    printLineNo();
+    }
+| < LPAREN >
+| < RPAREN >
+| < LBRACE >
+| < RBRACE >
+| < LBRACKET >
+| < RBRACKET >
+| < SEMICOLON >
+| < COMMA >
+| < DOT >
+| < ASSIGN >
+| < GT >
+| < LT >
+| < BANG >
+| < TILDE >
+| < COLON >
+| < EQ >
+| < LE >
+| < GE >
+| < NE>
+| < SC_OR >
+| < SC_AND >
+| < INCR >
+| < DECR >
+| < PLUS>
+| < MINUS>
+| < STAR>
+| < SLASH>
+| < BIT_AND>
+| < BIT_OR>
+| < XOR>
+| < REM>
+| < SHIFT>
+| < PLUSASSIGN>
+| < MINUSASSIGN>
+| < STARASSIGN>
+| < SLASHASSIGN>
+| < ANDASSIGN>
+| < REMASSIGN>
+| < SHIFTASSIGN>
+| < BREAK >
+| < CASE >
+| < CATCH >
+| < CLASS >
+| < CONTINUE >
+| < _DEFAULT >
+| < DO >
+| < ELSE >
+| < FALSE >
+| < FINALLY >
+| < FLOAT >
+| < FOR >
+| < GOTO >
+| < IF >
+| < IMPLEMENTS >
+| < IMPORT >
+| < INT >
+| < INTERFACE >
+| < NATIVE >
+| < NEW >
+| < MODIFIERS >
+| < NULL >
+| < PACKAGE>
+| < RETURN >
+| < SHORT >
+| < SUPER >
+| < SWITCH >
+| < THIS >
+| < THROW >
+| < TRUE >
+| < TRY >
+| < TYPE >
+| < WHILE >
+| < INTEGER_LITERAL >
+| < FLOATING_POINT_LITERAL >
+| < CHARACTER_LITERAL >
+| < STRING_LITERAL >
+| < IDENTIFIER >
+| <newLine>
+| <others> {
+      if (seenNewLine)
+        CPP.save.println();
+      seenNewLine=false;
+      CPP.toPrint(token.image);
+    }
+}
+
+void Input () : {
+  try    {
+      if (outputFile!=null)
+        CPP.save = new PrintStream(new FileOutputStream(outputFile));
+      else
+        save = System.out;
+  } catch (IOException e) {
+      Date day = new Date(System.currentTimeMillis());
+      if (outputFile != null) {
+        try {
+            String file = new String
+                (System.getProperty("user.home") + Settings.fileSep
+                 + "sherlock.log");
+            BufferedWriter bw = new BufferedWriter
+                (new FileWriter(file, true));
+            bw.write(day + "-" + "Cannot write to: "
+                     + outputFile.getAbsolutePath());
+            bw.newLine();
+            bw.close();
+        }
+        catch (IOException e2) {
+            if (outputFile != null)
+                System.err.println(day + "-" + "Cannot write to: "
+                                   + outputFile.getAbsolutePath());
+        }
+      }
+      else System.err.println(day + "-" + "Cannot write to System.out");
+      return;
+  }
+}
+{
+  (anyOldLines())* <EOF>
+}
