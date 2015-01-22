@@ -21,7 +21,6 @@
             <div id="content-container"><decorator:body /></div>
         </div></div></div>
 <div id="page-footer"><jsp:include page="/jsp/includes/footer.jsp"/></div>
-</div>
 
 </body>
 </html>
