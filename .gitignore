@@ -10,6 +10,7 @@ test.log.*
 antlr
 compilers
 grammars
+test
 .idea
 *.iml
 

@@ -208,9 +208,9 @@ h1{
 #page-footer {
     width: 770px;
     padding: 20px 100px;
-    margin-left: 500px;
     color: #12526d;
     text-align: center;
+    margin: auto;
 }
 
 #page-footer a {
