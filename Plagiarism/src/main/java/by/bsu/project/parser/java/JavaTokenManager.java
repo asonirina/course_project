@@ -5,10 +5,6 @@ import by.bsu.project.model.Token;
 
 @SuppressWarnings("unused")public class JavaTokenManager implements JavaConstants {
 
-  /** Debug output. */
-  public static  java.io.PrintStream debugStream = System.out;
-  /** Set debug output. */
-  public static  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private static final int jjStopStringLiteralDfa_2(int pos, long active0){
    switch (pos)
    {
@@ -2593,26 +2589,22 @@ static void TokenLexicalActions(Token matchedToken)
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     Java.lineNo++;
     if (Java.seenNewLine)
-      Java.printLineNumber = true;
     Java.seenNewLine = true;
          break;
       case 3 :
         image.append(jjstrLiteralImages[3]);
         lengthOfMatch = jjstrLiteralImages[3].length();
     Java.toPrint("<SINGLE_LINE_COMMENT>");
-    Java.printLineNumber = true;
          break;
       case 4 :
         image.append(jjstrLiteralImages[4]);
         lengthOfMatch = jjstrLiteralImages[4].length();
     Java.toPrint("<MULTI_LINE_COMMENT>");
-    Java.printLineNumber = true;
          break;
       case 5 :
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     input_stream.backup(1);
     Java.toPrint("<FORMAL_COMMENT>");
-    Java.printLineNumber = true;
          break;
       case 10 :
         image.append(jjstrLiteralImages[10]);
