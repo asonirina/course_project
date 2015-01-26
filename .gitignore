@@ -13,7 +13,3 @@ test
 .idea
 *.iml
 
-
-####  local
-_pom.xml
-qaa.log
