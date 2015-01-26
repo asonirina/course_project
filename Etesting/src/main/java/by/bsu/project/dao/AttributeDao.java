@@ -1,6 +1,6 @@
 package by.bsu.project.dao;
 
-import by.bsu.project.entity.AttributeCounting;
+import by.bsu.project.general.model.AttributeCounting;
 
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package by.bsu.project.entity;
 
+import by.bsu.project.general.model.ProgramFilesEntity;
+
 import javax.persistence.*;
 import java.util.List;
 

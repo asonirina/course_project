@@ -1,6 +1,6 @@
 package by.bsu.project.dao;
 
-import by.bsu.project.entity.ProgramFilesEntity;
+import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 
 import java.util.List;

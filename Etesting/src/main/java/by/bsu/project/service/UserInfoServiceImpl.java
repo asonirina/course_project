@@ -1,8 +1,8 @@
 package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
-import by.bsu.project.entity.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.paging.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

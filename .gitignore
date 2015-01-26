@@ -7,7 +7,6 @@ test-output
 test.log.*
 
 #### Idea ###
-antlr
 compilers
 grammars
 test

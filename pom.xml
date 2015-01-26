@@ -29,6 +29,7 @@
     <modules>
         <module>Etesting</module>
         <module>Plagiarism</module>
+        <module>General</module>
     </modules>
 
     <properties>

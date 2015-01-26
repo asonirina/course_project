@@ -1,7 +1,7 @@
 package by.bsu.project.dao;
 
 import by.bsu.project.constants.ETestingConstants;
-import by.bsu.project.entity.AttributeCounting;
+import by.bsu.project.general.model.AttributeCounting;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.dao.AttributeDao;
-import by.bsu.project.entity.AttributeCounting;
+import by.bsu.project.general.model.AttributeCounting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

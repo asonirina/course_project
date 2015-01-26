@@ -1,16 +1,16 @@
 package by.bsu.project.mvc;
 
 import by.bsu.project.constants.ETestingConstants;
-import by.bsu.project.entity.ProgramFilesEntity;
+import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
-import by.bsu.project.huffman.Huffman;
+import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
-import by.bsu.project.entity.AttributeCounting;
-import by.bsu.project.plagiat.model.TreeHelper;
-import by.bsu.project.plagiat.model.TreeNode;
-import by.bsu.project.plagiat.util.AttributeCountingUtil;
-import by.bsu.project.plagiat.util.TreeCompareUtil;
+import by.bsu.project.general.model.AttributeCounting;
+import by.bsu.project.antlr.model.TreeHelper;
+import by.bsu.project.antlr.model.TreeNode;
+import by.bsu.project.antlr.util.AttributeCountingUtil;
+import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.service.AttributeService;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
