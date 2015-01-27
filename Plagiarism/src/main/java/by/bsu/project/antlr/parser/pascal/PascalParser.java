@@ -1,9 +1,6 @@
-package by.bsu.project.antlr.pascal;// $ANTLR 3.4 pascal3g.g 2015-01-27 10:33:01
+package by.bsu.project.antlr.parser.pascal;// $ANTLR 3.4 pascal3g.g 2015-01-27 10:33:01
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 import org.antlr.runtime.tree.*;
 

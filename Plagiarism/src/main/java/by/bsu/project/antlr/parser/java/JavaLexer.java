@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.java;
+package by.bsu.project.antlr.parser.java;
 
 import org.antlr.runtime.*;
 

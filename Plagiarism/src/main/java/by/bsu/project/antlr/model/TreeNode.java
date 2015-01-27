@@ -8,14 +8,14 @@ import java.util.List;
  * Date: 24.03.14
  */
 public class TreeNode {
-    private Long id;
-    private Long parentId;
+    private Integer id;
+    private Integer parentId;
     private String name;
     private String operation;
     private TreeNode parent;
     private String parentName;
 
-    public TreeNode(Long id, String name, TreeNode node) {
+    public TreeNode(Integer id, String name, TreeNode node) {
         this.id = id;
         this.name = name;
         this.parent = node;
@@ -59,19 +59,19 @@ public class TreeNode {
         this.parent = parent;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -85,5 +85,9 @@ public class TreeNode {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public boolean isLeaf() {
+        return children.isEmpty();
     }
 }

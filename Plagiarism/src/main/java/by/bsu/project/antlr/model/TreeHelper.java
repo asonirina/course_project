@@ -1,8 +1,7 @@
 package by.bsu.project.antlr.model;
 
-import by.bsu.project.antlr.java.JavaLexer;
-import by.bsu.project.antlr.java.JavaParser;
 import by.bsu.project.general.model.AttributeCounting;
+import by.bsu.project.antlr.parser.java.*;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
@@ -18,7 +17,7 @@ import java.util.List;
  * Date: 26.03.14
  */
 public class TreeHelper {
-    private long h = 0;
+    private int h = 0;
     private AttributeCounting ac;
     private final TreeAdaptor adaptor = new CommonTreeAdaptor() {
         public Object create(Token payload) {

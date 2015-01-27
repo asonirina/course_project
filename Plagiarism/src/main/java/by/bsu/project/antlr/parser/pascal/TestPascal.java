@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.pascal;
+package by.bsu.project.antlr.parser.pascal;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CharStream;
