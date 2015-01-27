@@ -1,5 +1,7 @@
 package by.bsu.project.antlr.model;
 
+import by.bsu.project.antlr.java.JavaLexer;
+import by.bsu.project.antlr.java.JavaParser;
 import by.bsu.project.general.model.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;

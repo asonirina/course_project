@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.model;
+package by.bsu.project.antlr.java;
 
 import org.antlr.runtime.*;
 

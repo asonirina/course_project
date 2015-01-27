@@ -1,5 +1,6 @@
-package by.bsu.project.antlr.model;
+package by.bsu.project.antlr.java;
 
+import by.bsu.project.antlr.model.TreeNode;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
@@ -9,7 +10,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpDemo {
+public class TestJava {
     static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
         public Object create(Token payload) {
             if (payload != null)
@@ -66,7 +67,7 @@ public class ExpDemo {
     }
     public static void main(String[] args) throws Exception {
 
-        ExpDemo d = new ExpDemo();
+        TestJava d = new TestJava();
         ANTLRInputStream in = new ANTLRInputStream(new FileInputStream("test/Test.java"));
         JavaLexer lexer = new JavaLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
