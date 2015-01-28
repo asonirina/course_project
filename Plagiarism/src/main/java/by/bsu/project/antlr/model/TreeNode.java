@@ -14,6 +14,7 @@ public class TreeNode {
     private String operation;
     private TreeNode parent;
     private String parentName;
+    private Integer i;
 
     public TreeNode(Integer id, String name, TreeNode node) {
         this.id = id;
@@ -89,5 +90,13 @@ public class TreeNode {
 
     public boolean isLeaf() {
         return children.isEmpty();
+    }
+
+    public Integer getI() {
+        return i;
+    }
+
+    public void setI(Integer i) {
+        this.i = i;
     }
 }
