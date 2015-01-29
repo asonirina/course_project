@@ -1,8 +1,9 @@
 package by.bsu.project.antlr.parser.java;
 
+import by.bsu.project.antlr.lang.LangLexer;
 import org.antlr.runtime.*;
 
-public class JavaLexer extends Lexer {
+public class JavaLexer extends LangLexer {
     public static final int PACKAGE=84;
     public static final int EXPONENT=173;
     public static final int STAR=49;

@@ -1,9 +1,10 @@
 package by.bsu.project.antlr.model;
 
-//import by.bsu.project.antlr.lang.Operation1;
+import by.bsu.project.antlr.lang.LangFactory;
+import by.bsu.project.antlr.lang.LangLexer;
+import by.bsu.project.antlr.lang.LangParser;
 import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.general.model.AttributeCounting;
-import by.bsu.project.antlr.parser.java.*;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
@@ -24,6 +25,7 @@ import static by.bsu.project.antlr.lang.LangWrap.Lang;
 public class TreeHelper {
     private int h = 0;
     private AttributeCounting ac;
+    private LangFactory factory;
     private final TreeAdaptor adaptor = new CommonTreeAdaptor() {
         public Object create(Token payload) {
             return new CommonTree(payload);
@@ -36,8 +38,9 @@ public class TreeHelper {
     }
 
     public TreeHelper(String id, Lang lang) {
-        ac = new AttributeCounting(id);
+        this.ac = new AttributeCounting(id);
         this.lang = lang;
+        this.factory = new LangFactory(lang);
     }
 
     private List<TreeNode> nodes = new ArrayList<>();
@@ -45,9 +48,9 @@ public class TreeHelper {
     public List<TreeNode> getTree(byte[] bytes) {
         try {
             ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(bytes));
-            JavaLexer lexer = new JavaLexer(in);
+            LangLexer lexer = factory.createLexer(in);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            JavaParser parser = new JavaParser(tokens);
+            LangParser parser = factory.createParser(tokens);
             parser.setTreeAdaptor(adaptor);
 
             CommonTree tree = (CommonTree) parser.compilationUnit().getTree();
@@ -73,7 +76,6 @@ public class TreeHelper {
                     }
                     break;
                 }
-
                 //-----------------------------------------------------------------------
                 case 61: { //class node
                     doClass(t, node);
@@ -81,11 +83,9 @@ public class TreeHelper {
                 }
                 //------------------------------------------------------------------------------------------
                 default: {
-                    //skip  it
                     break;
                 }
             }
-
         }
     }
 
@@ -832,4 +832,3 @@ public class TreeHelper {
         return t.getText();
     }
 }
-

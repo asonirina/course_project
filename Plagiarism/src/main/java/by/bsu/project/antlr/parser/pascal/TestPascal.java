@@ -23,7 +23,7 @@ public class TestPascal {
 
       // Print the tree
 //      System.out.println(
-              printTree1((CommonTree) parser.program().getTree(),0);
+              printTree1((CommonTree) parser.compilationUnit().getTree(),0);
 //      );
 
   }

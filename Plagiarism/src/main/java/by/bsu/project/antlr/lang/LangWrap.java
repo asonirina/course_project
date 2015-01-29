@@ -18,9 +18,9 @@ public class LangWrap {
         }
     }
 
-
     public static enum Operation1 {
-        NULL,
+        NULL, //empty
+        ROOT,
         DECIMAL_LITERAL,
         IDENT
     }

@@ -1,9 +1,10 @@
 package by.bsu.project.antlr.parser.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:54
 
+import by.bsu.project.antlr.lang.LangLexer;
 import org.antlr.runtime.*;
 
 @SuppressWarnings("all")
-public class CPPGrammarLexer extends Lexer {
+public class CPPGrammarLexer extends LangLexer {
 	public static final int EOF=-1;
 	public static final int T__83=83;
 	public static final int T__84=84;

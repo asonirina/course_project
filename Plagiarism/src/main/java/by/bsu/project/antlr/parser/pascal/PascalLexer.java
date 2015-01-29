@@ -1,9 +1,10 @@
 package by.bsu.project.antlr.parser.pascal;// $ANTLR 3.4 pascal3g.g 2015-01-27 10:33:05
 
+import by.bsu.project.antlr.lang.LangLexer;
 import org.antlr.runtime.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked"})
-public class PascalLexer extends Lexer {
+public class PascalLexer extends LangLexer {
     public static final int EOF=-1;
     public static final int AND=4;
     public static final int ARGDECL=5;

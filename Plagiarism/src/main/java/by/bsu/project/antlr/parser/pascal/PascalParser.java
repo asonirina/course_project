@@ -1,12 +1,13 @@
 package by.bsu.project.antlr.parser.pascal;// $ANTLR 3.4 pascal3g.g 2015-01-27 10:33:01
 
+import by.bsu.project.antlr.lang.LangParser;
 import org.antlr.runtime.*;
 
 import org.antlr.runtime.tree.*;
 
 
 @SuppressWarnings({"all", "warnings", "unchecked"})
-public class PascalParser extends Parser {
+public class PascalParser extends LangParser {
     public static final String[] tokenNames = new String[] {
         "<invalid>", "<EOR>", "<DOWN>", "<UP>", "AND", "ARGDECL", "ARGDECLS", "ARGLIST", "ARRAY", "ASSIGN", "AT", "BEGIN", "BLOCK", "BOOLEAN", "CASE", "CHAR", "CHR", "COLON", "COMMA", "COMMENT_1", "COMMENT_2", "CONST", "CONSTLIST", "DIV", "DO", "DOT", "DOTDOT", "DOWNTO", "ELIST", "ELSE", "END", "EQUAL", "EXIT", "EXPONENT", "FIELD", "FIELDLIST", "FILE", "FOR", "FORWARD", "FUNCTION", "FUNC_CALL", "GE", "GOTO", "GT", "IDENT", "IDLIST", "IF", "IMPLEMENTATION", "IN", "INTEGER", "INTERFACE", "LABEL", "LBRACK", "LBRACK2", "LCURLY", "LE", "LPAREN", "LT", "MINUS", "MOD", "NIL", "NOT", "NOT_EQUAL", "NUM_INT", "NUM_REAL", "OF", "OR", "PACKED", "PLUS", "POINTER", "PROCEDURE", "PROC_CALL", "PROGRAM", "RBRACK", "RBRACK2", "RCURLY", "REAL", "RECORD", "REPEAT", "RPAREN", "SCALARTYPE", "SEMI", "SET", "SLASH", "STAR", "STRING", "STRING_LITERAL", "SUBRANGE", "THEN", "TO", "TYPE", "TYPEDECL", "TYPELIST", "UNIT", "UNTIL", "USES", "VAR", "VARDECL", "VARIANT_CASE", "VARIANT_TAG", "VARIANT_TAG_NO_ID", "WHILE", "WITH", "WS"
     };
@@ -140,16 +141,17 @@ public TreeAdaptor getTreeAdaptor() {
     public String getGrammarFileName() { return "pascal3g.g"; }
 
 
-    public static class program_return extends ParserRuleReturnScope {
-        Object tree;
-        public Object getTree() { return tree; }
-    };
+//    public static class program_return extends ParserRuleReturnScope {
+//        CommonTree tree;
+//        public CommonTree getTree() { return tree; }
+//    };
 
 
     // $ANTLR start "program"
     // pascal3g.g:216:1: program : programHeading ( INTERFACE )? block DOT -> ^( PROGRAM programHeading block ) ;
-    public final program_return program() throws RecognitionException {
-        program_return retval = new program_return();
+    @Override
+    public final CompilationUnit compilationUnit() throws RecognitionException {
+        CompilationUnit retval = new CompilationUnit();
         retval.start = input.LT(1);
 
 
@@ -218,7 +220,7 @@ public TreeAdaptor getTreeAdaptor() {
             // token list labels: 
             // rule list labels: 
             // wildcard labels: 
-            retval.tree = root_0;
+            retval.tree = (CommonTree)root_0;
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",
                     retval!=null?retval.tree:null);
 
@@ -242,21 +244,21 @@ public TreeAdaptor getTreeAdaptor() {
             }
 
 
-            retval.tree = root_0;
+            retval.tree = (CommonTree)root_0;
 
             }
 
             retval.stop = input.LT(-1);
 
 
-            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
             adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
         catch (RecognitionException re) {
             reportError(re);
             recover(input,re);
-    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
+    	retval.tree = (CommonTree)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
         }
 

@@ -4,8 +4,11 @@ import by.bsu.project.antlr.lang.LangWrap.Operation1;
 import by.bsu.project.antlr.lang.LangWrap.Lang;
 
 import static by.bsu.project.antlr.lang.LangWrap.Lang.JAVA;
+import static by.bsu.project.antlr.lang.LangWrap.Lang.CPP;
+import static by.bsu.project.antlr.lang.LangWrap.Lang.PASCAL;
 import static by.bsu.project.antlr.lang.LangWrap.Operation1.DECIMAL_LITERAL;
 import static by.bsu.project.antlr.lang.LangWrap.Operation1.IDENT;
+import static by.bsu.project.antlr.lang.LangWrap.Operation1.ROOT;
 
 /**
  * User: iason
@@ -16,7 +19,13 @@ public class OperationUtil {
     static Operation1 matrix[][] = new Operation1[Lang.values().length][200];
 
     static {
+        put(ROOT, 0, JAVA);      //nil
+        put(ROOT, 69, CPP);      //SOURCE_FILE
+        put(ROOT, 72, PASCAL);   //PROGRAM
         put(DECIMAL_LITERAL, 167, JAVA);
+        put(DECIMAL_LITERAL, 27, CPP);
+
+
         put(IDENT, 164, JAVA);
     }
 

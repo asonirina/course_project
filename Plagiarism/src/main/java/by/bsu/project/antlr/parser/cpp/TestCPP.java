@@ -10,7 +10,7 @@ public class TestCPP {
         public Object create(Token payload) {
             if (payload != null)
             {
-                System.out.println("Create " + CPPGrammarParser.tokenNames[payload.getType()] + ":  L" + payload.getLine() + ":C" + payload.getCharPositionInLine() + " " + payload.getText());
+//                System.out.println("Create " + CPPGrammarParser.tokenNames[payload.getType()] + ":  L" + payload.getLine() + ":C" + payload.getCharPositionInLine() + " " + payload.getText());
             }
             return new CommonTree(payload);
         }
@@ -24,8 +24,8 @@ public class TestCPP {
 
 			CPPGrammarParser parser = new CPPGrammarParser(tokens);
 
-//            parser.setTreeAdaptor(adaptor);
-			CommonTree tree = parser.code().getTree();
+            parser.setTreeAdaptor(adaptor);
+			CommonTree tree = (CommonTree)parser.compilationUnit().getTree();
         printTree1(tree, 1);
 
 //			t.inspect(parser);

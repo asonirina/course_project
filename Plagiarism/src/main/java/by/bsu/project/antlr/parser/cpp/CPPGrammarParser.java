@@ -1,5 +1,6 @@
 package by.bsu.project.antlr.parser.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:52
 
+import by.bsu.project.antlr.lang.LangParser;
 import org.antlr.runtime.*;
 import java.util.Stack;
 
@@ -7,7 +8,7 @@ import org.antlr.runtime.tree.*;
 
 
 @SuppressWarnings("all")
-public class CPPGrammarParser extends Parser {
+public class CPPGrammarParser extends LangParser {
 	public static final String[] tokenNames = new String[] {
 		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "ALPHA_NUMERIC", "AND", "ARGUMENT", 
 		"ASSIGN", "ASSIGN_OP", "BASE_CLASSES", "BIT_OR", "BIT_OR_ELEM", "BRACKETS", 
@@ -228,18 +229,19 @@ public class CPPGrammarParser extends Parser {
 	@Override public String[] getTokenNames() { return CPPGrammarParser.tokenNames; }
 	@Override public String getGrammarFileName() { return "CPPGrammar.g"; }
 
-
-	public static class code_return extends ParserRuleReturnScope {
-		CommonTree tree;
-		@Override
-		public CommonTree getTree() { return tree; }
-	};
+//
+//	public static class code_return extends ParserRuleReturnScope {
+//		CommonTree tree;
+//		@Override
+//		public CommonTree getTree() { return tree; }
+//	};
 
 
 	// $ANTLR start "code"
 	// CPPGrammar.g:59:1: code : ( part )* -> ^( SOURCE_FILE ( part )* ) ;
-	public final code_return code() throws RecognitionException {
-		code_return retval = new code_return();
+    @Override
+	public final CompilationUnit compilationUnit() throws RecognitionException {
+        CompilationUnit retval = new CompilationUnit();
 		retval.start = input.LT(1);
 
 		CommonTree root_0 = null;
