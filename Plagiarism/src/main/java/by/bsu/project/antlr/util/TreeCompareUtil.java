@@ -1,5 +1,6 @@
 package by.bsu.project.antlr.util;
 
+import by.bsu.project.antlr.lang.LangWrap.Lang;
 import by.bsu.project.antlr.util.CustomComparator;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.huffman.Huffman;
@@ -19,7 +20,7 @@ public class TreeCompareUtil {
         String source[] = getTokenizedString(tree);
         int max = 0;
         for (ProgramFilesEntity entity : programs) {
-            TreeHelper builder = new TreeHelper(String.valueOf(entity.getId()));
+            TreeHelper builder = new TreeHelper(String.valueOf(entity.getId()), Lang.JAVA);
             List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
             String arr[] = getTokenizedString(nodes);
             int sim = (int) (100 * Math.exp(- Math.pow(DLevenstein(source, arr), 2) / (source.length * arr.length)));

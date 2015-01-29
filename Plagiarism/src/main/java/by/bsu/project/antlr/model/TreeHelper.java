@@ -1,5 +1,7 @@
 package by.bsu.project.antlr.model;
 
+//import by.bsu.project.antlr.lang.Operation1;
+import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.antlr.parser.java.*;
 import org.antlr.runtime.ANTLRInputStream;
@@ -11,6 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static by.bsu.project.antlr.lang.LangWrap.Operation1;
+import static by.bsu.project.antlr.lang.LangWrap.Lang;
 
 /**
  * User: iason
@@ -24,13 +29,15 @@ public class TreeHelper {
             return new CommonTree(payload);
         }
     };
+    private Lang lang;
 
     public AttributeCounting getAc() {
         return ac;
     }
 
-    public TreeHelper(String id) {
+    public TreeHelper(String id, Lang lang) {
         ac = new AttributeCounting(id);
+        this.lang = lang;
     }
 
     private List<TreeNode> nodes = new ArrayList<>();
@@ -284,8 +291,9 @@ public class TreeHelper {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 164: {
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case IDENT: {
                     name = doIdent((CommonTree) child);
                 }
             }

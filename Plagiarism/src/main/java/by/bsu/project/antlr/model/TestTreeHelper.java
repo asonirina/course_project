@@ -1,5 +1,6 @@
 package by.bsu.project.antlr.model;
 
+import by.bsu.project.antlr.lang.LangWrap.Lang;
 import by.bsu.project.antlr.util.*;
 import org.apache.commons.io.IOUtils;
 
@@ -12,11 +13,11 @@ import java.util.List;
  */
 public class TestTreeHelper {
     public static void main(String[] args) throws Exception{
-        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test3.java"));
-        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test4.java"));
-        TreeHelper helper1 = new TreeHelper("ghj");
+        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test.java"));
+        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test1.java"));
+        TreeHelper helper1 = new TreeHelper("ghj", Lang.JAVA);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
-        TreeHelper helper2 = new TreeHelper("ghj1");
+        TreeHelper helper2 = new TreeHelper("ghj1", Lang.JAVA);
         List<TreeNode> nodes2 = helper2.getTree(bytes2);
         NodeDistance nd = new NodeDistance() {
             public int rename(TreeNode n1, TreeNode n2) {
