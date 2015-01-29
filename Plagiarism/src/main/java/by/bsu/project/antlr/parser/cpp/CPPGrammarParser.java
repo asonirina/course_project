@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:52
+package by.bsu.project.antlr.parser.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:52
 
 import org.antlr.runtime.*;
 import java.util.Stack;

@@ -1,9 +1,6 @@
-package by.bsu.project.antlr.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:54
+package by.bsu.project.antlr.parser.cpp;// $ANTLR 3.5.1 CPPGrammar.g 2015-01-27 06:28:54
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class CPPGrammarLexer extends Lexer {

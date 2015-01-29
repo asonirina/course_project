@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class TestTreeHelper {
     public static void main(String[] args) throws Exception{
-        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test/Test.java"));
-        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test/Test1.java"));
+        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test3.java"));
+        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test4.java"));
         TreeHelper helper1 = new TreeHelper("ghj");
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
         TreeHelper helper2 = new TreeHelper("ghj1");
@@ -32,6 +32,6 @@ public class TestTreeHelper {
         };
         TreeEditDistance d = new TreeEditDistance(nd, nodes1, nodes2);
         int h = d.calculate();
-
+        System.out.println(h);
     }
 }

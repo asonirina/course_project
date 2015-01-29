@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.cpp;
+package by.bsu.project.antlr.parser.cpp;
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTree;
