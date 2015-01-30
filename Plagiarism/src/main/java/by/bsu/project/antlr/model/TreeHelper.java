@@ -311,8 +311,9 @@ public class TreeHelper {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 164: {
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case IDENT: {
                     name = doIdent((CommonTree) child);
                 }
             }
@@ -481,8 +482,9 @@ public class TreeHelper {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 164: {// [IDENT]
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case IDENT: {// [IDENT]
                     name = doIdent((CommonTree) child);
                 }
             }

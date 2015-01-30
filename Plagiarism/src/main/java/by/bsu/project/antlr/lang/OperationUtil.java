@@ -2,31 +2,36 @@ package by.bsu.project.antlr.lang;
 
 import by.bsu.project.antlr.lang.LangWrap.Operation1;
 import by.bsu.project.antlr.lang.LangWrap.Lang;
+import org.apache.log4j.Logger;
 
-import static by.bsu.project.antlr.lang.LangWrap.Lang.JAVA;
-import static by.bsu.project.antlr.lang.LangWrap.Lang.CPP;
-import static by.bsu.project.antlr.lang.LangWrap.Lang.PASCAL;
-import static by.bsu.project.antlr.lang.LangWrap.Operation1.DECIMAL_LITERAL;
-import static by.bsu.project.antlr.lang.LangWrap.Operation1.IDENT;
-import static by.bsu.project.antlr.lang.LangWrap.Operation1.ROOT;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 /**
  * User: iason
  * Date: 29.01.15
  */
 public class OperationUtil {
+    private static final Logger logger = Logger.getLogger(OperationUtil.class);
 
     static Operation1 matrix[][] = new Operation1[Lang.values().length][200];
 
     static {
-        put(ROOT, 0, JAVA);      //nil
-        put(ROOT, 69, CPP);      //SOURCE_FILE
-        put(ROOT, 72, PASCAL);   //PROGRAM
-        put(DECIMAL_LITERAL, 167, JAVA);
-        put(DECIMAL_LITERAL, 27, CPP);
+        try {
 
-
-        put(IDENT, 164, JAVA);
+            for (Lang lang : Lang.values()) {
+                Properties props = new Properties();
+                props.load(ClassLoader.getSystemResourceAsStream(lang.name().toLowerCase() + ".properties"));
+                for (Operation1 op : Operation1.values()) {
+                    String code = props.getProperty(op.name());
+                    if (code != null) {
+                        put(op, Integer.valueOf(code), lang);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
     }
 
     public static Operation1 get(Lang lang, int code) {
