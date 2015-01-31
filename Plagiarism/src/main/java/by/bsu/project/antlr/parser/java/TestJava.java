@@ -15,7 +15,7 @@ public class TestJava {
         public Object create(Token payload) {
             if (payload != null)
             {
-                System.out.println("Create " + JavaParser.tokenNames[payload.getType()] + ":  L" + payload.getLine() + ":C" + payload.getCharPositionInLine() + " " + payload.getText());
+//                System.out.println("Create " + JavaParser.tokenNames[payload.getType()] + ":  L" + payload.getLine() + ":C" + payload.getCharPositionInLine() + " " + payload.getText());
             }
             return new CommonTree(payload);
         }

@@ -1,10 +1,9 @@
 package by.bsu.project.antlr.util;
 
 import by.bsu.project.antlr.lang.LangWrap.Lang;
-import by.bsu.project.antlr.util.CustomComparator;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.huffman.Huffman;
-import by.bsu.project.antlr.model.TreeHelper;
+import by.bsu.project.antlr.tree.TreeHelper;
 import by.bsu.project.antlr.model.TreeNode;
 
 import java.util.ArrayList;

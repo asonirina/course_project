@@ -22,6 +22,17 @@ public class LangWrap {
         NULL, //empty
         ROOT,
         DECIMAL_LITERAL,
-        IDENT
+        IDENT,
+        CLASS_DECL,    //java, cpp
+        SIMPLE_DECL,  //cpp
+        CLASS_NAME,  //cpp
+        CLASS_CONTENT,
+        VAR_DECLARATION,
+        VAR_DECLARATOR_LIST,
+        VAR_DECLARATOR,
+        VAR,  //pascal
+        TYPE, //cpp
+        TYPE_NAME,
+        NAME
     }
 }

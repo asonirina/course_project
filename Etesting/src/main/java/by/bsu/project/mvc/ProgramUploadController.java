@@ -7,7 +7,7 @@ import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.general.model.AttributeCounting;
-import by.bsu.project.antlr.model.TreeHelper;
+import by.bsu.project.antlr.tree.TreeHelper;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
