@@ -64,7 +64,7 @@ public class TreeParser {
         if (t != null) {
         Operation1 op = OperationUtil.get(lang, t);
             switch (op) {
-                case ROOT: { //root
+                case ROOT: {
                     TreeNode root = new TreeNode(h++, "root", null);
                     nodes.add(root);
 
@@ -846,6 +846,17 @@ public class TreeParser {
                     break;
                 }
                 //---------------------------------------------------------------------------------
+                case RETURN: {
+                    doExpr((CommonTree)child.getChild(0), node);
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case JUMP_STATEMENT: {
+                    doExpr((CommonTree)child.getChild(1).getChild(0), node);
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+
                 default: {
                     break;
                 }

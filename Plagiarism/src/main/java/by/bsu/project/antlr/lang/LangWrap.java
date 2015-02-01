@@ -33,6 +33,7 @@ public class LangWrap {
         NAME,
         FORMAL_PARAM_LIST,
         BLOCK_SCOPE,
+        RETURN, JUMP_STATEMENT,
         RETURN_TYPE,
         FUNCTION_METHOD_DECL,    //java, cpp
         VOID_METHOD_DECL, //java
