@@ -57,7 +57,8 @@ public class LangWrap {
         CALLEE, ARGUMENT, //cpp
         CONDITION,
         PARENTESIZED_EXPR,
-        IF, WHILE,
+        IF, WHILE, FOR,
+        FOR_INIT, FOR_UPDATE,FOR_CONDITION,
         ITERATION
     }
 }

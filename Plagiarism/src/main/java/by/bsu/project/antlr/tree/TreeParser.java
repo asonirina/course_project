@@ -840,12 +840,12 @@ public class TreeParser {
                     doWhile(child, node);
                     break;
                 }
-//                //---------------------------------------------------------------------------------
-//                case 73: {
-//                    doFor((CommonTree) child, node);
-//                    break;
-//                }
-//                //---------------------------------------------------------------------------------
+                //---------------------------------------------------------------------------------
+                case FOR: {
+                    doFor(child, node);
+                    break;
+                }
+                //---------------------------------------------------------------------------------
                 default: {
                     break;
                 }
@@ -902,6 +902,11 @@ public class TreeParser {
         switch (op){
             case WHILE:{
                 doWhile(t, node);
+                break;
+            }
+            case FOR:{
+                doFor(t, node);
+                break;
             }
             default:{
                 break;
@@ -934,27 +939,31 @@ public class TreeParser {
         TreeNode forNode = new TreeNode(h++, "", node);
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 131: {   // [FOR_INIT]
-                    name += doForInit((CommonTree) child, forNode) + " ; ";
+            CommonTree child = (CommonTree)t.getChild(i);
+            Operation1 op = OperationUtil.get(lang, child);
+            switch (op) {
+                case FOR_INIT: {
+                    doForInit(child, forNode);
                     break;
                 }
-                case 129: {   // [FOR_CONDITION]
-                    name += doForCondition((CommonTree) child, forNode) + " ; ";
+                case FOR_CONDITION: {
+                    name += doForCondition(child, forNode) + " ; ";
                     break;
                 }
-
-                case 132: {   // [FOR_CONDITION]
-                    name += doForUpdate((CommonTree) child, forNode);
-                    break;
-                }
-
-                case 117: {   // [FOR_CONDITION]
-                    doBlockScope((CommonTree) child, forNode);
+                case CONDITION: {
+                    name += doExpr((CommonTree)child.getChild(0), node)+ " ; ";
                     break;
                 }
 
+                case FOR_UPDATE: {
+                    name += doForUpdate(child, forNode);
+                    break;
+                }
+
+                case BLOCK_SCOPE: {
+                    doBlockScope(child, forNode);
+                    break;
+                }
             }
         }
         forNode.setName("for (" + name + ")");
@@ -963,54 +972,56 @@ public class TreeParser {
         ac.incCycle();
     }
 
-    private String doForInit(CommonTree t, TreeNode node) {
-//        TreeNode forInit = new TreeNode(h++, "", node);
-        String name = "";
+    //////////////////////
+    private void doForInit(CommonTree t, TreeNode node) {
         for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 160: {   // [VAR_DECLARATION]
-                    name = doVarDeclaration((CommonTree) child, node);
+            CommonTree child = (CommonTree)t.getChild(i);
+            Operation1 op = OperationUtil.get(lang, child);
+            switch (op) {
+                case VAR_DECLARATION: {
+                    doVarDeclaration(child, node);
+                    break;
+                }
+                case SIMPLE_DECL:{
+                    doSimpleDeclaration(child, node);
+                    break;
+                }
+                default:{
                     break;
                 }
             }
         }
-//        forInit.setName(name);
-//        nodes.add(forInit);
-        return name;
     }
 
+    //////////////////
     private String doForCondition(CommonTree t, TreeNode node) {
-//        TreeNode forCond = new TreeNode(h++, "", node);
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 126: {   // [VAR_DECLARATION]
-                    name = doExpr((CommonTree) child, node);
+            CommonTree child = (CommonTree)t.getChild(i);
+            Operation1 op = OperationUtil.get(lang, child);
+            switch (op) {
+                case EXPR: {
+                    name = doExpr(child, node);
                     break;
                 }
             }
         }
-//        forCond.setName(name);
-//        nodes.add(forCond);
         return name;
     }
 
+    ////////////////
     private String doForUpdate(CommonTree t, TreeNode node) {
-//        TreeNode forUpdate = new TreeNode(h++, "", node);
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 126: {   // [VAR_DECLARATION]
-                    name = doExpr((CommonTree) child, node);
+            CommonTree child = (CommonTree)t.getChild(i);
+            Operation1 op = OperationUtil.get(lang, child);
+            switch (op) {
+                case EXPR: {
+                    name = doExpr( child, node);
                     break;
                 }
             }
         }
-//        forUpdate.setName(name);
-//        nodes.add(forUpdate);
         return name;
     }
 
