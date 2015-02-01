@@ -39,6 +39,7 @@ public class LangWrap {
         FORMAL_PARAM_STD_DECL,
         PROCEDURE ,     //pascal
         INT, CHAR, DOUBLE, BOOLEAN, FLOAT, STRING,
+        QUALIFIED_TYPE_IDENT,
         ARRAY, //cpp
         EXPR, EXPR_STATEMENT,
         INIT,  //cpp
@@ -48,8 +49,15 @@ public class LangWrap {
         PLUS, MINUS ,
         EQUAL, NOT_EQUAL,
         LOGICAL_AND,
-        LESS_THAN, GREATER_THAN  ,
+        POST_INC, POST_DEC,
+        LESS_THAN, GREATER_THAN,
         CLASS_CONSTRUCTOR_CALL,
-        LVAL, RVAL , FIELD
+        LVAL, RVAL, FIELD,
+        METHOD_CALL, ARGUMENT_LIST, DOT,
+        CALLEE, ARGUMENT, //cpp
+        CONDITION,
+        PARENTESIZED_EXPR,
+        IF, WHILE,
+        ITERATION
     }
 }

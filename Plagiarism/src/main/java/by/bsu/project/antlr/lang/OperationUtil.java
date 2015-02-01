@@ -2,6 +2,7 @@ package by.bsu.project.antlr.lang;
 
 import by.bsu.project.antlr.lang.LangWrap.Operation1;
 import by.bsu.project.antlr.lang.LangWrap.Lang;
+import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
@@ -34,9 +35,13 @@ public class OperationUtil {
         }
     }
 
-    public static Operation1 get(Lang lang, int code) {
+    private static Operation1 get(Lang lang, int code) {
         if (matrix[lang.id][code] == null) return Operation1.NULL;
         return matrix[lang.id][code];
+    }
+
+    public static Operation1 get(Lang lang, CommonTree t) {
+        return get(lang, t.getType());
     }
 
     private static void put(Operation1 operation1, int code, Lang lang) {
