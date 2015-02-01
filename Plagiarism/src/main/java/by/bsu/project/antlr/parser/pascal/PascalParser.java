@@ -129,22 +129,16 @@ public class PascalParser extends LangParser {
         super(input, state);
     }
 
-protected TreeAdaptor adaptor = new CommonTreeAdaptor();
+    protected TreeAdaptor adaptor = new CommonTreeAdaptor();
 
-public void setTreeAdaptor(TreeAdaptor adaptor) {
-    this.adaptor = adaptor;
-}
-public TreeAdaptor getTreeAdaptor() {
-    return adaptor;
-}
+    public void setTreeAdaptor(TreeAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+    public TreeAdaptor getTreeAdaptor() {
+        return adaptor;
+    }
     public String[] getTokenNames() { return PascalParser.tokenNames; }
     public String getGrammarFileName() { return "pascal3g.g"; }
-
-
-//    public static class program_return extends ParserRuleReturnScope {
-//        CommonTree tree;
-//        public CommonTree getTree() { return tree; }
-//    };
 
 
     // $ANTLR start "program"

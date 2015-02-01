@@ -89,6 +89,16 @@ public class TreeHelper {
                     break;
                 }
                 //------------------------------------------------------------------------------------------
+                case PROCEDURE: { //pascal
+                    doMethod(t, node);
+                    break;
+                }
+                //------------------------------------------------------------------------------------------
+                case FUNCTION_METHOD_DECL: { //pascal
+                    doMethod(t, node);
+                    break;
+                }
+                //------------------------------------------------------------------------------------------
 
                 default: {
                     break;
@@ -180,7 +190,6 @@ public class TreeHelper {
     }
 
     private String doVarDeclaration(CommonTree t, TreeNode node) {
-        String scope = "";
         String type = doType(t); // try to find any children TYPE (Pascal)
         List<String> names = new ArrayList<>();
 
@@ -193,19 +202,18 @@ public class TreeHelper {
                     break;
                 }
                 //-------------------------------------------------------------------------------
-
                 case VAR_DECLARATOR_LIST: {
                     names.addAll(doVarDeclaratorList((CommonTree) child, node));
                     break;
                 }
                 //-------------------------------------------------------------------------------
-                case TYPE_NAME: {
+                case TYPE: {
                     type = doType((CommonTree) child);
                     break;
                 }
-                //-------------------------------------------------------------------------------
-                case TYPE: {
-                    type = doType((CommonTree) child.getChild(0));
+                //----------------------------------------------------------------------------------
+                case INIT: {
+                    doExpr((CommonTree) child, node);
                     break;
                 }
                 //----------------------------------------------------------------------------------
@@ -215,7 +223,7 @@ public class TreeHelper {
         }
         for (String name : names) {
             TreeNode varDeclarationNode = new TreeNode(h++, "", node);
-            varDeclarationNode.setName(scope + type + name);
+            varDeclarationNode.setName(type +" "+ name);
             varDeclarationNode.setOperation("var_" + type);
             nodes.add(varDeclarationNode);
         }
@@ -236,7 +244,6 @@ public class TreeHelper {
                     names.add(doIdent((CommonTree) child));
                     break;
                 }
-
                 default: {
                     break;
                 }
@@ -249,13 +256,14 @@ public class TreeHelper {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 164: {  // [IDENT]
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case IDENT: {
                     name = doIdent((CommonTree) child);
                     break;
                 }
                 //-------------------------------------------------
-                case 126: {
+                case EXPR: {
                     name += " = " + doExpr((CommonTree) child, node);
                     break;
                 }
@@ -313,7 +321,6 @@ public class TreeHelper {
                     res = doMethodCall((CommonTree) child, node);
                     break;
                 }
-
                 case 6: {
                     res = doBinOperator((CommonTree) child, node, Operation.ASSIGN);
                     break;
@@ -560,7 +567,7 @@ public class TreeHelper {
             Tree child = t.getChild(i);
             Operation1 op = OperationUtil.get(lang, child.getType());
             switch (op) {
-                case IDENT: {// [IDENT]
+                case IDENT: {
                     name = doIdent((CommonTree) child);
                 }
             }
@@ -587,33 +594,42 @@ public class TreeHelper {
 
     private void doMethod(CommonTree t, TreeNode node) {
         List<String> params = new ArrayList<>();
-        String scope = "";
         String name = "";
-        String type = "void ";
-
+        String type = doType(t); //pascal
         TreeNode methodNode = new TreeNode(h++, "", node);
 
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case RETURN_TYPE: { //cpp
+                    String temp = doType((CommonTree) child);
+                    type = temp.equalsIgnoreCase("void") ? "" : temp;
+                    break;
+                }
 
-                case 157: {  //type
+                case TYPE: { //java
                     type = doType((CommonTree) child);
                     break;
                 }
                 //--------------------------------------------------------------------------
-                case 164: {  //identifier
+                case IDENT: {
                     name = doIdent((CommonTree) child) + " ";
                     break;
                 }
                 //----------------------------------------------------------------------------
-                case 117: {  //block scope
+                case BLOCK_SCOPE: {
                     doBlockScope((CommonTree) child, methodNode);
                     break;
                 }
                 //---------------------------------------------------------------------------------
-                case 133: {   //formal param
-                    formalParamList((CommonTree) child, params);
+                case FORMAL_PARAM_LIST: {
+                    params = doFormalParamList((CommonTree) child);
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case VAR: {
+                    doVar((CommonTree) child, methodNode);
                     break;
                 }
                 default: {
@@ -621,82 +637,117 @@ public class TreeHelper {
                 }
             }
         }
-        methodNode.setName(scope + type + name + "(" + StringUtils.join(params, ", ") + ")");
+        methodNode.setName(type + name + "(" + StringUtils.join(params, ',') + ")");
         methodNode.setOperation("method");
         nodes.add(methodNode);
         ac.incMethod();
     }
 
-    private void formalParamList(CommonTree t, List<String> params) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            params.add(formalParam((CommonTree) t.getChild(i)));
-        }
-    }
-
-    private String formalParam(CommonTree t) {
-        String name = "";
-        String type = "";
+    private List<String> doFormalParamList(CommonTree t) {
+        List<String> params = new ArrayList<>();
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-                case 157: {  //type
-                    type = doType((CommonTree) child);
-                    break;
-                }
-                //---------------------------------------------------------------
-                case 164: {  //identifier
-                    name = doIdent((CommonTree) child);
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case FORMAL_PARAM_STD_DECL: {  //identifier
+                    params.add(doFormalParam((CommonTree) child));
                     break;
                 }
                 //-----------------------------------------------------------------------
                 default: {
                     break;
                 }
-
             }
         }
-        return type + name;
+        return params;
     }
 
-    private String doType(CommonTree t) {
-        String type = "";
-        int arr = 0;
+    private String doFormalParam(CommonTree t) {
+        List<String> names = new ArrayList<>();
+        String type = doType(t);  //pascal !!!
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
-            switch (child.getType()) {
-
-                case 151: {   //custom type
-                    type = doQualifiedTypeIdent((CommonTree) child);
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case VAR_DECLARATOR_LIST: { //pascal
+                   names.addAll(doVarDeclaratorList((CommonTree) child, null));
                     break;
                 }
-                //----------------------------------------------------------------------
-                case 114: {   //array declaration
-                    arr = child.getChildCount();
+                //---------------------------------------------------------------
+                case TYPE: {
+                    type = doType((CommonTree) child);
                     break;
                 }
-                //-------------------------------------------------------------
-                case 79: {
-                    type = "int";
+                //---------------------------------------------------------------
+                case IDENT: {
+                    names.add(doIdent((CommonTree) child));
                     break;
                 }
-                //---------------------------------------------------------------------------------
-                case 65: {
-                    type = "double";
-                    break;
-                }
-                case 55: {
-                    type = "boolean";
-                    break;
-                }
+                //-----------------------------------------------------------------------
                 default: {
                     break;
                 }
             }
         }
-        for (int i = 0; i < arr; i++) {
-            type += "[]";
+        String res = "";
+        for(String s: names) {
+           res +=type+" "+s+", ";
         }
-        return type + " ";
+        return res.substring(0, res.length() - 2);
+    }
+
+    private String doType(CommonTree t) {
+        String type = "";
+        String array = "";
+        for (int i = 0; i < t.getChildCount(); i++) {
+            Tree child = t.getChild(i);
+            Operation1 op = OperationUtil.get(lang, child.getType());
+            switch (op) {
+                case TYPE_NAME: {   //custom type
+                    type = doQualifiedTypeIdent((CommonTree) child);
+                    break;
+                }
+                //-------------------------------------------------------------
+                case ARRAY: {   //custom type
+                    array = "ARRAY";
+                    break;
+                }
+                case INT: {
+                    type = "INT";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case FLOAT: {
+                    type = "FLOAT";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case CHAR: {
+                    type = "CHAR";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case DOUBLE: {
+                    type = "DOUBLE";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case BOOLEAN: {
+                    type = "BOOLEAN";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                case STRING: {
+                    type = "STRING";
+                    break;
+                }
+                //---------------------------------------------------------------------------------
+                default: {
+                    break;
+                }
+            }
+        }
+        return type + " "+array;
     }
 
     private void doBlockScope(CommonTree t, TreeNode node) {
@@ -712,20 +763,22 @@ public class TreeHelper {
                     doExpr((CommonTree) child, node);
                     break;
                 }
-
+                //---------------------------------------------------------------------------------
                 case 74: {
                     doIf((CommonTree) child, node);
                     break;
                 }
-
+                //---------------------------------------------------------------------------------
                 case 103: {
                     doWhile((CommonTree) child, node);
                     break;
                 }
+                //---------------------------------------------------------------------------------
                 case 73: {
                     doFor((CommonTree) child, node);
                     break;
                 }
+                //---------------------------------------------------------------------------------
                 default: {
                     break;
                 }
@@ -735,12 +788,12 @@ public class TreeHelper {
 
     private void doIf(CommonTree t, TreeNode node) {
         TreeNode ifNode = new TreeNode(h++, "", node);
-        String name = "";
+        String condition = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             Tree child = t.getChild(i);
             switch (child.getType()) {
                 case 146: {   // [PARENTESIZED_EXPR]
-                    name = doParenthesizedExpr((CommonTree) child, ifNode);
+                    condition = doParenthesizedExpr((CommonTree) child, ifNode);
                     break;
                 }
 
@@ -750,7 +803,7 @@ public class TreeHelper {
                 }
             }
         }
-        ifNode.setName("if (" + name + ")");
+        ifNode.setName("if (" + condition + ")");
         ifNode.setOperation("if");
         nodes.add(ifNode);
         ac.incIfs();
@@ -889,22 +942,21 @@ public class TreeHelper {
                 }
                //----------------------------------------------------------------------------------
                 case SIMPLE_DECL: { //used for var init in class
-                        doSimpleDeclaration((CommonTree) child.getChild(0), node);
+                    doSimpleDeclaration((CommonTree) child, node);
                     break;
                 }
-//                //----------------------------------------------------------------------------------
-//                case 163: {  //void method
-//                    doMethod((CommonTree) child, node);
-//                    break;
-//                }
-//                //----------------------------------------------------------------------------------------
-//                case 136: {  // method
-//                    doMethod((CommonTree) child, node);
-//                    break;
-//                }
+                //----------------------------------------------------------------------------------
+                case VOID_METHOD_DECL: {
+                    doMethod((CommonTree) child, node);
+                    break;
+                }
+                //----------------------------------------------------------------------------------------
+                case FUNCTION_METHOD_DECL: {
+                    doMethod((CommonTree) child, node);
+                    break;
+                }
                 //------------------------------------------------------------------------------------------
                 default: {
-                    //skip  it
                     break;
                 }
             }

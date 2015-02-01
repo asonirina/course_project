@@ -33,6 +33,23 @@ public class LangWrap {
         VAR,  //pascal
         TYPE, //cpp
         TYPE_NAME,
-        NAME
+        NAME,
+        FORMAL_PARAM_LIST,
+        BLOCK_SCOPE,
+        RETURN_TYPE,
+        FUNCTION_METHOD_DECL,    //java, cpp
+        VOID_METHOD_DECL, //java
+        FORMAL_PARAM_STD_DECL,
+        PROCEDURE ,     //pascal
+        INT,
+        CHAR,
+        DOUBLE,
+        BOOLEAN,
+        FLOAT,
+        STRING,
+        ARRAY, //cpp
+        EXPR,
+        INIT,  //cpp
+        ASSIGN
     }
 }
