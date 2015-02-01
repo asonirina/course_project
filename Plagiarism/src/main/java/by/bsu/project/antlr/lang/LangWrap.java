@@ -21,15 +21,12 @@ public class LangWrap {
     public static enum Operation1 {
         NULL, //empty
         ROOT,
-        DECIMAL_LITERAL,
         IDENT,
         CLASS_DECL,    //java, cpp
-        SIMPLE_DECL,  //cpp
-        CLASS_NAME,  //cpp
+        SIMPLE_DECL, CLASS_NAME,  //cpp
         CLASS_CONTENT,
-        VAR_DECLARATION,
-        VAR_DECLARATOR_LIST,
-        VAR_DECLARATOR,
+        VAR_DECLARATION, VAR_DECLARATOR_LIST, VAR_DECLARATOR,
+        FUNCTION_NAME, //cpp
         VAR,  //pascal
         TYPE, //cpp
         TYPE_NAME,
@@ -41,15 +38,18 @@ public class LangWrap {
         VOID_METHOD_DECL, //java
         FORMAL_PARAM_STD_DECL,
         PROCEDURE ,     //pascal
-        INT,
-        CHAR,
-        DOUBLE,
-        BOOLEAN,
-        FLOAT,
-        STRING,
+        INT, CHAR, DOUBLE, BOOLEAN, FLOAT, STRING,
         ARRAY, //cpp
-        EXPR,
+        EXPR, EXPR_STATEMENT,
         INIT,  //cpp
-        ASSIGN
+        ASSIGN ,
+        DECIMAL_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, FLOATING_POINT_LITERAL,
+        TRUE, FALSE ,
+        PLUS, MINUS ,
+        EQUAL, NOT_EQUAL,
+        LOGICAL_AND,
+        LESS_THAN, GREATER_THAN  ,
+        CLASS_CONSTRUCTOR_CALL,
+        LVAL, RVAL , FIELD
     }
 }
