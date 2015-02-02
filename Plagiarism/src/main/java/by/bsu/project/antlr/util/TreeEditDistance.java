@@ -1,5 +1,6 @@
 package by.bsu.project.antlr.util;
 
+import by.bsu.project.antlr.model.NodeDistance;
 import by.bsu.project.antlr.model.TreeNode;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -17,15 +18,15 @@ public class TreeEditDistance {
     List<TreeNode> t2;
     private static int data = -1;
 
-    private static void walkTree_LCR(TreeNode node) {
+    private static void walkTreeLeft(TreeNode node) {
         for (TreeNode tn : node.getChildren())
-            walkTree_LCR(tn);
+            walkTreeLeft(tn);
         node.setI(data++);
     }
 
-    private static void numerateTree (TreeNode node) {
+    private static void numerateTree(TreeNode node) {
         data = 0;
-        walkTree_LCR(node);
+        walkTreeLeft(node);
     }
 
     public TreeEditDistance(NodeDistance nd, List<TreeNode> t1, List<TreeNode> t2) {
@@ -38,9 +39,9 @@ public class TreeEditDistance {
         Collections.sort(this.t2, new OrderComparator());
     }
 
-    public int calculate() {
-        int[][] td = new int[t1.size()][t2.size()];
-        int[][] fd = new int[t1.size()][t2.size()];
+    public double calculate() {
+        double [][] td = new double[t1.size()][t2.size()];
+        double [][] fd = new double[t1.size()][t2.size()];
         int[] L1 = lmld(t1.get(t1.size() - 1), new int[t1.size()]);
         int[] L2 = lmld(t2.get(t2.size() - 1), new int[t2.size()]);
         int KR1[] = kr(L1, getCountLeaves(t1));
@@ -59,7 +60,7 @@ public class TreeEditDistance {
         return td[t1.size() - 1][t2.size() - 1];
     }
 
-    private void forestDist(int i, int j, int[] li, int[] lj, TreeNode[] nodes1, TreeNode[] nodes2, int[][] td, int[][] fd) {
+    private void forestDist(int i, int j, int[] li, int[] lj, TreeNode[] nodes1, TreeNode[] nodes2, double [][] td, double [][] fd) {
         fd[li[i] - 1][lj[j] - 1] = 0;
         for (int di = li[i]; di <= i; di++)
             fd[di][lj[j] - 1] = fd[di - 1][lj[j] - 1] + nd.delete(nodes1[di], nodes2[lj[j] - 1]);
@@ -70,14 +71,14 @@ public class TreeEditDistance {
             for (int dj = lj[j]; dj <= j; dj++) {
                 if (li[di] == li[i] && lj[dj] == lj[j]) {
                     fd[di][dj] =
-                            NumberUtils.min(new int[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
+                            NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
                                     fd[di][dj - 1] + nd.insert(nodes1[di], nodes2[dj]),
                                     fd[di - 1][dj - 1] + nd.rename(nodes1[di], nodes2[dj])
 
                             });
                     td[di][dj] = fd[di][dj];
                 } else fd[di][dj] =
-                        NumberUtils.min(new int[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
+                        NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
                                 fd[di][dj - 1] + nd.insert(nodes1[di], nodes2[dj]),
                                 fd[li[di] - 1][lj[dj] - 1] + td[di][dj]
 
@@ -127,5 +128,4 @@ public class TreeEditDistance {
         }
         return res;
     }
-
 }

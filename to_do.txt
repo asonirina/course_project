@@ -1,6 +1,4 @@
-change measure
-add any simple comparator by original code
-add another module for plagiarism
-check java, cpp, pascal parsers for the same <NAME>
+serializable tree node
+
 hinton diagrams
 neural net

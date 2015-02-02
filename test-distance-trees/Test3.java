@@ -1,5 +1,6 @@
 
 class Test3{
-}
-class Test4{
+    void x(){
+    while(true){}
+    }
 }
