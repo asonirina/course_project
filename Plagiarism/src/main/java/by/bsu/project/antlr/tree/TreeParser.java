@@ -971,6 +971,11 @@ public class TreeParser {
                     break;
                 }
 
+                case TO: {
+                    name += doTo(child, forNode);
+                    break;
+                }
+
                 case BLOCK_SCOPE: {
                     doBlockScope(child, forNode);
                     break;
@@ -981,6 +986,18 @@ public class TreeParser {
         forNode.setOperation("cycle");
         nodes.add(forNode);
         ac.incCycle();
+    }
+
+    private String doTo(CommonTree t, TreeNode node) {
+        CommonTree init = (CommonTree) t.getChild(0);
+        String assign = doExpr(init, node);
+        TreeNode assignNode = new TreeNode(h++, "ASSIGN"+assign, node);
+        nodes.add(assignNode);
+        CommonTree con = (CommonTree) t.getChild(1);
+        String condition = doExpr(con, node);
+        TreeNode conditionNode = new TreeNode(h++, "LESS"+condition, node);
+        nodes.add(conditionNode);
+        return assign + condition;
     }
 
     //////////////////////
