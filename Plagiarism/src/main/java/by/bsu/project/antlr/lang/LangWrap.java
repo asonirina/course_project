@@ -18,7 +18,7 @@ public class LangWrap {
         }
     }
 
-    public static enum Operation1 {
+    public static enum Operation {
         NULL, //empty
         ROOT,
         IDENT,
@@ -52,7 +52,7 @@ public class LangWrap {
         LOGICAL_AND,
         POST_INC, POST_DEC,
         LESS_THAN, GREATER_THAN,
-        CLASS_CONSTRUCTOR_CALL,
+        CLASS_CONSTRUCTOR_CALL, NEW,
         LVAL, RVAL, FIELD,
         METHOD_CALL, ARGUMENT_LIST, DOT,
         CALLEE, ARGUMENT, //cpp

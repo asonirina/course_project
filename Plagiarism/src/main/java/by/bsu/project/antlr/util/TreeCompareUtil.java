@@ -36,7 +36,7 @@ public class TreeCompareUtil {
         Collections.sort(list, new CustomComparator());
         for (TreeNode node : list) {
             if (node.getOperation() != null) {
-                res.add(node.getOperation());
+                res.add(node.getOperation().name());
             }
         }
 

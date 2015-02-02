@@ -1,6 +1,6 @@
 package by.bsu.project.antlr.lang;
 
-import by.bsu.project.antlr.lang.LangWrap.Operation1;
+import by.bsu.project.antlr.lang.LangWrap.Operation;
 import by.bsu.project.antlr.lang.LangWrap.Lang;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.log4j.Logger;
@@ -15,7 +15,7 @@ import java.util.Properties;
 public class OperationUtil {
     private static final Logger logger = Logger.getLogger(OperationUtil.class);
 
-    static Operation1 matrix[][] = new Operation1[Lang.values().length][200];
+    static Operation matrix[][] = new Operation[Lang.values().length][200];
 
     static {
         try {
@@ -23,7 +23,7 @@ public class OperationUtil {
             for (Lang lang : Lang.values()) {
                 Properties props = new Properties();
                 props.load(ClassLoader.getSystemResourceAsStream(lang.name().toLowerCase() + ".properties"));
-                for (Operation1 op : Operation1.values()) {
+                for (Operation op : Operation.values()) {
                     String code = props.getProperty(op.name());
                     if (code != null) {
                         put(op, Integer.valueOf(code), lang);
@@ -35,16 +35,16 @@ public class OperationUtil {
         }
     }
 
-    private static Operation1 get(Lang lang, int code) {
-        if (matrix[lang.id][code] == null) return Operation1.NULL;
+    private static Operation get(Lang lang, int code) {
+        if (matrix[lang.id][code] == null) return Operation.NULL;
         return matrix[lang.id][code];
     }
 
-    public static Operation1 get(Lang lang, CommonTree t) {
+    public static Operation get(Lang lang, CommonTree t) {
         return get(lang, t.getType());
     }
 
-    private static void put(Operation1 operation1, int code, Lang lang) {
+    private static void put(Operation operation1, int code, Lang lang) {
         matrix[lang.id][code] = operation1;
     }
 }

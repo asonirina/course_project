@@ -1,5 +1,7 @@
 package by.bsu.project.antlr.model;
 
+import by.bsu.project.antlr.lang.LangWrap.Operation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class TreeNode {
     private Integer id;
     private Integer parentId;
     private String name;
-    private String operation;
+    private Operation operation;
     private TreeNode parent;
     private String parentName;
     private Integer i;
@@ -41,7 +43,7 @@ public class TreeNode {
         return name;
     }
 
-    public String getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 
@@ -52,7 +54,7 @@ public class TreeNode {
         }
     }
 
-    public void setOperation(String operation) {
+    public void setOperation(Operation operation) {
         this.operation = operation;
     }
 

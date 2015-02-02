@@ -1,9 +1,7 @@
 package by.bsu.project.antlr.tree;
 
 import by.bsu.project.antlr.lang.*;
-import by.bsu.project.antlr.model.Operation;
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.antlr.model.Type;
 import by.bsu.project.general.model.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -13,9 +11,10 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static by.bsu.project.antlr.lang.LangWrap.Operation1;
+import static by.bsu.project.antlr.lang.LangWrap.Operation;
 import static by.bsu.project.antlr.lang.LangWrap.Lang;
 
 /**
@@ -62,10 +61,11 @@ public class TreeParser {
     ///
     private void doTree(CommonTree t, TreeNode node) {
         if (t != null) {
-        Operation1 op = OperationUtil.get(lang, t);
+        Operation op = OperationUtil.get(lang, t);
             switch (op) {
                 case ROOT: {
-                    TreeNode root = new TreeNode(h++, "root", null);
+                    TreeNode root = new TreeNode(h++, Operation.ROOT.name(), null);
+                    root.setOperation(Operation.ROOT);
                     nodes.add(root);
 
                     for (int i = 0; i < t.getChildCount(); i++) {
@@ -119,7 +119,7 @@ public class TreeParser {
 
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            LangWrap.Operation1 op = OperationUtil.get(lang, child);
+            LangWrap.Operation op = OperationUtil.get(lang, child);
             switch (op) {
 
                 case CLASS_NAME: {
@@ -142,7 +142,8 @@ public class TreeParser {
                 }
             }
         }
-        classNode.setName("class " + name);
+        classNode.setName(Operation.CLASS_DECL.name()+" " + name);
+        classNode.setOperation(Operation.CLASS_DECL);
         nodes.add(classNode);
 
     }
@@ -150,7 +151,7 @@ public class TreeParser {
     private void doSimpleDeclaration(CommonTree t, TreeNode node) {
         for (int i =0; i<t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
 
                 case CLASS_DECL: {
@@ -175,7 +176,7 @@ public class TreeParser {
     private void doVar(CommonTree t, TreeNode node) {
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
 
                 case VAR_DECLARATION: {
@@ -192,12 +193,12 @@ public class TreeParser {
 
     ////
     private String doVarDeclaration(CommonTree t, TreeNode node) {
-        String type = doType(t); // try to find any children TYPE (Pascal)
+        List<Operation> types = doType(t); // try to find any children TYPE (Pascal)
         List<String> names = new ArrayList<>();
 
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case NAME: {//cpp !!!! it's OK
                     names.add(doIdent((CommonTree) child.getChild(0)));
@@ -210,7 +211,7 @@ public class TreeParser {
                 }
                 //-------------------------------------------------------------------------------
                 case TYPE: {
-                    type = doType(child);
+                    types = doType(child);
                     break;
                 }
                 //----------------------------------------------------------------------------------
@@ -225,11 +226,11 @@ public class TreeParser {
         }
         for (String name : names) {
             TreeNode varDeclarationNode = new TreeNode(h++, "", node);
-            varDeclarationNode.setName(type +" "+ name);
-            varDeclarationNode.setOperation("var_" + type);
+            varDeclarationNode.setName(getType(types) +" "+ name);
+            varDeclarationNode.setOperation(Operation.VAR_DECLARATION);
             nodes.add(varDeclarationNode);
         }
-        return type + StringUtils.join(names.toArray());
+        return getType(types) + StringUtils.join(names.toArray());
     }
 
     /////
@@ -237,7 +238,7 @@ public class TreeParser {
         List<String> names = new ArrayList<>();
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR: {
                     names.add(doVarDeclarator( child, node));
@@ -260,7 +261,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent(child);
@@ -301,11 +302,11 @@ public class TreeParser {
         if (t.getChildCount() == 1) {
             return doExpr((CommonTree) t.getChild(0), node);
         }
-        Operation1 current = Operation1.NULL;
+        Operation current = Operation.NULL;
         List<String> arr = new ArrayList<>();
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case FIELD: {
                     arr.add(doExpr(child, node));
@@ -326,6 +327,7 @@ public class TreeParser {
             }
         }
         TreeNode bin = new TreeNode(h++, StringUtils.join(arr, ' ') + current.name(), node);
+        bin.setOperation(current);
         nodes.add(bin);
         return bin.getName();
     }
@@ -333,7 +335,7 @@ public class TreeParser {
     ////////////////
     private String doCommonExpression(CommonTree t, TreeNode node) {
         String res = "";
-        Operation1 op = OperationUtil.get(lang, t);
+        Operation op = OperationUtil.get(lang, t);
         switch (op) {
             case FIELD: { // cpp
                 res = doCppLinearExpression(t, node);
@@ -372,27 +374,27 @@ public class TreeParser {
                 break;
             }
             case DECIMAL_LITERAL: {
-                res = doLiteral(t, node, Type.DECIMAL);
+                res = doLiteral(t, node, Operation.INT);
                 break;
             }
 
             case FLOATING_POINT_LITERAL: {
-                res = doLiteral(t, node, Type.FLOATING_POINT);
+                res = doLiteral(t, node, Operation.DOUBLE);
                 break;
             }
 
             case STRING_LITERAL: {
-                res = doLiteral(t, node, Type.STRING);
+                res = doLiteral(t, node, Operation.STRING);
                 break;
             }
 
             case TRUE: {
-                res = doLiteral(t, node, Type.BOOL);
+                res = doLiteral(t, node, Operation.BOOLEAN);
                 break;
             }
 
             case FALSE: {
-                res = doLiteral(t, node, Type.BOOL);
+                res = doLiteral(t, node, Operation.BOOLEAN);
                 break;
             }
             case ASSIGN: {
@@ -446,7 +448,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent(child);
@@ -456,7 +458,7 @@ public class TreeParser {
 
         TreeNode postInc = new TreeNode(h++, name + "++", node);
         nodes.add(postInc);
-        postInc.setOperation("post_inc");
+        postInc.setOperation(Operation.POST_INC);
         ac.incPlus();
         ac.incAssign();
         return postInc.getName();
@@ -467,7 +469,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent(child);
@@ -477,7 +479,7 @@ public class TreeParser {
 
         TreeNode postDec = new TreeNode(h++, name + "--", node);
         nodes.add(postDec);
-        postDec.setOperation("post_dec");
+        postDec.setOperation(Operation.POST_DEC);
         ac.incMinus();
         ac.incAssign();
         return postDec.getName();
@@ -494,8 +496,8 @@ public class TreeParser {
                 arr.add(temp);
             }
         }
-        bin.setName(StringUtils.join(arr, operation.getSymbol()));
-        bin.setOperation(operation.getSymbol());
+        bin.setName(StringUtils.join(arr, operation.name()));
+        bin.setOperation(operation);
         nodes.add(bin);
         return bin.getName();
     }
@@ -506,7 +508,7 @@ public class TreeParser {
         TreeNode methodCall = new TreeNode(h++, "", node);
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent(child);
@@ -530,7 +532,7 @@ public class TreeParser {
             }
         }
         methodCall.setName(name);
-        methodCall.setOperation("method_call");
+        methodCall.setOperation(Operation.METHOD_CALL);
         nodes.add(methodCall);
         ac.incCall();
         return name;
@@ -541,7 +543,7 @@ public class TreeParser {
         List<String> names = new ArrayList<>();
         for (int i = 0; i<t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op){
                 case IDENT:{
                     names.add(doIdent(child));
@@ -559,8 +561,8 @@ public class TreeParser {
     }
 
     //////////////////
-    private String doLiteral(CommonTree t, TreeNode node, Type type) {
-        return t.getText()+ type.getName();
+    private String doLiteral(CommonTree t, TreeNode node, Operation operation) {
+        return t.getText()+ operation.name();
     }
 
     /////////
@@ -568,10 +570,10 @@ public class TreeParser {
         TreeNode constructor = new TreeNode(h++, "", node);
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case QUALIFIED_TYPE_IDENT: {
-                    constructor.setName("new " + doQualifiedTypeIdent(child));
+                    constructor.setName(Operation.NEW+" " + doQualifiedTypeIdent(child));
                     break;
                 }
                 //----------------------------------------------------
@@ -586,6 +588,7 @@ public class TreeParser {
             }
         }
         nodes.add(constructor);
+        constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
         ac.incCall();
         return constructor.getName();
     }
@@ -595,7 +598,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent( child);
@@ -613,7 +616,7 @@ public class TreeParser {
             if (lang.equals(Lang.PASCAL)) {
                 doExpr(child, node);
             }
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     doExpr(child, node);
@@ -630,21 +633,20 @@ public class TreeParser {
     private void doMethod(CommonTree t, TreeNode node) {
         List<String> params = new ArrayList<>();
         String name = "";
-        String type = doType(t); //pascal
+        List<Operation> types = doType(t); //pascal
         TreeNode methodNode = new TreeNode(h++, "", node);
 
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case RETURN_TYPE: { //cpp
-                    String temp = doType( child).trim();
-                    type = temp.equalsIgnoreCase("void") ? "" : temp;
+                    types = doType(child);
                     break;
                 }
 
                 case TYPE: { //java
-                    type = doType(child);
+                    types = doType(child);
                     break;
                 }
                 //--------------------------------------------------------------------------
@@ -678,10 +680,18 @@ public class TreeParser {
                 }
             }
         }
-        methodNode.setName(type + name + "(" + StringUtils.join(params, ',') + ")");
-        methodNode.setOperation("method");
+        methodNode.setName(getType(types) + name + "(" + StringUtils.join(params, ',') + ")");
+        methodNode.setOperation(Operation.FUNCTION_METHOD_DECL);
         nodes.add(methodNode);
         ac.incMethod();
+    }
+
+    private static String getType(List<Operation> types){
+        String res = "";
+        for(Operation op: types){
+            res+=op.name()+" ";
+        }
+        return res;
     }
 
     /////////////////
@@ -689,10 +699,10 @@ public class TreeParser {
         List<String> params = new ArrayList<>();
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case FORMAL_PARAM_STD_DECL: {  //identifier
-                    params.add(doFormalParam( child));
+                    params.add(doFormalParam(child));
                     break;
                 }
                 default: {
@@ -706,10 +716,10 @@ public class TreeParser {
     /////////////////////
     private String doFormalParam(CommonTree t) {
         List<String> names = new ArrayList<>();
-        String type = doType(t);  //pascal !!!
+        List<Operation> types = doType(t);  //pascal !!!
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR_LIST: { //pascal
                    names.addAll(doVarDeclaratorList(child, null));
@@ -717,7 +727,7 @@ public class TreeParser {
                 }
                 //---------------------------------------------------------------
                 case TYPE: {
-                    type = doType(child);
+                    types = doType(child);
                     break;
                 }
                 //---------------------------------------------------------------
@@ -733,55 +743,59 @@ public class TreeParser {
         }
         String res = "";
         for(String s: names) {
-           res +=type+" "+s+", ";
+           res +=getType(types)+" "+s+", ";
         }
         return res.substring(0, res.length() - 2);
     }
 
     /////////////////
-    private String doType(CommonTree t) {
-        String type = "";
-        String array = "";
+    private List<Operation> doType(CommonTree t) {
+        Operation type = Operation.NULL;
+        Operation array = Operation.NULL;
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
+                case QUALIFIED_TYPE_IDENT: {   //custom type
+                    type = Operation.QUALIFIED_TYPE_IDENT;
+                    break;
+                }
                 case TYPE_NAME: {   //custom type
-                    type = doQualifiedTypeIdent(child);
+                    type = Operation.QUALIFIED_TYPE_IDENT;
                     break;
                 }
                 //-------------------------------------------------------------
                 case ARRAY: {   //custom type
-                    array = "ARRAY";
+                    array = Operation.ARRAY;
                     break;
                 }
                 case INT: {
-                    type = "INT";
+                    type = Operation.INT;
                     break;
                 }
                 //---------------------------------------------------------------------------------
                 case FLOAT: {
-                    type = "FLOAT";
+                    type = Operation.FLOAT;
                     break;
                 }
                 //---------------------------------------------------------------------------------
                 case CHAR: {
-                    type = "CHAR";
+                    type = Operation.CHAR;
                     break;
                 }
                 //---------------------------------------------------------------------------------
                 case DOUBLE: {
-                    type = "DOUBLE";
+                    type = Operation.DOUBLE;
                     break;
                 }
                 //---------------------------------------------------------------------------------
                 case BOOLEAN: {
-                    type = "BOOLEAN";
+                    type = Operation.BOOLEAN;
                     break;
                 }
                 //---------------------------------------------------------------------------------
                 case STRING: {
-                    type = "STRING";
+                    type = Operation.STRING;
                     break;
                 }
                 //---------------------------------------------------------------------------------
@@ -790,7 +804,14 @@ public class TreeParser {
                 }
             }
         }
-        return type + " "+array;
+        List<Operation> types = new ArrayList<>();
+        if (!type.equals(Operation.NULL)){
+            types.add(type);
+        }
+        if (!array.equals(Operation.NULL)){
+            types.add(array);
+        }
+        return types;
     }
 
     //////////////////
@@ -800,7 +821,7 @@ public class TreeParser {
             if (lang.equals(Lang.PASCAL)) {
                 doExpr(child, node);
             }
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case SIMPLE_DECL: {  //cpp
                     doSimpleDeclaration(child, node);
@@ -879,7 +900,7 @@ public class TreeParser {
             }
         }
         ifNode.setName("if (" + c1 + c2 + ")");
-        ifNode.setOperation("if");
+        ifNode.setOperation(Operation.IF);
         nodes.add(ifNode);
         ac.incIfs();
     }
@@ -887,7 +908,7 @@ public class TreeParser {
      ////////////////
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
         String condition = "";
-        Operation1 op = OperationUtil.get(lang, t);
+        Operation op = OperationUtil.get(lang, t);
         switch (op) {
             case PARENTESIZED_EXPR: {
                 condition = doParenthesizedExpr(t, node);
@@ -909,7 +930,7 @@ public class TreeParser {
     /////////
     private void doIteration(CommonTree t, TreeNode node){
         CommonTree type = (CommonTree)t.getChild(0).getChild(0);
-        Operation1 op = OperationUtil.get(lang, type);
+        Operation op = OperationUtil.get(lang, type);
         switch (op){
             case WHILE:{
                 doWhile(t, node);
@@ -941,7 +962,7 @@ public class TreeParser {
             }
         }
         whileNode.setName("while (" + c1 + c2 + ")");
-        whileNode.setOperation("cycle");
+        whileNode.setOperation(Operation.WHILE);
         nodes.add(whileNode);
         ac.incCycle();
     }
@@ -951,7 +972,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case FOR_INIT: {
                     doForInit(child, forNode);
@@ -983,7 +1004,7 @@ public class TreeParser {
             }
         }
         forNode.setName("for (" + name + ")");
-        forNode.setOperation("cycle");
+        forNode.setOperation(Operation.FOR);
         nodes.add(forNode);
         ac.incCycle();
     }
@@ -992,10 +1013,12 @@ public class TreeParser {
         CommonTree init = (CommonTree) t.getChild(0);
         String assign = doExpr(init, node);
         TreeNode assignNode = new TreeNode(h++, "ASSIGN"+assign, node);
+        assignNode.setOperation(Operation.ASSIGN);
         nodes.add(assignNode);
         CommonTree con = (CommonTree) t.getChild(1);
         String condition = doExpr(con, node);
-        TreeNode conditionNode = new TreeNode(h++, "LESS"+condition, node);
+        TreeNode conditionNode = new TreeNode(h++, "LESS_THAN"+condition, node);
+        conditionNode.setOperation(Operation.LESS_THAN);
         nodes.add(conditionNode);
         return assign + condition;
     }
@@ -1004,7 +1027,7 @@ public class TreeParser {
     private void doForInit(CommonTree t, TreeNode node) {
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATION: {
                     doVarDeclaration(child, node);
@@ -1026,7 +1049,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr(child, node);
@@ -1042,7 +1065,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr( child, node);
@@ -1058,7 +1081,7 @@ public class TreeParser {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr(child, node);
@@ -1073,7 +1096,7 @@ public class TreeParser {
     private void doClassTopLevelScope(CommonTree t, TreeNode node) {
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree)t.getChild(i);
-            Operation1 op = OperationUtil.get(lang, child);
+            Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATION: {
                     doVarDeclaration( child, node);
