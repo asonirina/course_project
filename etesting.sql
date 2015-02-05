@@ -32,6 +32,7 @@ CREATE TABLE `program_files` (
   `file_name` varchar(20) NOT NULL,
   `content_type` varchar(100) default NULL,
   `testResults` longblob,
+  `tree_content` longblob,
   `user_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2340 COMMENT='InnoDB free: 11264 kB';

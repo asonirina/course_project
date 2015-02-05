@@ -2,6 +2,8 @@ package by.bsu.project.antlr.tree;
 
 import by.bsu.project.antlr.lang.*;
 import by.bsu.project.antlr.model.TreeNode;
+import by.bsu.project.general.lang.LangWrap;
+import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.general.model.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -13,8 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.bsu.project.antlr.lang.LangWrap.Operation;
-import static by.bsu.project.antlr.lang.LangWrap.Lang;
+import static by.bsu.project.general.lang.LangWrap.Operation;
+import static by.bsu.project.general.lang.LangWrap.Lang;
 
 /**
  * User: iason

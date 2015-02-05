@@ -1,6 +1,9 @@
 package by.bsu.project.general.model;
 
+import by.bsu.project.general.lang.LangWrap;
+
 import javax.persistence.*;
+import javax.security.auth.callback.LanguageCallback;
 import java.util.Date;
 
 /**
@@ -40,11 +43,16 @@ public class ProgramFilesEntity {
     @Column(name = "testResults")
     private byte[] testResults;
 
+    @Column(name = "tree_content")
+    private byte[] treeContent;
+
     @Column(name = "plagiat1")
     private Integer plagiat1;
 
     @Column(name = "plagiat2")
     private Integer plagiat2;
+
+    private LangWrap.Lang lang;
 
     public Long getId() {
         return id;
@@ -99,6 +107,24 @@ public class ProgramFilesEntity {
     }
 
     public void setFileName(String fileName) {
+        String ext = fileName.substring(fileName.lastIndexOf('.') + 1);
+        switch (ext.toLowerCase()){
+            case "java":{
+                setLang(LangWrap.Lang.JAVA);
+                break;
+            }
+            case "cpp":{
+                setLang(LangWrap.Lang.CPP);
+                break;
+            }
+            case "pascal":{
+                setLang(LangWrap.Lang.PASCAL);
+                break;
+            }
+            default:{
+                break;
+            }
+        }
         this.fileName = fileName;
     }
 
@@ -132,5 +158,21 @@ public class ProgramFilesEntity {
 
     public void setPlagiat2(Integer plagiat2) {
         this.plagiat2 = plagiat2;
+    }
+
+    public byte[] getTreeContent() {
+        return treeContent;
+    }
+
+    public void setTreeContent(byte[] treeContent) {
+        this.treeContent = treeContent;
+    }
+
+    public LangWrap.Lang getLang() {
+        return lang;
+    }
+
+    public void setLang(LangWrap.Lang lang) {
+        this.lang = lang;
     }
 }

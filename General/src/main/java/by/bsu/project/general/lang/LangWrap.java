@@ -1,4 +1,4 @@
-package by.bsu.project.antlr.lang;
+package by.bsu.project.general.lang;
 
 /**
  * User: iason
@@ -7,7 +7,7 @@ package by.bsu.project.antlr.lang;
 public class LangWrap {
     public enum Lang {
         JAVA(0), CPP(1), PASCAL(2);
-        int id;
+        public int id;
 
         private Lang(int id) {
             this.id = id;

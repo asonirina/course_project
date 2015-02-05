@@ -1,11 +1,11 @@
 package by.bsu.project.antlr.lang;
 
-import by.bsu.project.antlr.lang.LangWrap.Operation;
-import by.bsu.project.antlr.lang.LangWrap.Lang;
+import by.bsu.project.general.lang.LangWrap.Operation;
+import by.bsu.project.general.lang.LangWrap.Lang;
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 /**
@@ -18,13 +18,15 @@ public class OperationUtil {
     static Operation matrix[][] = new Operation[Lang.values().length][200];
 
     static {
-        try {
+      init();
+    }
 
+    public static void init() {
+        try {
             for (Lang lang : Lang.values()) {
-                Properties props = new Properties();
-                props.load(ClassLoader.getSystemResourceAsStream(lang.name().toLowerCase() + ".properties"));
+                PropertiesConfiguration config = new PropertiesConfiguration(lang.name().toLowerCase() + ".properties");
                 for (Operation op : Operation.values()) {
-                    String code = props.getProperty(op.name());
+                    String code = (String)config.getProperty(op.name());
                     if (code != null) {
                         put(op, Integer.valueOf(code), lang);
                     }

@@ -7,7 +7,7 @@ import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.general.model.AttributeCounting;
-import by.bsu.project.antlr.tree.TreeHelper;
+import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
@@ -109,9 +109,9 @@ public class ProgramUploadController {
             programFilesEntity.setStatus(programStatus);
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
 
-            TreeHelper helper = new TreeHelper(programFilesEntity.getProgramName());
-            List<TreeNode>nodes = helper.getTree(Huffman.expand(programFilesEntity.getFile()));
-            AttributeCounting ac = helper.getAc();
+            TreeParser parser = new TreeParser(programFilesEntity.getProgramName(), programFilesEntity.getLang());
+            List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
+            AttributeCounting ac = parser.getAc();
             ac.setProgrName(programFilesEntity.getProgramName());
 
             int plagiat1 = AttributeCountingUtil.checkAC(attributeService.getByProgrName(ac), ac);
@@ -123,6 +123,7 @@ public class ProgramUploadController {
 
             programFilesEntity.setPlagiat1(plagiat1);
             programFilesEntity.setPlagiat2(plagiat2);
+            programFilesEntity.setTreeContent(Huffman.compress(TreeNode.getBytes(nodes)));
             userInfoEntity.getProgramFiles().add(programFilesEntity);
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
@@ -166,11 +167,14 @@ public class ProgramUploadController {
     @RequestMapping(value = "/e-Testing/viewTree")
     public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId,
                                  Model model) {
-        byte[] file = Huffman.expand(userInfoService.getFileById(programId).getFile());
-        TreeHelper builder = new TreeHelper(String.valueOf(programId));
-        List<TreeNode> nodes = builder.getTree(file);
-        model.addAttribute(ETestingConstants.TREE_NODES, nodes);
-        return new ModelAndView("tree/viewTree2");
+        try {
+            byte[] content = Huffman.expand(userInfoService.getFileById(programId).getTreeContent());
+            List<TreeNode> nodes = TreeNode.getTree(content);
+            model.addAttribute(ETestingConstants.TREE_NODES, nodes);
+            return new ModelAndView("tree/viewTree2");
+        } catch (Exception ex) {
+            return new ModelAndView("errors/error503");
+        }
     }
 
     @RequestMapping(value = "/e-Testing/error503")

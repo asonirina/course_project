@@ -1,7 +1,13 @@
 package by.bsu.project.antlr.model;
 
-import by.bsu.project.antlr.lang.LangWrap.Operation;
+import by.bsu.project.general.lang.LangWrap.Operation;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +15,7 @@ import java.util.List;
  * User: iason
  * Date: 24.03.14
  */
-public class TreeNode {
+public class TreeNode implements Serializable {
     private Integer id;
     private Integer parentId;
     private String name;
@@ -101,4 +107,21 @@ public class TreeNode {
     public void setI(Integer i) {
         this.i = i;
     }
+
+    public static List<TreeNode> getTree(byte data[]) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(
+                new ByteArrayInputStream(data));
+        List<TreeNode> list = (List<TreeNode>) ois.readObject();
+        ois.close();
+        return list;
+    }
+
+    public static byte[] getBytes(List<TreeNode> list) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(list);
+        oos.close();
+        return baos.toByteArray();
+    }
+
 }

@@ -1,6 +1,6 @@
 package by.bsu.project.antlr.parser.cpp;
 
-import by.bsu.project.antlr.lang.LangWrap.Lang;
+import by.bsu.project.general.lang.LangWrap.Lang;
 import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
 import org.apache.commons.io.IOUtils;
