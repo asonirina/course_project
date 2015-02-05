@@ -27,4 +27,5 @@ public class ETestingConstants {
 
     public final static String TREE_NODES = "treeNodes";
     public final static String PROGRAM_NAME = "progrName";
+    public final static String USER_ID = "userId";
 }

@@ -74,7 +74,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
-        return userInfoDAO.getProgramsByName(entity.getProgramName());
+        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUserId());
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {
