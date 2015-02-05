@@ -22,7 +22,7 @@ public class ProgramFilesUtil {
     private String cmdCpp;
     private String cmdPascal;
     private String cmdJava;
-    private String path = System.getenv("CATALINA_HOME") + "\\bin\\";
+    private String path = System.getenv("CATALINA_HOME") + "/bin/";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
