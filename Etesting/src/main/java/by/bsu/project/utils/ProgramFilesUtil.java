@@ -22,7 +22,7 @@ public class ProgramFilesUtil {
     private String cmdCpp;
     private String cmdPascal;
     private String cmdJava;
-    private String path = "C:/tomcat/bin/";
+    private String path = System.getenv("CATALINA_HOME") + "\\bin\\";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
@@ -41,7 +41,6 @@ public class ProgramFilesUtil {
         cmdCpp = config.getProperty("cpp") + " " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
         cmdPascal = config.getProperty("pas") + " " + path + dir + "/" + file.getOriginalFilename();
         cmdJava = config.getProperty("java") + " " + file.getOriginalFilename();
-
     }
 
     public boolean checkFile() throws Exception {
