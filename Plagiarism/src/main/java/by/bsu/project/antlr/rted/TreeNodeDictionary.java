@@ -1,5 +1,7 @@
 package by.bsu.project.antlr.rted;
 
+import by.bsu.project.antlr.model.CustomNodeDistance;
+import by.bsu.project.antlr.model.NodeDistance;
 import by.bsu.project.antlr.model.TreeNode;
 
 import java.util.Hashtable;
@@ -9,6 +11,7 @@ public class TreeNodeDictionary {
     private int count;
     private Map<TreeNode, Integer> nodeInt;
     private Map<Integer, TreeNode> intNode;
+    private NodeDistance nd = new CustomNodeDistance();
 
      public  TreeNodeDictionary() {
         count = 0;
@@ -29,6 +32,16 @@ public class TreeNodeDictionary {
 
     public TreeNode read(Integer labelID) {
         return intNode.get(labelID);
+    }
+
+    public double insert() {
+         return 1.0;
+    }
+    public double delete() {
+        return 1.0;
+    }
+    public double rename(int i1, int i2) {
+        return nd.rename(read(i1), read(i2));
     }
 }
 

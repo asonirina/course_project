@@ -1,12 +1,7 @@
 package by.bsu.project.antlr.rted;
 
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.general.lang.LangWrap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class RTED {
     private static final byte LEFT = 0;
@@ -49,11 +44,10 @@ public class RTED {
     private int size2;
     private TreeNodeDictionary ld;
 
-    // arrays
     private int[][] STR; // strategy array
     private double[][] delta; // an array for storing the distances between
     // every pair of subtrees
-    private byte[][] deltaBit; // stores the distances difference of a form
+    private double[][] deltaBit; // stores the distances difference of a form
     // delta(F,G)-delta(F°,G°) for every pair of
     // subtrees, which is at most 1
     private int[][] IJ; // stores a forest preorder for given i and j
@@ -75,28 +69,7 @@ public class RTED {
     private int previousStrategy;
     public int[] strStat = new int[5]; // statistics for strategies
     // LEFT,RIGHT,HEAVY,SUM
-    private double costDel, costIns, costMatch; // edit operations costs
 
-    /**
-     * The constructor. Parameters passed are the edit operation costs.
-     *
-     * @param delCost
-     * @param insCost
-     * @param matchCost
-     */
-    public RTED(double delCost, double insCost, double matchCost) {
-        this.costDel = delCost;
-        this.costIns = insCost;
-        this.costMatch = matchCost;
-    }
-
-    /**
-     * Computes the tree edit distance between trees t1 and t2.
-     *
-     * @param t1
-     * @param t2
-     * @return tree edit distance between trees t1 and t2
-     */
     public double nonNormalizedTreeDist(List<TreeNode> t1, List<TreeNode> t2) {
         init(t1, t2);
         STR = new int[size1][size2];
@@ -105,37 +78,9 @@ public class RTED {
     }
 
     public double nonNormalizedTreeDist() {
-        if (it1 == null || it2 == null) {
-            System.err.println("No stored trees to compare.");
-        }
-        if (STR == null) {
-            System.err.println("No strategy to use.");
-        }
         return computeDistUsingStrArray(it1, it2);
     }
 
-    public static void main(String[] args) {
-
-        TreeNode n2 = new TreeNode(1, "1", null, LangWrap.Operation.ARGUMENT);
-        TreeNode n1 = new TreeNode(1, "1", n2, LangWrap.Operation.ARGUMENT);
-        TreeNode n0 = new TreeNode(1, "1", n2, LangWrap.Operation.ARGUMENT);
-
-        TreeNode n4 = new TreeNode(1, "1", null, LangWrap.Operation.ARGUMENT);
-        TreeNode n3 = new TreeNode(1, "1", n4, LangWrap.Operation.ARGUMENT);
-        List<TreeNode> q1 = Arrays.asList(n0, n1, n2);
-        List<TreeNode> q2 = Arrays.asList(n3, n4);
-        RTED c = new RTED(1, 1, 1);
-        c.init(q1, q2);
-        c.computeOptimalStrategy();
-        System.out.println(c.nonNormalizedTreeDist());
-    }
-
-    /**
-     * Initialization method.
-     *
-     * @param t1
-     * @param t2
-     */
     public void init(List<TreeNode> t1, List<TreeNode> t2) {
         ld = new TreeNodeDictionary();
         it1 = new InfoTree(t1, ld);
@@ -144,7 +89,7 @@ public class RTED {
         size2 = it2.getSize();
         IJ = new int[Math.max(size1, size2)][Math.max(size1, size2)];
         delta = new double[size1][size2];
-        deltaBit = new byte[size1][size2];
+        deltaBit = new double[size1][size2];
         costV = new long[3][size1][size2];
         costW = new long[3][size2];
 
@@ -159,17 +104,8 @@ public class RTED {
         for (int x = 0; x < sizes1.length; x++) { // for all nodes of initially
             // left tree
             for (int y = 0; y < sizes2.length; y++) { // for all nodes of
-                // initially right tree
 
-                // This is an attempt for distances of single-node subtree and
-                // anything alse
-                // The differences between pairs of labels are stored
-                if (labels1[x] == labels2[y]) {
-                    deltaBit[x][y] = 0;
-                } else {
-                    deltaBit[x][y] = 1; // if this set, the labels differ, cost
-                    // of relabeling is set to costMatch
-                }
+                deltaBit[x][y] = ld.rename(labels1[x], labels2[y]);
 
                 if (sizes1[x] == 1 && sizes2[y] == 1) { // both nodes are leafs
                     delta[x][y] = 0;
@@ -185,9 +121,6 @@ public class RTED {
         }
     }
 
-    /**
-     * A method for computing and storing the optimal strategy
-     */
     public void computeOptimalStrategy() {
         long heavyMin, revHeavyMin, leftMin, revLeftMin, rightMin, revRightMin;
         long min = -1;
@@ -297,7 +230,6 @@ public class RTED {
      * @return
      */
     private double computeDistUsingStrArray(InfoTree it1, InfoTree it2) {
-
         int postorder1 = it1.getCurrentNode();
         int postorder2 = it2.getCurrentNode();
 
@@ -462,9 +394,9 @@ public class RTED {
         treeEditDist(it1, it2, fPostorder, gPostorder);
 
         return it1.isSwitched() ? delta[gPostorder][fPostorder]
-                + deltaBit[gPostorder][fPostorder] * costMatch
+                + deltaBit[gPostorder][fPostorder]// * costMatch
                 : delta[fPostorder][gPostorder]
-                + deltaBit[fPostorder][gPostorder] * costMatch;
+                + deltaBit[fPostorder][gPostorder];// * costMatch;
     }
 
     private void treeEditDist(InfoTree it1, InfoTree it2, int i, int j) {
@@ -486,13 +418,13 @@ public class RTED {
                 counter++;
                 if ((it1.info[POST2_LLD][i1 + ioff] == it1.info[POST2_LLD][i])
                         && (it2.info[POST2_LLD][j1 + joff] == it2.info[POST2_LLD][j])) {
-                    double u = 0;
-                    if (it1.info[POST2_LABEL][i1 + ioff] != it2.info[POST2_LABEL][j1
-                            + joff]) {
-                        u = costMatch;
+                    double u = 0.0;
+                    if (it1.info[POST2_LABEL][i1 + ioff] != it2.info[POST2_LABEL][j1 + joff]) {
+                        u = //ld.rename(it1.info[POST2_LABEL][i1 + ioff],it2.info[POST2_LABEL][j1 + joff]);//costMatch;
+                        deltaBit [i1 + ioff][j1 + joff];
                     }
-                    da = forestdist[i1 - 1][j1] + costDel;
-                    db = forestdist[i1][j1 - 1] + costIns;
+                    da = forestdist[i1 - 1][j1] + ld.delete();
+                    db = forestdist[i1][j1 - 1] + ld.insert();
                     dc = forestdist[i1 - 1][j1 - 1] + u;
                     forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
@@ -504,12 +436,12 @@ public class RTED {
                                     - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
                             switched);
                 } else {
-                    double u = 0;
-                    u = switched ? deltaBit[j1 + joff][i1 + ioff] * costMatch
-                            : deltaBit[i1 + ioff][j1 + joff] * costMatch;
+                    double u = 0.0;
+                    u = switched ? deltaBit[j1 + joff][i1 + ioff] //* costMatch
+                            : deltaBit[i1 + ioff][j1 + joff];// * costMatch;
 
-                    da = forestdist[i1 - 1][j1] + costDel;
-                    db = forestdist[i1][j1 - 1] + costIns;
+                    da = forestdist[i1 - 1][j1] + ld.delete();
+                    db = forestdist[i1][j1 - 1] + ld.insert();
                     dc = forestdist[it1.info[POST2_LLD][i1 + ioff] - 1 - ioff][it2.info[POST2_LLD][j1
                             + joff]
                             - 1 - joff]
@@ -546,12 +478,10 @@ public class RTED {
         }
         treeEditDistRev(it1, it2, fReversedPostorder, gReversedPostorder);
 
-        return it1.isSwitched() ? delta[it2.getCurrentNode()][it1
-                .getCurrentNode()]
-                + deltaBit[it2.getCurrentNode()][it1.getCurrentNode()]
-                * costMatch : delta[it1.getCurrentNode()][it2.getCurrentNode()]
-                + deltaBit[it1.getCurrentNode()][it2.getCurrentNode()]
-                * costMatch;
+        return it1.isSwitched() ? delta[it2.getCurrentNode()][it1.getCurrentNode()]
+                + deltaBit[it2.getCurrentNode()][it1.getCurrentNode()]//* costMatch
+                : delta[it1.getCurrentNode()][it2.getCurrentNode()]
+                + deltaBit[it1.getCurrentNode()][it2.getCurrentNode()];//* costMatch;
     }
 
     private void treeEditDistRev(InfoTree it1, InfoTree it2, int i, int j) {
@@ -573,13 +503,13 @@ public class RTED {
                 counter++;
                 if ((it1.info[RPOST2_RLD][i1 + ioff] == it1.info[RPOST2_RLD][i])
                         && (it2.info[RPOST2_RLD][j1 + joff] == it2.info[RPOST2_RLD][j])) {
-                    double u = 0;
-                    if (it1.info[POST2_LABEL][it1.info[RPOST2_POST][i1 + ioff]] != it2.info[POST2_LABEL][it2.info[RPOST2_POST][j1
-                            + joff]]) {
-                        u = costMatch;
+                    double u = 0.0;
+                    if (it1.info[POST2_LABEL][it1.info[RPOST2_POST][i1 + ioff]] != it2.info[POST2_LABEL][it2.info[RPOST2_POST][j1+ joff]]) {
+                        u =  deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1+ joff]];
+                                //costMatch;
                     }
-                    da = forestdist[i1 - 1][j1] + costDel;
-                    db = forestdist[i1][j1 - 1] + costIns;
+                    da = forestdist[i1 - 1][j1] + ld.delete();
+                    db = forestdist[i1][j1 - 1] + ld.insert();
                     dc = forestdist[i1 - 1][j1 - 1] + u;
                     forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
@@ -593,16 +523,12 @@ public class RTED {
                                     - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
                             switched);
                 } else {
-                    double u = 0;
-                    u = switched ? deltaBit[it2.info[RPOST2_POST][j1 + joff]][it1.info[RPOST2_POST][i1
-                            + ioff]]
-                            * costMatch
-                            : deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1
-                            + joff]]
-                            * costMatch;
+                    double u = 0.0;
+                    u = switched ? deltaBit[it2.info[RPOST2_POST][j1 + joff]][it1.info[RPOST2_POST][i1 + ioff]] //* costMatch
+                            : deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1 + joff]];//* costMatch;
 
-                    da = forestdist[i1 - 1][j1] + costDel;
-                    db = forestdist[i1][j1 - 1] + costIns;
+                    da = forestdist[i1 - 1][j1] + ld.delete();
+                    db = forestdist[i1][j1 - 1] + ld.insert();
                     dc = forestdist[it1.info[RPOST2_RLD][i1 + ioff] - 1 - ioff][it2.info[RPOST2_RLD][j1
                             + joff]
                             - 1 - joff]
@@ -659,7 +585,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, strategy,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * costIns;
+                            t[i][j] = (gSize - (i + j)) * ld.insert();
                         }
                     }
                     previousStrategy = strategy;
@@ -671,7 +597,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, LEFT,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * costIns;
+                            t[i][j] = (gSize - (i + j)) * ld.insert();
                         }
                     }
                     previousStrategy = LEFT;
@@ -682,7 +608,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, RIGHT,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * costIns;
+                            t[i][j] = (gSize - (i + j)) * ld.insert();
                         }
                     }
                     previousStrategy = RIGHT;
@@ -802,8 +728,8 @@ public class RTED {
                         - it1.info[POST2_SIZE][it1.info[PRE2_POST][fForestPreorderKPrime]];
 
                 // reset the minimum arguments' values
-                deleteFromRight = costIns;
-                deleteFromLeft = costDel;
+                deleteFromRight = ld.insert();
+                deleteFromLeft = ld.delete();
                 match = 0;
 
                 match += aStrategy == LEFT ? kBis + nextVpSize : vpSize - k
@@ -869,7 +795,8 @@ public class RTED {
                     gLabel = it2.info[POST2_LABEL][it2.info[PRE2_POST][gijForestPreorder]];
 
                     if (fLabel != gLabel) {
-                        match += costMatch;
+                        match += ld
+                        .rename(fLabel, gLabel);//costMatch;
                     }
 
                     // this condition is checked many times but is not satisfied
@@ -902,24 +829,11 @@ public class RTED {
                             : match);
 
                     // reset the minimum arguments' values
-                    deleteFromRight = costIns;
-                    deleteFromLeft = costDel;
+                    deleteFromRight = ld.insert();
+                    deleteFromLeft = ld.delete();
                     match = 0;
                 }
             }
-
-            // compute table T => add row to T
-            // if (realStrategy == BOTH && aStrategy == LEFT) {
-            // // t[i] has to be of correct length
-            // // assigning pointer of a row in s to t[i] is wrong
-            // // t[i] = Arrays.copyOf(s[k-1-1], jOfI+1);//sTable[k - 1 - 1];
-            // // System.arraycopy(s[k-1-1], 0, t[i], 0, jOfI+1);
-            // t[i] = s[k-1-1].clone();
-            // } else {
-            // // t[i] = Arrays.copyOf(s[k-1], jOfI+1);//sTable[k - 1];
-            // // System.arraycopy(s[k-1], 0, t[i], 0, jOfI+1);
-            // t[i] = s[k-1].clone();
-            // }
 
             // compute table T => add row to T
             // we have to copy the values, otherwise they may be overwritten t
@@ -1057,37 +971,11 @@ public class RTED {
         }
     }
 
-    private void setDeltaBitValue(int a, int b, byte value, boolean switched) {
+    private void setDeltaBitValue(int a, int b, double value, boolean switched) {
         if (switched) {
             deltaBit[b][a] = value;
         } else {
             deltaBit[a][b] = value;
-        }
-    }
-
-    public void setCustomCosts(double costDel, double costIns, double costMatch) {
-        this.costDel = costDel;
-        this.costIns = costIns;
-        this.costMatch = costMatch;
-    }
-
-    public void setCustomStrategy(int[][] strategyArray) {
-        STR = strategyArray;
-    }
-
-    public void setCustomStrategy(int strategy, boolean ifSwitch) {
-        STR = new int[size1][size2];
-        if (ifSwitch) {
-            for (int i = 0; i < size1; i++) {
-                for (int j = 0; j < size2; j++) {
-                    STR[i][j] = it1.info[POST2_SIZE][i] >= it2.info[POST2_SIZE][j] ? strategy
-                            : strategy + 4;
-                }
-            }
-        } else {
-            for (int i = 0; i < size1; i++) {
-                Arrays.fill(STR[i], strategy);
-            }
         }
     }
 
@@ -1157,12 +1045,12 @@ public class RTED {
             int col = lastCol;
             while ((row > firstRow) || (col > firstCol)) {
                 if ((row > firstRow)
-                        && (forestdist[row - 1][col] + costDel == forestdist[row][col])) {
+                        && (forestdist[row - 1][col] + ld.delete() == forestdist[row][col])) {
                     // node with postorderID row is deleted from ted1
                     editMapping.push(new int[]{row, 0});
                     row--;
                 } else if ((col > firstCol)
-                        && (forestdist[row][col - 1] + costIns == forestdist[row][col])) {
+                        && (forestdist[row][col - 1] + ld.insert() == forestdist[row][col])) {
                     // node with postorderID col is inserted into ted2
                     editMapping.push(new int[]{0, col});
                     col--;
@@ -1194,25 +1082,25 @@ public class RTED {
     private void forestDist(InfoTree ted1, InfoTree ted2, int i, int j, double[][] treedist, double[][] forestdist) {
         forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = 0;
         for (int di = ted1.getInfo(POST2_LLD, i - 1) + 1; di <= i; di++) {
-            forestdist[di][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] + costDel;
+            forestdist[di][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] + ld.delete();
             for (int dj = ted2.getInfo(POST2_LLD, j - 1) + 1; dj <= j; dj++) {
-                forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + costIns;
+                forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + ld.insert();
 
                 if ((ted1.getInfo(POST2_LLD, di - 1) == ted1.getInfo(POST2_LLD, i - 1))
                         && (ted2.getInfo(POST2_LLD, dj - 1) == ted2.getInfo(POST2_LLD, j - 1))) {
-                    double costRen = 0;
+                    double costRen = 0.0;
                     if (!(ted1.getInfo(POST2_LABEL, di - 1) == ted2.getInfo(POST2_LABEL, dj - 1))) {
-                        costRen = costMatch;
+                        costRen = deltaBit[di-1][dj - 1];//costMatch;
                     }
                     forestdist[di][dj] = Math.min(Math.min(
-                            forestdist[di - 1][dj] + costDel,
-                            forestdist[di][dj - 1] + costIns),
+                            forestdist[di - 1][dj] + ld.delete(),
+                            forestdist[di][dj - 1] + ld.insert()),
                             forestdist[di - 1][dj - 1] + costRen);
                     treedist[di][dj] = forestdist[di][dj];
                 } else {
                     forestdist[di][dj] = Math.min(Math.min(
-                            forestdist[di - 1][dj] + costDel,
-                            forestdist[di][dj - 1] + costIns),
+                            forestdist[di - 1][dj] + ld.delete(),
+                            forestdist[di][dj - 1] + ld.insert()),
                             forestdist[ted1.getInfo(POST2_LLD, di - 1) + 1 - 1][ted2.getInfo(POST2_LLD, dj - 1) + 1 - 1]
                                     + treedist[di][dj]);
                 }

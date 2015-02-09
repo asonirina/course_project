@@ -14,7 +14,7 @@ public class CustomNodeDistance implements NodeDistance {
             return 1;
         }
         if (n1.getOperation().equals(n2.getOperation()))
-            return calculate(n1, n2, 0.1);
+            return calculate(n1, n2, 0.3);
 
         return calculate(n1, n2, 0.5);
     }

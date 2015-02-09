@@ -15,7 +15,7 @@ import java.util.List;
 public class TestTreeHelper {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test3.java"));
-        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test4.java"));
+        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test1.java"));
         TreeParser helper1 = new TreeParser("ghj", Lang.JAVA);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
         TreeParser helper2 = new TreeParser("ghj1", Lang.JAVA);

@@ -24,7 +24,7 @@ public class TreeEditDistance {
         node.setI(data++);
     }
 
-    private static void numerateTree(TreeNode node) {
+    public static void numerateTree(TreeNode node) {
         data = 0;
         walkTreeLeft(node);
     }
