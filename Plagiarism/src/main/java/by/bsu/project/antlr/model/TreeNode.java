@@ -34,6 +34,10 @@ public class TreeNode implements Serializable {
             parentName = node.getName();
         }
     }
+    public TreeNode(Integer id, String name, TreeNode node, Operation operation) {
+        this(id, name, node);
+        this.operation = operation;
+    }
 
     private List<TreeNode> children = new ArrayList<>();
 
