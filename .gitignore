@@ -9,7 +9,7 @@ test.log.*
 #### Idea ###
 compilers
 grammars
-test
+test-files
 lib
 .idea
 *.iml
