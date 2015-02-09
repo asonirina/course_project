@@ -1,18 +1,3 @@
-//    Copyright (C) 2012  Mateusz Pawlik and Nikolaus Augsten
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU Affero General Public License as
-//    published by the Free Software Foundation, either version 3 of the
-//    License, or (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU Affero General Public License for more details.
-//
-//    You should have received a copy of the GNU Affero General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 package by.bsu.project.antlr.rted;
 
 import by.bsu.project.antlr.model.TreeNode;
@@ -22,11 +7,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Stores all needed information about a single tree in several indeces. 
- *
- * @author Mateusz Pawlik
- */
 public class InfoTree {
 
     private List<TreeNode> inputTree;
@@ -59,7 +39,7 @@ public class InfoTree {
 
     public int[][] info; // an array with all the indeces
     
-    private LabelDictionary ld; // dictionary with labels - common for two input trees
+    private TreeNodeDictionary ld; // dictionary with labels - common for two input trees
 
     public boolean[][] nodeType; // store the type of a node: for every node stores three boolean values (L, R, H)
     
@@ -84,19 +64,7 @@ public class InfoTree {
     private int leafCount = 0;
     private int treeSize = 0;
     
-    public static void main(String[] args) {
-
-    }
-
-    /**
-     * Creates an InfoTree object, gathers all information about aInputTree and stores in indexes.
-     * aInputTree is not needed any more.
-     * Remember to pass the same LabelDictionary object to both trees which are compared.
-     * 
-     * @param aInputTree an LblTree object
-     * @param aLd  a LabelDictionary object
-     */
-    public InfoTree(List<TreeNode> aInputTree, LabelDictionary aLd) {
+    public InfoTree(List<TreeNode> aInputTree, TreeNodeDictionary aLd) {
         this.inputTree = aInputTree;
         this.treeSize = inputTree.size();
         this.info = new int[16][treeSize];
@@ -104,7 +72,10 @@ public class InfoTree {
         Arrays.fill(info[POST2_MIN_KR], -1);
         Arrays.fill(info[RPOST2_MIN_RKR], -1);
         Arrays.fill(info[POST2_STRATEGY], -1);
-        this.paths = new int[3][treeSize]; Arrays.fill(paths[LEFT], -1); Arrays.fill(paths[RIGHT], -1); Arrays.fill(paths[HEAVY], -1);
+        this.paths = new int[3][treeSize];
+        Arrays.fill(paths[LEFT], -1);
+        Arrays.fill(paths[RIGHT], -1);
+        Arrays.fill(paths[HEAVY], -1);
         this.relSubtrees = new int[3][treeSize][];
         this.nodeType = new boolean[3][treeSize];
         this.ld = aLd;
@@ -113,11 +84,6 @@ public class InfoTree {
         postTraversalProcessing();
     }
 
-    /**
-     * Returns the size of the tree.
-     * 
-     * @return
-     */
     public int getSize() {
         return treeSize;
     }
@@ -130,82 +96,35 @@ public class InfoTree {
         return nodeType[type];
     }
     
-        
-    /**
-     * For given infoCode and postorder of a node returns requested information of that node.
-     * 
-     * @param infoCode
-     * @param nodesPostorder postorder of a node
-     * @return a value of requested information
-     */
     public int getInfo(int infoCode, int nodesPostorder) {
         // return info under infoCode and nodesPostorder
         return info[infoCode][nodesPostorder];
     }
     
-    /**
-     * For given infoCode returns an info array (index array)
-     * 
-     * @param infoCode
-     * @return array with requested index
-     */
     public int[] getInfoArray(int infoCode) {
         return info[infoCode];
     }
     
-    /**
-     * Returns relevant subtrees for given node. Assuming that child v of given node belongs to given path, 
-     * all children of given node are returned but node v.
-     * 
-     * @param pathType
-     * @param nodePostorder postorder of a node
-     * @return  an array with relevant subtrees of a given node
-     */
     public int[] getNodeRelSubtrees(int pathType, int nodePostorder) {
         return relSubtrees[pathType][nodePostorder];
     }
     
-    /**
-     * Returns an array representation of a given path's type.
-     * 
-     * @param pathType
-     * @return an array with a requested path
-     */
     public int[] getPath(int pathType) {
         return paths[pathType];
     }
-    
-    /**
-     * Returns the postorder of current root node.
-     * 
-     * @return 
-     */
+
     public int getCurrentNode() {
         return currentNode;
     }
-    
-    /**
-     * Sets postorder of the current node in the recursion.
-     * 
-     * @param postorder 
-     */
+
     public void setCurrentNode(int postorder) {
         currentNode = postorder;
     }
     
-    /**
-     * Gathers information of a given tree in corresponding arrays.
-     * 
-     * At this point the given tree is traversed once, but there is a loop over current nodes children
-     * to assign them their parents.
-     * 
-     * @param aT
-     * @param postorder
-     * @return 
-     */
     private int gatherInfo(List<TreeNode> aT, int postorder) {
           return gatherInfo(aT.get(aT.size() - 1), postorder);
     }
+
     private int gatherInfo(TreeNode aT, int postorder) {
         int currentSize = 0;
         int childrenCount = 0;
@@ -235,9 +154,7 @@ public class InfoTree {
             childrenCount++;
 
             postorder = gatherInfo(e.next(), postorder);
-
             childrenPostorders.add(postorder);
-            
             currentPostorder = postorder;
 
             // heavy path
@@ -289,17 +206,13 @@ public class InfoTree {
 
         postorder++;
 
-        // postorder
-//        aT.setTmpData(postorder);
-
         int currentDescSizes = descSizes + currentSize + 1;
         info[POST2_DESC_SUM][postorder] = (currentSize+1)*(currentSize+1+3)/2-currentDescSizes;
         info[POST2_KR_SUM][postorder] = krSizesSum + currentSize+1;
         info[POST2_REV_KR_SUM][postorder] = revkrSizesSum + currentSize+1;
 
         // POST2_LABEL
-        //labels[rootNumber] = ld.store(aT.getLabel());
-        info[POST2_LABEL][postorder] = ld.store(aT.getName());
+        info[POST2_LABEL][postorder] = ld.store(aT);
         
         // POST2_PARENT
         for (Integer i : childrenPostorders) {
@@ -337,8 +250,6 @@ public class InfoTree {
             info[POST2_STRATEGY][postorder] = RIGHT;
         }
         
-        
-        
         // left path
         if (leftChild != -1) {
             paths[LEFT][postorder] = leftChild;
@@ -361,9 +272,6 @@ public class InfoTree {
         return postorder;
     }
     
-    /**
-     * Gathers information, that couldn't be collected while tree traversal.
-     */
     private void postTraversalProcessing() {
         int nc1 = treeSize;
         info[KR] = new int[leafCount];
@@ -430,11 +338,6 @@ public class InfoTree {
         }
     }
     
-    /**
-     * Transforms a list of Integer objects to an array of primitive int values.
-     * @param integers
-     * @return 
-     */
     public static int[] toIntArray(List<Integer> integers) {
         int[] ints = new int[integers.size()];
         int i = 0;

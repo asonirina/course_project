@@ -128,4 +128,23 @@ public class TreeNode implements Serializable {
         return baos.toByteArray();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TreeNode)) return false;
+
+        TreeNode treeNode = (TreeNode) o;
+
+        if (name != null ? !name.equals(treeNode.name) : treeNode.name != null) return false;
+        if (operation != treeNode.operation) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        return result;
+    }
 }
