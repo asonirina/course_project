@@ -8,39 +8,35 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static by.bsu.project.antlr.rted.RTEDConstants.LEFT;
+import static by.bsu.project.antlr.rted.RTEDConstants.RIGHT;
+import static by.bsu.project.antlr.rted.RTEDConstants.HEAVY;
+import static by.bsu.project.antlr.rted.RTEDConstants.BOTH;
+
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_SIZE;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_KR_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_REV_KR_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_DESC_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_PRE;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_PARENT;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_LABEL;
+import static by.bsu.project.antlr.rted.RTEDConstants.KR;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_LLD;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_MIN_KR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RKR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_RLD;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_MIN_RKR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_POST;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_STRATEGY;
+import static by.bsu.project.antlr.rted.RTEDConstants.PRE2_POST;
+
+
 public class InfoTree {
 
     private List<TreeNode> inputTree;
 
-    private static final byte LEFT = 0;
-    private static final byte RIGHT = 1;
-    private static final byte HEAVY = 2;
-    private static final byte BOTH = 3;
-    private static final byte REVLEFT = 4;
-    private static final byte REVRIGHT = 5;
-    private static final byte REVHEAVY = 6;
-
-    // constants for indeces numbers
-    public static final byte POST2_SIZE = 0;
-    public static final byte POST2_KR_SUM = 1;
-    public static final byte POST2_REV_KR_SUM = 2;
-    public static final byte POST2_DESC_SUM = 3; // number of subforests in full decomposition
-    public static final byte POST2_PRE = 4;
-    public static final byte POST2_PARENT = 5;
-    public static final byte POST2_LABEL = 6;
-    public static final byte KR = 7; // key root nodes (size of this array = leaf count)
-    public static final byte POST2_LLD = 8; // left-most leaf descendants
-    public static final byte POST2_MIN_KR = 9; // minimum key root nodes index in KR array
-    public static final byte RKR = 10; // reversed key root nodes
-    public static final byte RPOST2_RLD = 11; // reversed postorer 2 right-most leaf descendants
-    public static final byte RPOST2_MIN_RKR = 12;
-    public static final byte RPOST2_POST = 13; // reversed postorder -> postorder
-    public static final byte POST2_STRATEGY = 14; // strategy for Demaine (is there sth on the left/right of the heavy node)
-    public static final byte PRE2_POST =15;
-
-    public int[][] info; // an array with all the indeces
-    
-    private TreeNodeDistanceMap map; // dictionary with labels - common for two input trees
+    public int[][] info;
+    private TreeNodeDistanceMap map;
 
     public boolean[][] nodeType; // store the type of a node: for every node stores three boolean values (L, R, H)
     
@@ -48,20 +44,17 @@ public class InfoTree {
     private int[][] paths;
     private int[][][] relSubtrees;
 
-    // temporal variables
-    private int sizeTmp = 0; // temporal value of size of a subtree
-    private int descSizesTmp = 0; // temporal value of sum of descendat sizes
-    private int krSizesSumTmp = 0; // temporal value of sum of key roots sizes
-    private int revkrSizesSumTmp = 0; // temporal value of sum of reversed hey roots sizes
-    private int preorderTmp = 0; // temporal value of preorder
+    private int sizeTmp =           0; // temporal value of size of a subtree
+    private int descSizesTmp =      0; // temporal value of sum of descendat sizes
+    private int krSizesSumTmp =     0; // temporal value of sum of key roots sizes
+    private int revkrSizesSumTmp =  0; // temporal value of sum of reversed hey roots sizes
+    private int preorderTmp =       0; // temporal value of preorder
     
-    // remembers what is the current node's postorder (current in the TED recursion)
     private int currentNode = -1;
     
     // remembers if the trees order was switched during the recursion (in comparison with the order of input trees)
     private boolean switched = false;
     
-    // as the names say
     private int leafCount = 0;
     private int treeSize = 0;
     
@@ -98,7 +91,6 @@ public class InfoTree {
     }
     
     public int getInfo(int infoCode, int nodesPostorder) {
-        // return info under infoCode and nodesPostorder
         return info[infoCode][nodesPostorder];
     }
     

@@ -5,41 +5,33 @@ import by.bsu.project.antlr.model.TreeNodeDistanceMap;
 
 import java.util.*;
 
-public class RTED {
-    private static final byte LEFT = 0;
-    private static final byte RIGHT = 1;
-    private static final byte HEAVY = 2;
-    private static final byte BOTH = 3;
-    private static final byte REVLEFT = 4;
-    private static final byte REVRIGHT = 5;
-    private static final byte REVHEAVY = 6;
-    private static final byte POST2_SIZE = 0;
-    private static final byte POST2_KR_SUM = 1;
-    private static final byte POST2_REV_KR_SUM = 2;
-    private static final byte POST2_DESC_SUM = 3; // number of subforests in
-    // full decomposition
-    private static final byte POST2_PRE = 4;
-    private static final byte POST2_PARENT = 5;
-    private static final byte POST2_LABEL = 6;
-    private static final byte KR = 7; // key root nodes (size of this array =
-    // leaf count)
-    private static final byte POST2_LLD = 8; // left-most leaf descendants
-    private static final byte POST2_MIN_KR = 9; // minimum key root nodes index
-    // in KR array
-    private static final byte RKR = 10; // reversed key root nodes
-    private static final byte RPOST2_RLD = 11; // reversed postorer 2 right-most
-    // leaf descendants
-    private static final byte RPOST2_MIN_RKR = 12; // minimum key root nodes
-    // index in RKR array
-    private static final byte RPOST2_POST = 13; // reversed postorder ->
-    // postorder
-    private static final byte POST2_STRATEGY = 14; // strategy for Demaine (is
-    // there sth on the
-    // left/right of the heavy
-    // node)
-    private static final byte PRE2_POST = 15; // preorder to postorder
+import static by.bsu.project.antlr.rted.RTEDConstants.LEFT;
+import static by.bsu.project.antlr.rted.RTEDConstants.RIGHT;
+import static by.bsu.project.antlr.rted.RTEDConstants.HEAVY;
+import static by.bsu.project.antlr.rted.RTEDConstants.BOTH;
+import static by.bsu.project.antlr.rted.RTEDConstants.REVLEFT;
+import static by.bsu.project.antlr.rted.RTEDConstants.REVRIGHT;
+import static by.bsu.project.antlr.rted.RTEDConstants.REVHEAVY;
 
-    // trees
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_SIZE;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_KR_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_REV_KR_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_DESC_SUM;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_PRE;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_PARENT;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_LABEL;
+import static by.bsu.project.antlr.rted.RTEDConstants.KR;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_LLD;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_MIN_KR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RKR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_RLD;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_MIN_RKR;
+import static by.bsu.project.antlr.rted.RTEDConstants.RPOST2_POST;
+import static by.bsu.project.antlr.rted.RTEDConstants.POST2_STRATEGY;
+import static by.bsu.project.antlr.rted.RTEDConstants.PRE2_POST;
+
+public class RTED {
+
     private InfoTree it1;
     private InfoTree it2;
     private int size1;
@@ -74,7 +66,6 @@ public class RTED {
 
     public double nonNormalizedTreeDist(List<TreeNode> t1, List<TreeNode> t2) {
         init(t1, t2);
-        STR = new int[size1][size2];
         computeOptimalStrategy();
         return computeDistUsingStrArray(it1, it2);
     }
@@ -95,16 +86,13 @@ public class RTED {
         costV = new long[3][size1][size2];
         costW = new long[3][size2];
 
-        // Calculate delta between every leaf in G (empty tree) and all the
-        // nodes in F.
-        // Calculate it both sides: leafs of F and nodes of G & leafs of G and
-        // nodes of F.
+        // Calculate delta between every leaf in G (empty tree) and all the nodes in F.
+        // Calculate it both sides: leafs of F and nodes of G & leafs of G and nodes of F.
         int[] labels1 = it1.getInfoArray(POST2_LABEL);
         int[] labels2 = it2.getInfoArray(POST2_LABEL);
         int[] sizes1 = it1.getInfoArray(POST2_SIZE);
         int[] sizes2 = it2.getInfoArray(POST2_SIZE);
-        for (int x = 0; x < sizes1.length; x++) { // for all nodes of initially
-            // left tree
+        for (int x = 0; x < sizes1.length; x++) { // for all nodes of initially left tree
             for (int y = 0; y < sizes2.length; y++) { // for all nodes of
 
                 deltaBit[x][y] = map.rename(labels1[x], labels2[y]);
@@ -168,8 +156,6 @@ public class RTED {
                     costV[HEAVY][v][w] = 0;
                 }
 
-                // TODO: some things below may be put to outer loop
-
                 // count the minimum + get the strategy
                 heavyMin = (long) post2size1[v] * (long) post2descSum2[w]
                         + costV[HEAVY][v][w];
@@ -227,9 +213,6 @@ public class RTED {
     /**
      * The recursion step according to the optimal strategy.
      *
-     * @param it1
-     * @param it2
-     * @return
      */
     private double computeDistUsingStrArray(InfoTree it1, InfoTree it2) {
         int postorder1 = it1.getCurrentNode();
@@ -289,7 +272,7 @@ public class RTED {
             case HEAVY:
                 tmpPostorder = postorder1;
                 stepPath = it1.getPath(HEAVY);
-                heavyPath = new ArrayList<Integer>();
+                heavyPath = new ArrayList<>();
                 heavyPath.add(postorder1);
                 while (stepPath[postorder1] > -1) {
                     stepRelSubtrees = it1.getNodeRelSubtrees(HEAVY, postorder1);
@@ -349,7 +332,7 @@ public class RTED {
             case REVHEAVY:
                 tmpPostorder = postorder2;
                 stepPath = it2.getPath(HEAVY);
-                heavyPath = new ArrayList<Integer>();
+                heavyPath = new ArrayList<>();
                 heavyPath.add(postorder2);
                 while (stepPath[postorder2] > -1) {
                     stepRelSubtrees = it2.getNodeRelSubtrees(HEAVY, postorder2);
@@ -376,9 +359,6 @@ public class RTED {
     /**
      * Single-path function for the left-most path based on Zhang and Shasha
      * algorithm.
-     *
-     * @param it1
-     * @param it2
      * @return distance between subtrees it1 and it2
      */
     private double spfL(InfoTree it1, InfoTree it2) {
@@ -459,9 +439,6 @@ public class RTED {
     /**
      * Single-path function for right-most path based on symmetric version of
      * Zhang and Shasha algorithm.
-     *
-     * @param it1
-     * @param it2
      * @return distance between subtrees it1 and it2
      */
     private double spfR(InfoTree it1, InfoTree it2) {
@@ -549,9 +526,6 @@ public class RTED {
     /**
      * Single-path function for heavy path based on Klein/Demaine algorithm.
      *
-     * @param it1
-     * @param it2
-     * @param heavyPath
      * @return distance between subtrees it1 and it2
      */
     private double spfH(InfoTree it1, InfoTree it2, int[] heavyPath) {
@@ -568,8 +542,7 @@ public class RTED {
 
         int jOfi;
 
-        // Initialize arrays to their maximal possible size for current pairs of
-        // subtrees.
+        // Initialize arrays to their maximal possible size for current pairs of subtrees.
         t = new double[gSize][gSize];
         tCOPY = new double[gSize][gSize];
         s = new double[fSize][gSize];
@@ -622,17 +595,7 @@ public class RTED {
         return t[0][0];
     }
 
-    /**
-     * Compute period method.
-     *
-     * @param it1
-     * @param aVp
-     * @param aNextVp
-     * @param it2
-     * @param aStrategy
-     */
-    private void computePeriod(InfoTree it1, int aVp, int aNextVp,
-                               InfoTree it2, int aStrategy) {
+    private void computePeriod(InfoTree it1, int aVp, int aNextVp, InfoTree it2, int aStrategy) {
 
         int fTreeSize = it1.getSize();
         int gTreeSize = it2.getSize();
@@ -893,13 +856,6 @@ public class RTED {
     /**
      * Computes an array where preorder/rev.preorder of a subforest of given
      * subtree is stored and can be accessed for given i and j.
-     *
-     * @param it
-     * @param subtreePreorder
-     * @param subtreeRevPreorder
-     * @param subtreeSize
-     * @param aStrategy
-     * @param treeSize
      */
     private void computeIJTable(InfoTree it, int subtreePreorder,
                                 int subtreeRevPreorder, int subtreeSize, int aStrategy, int treeSize) {
@@ -945,23 +901,13 @@ public class RTED {
     /**
      * Returns j for given i, result of j(i) form Demaine's algorithm.
      *
-     * @param it
-     * @param aI
-     * @param aSubtreeWeight
-     * @param aSubtreeRevPre
-     * @param aSubtreePre
-     * @param aStrategy
-     * @param treeSize
-     * @return j for given i
      */
     private int jOfI(InfoTree it, int aI, int aSubtreeWeight,
                      int aSubtreeRevPre, int aSubtreePre, int aStrategy, int treeSize) {
         return aStrategy == LEFT ? aSubtreeWeight - aI
                 - it.info[POST2_SIZE][treeSize - 1 - (aSubtreeRevPre + aI)]
-                : aSubtreeWeight
-                - aI
-                - it.info[POST2_SIZE][it.info[RPOST2_POST][treeSize - 1
-                - (aSubtreePre + aI)]];
+                : aSubtreeWeight - aI
+                - it.info[POST2_SIZE][it.info[RPOST2_POST][treeSize - 1 - (aSubtreePre + aI)]];
     }
 
     private void setDeltaValue(int a, int b, double value, boolean switched) {
@@ -994,8 +940,6 @@ public class RTED {
      *         postorderID of the empty node (insertion, deletion) is zero.
      */
     public LinkedList<int[]> computeEditMapping() {
-
-        // initialize tree and forest distance arrays
         double[][] treedist = new double[size1 + 1][size2 + 1];
         double[][] forestdist = new double[size1 + 1][size2 + 1];
 
@@ -1018,10 +962,10 @@ public class RTED {
         forestDist(it1, it2, size1, size2, treedist, forestdist);
 
         // empty edit mapping
-        LinkedList<int[]> editMapping = new LinkedList<int[]>();
+        LinkedList<int[]> editMapping = new LinkedList<>();
 
         // empty stack of tree Pairs
-        LinkedList<int[]> treePairs = new LinkedList<int[]>();
+        LinkedList<int[]> treePairs = new LinkedList<>();
 
         // push the pair of trees (ted1,ted2) to stack
         treePairs.push(new int[]{size1, size2});
@@ -1056,8 +1000,7 @@ public class RTED {
                     editMapping.push(new int[]{0, col});
                     col--;
                 } else {
-                    // node with postorderID row in ted1 is renamed to node col
-                    // in ted2
+                    // node with postorderID row in ted1 is renamed to node col in ted2
 
                     if ((it1.getInfo(POST2_LLD, row - 1) == it1.getInfo(POST2_LLD, lastRow - 1))
                             && (it2.getInfo(POST2_LLD, col - 1) == it2.getInfo(POST2_LLD, lastCol - 1))) {
