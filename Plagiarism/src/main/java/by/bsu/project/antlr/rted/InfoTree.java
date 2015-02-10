@@ -1,6 +1,7 @@
 package by.bsu.project.antlr.rted;
 
 import by.bsu.project.antlr.model.TreeNode;
+import by.bsu.project.antlr.model.TreeNodeDistanceMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class InfoTree {
 
     public int[][] info; // an array with all the indeces
     
-    private TreeNodeDictionary ld; // dictionary with labels - common for two input trees
+    private TreeNodeDistanceMap map; // dictionary with labels - common for two input trees
 
     public boolean[][] nodeType; // store the type of a node: for every node stores three boolean values (L, R, H)
     
@@ -64,7 +65,7 @@ public class InfoTree {
     private int leafCount = 0;
     private int treeSize = 0;
     
-    public InfoTree(List<TreeNode> aInputTree, TreeNodeDictionary aLd) {
+    public InfoTree(List<TreeNode> aInputTree, TreeNodeDistanceMap aMap) {
         this.inputTree = aInputTree;
         this.treeSize = inputTree.size();
         this.info = new int[16][treeSize];
@@ -78,7 +79,7 @@ public class InfoTree {
         Arrays.fill(paths[HEAVY], -1);
         this.relSubtrees = new int[3][treeSize][];
         this.nodeType = new boolean[3][treeSize];
-        this.ld = aLd;
+        this.map = aMap;
         this.currentNode = treeSize-1;
         gatherInfo(inputTree, -1);
         postTraversalProcessing();
@@ -212,7 +213,7 @@ public class InfoTree {
         info[POST2_REV_KR_SUM][postorder] = revkrSizesSum + currentSize+1;
 
         // POST2_LABEL
-        info[POST2_LABEL][postorder] = ld.store(aT);
+        info[POST2_LABEL][postorder] = map.store(aT);
         
         // POST2_PARENT
         for (Integer i : childrenPostorders) {

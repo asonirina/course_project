@@ -1,6 +1,8 @@
 package by.bsu.project.antlr.rted;
 
 import by.bsu.project.antlr.model.TreeNode;
+import by.bsu.project.antlr.model.TreeNodeDistanceMap;
+
 import java.util.*;
 
 public class RTED {
@@ -42,7 +44,7 @@ public class RTED {
     private InfoTree it2;
     private int size1;
     private int size2;
-    private TreeNodeDictionary ld;
+    private TreeNodeDistanceMap map;
 
     private int[][] STR; // strategy array
     private double[][] delta; // an array for storing the distances between
@@ -82,9 +84,9 @@ public class RTED {
     }
 
     public void init(List<TreeNode> t1, List<TreeNode> t2) {
-        ld = new TreeNodeDictionary();
-        it1 = new InfoTree(t1, ld);
-        it2 = new InfoTree(t2, ld);
+        map = new TreeNodeDistanceMap();
+        it1 = new InfoTree(t1, map);
+        it2 = new InfoTree(t2, map);
         size1 = it1.getSize();
         size2 = it2.getSize();
         IJ = new int[Math.max(size1, size2)][Math.max(size1, size2)];
@@ -105,7 +107,7 @@ public class RTED {
             // left tree
             for (int y = 0; y < sizes2.length; y++) { // for all nodes of
 
-                deltaBit[x][y] = ld.rename(labels1[x], labels2[y]);
+                deltaBit[x][y] = map.rename(labels1[x], labels2[y]);
 
                 if (sizes1[x] == 1 && sizes2[y] == 1) { // both nodes are leafs
                     delta[x][y] = 0;
@@ -423,8 +425,8 @@ public class RTED {
                         u = //ld.rename(it1.info[POST2_LABEL][i1 + ioff],it2.info[POST2_LABEL][j1 + joff]);//costMatch;
                         deltaBit [i1 + ioff][j1 + joff];
                     }
-                    da = forestdist[i1 - 1][j1] + ld.delete();
-                    db = forestdist[i1][j1 - 1] + ld.insert();
+                    da = forestdist[i1 - 1][j1] + map.delete();
+                    db = forestdist[i1][j1 - 1] + map.insert();
                     dc = forestdist[i1 - 1][j1 - 1] + u;
                     forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
@@ -440,8 +442,8 @@ public class RTED {
                     u = switched ? deltaBit[j1 + joff][i1 + ioff] //* costMatch
                             : deltaBit[i1 + ioff][j1 + joff];// * costMatch;
 
-                    da = forestdist[i1 - 1][j1] + ld.delete();
-                    db = forestdist[i1][j1 - 1] + ld.insert();
+                    da = forestdist[i1 - 1][j1] + map.delete();
+                    db = forestdist[i1][j1 - 1] + map.insert();
                     dc = forestdist[it1.info[POST2_LLD][i1 + ioff] - 1 - ioff][it2.info[POST2_LLD][j1
                             + joff]
                             - 1 - joff]
@@ -508,8 +510,8 @@ public class RTED {
                         u =  deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1+ joff]];
                                 //costMatch;
                     }
-                    da = forestdist[i1 - 1][j1] + ld.delete();
-                    db = forestdist[i1][j1 - 1] + ld.insert();
+                    da = forestdist[i1 - 1][j1] + map.delete();
+                    db = forestdist[i1][j1 - 1] + map.insert();
                     dc = forestdist[i1 - 1][j1 - 1] + u;
                     forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
@@ -527,8 +529,8 @@ public class RTED {
                     u = switched ? deltaBit[it2.info[RPOST2_POST][j1 + joff]][it1.info[RPOST2_POST][i1 + ioff]] //* costMatch
                             : deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1 + joff]];//* costMatch;
 
-                    da = forestdist[i1 - 1][j1] + ld.delete();
-                    db = forestdist[i1][j1 - 1] + ld.insert();
+                    da = forestdist[i1 - 1][j1] + map.delete();
+                    db = forestdist[i1][j1 - 1] + map.insert();
                     dc = forestdist[it1.info[RPOST2_RLD][i1 + ioff] - 1 - ioff][it2.info[RPOST2_RLD][j1
                             + joff]
                             - 1 - joff]
@@ -585,7 +587,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, strategy,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * ld.insert();
+                            t[i][j] = (gSize - (i + j)) * map.insert();
                         }
                     }
                     previousStrategy = strategy;
@@ -597,7 +599,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, LEFT,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * ld.insert();
+                            t[i][j] = (gSize - (i + j)) * map.insert();
                         }
                     }
                     previousStrategy = LEFT;
@@ -608,7 +610,7 @@ public class RTED {
                         jOfi = jOfI(it2, i, gSize, gRevPre, gPre, RIGHT,
                                 gTreeSize);
                         for (int j = jOfi; j >= 0; j--) {
-                            t[i][j] = (gSize - (i + j)) * ld.insert();
+                            t[i][j] = (gSize - (i + j)) * map.insert();
                         }
                     }
                     previousStrategy = RIGHT;
@@ -728,8 +730,8 @@ public class RTED {
                         - it1.info[POST2_SIZE][it1.info[PRE2_POST][fForestPreorderKPrime]];
 
                 // reset the minimum arguments' values
-                deleteFromRight = ld.insert();
-                deleteFromLeft = ld.delete();
+                deleteFromRight = map.insert();
+                deleteFromLeft = map.delete();
                 match = 0;
 
                 match += aStrategy == LEFT ? kBis + nextVpSize : vpSize - k
@@ -795,8 +797,7 @@ public class RTED {
                     gLabel = it2.info[POST2_LABEL][it2.info[PRE2_POST][gijForestPreorder]];
 
                     if (fLabel != gLabel) {
-                        match += ld
-                        .rename(fLabel, gLabel);//costMatch;
+                        match += map.rename(fLabel, gLabel);
                     }
 
                     // this condition is checked many times but is not satisfied
@@ -829,8 +830,8 @@ public class RTED {
                             : match);
 
                     // reset the minimum arguments' values
-                    deleteFromRight = ld.insert();
-                    deleteFromLeft = ld.delete();
+                    deleteFromRight = map.insert();
+                    deleteFromLeft = map.delete();
                     match = 0;
                 }
             }
@@ -1045,12 +1046,12 @@ public class RTED {
             int col = lastCol;
             while ((row > firstRow) || (col > firstCol)) {
                 if ((row > firstRow)
-                        && (forestdist[row - 1][col] + ld.delete() == forestdist[row][col])) {
+                        && (forestdist[row - 1][col] + map.delete() == forestdist[row][col])) {
                     // node with postorderID row is deleted from ted1
                     editMapping.push(new int[]{row, 0});
                     row--;
                 } else if ((col > firstCol)
-                        && (forestdist[row][col - 1] + ld.insert() == forestdist[row][col])) {
+                        && (forestdist[row][col - 1] + map.insert() == forestdist[row][col])) {
                     // node with postorderID col is inserted into ted2
                     editMapping.push(new int[]{0, col});
                     col--;
@@ -1082,9 +1083,9 @@ public class RTED {
     private void forestDist(InfoTree ted1, InfoTree ted2, int i, int j, double[][] treedist, double[][] forestdist) {
         forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = 0;
         for (int di = ted1.getInfo(POST2_LLD, i - 1) + 1; di <= i; di++) {
-            forestdist[di][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] + ld.delete();
+            forestdist[di][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] + map.delete();
             for (int dj = ted2.getInfo(POST2_LLD, j - 1) + 1; dj <= j; dj++) {
-                forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + ld.insert();
+                forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + map.insert();
 
                 if ((ted1.getInfo(POST2_LLD, di - 1) == ted1.getInfo(POST2_LLD, i - 1))
                         && (ted2.getInfo(POST2_LLD, dj - 1) == ted2.getInfo(POST2_LLD, j - 1))) {
@@ -1093,14 +1094,14 @@ public class RTED {
                         costRen = deltaBit[di-1][dj - 1];//costMatch;
                     }
                     forestdist[di][dj] = Math.min(Math.min(
-                            forestdist[di - 1][dj] + ld.delete(),
-                            forestdist[di][dj - 1] + ld.insert()),
+                            forestdist[di - 1][dj] + map.delete(),
+                            forestdist[di][dj - 1] + map.insert()),
                             forestdist[di - 1][dj - 1] + costRen);
                     treedist[di][dj] = forestdist[di][dj];
                 } else {
                     forestdist[di][dj] = Math.min(Math.min(
-                            forestdist[di - 1][dj] + ld.delete(),
-                            forestdist[di][dj - 1] + ld.insert()),
+                            forestdist[di - 1][dj] + map.delete(),
+                            forestdist[di][dj - 1] + map.insert()),
                             forestdist[ted1.getInfo(POST2_LLD, di - 1) + 1 - 1][ted2.getInfo(POST2_LLD, dj - 1) + 1 - 1]
                                     + treedist[di][dj]);
                 }

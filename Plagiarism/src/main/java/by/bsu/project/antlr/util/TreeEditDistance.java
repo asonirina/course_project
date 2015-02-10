@@ -63,23 +63,23 @@ public class TreeEditDistance {
     private void forestDist(int i, int j, int[] li, int[] lj, TreeNode[] nodes1, TreeNode[] nodes2, double [][] td, double [][] fd) {
         fd[li[i] - 1][lj[j] - 1] = 0;
         for (int di = li[i]; di <= i; di++)
-            fd[di][lj[j] - 1] = fd[di - 1][lj[j] - 1] + nd.delete(nodes1[di], nodes2[lj[j] - 1]);
+            fd[di][lj[j] - 1] = fd[di - 1][lj[j] - 1] + nd.delete();
         for (int dj = lj[j]; dj <= j; dj++)
             fd[li[i] - 1][dj] =
-                    fd[li[i] - 1][dj - 1] + nd.insert(nodes1[li[i] - 1], nodes2[dj]);
+                    fd[li[i] - 1][dj - 1] + nd.insert();
         for (int di = li[i]; di <= i; di++) {
             for (int dj = lj[j]; dj <= j; dj++) {
                 if (li[di] == li[i] && lj[dj] == lj[j]) {
                     fd[di][dj] =
-                            NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
-                                    fd[di][dj - 1] + nd.insert(nodes1[di], nodes2[dj]),
+                            NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(),
+                                    fd[di][dj - 1] + nd.insert(),
                                     fd[di - 1][dj - 1] + nd.rename(nodes1[di], nodes2[dj])
 
                             });
                     td[di][dj] = fd[di][dj];
                 } else fd[di][dj] =
-                        NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(nodes1[di], nodes2[dj]),
-                                fd[di][dj - 1] + nd.insert(nodes1[di], nodes2[dj]),
+                        NumberUtils.min(new double[]{fd[di - 1][dj] + nd.delete(),
+                                fd[di][dj - 1] + nd.insert(),
                                 fd[li[di] - 1][lj[dj] - 1] + td[di][dj]
 
                         });

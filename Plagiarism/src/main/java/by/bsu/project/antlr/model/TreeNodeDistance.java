@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
  * User: iason
  * Date: 02.02.15
  */
-public class CustomNodeDistance implements NodeDistance {
+public class TreeNodeDistance implements NodeDistance {
     @Override
     public double rename(TreeNode n1, TreeNode n2) {
         if (!n1.getOperation().getType().equals(n2.getOperation().getType())) {
@@ -26,12 +26,12 @@ public class CustomNodeDistance implements NodeDistance {
     }
 
     @Override
-    public double delete(TreeNode n1, TreeNode n2) {
+    public double delete() {
         return 1.0;
     }
 
     @Override
-    public double insert(TreeNode n1, TreeNode n2) {
+    public double insert() {
         return 1.0;
     }
 }
