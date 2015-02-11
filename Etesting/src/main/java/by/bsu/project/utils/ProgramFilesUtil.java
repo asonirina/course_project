@@ -61,8 +61,10 @@ public class ProgramFilesUtil {
         } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
             cmd = cmdJava;
         }
-
-        return compile(cmd, postfix);
+        PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
+        File f  = new File(ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getFile());
+        return f.exists();
+//        return compile(cmd, postfix);
     }
 
 
