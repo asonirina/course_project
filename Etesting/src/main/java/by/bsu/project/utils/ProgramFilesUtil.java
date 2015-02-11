@@ -36,7 +36,7 @@ public class ProgramFilesUtil {
         this.programName = user.getForm() + '.' + programName;
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
-        dir = tmp.getName();
+        dir = tmp.getAbsolutePath();
 //        File baseDir = new File(System.getProperty("java.io.tmpdir"));
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
 //        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
@@ -65,7 +65,7 @@ public class ProgramFilesUtil {
     private boolean compile(String cmd, String postfix) throws Exception {
         file.transferTo(new File(dir + "/" + file.getOriginalFilename()));
 
-        Process    process = Runtime.getRuntime().exec(cmd, null, new File(dir));
+        Process  process = Runtime.getRuntime().exec(cmd, null);
 
         int result  = process.waitFor();
 
