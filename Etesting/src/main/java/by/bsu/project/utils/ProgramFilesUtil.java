@@ -37,7 +37,7 @@ public class ProgramFilesUtil {
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
         dir = tmp.getAbsolutePath();
-
+//        File baseDir = new File(System.getProperty("java.io.tmpdir"));
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
 //        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp = config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
@@ -70,7 +70,10 @@ public class ProgramFilesUtil {
 
          process = Runtime.getRuntime().exec(cmd, null, new File(dir));
 
-       result  = process.waitFor();  }catch (Exception ex){return true;}
+       result  = process.waitFor();  }catch (Exception ex){
+            logger.error(ex.getMessage());
+            System.out.println(ex.getMessage());
+            return true;}
 
         if (result == 0) {
             return true;//checkAllInputFiles(postfix);
