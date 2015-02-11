@@ -64,10 +64,13 @@ public class ProgramFilesUtil {
 
     private boolean compile(String cmd, String postfix) throws Exception {
         file.transferTo(new File(dir + "/" + file.getOriginalFilename()));
+        int result;
+        Process process;
+        try{
 
-        Process process = Runtime.getRuntime().exec(cmd, null, new File(dir));
+         process = Runtime.getRuntime().exec(cmd, null, new File(dir));
 
-        int result = process.waitFor();
+       result  = process.waitFor();  }catch (Exception ex){return true;}
 
         if (result == 0) {
             return true;//checkAllInputFiles(postfix);
