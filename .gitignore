@@ -7,7 +7,7 @@ test-output
 test.log.*
 
 #### Idea ###
-compilers
+ext-compilers
 grammars
 test-files
 lib

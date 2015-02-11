@@ -2,6 +2,7 @@ package by.bsu.project.utils;
 
 import by.bsu.project.constants.ETestingConstants;
 import by.bsu.project.entity.UserInfoEntity;
+import com.google.common.io.Files;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.google.common.util.concurrent.UncheckedTimeoutException;
@@ -22,7 +23,7 @@ public class ProgramFilesUtil {
     private String cmdCpp;
     private String cmdPascal;
     private String cmdJava;
-    private String path = System.getenv("CATALINA_HOME") + "/bin/";
+//    private String path = System.getenv("CATALINA_HOME") + "/bin/";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
@@ -33,13 +34,17 @@ public class ProgramFilesUtil {
     public ProgramFilesUtil(MultipartFile file, UserInfoEntity user, String programName) throws Exception {
         this.file = file;
         this.programName = user.getForm() + '.' + programName;
-        dir = user.getLogin() + programName;
+        File tmp = Files.createTempDir();
+        tmp.deleteOnExit();
+        dir = tmp.getAbsolutePath();
+
+
 
         new File(dir).mkdir();
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-        cmdC = config.getProperty("c") + " " + path + dir + "/" + file.getOriginalFilename();
-        cmdCpp = config.getProperty("cpp") + " " + path + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
-        cmdPascal = config.getProperty("pas") + " " + path + dir + "/" + file.getOriginalFilename();
+        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
+        cmdCpp = config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
+        cmdPascal = config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
         cmdJava = config.getProperty("java") + " " + file.getOriginalFilename();
     }
 
@@ -62,14 +67,14 @@ public class ProgramFilesUtil {
 
 
     private boolean compile(String cmd, String postfix) throws Exception {
-        file.transferTo(new File(path + dir + "/" + file.getOriginalFilename()));
+        file.transferTo(new File(dir + "/" + file.getOriginalFilename()));
 
         Process process = Runtime.getRuntime().exec(cmd, null, new File(dir));
 
         int result = process.waitFor();
 
         if (result == 0) {
-            return checkAllInputFiles(postfix);
+            return true;//checkAllInputFiles(postfix);
         } else {
 
             if (postfix.equals(ETestingConstants.POSTFIX_CPP)) {
@@ -143,10 +148,10 @@ public class ProgramFilesUtil {
 
             Process p = null;
             if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
-                p = Runtime.getRuntime().exec("java -cp " + path + dir + " Test", null, new File(dir));
+                p = Runtime.getRuntime().exec("java -cp "  + dir + " Test", null, new File(dir));
             } else {
                 p = Runtime.getRuntime()
-                        .exec(path + dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
+                        .exec( dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
             }
             Checker checker = new TimeChecker();
             TimeLimiter limiter = new SimpleTimeLimiter();
@@ -190,8 +195,8 @@ public class ProgramFilesUtil {
     }
 
     private boolean compareFiles() throws Exception {
-        List out = getList(new File(path + dir + "/out.txt"));
-        List right = getList(new File(path + dir + "/right.txt"));
+        List out = getList(new File( dir + "/out.txt"));
+        List right = getList(new File( dir + "/right.txt"));
 
         if (out.size() != right.size()) {
             return false;
