@@ -36,7 +36,7 @@ public class ProgramFilesUtil {
         this.programName = user.getForm() + '.' + programName;
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
-        dir = tmp.getAbsolutePath();
+        dir = tmp.getName();
 //        File baseDir = new File(System.getProperty("java.io.tmpdir"));
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
 //        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
