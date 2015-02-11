@@ -42,7 +42,7 @@ public class ProgramFilesUtil {
 //        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp = config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
         cmdPascal = config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
-        cmdJava = config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
+        cmdJava = System.getenv("JAVA_HOME")+"/bin/"+config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }
 
     public boolean checkFile() throws Exception {
@@ -65,7 +65,7 @@ public class ProgramFilesUtil {
     private boolean compile(String cmd, String postfix) throws Exception {
         file.transferTo(new File(dir + "/" + file.getOriginalFilename()));
 
-        Process  process = Runtime.getRuntime().exec(cmd, null);
+        Process  process = Runtime.getRuntime().exec(cmd, null, new File(dir));
 
         int result  = process.waitFor();
 
