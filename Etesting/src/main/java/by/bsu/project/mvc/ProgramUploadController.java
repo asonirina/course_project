@@ -108,6 +108,7 @@ public class ProgramUploadController {
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setStatus(programStatus);
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
+            programFilesEntity.setUserId(getUser().getId());
 
             TreeParser parser = new TreeParser(programFilesEntity.getProgramName(), programFilesEntity.getLang());
             List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
