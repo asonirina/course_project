@@ -2,8 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<script type="text/javascript" src="../../js/banner.js"/>
-<body onload="dropBanner();">
+<body>
     <div class="home"><a href="<c:url value="/e-Testing/MainAdminPage.html"/>"></a></div>
 
     <ul>
