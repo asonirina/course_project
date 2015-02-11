@@ -79,9 +79,9 @@ public class ProgramUploadController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "studentId", required = false) Long studentId,
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity,
-            Model model) {
+            Model model) throws Exception{
 
-        try {
+//        try {
             UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
             List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
@@ -130,10 +130,10 @@ public class ProgramUploadController {
             currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
 
-        } catch (Exception ex) {
-            logger.error("Unable to save entity " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
-        }
+//        } catch (Exception ex) {
+//            logger.error("Unable to save entity " + ex.getMessage());
+//            return new ModelAndView("redirect:/e-Testing/error503.html");
+//        }
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
