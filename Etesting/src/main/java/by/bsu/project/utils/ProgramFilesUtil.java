@@ -38,14 +38,11 @@ public class ProgramFilesUtil {
         tmp.deleteOnExit();
         dir = tmp.getAbsolutePath();
 
-
-
-        new File(dir).mkdir();
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
+//        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp = config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
         cmdPascal = config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
-        cmdJava = config.getProperty("java") + " " + file.getOriginalFilename();
+        cmdJava = config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }
 
     public boolean checkFile() throws Exception {
@@ -61,10 +58,7 @@ public class ProgramFilesUtil {
         } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
             cmd = cmdJava;
         }
-        PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-        File f  = new File(ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getFile());
-        return f.exists();
-//        return compile(cmd, postfix);
+        return compile(cmd, postfix);
     }
 
 
