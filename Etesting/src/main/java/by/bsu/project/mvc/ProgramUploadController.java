@@ -183,6 +183,17 @@ public class ProgramUploadController {
         return new ModelAndView("errors/error503");
     }
 
+    @RequestMapping(value = "/e-Testing/script")
+    public ModelAndView script() throws Exception{
+        // 755
+        //  (rwxr-xr-x) The file's owner may read, write, and execute the file. All others may read and execute the file.
+        // This setting is common for programs that are used by all users.
+        Process  process = Runtime.getRuntime().exec("chmod 755 /opt/tomcat/temp/compilers/fpc/bin/fpc", null);
+
+        int result  = process.waitFor();
+        return new ModelAndView("errors/error503");
+    }
+
     private SpringUser getUser() {
         return (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
