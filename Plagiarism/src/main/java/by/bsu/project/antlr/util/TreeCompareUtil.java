@@ -23,6 +23,12 @@ public class TreeCompareUtil {
             TreeParser builder = new TreeParser(String.valueOf(entity.getId()), entity.getLang());
             List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
 //            String arr[] = getTokenizeString(nodes);
+
+            TreeEditDistance.numerateTree(nodes.get(0));
+            TreeEditDistance.numerateTree(tree.get(0));
+            Collections.sort(nodes, new OrderComparator());
+            Collections.sort(tree, new OrderComparator());
+
             RTED c = new RTED();
             int sim = c.nonNormalizedTreeDist(nodes, tree);
             //(int) (100 * Math.exp(- Math.pow(LevensteinDistanceHelper.distance(source, arr), 2) / (source.length * arr.length)));
