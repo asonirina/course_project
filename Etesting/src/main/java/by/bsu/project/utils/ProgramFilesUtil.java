@@ -71,8 +71,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         int result  = process.waitFor();
 
         if (result == 0) {
-//            deleteDir(dir);
-            return true;//checkAllInputFiles(postfix);
+            return checkAllInputFiles(postfix);
         } else {
 
             if (postfix.equals(ETestingConstants.POSTFIX_CPP)) {
@@ -84,7 +83,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
                 getJavaMessages(process.getErrorStream());
             }
-//            deleteDir(dir);
+            deleteDir(dir);
             return false;
         }
     }
@@ -108,9 +107,9 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         String line = null;
         while (br.ready()) {
             line = br.readLine();
-//            if (line.startsWith("Fatal:")) {
+            if (line.startsWith("Fatal:") || line.startsWith("Error:")) {
                 messages.add(line);
-//            }
+            }
         }
     }
 
@@ -138,15 +137,15 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
 
     private boolean checkAllInputFiles(String postfix) throws Exception {
         boolean res = true;
-        File inDir = new File("tasks/" + programName + "/in");
+        File inDir = new File(path + "/tasks/" + programName + "/in");
 
         for (int i = 0; i < inDir.list().length; ++i) {
-            FileUtils.copyFile(new File("tasks/" + programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
-            FileUtils.copyFile(new File("tasks/" + programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/" + programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/" + programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
 
             Process p = null;
             if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
-                p = Runtime.getRuntime().exec("java -cp "  + dir + " Test", null, new File(dir));
+                p = Runtime.getRuntime().exec("java -cp "  + dir + " " + getName(file.getOriginalFilename()), null, new File(dir));
             } else {
                 p = Runtime.getRuntime()
                         .exec( dir + "/" + getName(file.getOriginalFilename()) + ".exe", null, new File(dir));
@@ -157,7 +156,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             try {
                 proxy.runProcess(p);
             } catch (UncheckedTimeoutException e) {
-                logger.error("Unable to compile file " + e.getMessage());
+                logger.error("Unable to run file " + e.getMessage());
                 p.destroy();
                 testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + '\n');
                 res = false;
