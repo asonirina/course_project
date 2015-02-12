@@ -253,6 +253,7 @@ public class TreeParser {
                     String exprName = name + ' ' + Operation.ASSIGN.name() + ' ' + doExpr(child, node);
                     TreeNode assignNode = new TreeNode(h++, exprName, node);
                     assignNode.setOperation(Operation.ASSIGN);
+                    nodes.add(assignNode);
                     break;
                 }
                 default: {
@@ -558,8 +559,9 @@ public class TreeParser {
                 }
             }
         }
-        nodes.add(constructor);
         constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
+        nodes.add(constructor);
+
         ac.incCall();
         return constructor.getName();
     }
