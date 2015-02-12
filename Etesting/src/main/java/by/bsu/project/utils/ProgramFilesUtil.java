@@ -108,9 +108,9 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         String line = null;
         while (br.ready()) {
             line = br.readLine();
-            if (line.startsWith("Fatal:")) {
+//            if (line.startsWith("Fatal:")) {
                 messages.add(line);
-            }
+//            }
         }
     }
 

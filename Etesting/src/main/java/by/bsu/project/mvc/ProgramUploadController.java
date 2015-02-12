@@ -197,6 +197,7 @@ public class ProgramUploadController {
 //
 //        int result  = process.waitFor();
 //
+        //find /opt/lampp/htdocs -type f -exec chmod 644 {} \;
         if (command != null) {
             Process process = Runtime.getRuntime().exec(command, null);
 
