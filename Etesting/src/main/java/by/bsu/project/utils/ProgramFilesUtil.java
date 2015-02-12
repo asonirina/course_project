@@ -71,7 +71,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         int result  = process.waitFor();
 
         if (result == 0) {
-            deleteDir(dir);
+//            deleteDir(dir);
             return true;//checkAllInputFiles(postfix);
         } else {
 
@@ -84,7 +84,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
                 getJavaMessages(process.getErrorStream());
             }
-            deleteDir(dir);
+//            deleteDir(dir);
             return false;
         }
     }
