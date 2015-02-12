@@ -30,7 +30,7 @@ public class TreeCompareUtil {
             Collections.sort(tree, new OrderComparator());
 
             RTED c = new RTED();
-            int sim = c.nonNormalizedTreeDist(nodes, tree);
+            int sim = (int) (100 * Math.exp(- Math.pow(c.nonNormalizedTreeDist(nodes, tree), 2) / (nodes.size() * tree.size())));
             //(int) (100 * Math.exp(- Math.pow(LevensteinDistanceHelper.distance(source, arr), 2) / (source.length * arr.length)));
             if (max < sim) {
                 max = sim;
