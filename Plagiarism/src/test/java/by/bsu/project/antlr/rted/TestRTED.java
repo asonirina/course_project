@@ -8,6 +8,7 @@ import by.bsu.project.general.lang.LangWrap;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,9 +31,9 @@ public class TestRTED {
         Collections.sort(nodes1, new OrderComparator());
         Collections.sort(nodes2, new OrderComparator());
         RTED c = new RTED();
-        c.init(nodes1, nodes2);
-        c.computeOptimalStrategy();
-        System.out.println(c.nonNormalizedTreeDist());
+//        c.init(nodes1, nodes2);
+//        c.computeOptimalStrategy();
+        System.out.println(c.nonNormalizedTreeDist(nodes1, nodes2));
         LinkedList list = c.computeEditMapping();
 
     }

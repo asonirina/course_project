@@ -64,10 +64,10 @@ public class RTED {
     public int[] strStat = new int[5]; // statistics for strategies
     // LEFT,RIGHT,HEAVY,SUM
 
-    public double nonNormalizedTreeDist(List<TreeNode> t1, List<TreeNode> t2) {
+    public int nonNormalizedTreeDist(List<TreeNode> t1, List<TreeNode> t2) {
         init(t1, t2);
         computeOptimalStrategy();
-        return computeDistUsingStrArray(it1, it2);
+        return (int)(Math.round(100* computeDistUsingStrArray(it1, it2)/Math.max(t1.size(), t2.size())));
     }
 
     public double nonNormalizedTreeDist() {

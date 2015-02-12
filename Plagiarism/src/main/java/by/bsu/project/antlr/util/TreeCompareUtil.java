@@ -1,5 +1,6 @@
 package by.bsu.project.antlr.util;
 
+import by.bsu.project.antlr.rted.RTED;
 import by.bsu.project.general.lang.LangWrap.Lang;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.huffman.Huffman;
@@ -16,13 +17,15 @@ import java.util.List;
  */
 public class TreeCompareUtil {
     public static int checkTrees(List<ProgramFilesEntity> programs, List<TreeNode> tree) {
-        String source[] = getTokenizeString(tree);
+//        String source[] = getTokenizeString(tree);
         int max = 0;
         for (ProgramFilesEntity entity : programs) {
             TreeParser builder = new TreeParser(String.valueOf(entity.getId()), entity.getLang());
             List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
-            String arr[] = getTokenizeString(nodes);
-            int sim = (int) (100 * Math.exp(- Math.pow(LevensteinDistanceHelper.distance(source, arr), 2) / (source.length * arr.length)));
+//            String arr[] = getTokenizeString(nodes);
+            RTED c = new RTED();
+            int sim = c.nonNormalizedTreeDist(nodes, tree);
+            //(int) (100 * Math.exp(- Math.pow(LevensteinDistanceHelper.distance(source, arr), 2) / (source.length * arr.length)));
             if (max < sim) {
                 max = sim;
             }
