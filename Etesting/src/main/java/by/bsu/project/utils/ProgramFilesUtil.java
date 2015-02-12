@@ -71,6 +71,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         int result  = process.waitFor();
 
         if (result == 0) {
+            deleteDir(dir);
             return true;//checkAllInputFiles(postfix);
         } else {
 

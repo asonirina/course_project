@@ -188,7 +188,7 @@ public class ProgramUploadController {
         // 755
         //  (rwxr-xr-x) The file's owner may read, write, and execute the file. All others may read and execute the file.
         // This setting is common for programs that are used by all users.
-        Process  process = Runtime.getRuntime().exec("chmod 755 /opt/tomcat/temp/compilers/fpc/bin/fpc", null);
+        Process  process = Runtime.getRuntime().exec("chmod -R 755 /opt/tomcat/temp/compilers/fpc", null);
 
         int result  = process.waitFor();
         return new ModelAndView("errors/error503");
