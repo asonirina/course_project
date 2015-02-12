@@ -1,7 +1,7 @@
 package by.bsu.project.validator;
 
-import by.bsu.project.constants.ETestingConstants;
-import by.bsu.project.constants.ErrorsMessages;
+import by.bsu.project.general.constants.ETestingConstants;
+import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.service.UserInfoService;
 import org.springframework.web.multipart.MultipartFile;
 

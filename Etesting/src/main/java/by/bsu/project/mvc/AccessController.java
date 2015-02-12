@@ -1,7 +1,7 @@
 package by.bsu.project.mvc;
 
-import by.bsu.project.constants.ETestingConstants;
-import by.bsu.project.constants.ErrorsMessages;
+import by.bsu.project.general.constants.ETestingConstants;
+import by.bsu.project.general.constants.ErrorsMessages;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

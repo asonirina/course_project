@@ -1,4 +1,4 @@
-package by.bsu.project.constants;
+package by.bsu.project.general.constants;
 
 public class ErrorsMessages {
     public final static String UNLOAD_FILE           = "Загрузите файл на проверку!";

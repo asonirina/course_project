@@ -1,4 +1,4 @@
-package by.bsu.project.constants;
+package by.bsu.project.general.constants;
 
 public class ETestingConstants {
     public final static String POSTFIX_C          = ".c";

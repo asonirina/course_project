@@ -1,9 +1,10 @@
 package by.bsu.project.general.model;
 
 import by.bsu.project.general.lang.LangWrap;
+import by.bsu.project.general.constants.ETestingConstants;
 
 import javax.persistence.*;
-import javax.security.auth.callback.LanguageCallback;
+
 import java.util.Date;
 
 /**
@@ -51,8 +52,6 @@ public class ProgramFilesEntity {
 
     @Column(name = "plagiat2")
     private Integer plagiat2;
-
-    private LangWrap.Lang lang;
 
     public Long getId() {
         return id;
@@ -107,24 +106,6 @@ public class ProgramFilesEntity {
     }
 
     public void setFileName(String fileName) {
-        String ext = fileName.substring(fileName.lastIndexOf('.') + 1);
-        switch (ext.toLowerCase()){
-            case "java":{
-                setLang(LangWrap.Lang.JAVA);
-                break;
-            }
-            case "cpp":{
-                setLang(LangWrap.Lang.CPP);
-                break;
-            }
-            case "pascal":{
-                setLang(LangWrap.Lang.PASCAL);
-                break;
-            }
-            default:{
-                break;
-            }
-        }
         this.fileName = fileName;
     }
 
@@ -169,10 +150,22 @@ public class ProgramFilesEntity {
     }
 
     public LangWrap.Lang getLang() {
-        return lang;
+        String extension = fileName.substring(fileName.lastIndexOf('.'));
+        switch (extension) {
+            case ETestingConstants.POSTFIX_JAVA:
+                return LangWrap.Lang.JAVA;
+            case ETestingConstants.POSTFIX_C:
+                return LangWrap.Lang.CPP;
+            case ETestingConstants.POSTFIX_CPP:
+                return LangWrap.Lang.CPP;
+            case ETestingConstants.POSTFIX_PASCAL_P:
+                return LangWrap.Lang.PASCAL;
+            case ETestingConstants.POSTFIX_PASCAL_PAS:
+                return LangWrap.Lang.PASCAL;
+            default:
+                return null;
+        }
+
     }
 
-    public void setLang(LangWrap.Lang lang) {
-        this.lang = lang;
-    }
 }

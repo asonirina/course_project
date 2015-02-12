@@ -1,6 +1,6 @@
 package by.bsu.project.utils;
 
-import by.bsu.project.constants.ETestingConstants;
+import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.entity.UserInfoEntity;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
@@ -24,6 +24,7 @@ public class ProgramFilesUtil {
     private String cmdPascal;
     private String cmdJava;
 //    private String path = System.getenv("CATALINA_HOME") + "/bin/";
+private String path =System.getProperty("java.io.tmpdir") + "/";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
@@ -39,9 +40,9 @@ public class ProgramFilesUtil {
         dir = tmp.getAbsolutePath();
 //        File baseDir = new File(System.getProperty("java.io.tmpdir"));
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-//        cmdC = ProgramFilesUtil.class.getClassLoader().getResource((String)config.getProperty("c")).getPath() + " "  + dir + "/" + file.getOriginalFilename();
-        cmdCpp = config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
-        cmdPascal = config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
+        cmdC = path+config.getProperty("c") + " "  + dir + "/" + file.getOriginalFilename();
+        cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
+        cmdPascal = path + config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
         cmdJava = System.getenv("JAVA_HOME")+"/bin/"+config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }
 

@@ -1,6 +1,6 @@
 package by.bsu.project.dao;
 
-import by.bsu.project.constants.ETestingConstants;
+import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.AttributeCounting;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
