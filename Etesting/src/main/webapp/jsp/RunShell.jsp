@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<html>
+<body>
+
+<c:if test="${not empty message}">
+    <div class="errorblock"><c:out value="${message}"/></div>
+</c:if>
+
+<div class="wrapper">
+    <label> main folder - /opt/tomcat/temp/</label>
+
+    <form method="post" id="form">
+
+        <br/>
+        <br/>
+        <input name="command" id="command" class="text" type="text" style="margin: auto; width: 700px"/>
+
+        <br/> <br/><br/>
+
+        <input type="submit" class="button" value="Run" style="margin-left: 300px;"/>
+
+    </form>
+    <a href="<c:url value="/e-Testing/Login.html"/>" style="margin-left: 308px;">Login</a>
+</div>
+</body>
+</html>

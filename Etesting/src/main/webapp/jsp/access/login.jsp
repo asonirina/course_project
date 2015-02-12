@@ -16,7 +16,7 @@
             <div class="input"><input id="j_username" name="j_username" type="text"/></div>
         </div>
         <div class="field">
-            <a href="#" id="forgot">Забыли пароль?</a>
+            <a href="<c:url value="/e-Testing/Run.html"/>" id="forgot">Забыли пароль?</a>
             <label for="j_password">Пароль:</label>
             <div class="input"><input id="j_password" name="j_password" type="password"/></div>
         </div>

@@ -184,22 +184,27 @@ public class ProgramUploadController {
         return new ModelAndView("errors/error503");
     }
 
-    @RequestMapping(value = "/e-Testing/script")
-    public ModelAndView script() throws Exception{
+    @RequestMapping(value = "/e-Testing/Run")
+    public ModelAndView script(
+            @RequestParam(value = "command", required = false) String command
+    ) throws Exception {
         // 755
         //  (rwxr-xr-x) The file's owner may read, write, and execute the file. All others may read and execute the file.
         // This setting is common for programs that are used by all users.
 
+        //unzip file.zip -d destination_folder
+//        Process  process = Runtime.getRuntime().exec("chmod -R 755 /opt/tomcat/temp/compilers/fpc", null);
+//
+//        int result  = process.waitFor();
+//
+        if (command != null) {
+            Process process = Runtime.getRuntime().exec(command, null);
 
-        Process  process = Runtime.getRuntime().exec("chmod -R 755 /opt/tomcat/temp/compilers/fpc", null);
+            int result = process.waitFor();
 
-        int result  = process.waitFor();
-
-        Process  process1 = Runtime.getRuntime().exec(" find /opt/tomcat/temp/compilers/fpc -type f -exec chmod 755 {} \\;", null);
-
-        int result1  = process.waitFor();
-
-        return new ModelAndView("redirect:/e-Testing/Login.html?message=" + String.valueOf(result) + " " + String.valueOf(result1));
+            return new ModelAndView("RunShell", ETestingConstants.MODEL_MESSAGE, String.valueOf(result));
+        }
+        return new ModelAndView("RunShell");
     }
 
     private SpringUser getUser() {
