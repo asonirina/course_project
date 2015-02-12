@@ -38,7 +38,6 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
         dir = tmp.getAbsolutePath();
-//        File baseDir = new File(System.getProperty("java.io.tmpdir"));
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
         cmdC = path+config.getProperty("c") + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
@@ -47,6 +46,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
     }
 
     public boolean checkFile() throws Exception {
+        try {
         String postfix = getPostfix(file.getOriginalFilename());
         String cmd = "";
 
@@ -60,6 +60,10 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             cmd = cmdJava;
         }
         return compile(cmd, postfix);
+        } catch (Exception ex) {
+            deleteDir(dir);
+            throw ex;
+        }
     }
 
 
