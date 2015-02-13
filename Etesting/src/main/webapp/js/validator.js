@@ -1,3 +1,6 @@
+function forgot() {
+    window.location.href = "/e-Testing/ForgotPassword.html?email=" + document.getElementById("j_username").value;
+}
 function checkAll() {
     var valid = false;
     var x;

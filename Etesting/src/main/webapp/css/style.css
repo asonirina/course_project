@@ -31,6 +31,14 @@ h1{
     margin: 16px;
 }
 
+.alertblock {
+    color: #003333;
+    background-color: #66FF99;
+    border: 3px solid #009933;
+    padding: 8px;
+    margin: 16px;
+}
+
 /* класс сообщений о правильно введенных данных */
 .correct {
     color: green;

@@ -13,6 +13,7 @@ public class ETestingConstants {
     public final static String MODEL_STUDENT      = "student";
     public final static String MODEL_STUDENT_LIST = "studentList";
     public final static String MODEL_MESSAGE      = "message";
+    public final static String MODEL_ALERT      = "alert";
     public final static String MODEL_PROGRAM_LIST = "programList";
     public final static String MODEL_PROGRAM      = "program";
     public final static String MODEL_MESSAGES     = "messages";
