@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class ProgramFilesUtil {
     private MultipartFile file;
     private String programName;
+    String form;
     private String cmdC;
     private String cmdCpp;
     private String cmdPascal;
@@ -34,7 +35,8 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
 
     public ProgramFilesUtil(MultipartFile file, UserInfoEntity user, String programName) throws Exception {
         this.file = file;
-        this.programName = user.getForm() + '.' + programName;
+        this.programName = programName;
+        this.form = user.getForm();
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
         dir = tmp.getAbsolutePath();
@@ -141,11 +143,11 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
 
     private boolean checkAllInputFiles(String postfix) throws Exception {
         boolean res = true;
-        File inDir = new File(path + "/tasks/" + programName + "/in");
+        File inDir = new File(path + "/tasks/" + form+ "/" + programName + "/in");
 
         for (int i = 0; i < inDir.list().length; ++i) {
-            FileUtils.copyFile(new File(path + "/tasks/" + programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
-            FileUtils.copyFile(new File(path + "/tasks/" + programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/"  + form+ "/"+ programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/"  + form+ "/"+ programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
 
             Process p = null;
             if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {

@@ -17,6 +17,7 @@ public class ETestingConstants {
     public final static String MODEL_PROGRAM      = "program";
     public final static String MODEL_MESSAGES     = "messages";
     public final static String MODEL_TEST_RESULTS = "testResults";
+    public final static String MODEL_TASKS = "tasks";
 
     public final static String TABLE_FIELD_LOGIN  = "login";
     public final static String TABLE_FIELD_ID     = "id";

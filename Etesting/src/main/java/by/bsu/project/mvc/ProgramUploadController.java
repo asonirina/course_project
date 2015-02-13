@@ -30,8 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Alina Glumova
@@ -66,8 +70,14 @@ public class ProgramUploadController {
             user = getUser();
             userInfoEntity = userInfoService.getStudentById(user.getId());
             programFilesEntity = new ProgramFilesEntity();
+
+            File dir = new File(System.getProperty("java.io.tmpdir") + "/tasks/" + userInfoEntity.getForm());
+            List<String> tasks = Arrays.asList(dir.list());
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-            return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+            Map<String, Object> params = new HashMap<>();
+            params.put(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+            params.put(ETestingConstants.MODEL_TASKS, tasks);
+            return new ModelAndView("UploadProgram", params);
 
         } catch (Exception ex) {
             logger.error("Unable to display upload file page " + ex.getMessage());
