@@ -20,5 +20,6 @@
         <pattern>/e-Testing/error503.html</pattern>
         <pattern>/e-Testing/error404.html</pattern>
         <pattern>/e-Testing/Run.html</pattern>
+        <pattern>/e-Testing/ResetPassword.html</pattern>
     </decorator>
 </decorators>

@@ -26,7 +26,7 @@ public class OperationUtil {
             for (Lang lang : Lang.values()) {
                 PropertiesConfiguration config = new PropertiesConfiguration(lang.name().toLowerCase() + ".properties");
                 for (Operation op : Operation.values()) {
-                    String code = (String)config.getProperty(op.name());
+                    String code = config.getString(op.name());
                     if (code != null) {
                         put(op, Integer.valueOf(code), lang);
                     }

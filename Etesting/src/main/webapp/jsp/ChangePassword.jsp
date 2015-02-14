@@ -26,7 +26,7 @@
     </p>
     <p>
     <c:out value="Повторите пароль"/>
-    <input name="password2" id="password2" class="text" type="password" style="margin-left: 17px;" /><br><br>
+    <input name="password2" id="password2" class="text" type="password" style="margin-left: 13px;" /><br><br>
     </p>
     <p>
     <input type="submit" class="button" value="Сменить пароль" style="margin-left: 320px;"/>

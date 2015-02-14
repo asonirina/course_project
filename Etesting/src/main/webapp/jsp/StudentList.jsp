@@ -37,7 +37,7 @@
                                                                                         value="Редактировать"
                                                                                         name="edit" class="button"/></a>
         </div>
-        <HR color="#52A8E8" size="1">
+        <HR color="#FFFF99" size="1">
     </c:forEach>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>

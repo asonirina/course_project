@@ -54,14 +54,11 @@
     <p>
     <br>
     <div style="text-align: center">
-        <input type="submit" class="btn" value="Сохранить" style="margin-left: 540px"/>
+        <input type="submit" class="button" value="Сохранить" />
     <a href="<c:url value="/e-Testing/StudentList.html"/>"><input type="button"
             value="Отмена"
-            name="canceled" class="btn" style="margin-left: 10px"/></a>
-         <%--<a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"--%>
-                                                                                       <%--value="Отмена"--%>
-                                                                                       <%--name="canceled" class="btn"/></a>--%>
-    </div>
+            name="canceled" class="button"/></a>
+   </div>
     </p>
 
 </form:form>

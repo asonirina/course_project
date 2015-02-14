@@ -7,7 +7,9 @@ import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
+import by.bsu.project.utils.LinkGenerator;
 import by.bsu.project.validator.Validator;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -234,6 +236,36 @@ public class UserInfoController {
                 return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
             }
             return new ModelAndView("ChangePassword");
+
+        } catch (Exception ex) {
+            logger.error("Unable to change password " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/ResetPassword")
+    public ModelAndView resetPassword(
+            @RequestParam(value = "hash", required = true) String hash,
+            @RequestParam(value = "password1", required = false) String password1,
+            @RequestParam(value = "password2", required = false) String password2,
+            @RequestParam(value = "email", required = false) String email,
+            HttpServletRequest request
+    ) throws Exception {
+        if (!LinkGenerator.checkHash(hash)) {
+            return new ModelAndView("redirect:/e-Testing/error404.html");
+        }
+
+        try {
+            if (password1 != null) {
+                UserInfoEntity user = userInfoService.findStudentByLogin(email);
+                if (password1.equals(password2)) {
+                    user.setPassword(password1);
+                    userInfoService.save(user);
+                    return new ModelAndView("redirect:/e-Testing/Login.html");
+                }
+                return new ModelAndView("ResetPassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
+            }
+            return new ModelAndView("ResetPassword");
 
         } catch (Exception ex) {
             logger.error("Unable to change password " + ex.getMessage());
