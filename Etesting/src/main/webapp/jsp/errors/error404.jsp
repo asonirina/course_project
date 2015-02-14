@@ -20,7 +20,7 @@
             <div id="content-container">
       <div style="margin-left: 100px"><input type="image" src="/images/error404.jpg"></div>
       <br>
-      <a style="margin-left: 300px;" href="<c:url value="/e-Testing/Login.html"/>">На главную</a>
+      <a style="margin-left: 330px;" href="<c:url value="/e-Testing/Login.html"/>">На главную</a>
         </div>
     </div>
 </div>

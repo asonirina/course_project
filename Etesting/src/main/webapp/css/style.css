@@ -5,7 +5,7 @@ body {
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 13px;
     line-height: 1.5em;
-    background: #C8C8C8  /*url(/images/templatemo_body.jpg) repeat-y left; */
+    background: #e7e7e7 /*url(/images/templatemo_body.jpg) repeat-y left; */
 }
 
 a, a:link, a:visited {
@@ -66,7 +66,7 @@ h1{
     width: 740px;
     height: 180px;
     padding: 0 100px 0 130px;
-    background: url(/images/templatemo_header1.png) top no-repeat ;
+    background: url(/images/templatemo_header3.png) top no-repeat ;
 }
 
 #page-header  #site_title {
@@ -217,7 +217,7 @@ h1{
     width: 1000px;
     /*padding: 20px 100px;*/
     padding: 20px  100px 20px 130px;
-    color: #12526d;
+    color: #16386d;
     text-align: center;
     margin: auto;
 }
