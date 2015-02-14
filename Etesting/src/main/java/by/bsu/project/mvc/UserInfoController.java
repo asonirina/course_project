@@ -71,6 +71,7 @@ public class UserInfoController {
                 model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
                         userInfoService.studentListByForm(userInfoService.setPage(page, paging1, model), form));
                 model.addAttribute("students", new UserInfoEntity());
+                model.addAttribute("currentForm", form);
             }
             return new ModelAndView("StudentList");
         } catch (Exception ex) {

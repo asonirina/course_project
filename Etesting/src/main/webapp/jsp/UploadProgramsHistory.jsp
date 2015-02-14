@@ -22,7 +22,7 @@
         <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
     </c:if>
 
-    <HR color="#FFFF66" size="1">
+    <HR color="#A8A8A8" size="1">
 </c:forEach>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>

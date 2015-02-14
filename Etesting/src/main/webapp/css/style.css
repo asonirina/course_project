@@ -145,7 +145,7 @@ h1{
     font-weight: normal;
     outline: none;
     border: none;
-    background: url(/images/templatemo_menu_divider1.gif) repeat-y right;
+    /*background: url(/images/templatemo_menu_divider1.gif) repeat-y right;*/
 }
 
 #navigation ul li a span {

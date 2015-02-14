@@ -9,13 +9,13 @@
 <form:form method="post" action="/e-Testing/GetStudentListByForm.html" commandName="students">
     <form:label  path="form" cssStyle="margin-left: 560px;"><c:out value="Класс"/></form:label>
     <form:select path="form" cssStyle="margin-left: 10px">
+    <form:option value="" label="Все"/>
     <form:option value="6" label="6"/>
     <form:option value="7" label="7"/>
     <form:option value="8" label="8"/>
     <form:option value="9" label="9"/>
     <form:option value="10" label="10"/>
     <form:option value="11" label="11"/>
-    <form:option value="" label="Все"/>
    </form:select>
    <input type="submit" style="text-align: left" class="button" value="Выбрать"/><br><br>
  </form:form>
@@ -30,14 +30,12 @@
         <span style="margin-left: 89px"><c:out value="${student.form}"/></span><br>
 
         <div style="text-align: right;">
-            <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>"><input type="button"
-                                                                        value="Посмотреть"
-                                                                        name="view" class="button"/></a>
-            <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>"><input type="button"
-                                                                                        value="Редактировать"
-                                                                                        name="edit" class="button"/></a>
+            <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>">
+                <input type="button" value="Посмотреть" name="view" class="button"/></a>
+            <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>">
+                <input type="button" value="Редактировать" name="edit" class="button"/></a>
         </div>
-        <HR color="#FFFF99" size="1">
+        <HR color="#A8A8A8" size="1">
     </c:forEach>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>

@@ -20,7 +20,7 @@
 <span style="margin-left: 218px"><c:out value="${student.login}"/></span><br>
 <span style="margin-left: 200px"><c:out value="Пароль"/></span>
 <span style="margin-left: 211px"><c:out value="${student.password}"/></span><br>
-<HR color="#52A8E8" size="1">
+<HR color="#A8A8A8" size="1">
 
 <c:forEach var="program" items="${programList}">
     <span style="margin-left: 200px"><c:out value="Название лабораторной"/></span>
@@ -60,7 +60,7 @@
         <span style="margin-left: 146px"><c:out value="${program.plagiat2} %"/></span><br>
     </c:if>
 
-    <HR color="#52A8E8" size="1">
+    <HR color="#A8A8A8" size="1">
 </c:forEach>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
