@@ -5,9 +5,11 @@ import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
+import by.bsu.project.model.News;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.LinkGenerator;
+import by.bsu.project.utils.NewsHelper;
 import by.bsu.project.validator.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -211,12 +213,22 @@ public class UserInfoController {
 
     @RequestMapping(value = "/e-Testing/MainAdminPage")
     public ModelAndView displayMainAdminPage() {
-        return new ModelAndView("MainAdminPage");
+        return newsPage("MainAdminPage");
     }
 
     @RequestMapping(value = "/e-Testing/MainStudentPage")
     public ModelAndView displayMainStudentPage() {
-        return new ModelAndView("MainStudentPage");
+        return newsPage("MainStudentPage");
+    }
+
+    private ModelAndView newsPage(String base) {
+        List<News> news = new ArrayList<>();
+        try{
+            news = NewsHelper.getRandomNews();
+        } catch (Exception ex) {
+            logger.info("News are not loaded");
+        }
+        return new ModelAndView(base, "news", news);
     }
 
     private ModelAndView changeUserPassword(String oldPassword,
