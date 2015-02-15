@@ -70,7 +70,7 @@ CREATE TABLE `user_info` (
   `FirstName` varchar(50) NOT NULL,
   `SecondName` varchar(50) NOT NULL,
   `Form` varchar(20) NOT NULL,
-  `Login` varchar(20) UNIQUE NOT NULL,
+  `Login` varchar(50) UNIQUE NOT NULL,
   `Password` varchar(20) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=5461 COMMENT='InnoDB free: 11264 kB';
@@ -82,8 +82,8 @@ CREATE TABLE `user_info` (
 #
 
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
-  (1,'Nataliya','Karpovich','admin','karpovichna','1234'),
-  (2,'Iryna','Ason','11','test','test');
+  (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234'),
+  (2,'Iryna','Ason','11','irina.ason@gmail.com','test');
 COMMIT;
 
 
