@@ -1,9 +1,12 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
+import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.MessageSender;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,9 @@ import java.util.Map;
 
 @Controller
 public class AccessController {
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @RequestMapping("/e-Testing/Login")
     public String login(Model model, @RequestParam(required = false) String message,
@@ -50,7 +56,13 @@ public class AccessController {
         if (StringUtils.isBlank(email)) {
             return new ModelAndView("redirect:/e-Testing/Login.html?message=" + "Please, enter email");
         }
-
+        if (!email.matches("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$")) {
+            return new ModelAndView("redirect:/e-Testing/Login.html?message=" + "Please, enter correct email");
+        }
+        UserInfoEntity user = userInfoService.findStudentByLogin(email);
+        if (user==null) {
+            return new ModelAndView("redirect:/e-Testing/Login.html?message=" + "User doesn't exist!");
+        }
         MessageSender sender = new MessageSender();
         String url = request.getRequestURL().toString();
         url = url.substring(0, url.lastIndexOf('/'));
