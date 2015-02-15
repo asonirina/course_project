@@ -18,8 +18,6 @@
 <span style="margin-left: 220px"><c:out value="${student.form}"/></span><br>
 <span style="margin-left: 200px"><c:out value="Логин"/></span>
 <span style="margin-left: 218px"><c:out value="${student.login}"/></span><br>
-<span style="margin-left: 200px"><c:out value="Пароль"/></span>
-<span style="margin-left: 211px"><c:out value="${student.password}"/></span><br>
 <HR color="#A8A8A8" size="1">
 
 <c:forEach var="program" items="${programList}">

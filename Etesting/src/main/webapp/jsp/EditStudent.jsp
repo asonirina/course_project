@@ -42,7 +42,7 @@
                 class="text" name="form" />
     </p>
     <p>
-    <form:label path="login">Логин</form:label>
+    <form:label path="login">Email</form:label>
     <form:input path="login" value="${student.login}"
                 class="text" name="login"/>
     </p>

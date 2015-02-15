@@ -9,10 +9,12 @@ $(function(){
 				required: true
 			},
             login: {
-				required: true
+				required: true,
+                email: true
 			},
             form: {
-				required: true
+				required: true,
+                number:   true
 			},
             password: {
 				required: true
@@ -35,10 +37,12 @@ $(function(){
                 required: 'Обязательное поле'
 			},
             login: {
-				required: 'Обязательное поле'
+				required: 'Обязательное поле',
+                email:    'Введите email корректно'
 			},
             form: {
-                required: 'Обязательное поле'
+                required: 'Обязательное поле',
+                number:   'Введите число'
             },
             password: {
                 required: 'Обязательное поле'
