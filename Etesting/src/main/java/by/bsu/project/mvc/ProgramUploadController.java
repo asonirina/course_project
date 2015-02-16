@@ -2,6 +2,7 @@ package by.bsu.project.mvc;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
+import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
@@ -77,6 +78,7 @@ public class ProgramUploadController {
             Map<String, Object> params = new HashMap<>();
             params.put(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             params.put(ETestingConstants.MODEL_TASKS, tasks);
+            params.put(ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_PROGRAM);
             return new ModelAndView("UploadProgram", params);
 
         } catch (Exception ex) {
@@ -151,6 +153,7 @@ public class ProgramUploadController {
     public ModelAndView processUploadPreview(Model model) {
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
         model.addAttribute(ETestingConstants.MODEL_MESSAGES, programFilesUtil.getMessages());
+        model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
         return new ModelAndView("UploadProgramStatus");
     }
 
@@ -166,12 +169,13 @@ public class ProgramUploadController {
             Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
             model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
                     userInfoService.setPage(page, paging1, model), user.getId()));
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_HISTORY);
 
             return new ModelAndView("UploadProgramsHistory");
 
         } catch (Exception ex) {
             logger.error("Unable to display upload file history page " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -183,15 +187,16 @@ public class ProgramUploadController {
             byte[] content = Huffman.expand(userInfoService.getFileById(programId).getTreeContent());
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
             return new ModelAndView("tree/viewTree2");
         } catch (Exception ex) {
-            return new ModelAndView("errors/error503");
+            return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
     @RequestMapping(value = "/e-Testing/error503")
     public ModelAndView errorPage() {
-        return new ModelAndView("errors/error503");
+        return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
     }
 
     @RequestMapping(value = "/e-Testing/Run")

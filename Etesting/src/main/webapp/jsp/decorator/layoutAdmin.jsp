@@ -4,6 +4,7 @@
 
 <html>
 <head>
+    <title>${title}</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/form.css">
     <decorator:head/>
@@ -21,7 +22,6 @@
     <div id="content-container"><decorator:body /></div>
         </div></div></div>
     <div id="page-footer"><jsp:include page="/jsp/includes/footer.jsp"/></div>
-</div>
 
 </body>
 </html>

@@ -3,6 +3,7 @@ package by.bsu.project.mvc;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
+import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.MessageSender;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +29,7 @@ public class AccessController {
                         @RequestParam(required = false) String alert) {
         model.addAttribute(ETestingConstants.MODEL_MESSAGE, message);
         model.addAttribute(ETestingConstants.MODEL_ALERT, alert);
-
+        model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
         return "access/login";
     }
 
@@ -38,21 +39,22 @@ public class AccessController {
     }
 
     @RequestMapping(value = "/e-Testing/Login/Failure")
-    public String loginFailure() {
-        return "redirect:/e-Testing/Login.html?message=" + ErrorsMessages.INVALID_USERNAME;
+    public String loginFailure(Model model) {
+        model.addAttribute(ETestingConstants.MODEL_MESSAGE, ErrorsMessages.INVALID_USERNAME);
+        model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
+        return "redirect:/e-Testing/Login.html";
     }
 
     @RequestMapping(value = "/e-Testing/Logout/Success")
-    public String logoutSuccess() {
-        return "redirect:/e-Testing/Login.html";
+    public ModelAndView logoutSuccess() {
+        return new ModelAndView("redirect:/e-Testing/Login.html", ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
     }
 
 
     @RequestMapping(value = "/e-Testing/ForgotPassword")
     public ModelAndView forgotPassword(
             @RequestParam(required = false) String email,
-            HttpServletRequest request
-    ) throws Exception {
+            HttpServletRequest request) throws Exception {
         if (StringUtils.isBlank(email)) {
             return new ModelAndView("redirect:/e-Testing/Login.html?message=" + "Please, enter email");
         }
@@ -69,6 +71,7 @@ public class AccessController {
         sender.sendActivationMessage(email, url);
         Map<String, Object> params = new HashMap<>();
         params.put(ETestingConstants.MODEL_ALERT, "Activation link was sent! Check email.");
+        params.put(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
         return new ModelAndView("redirect:/e-Testing/Login.html", params);
     }
 

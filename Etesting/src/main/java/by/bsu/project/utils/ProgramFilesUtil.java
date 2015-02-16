@@ -63,6 +63,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         }
         return compile(cmd, postfix);
         } catch (Exception ex) {
+            testResults.append("Output file not found");
             deleteDir(dir);
             throw ex;
         }
@@ -89,6 +90,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
                 getJavaMessages(process.getErrorStream());
             }
+            testResults.append("Ошибка компиляции");
             deleteDir(dir);
             return false;
         }
@@ -132,7 +134,6 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
     }
 
     private void getTinyCCompilerMessages(InputStream in) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String line = null;
         while (br.ready()) {
@@ -164,15 +165,15 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to run file " + e.getMessage());
                 p.destroy();
-                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + '\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + ";");
                 res = false;
             }
 
             if (!compareFiles()) {
                 res = false;
-                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + '\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + ";");
             } else {
-                testResults.append(i + 1).append(":" + ETestingConstants.PASSED_STATUS + '\n');
+                testResults.append(i + 1).append(":" + ETestingConstants.PASSED_STATUS + ";");
             }
         }
         deleteDir(dir);
@@ -232,7 +233,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         return messages;
     }
 
-    public byte[] getTestResults() {
-        return testResults.toString().getBytes();
+    public String getTestResults() {
+        return testResults.toString();
     }
 }

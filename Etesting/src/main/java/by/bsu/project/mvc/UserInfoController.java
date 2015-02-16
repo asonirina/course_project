@@ -2,6 +2,7 @@ package by.bsu.project.mvc;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
+import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
@@ -26,7 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Alina Glumova
@@ -198,11 +201,10 @@ public class UserInfoController {
             response.setHeader("Content-Disposition", "inline;filename=\"" + ETestingConstants.MODEL_TEST_RESULTS + ".txt\"");
             response.setContentType(programFilesEntity.getContentType());
 
-            byte[] file = programFilesEntity.getTestResults();
+            byte[] file = programFilesEntity.getTestResults().getBytes();
             response.setContentLength(file.length);
 
             FileCopyUtils.copy(file, response.getOutputStream());
-
             return null;
 
         } catch (Exception ex) {
@@ -228,7 +230,10 @@ public class UserInfoController {
         } catch (Exception ex) {
             logger.info("News are not loaded");
         }
-        return new ModelAndView(base, "news", news);
+        Map<String, Object> params = new HashMap<>();
+        params.put(ETestingConstants.MODEL_NEWS, news);
+        params.put(ETestingConstants.MODEL_TITLE, PageTitles.HOME_PAGE);
+        return new ModelAndView(base, params);
     }
 
     private ModelAndView changeUserPassword(String oldPassword,
@@ -248,7 +253,7 @@ public class UserInfoController {
                 }
                 return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
             }
-            return new ModelAndView("ChangePassword");
+            return new ModelAndView("ChangePassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD);
 
         } catch (Exception ex) {
             logger.error("Unable to change password " + ex.getMessage());

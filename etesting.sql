@@ -5,11 +5,6 @@
 # Database : etesting
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 SET FOREIGN_KEY_CHECKS=0;
 
 CREATE DATABASE `etesting`
@@ -31,7 +26,7 @@ CREATE TABLE `program_files` (
   `file` longblob,
   `file_name` varchar(20) NOT NULL,
   `content_type` varchar(100) default NULL,
-  `testResults` longblob,
+  `testResults` varchar(150),
   `tree_content` longblob,
   `user_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
@@ -85,9 +80,3 @@ INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Pass
   (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234'),
   (2,'Iryna','Ason','11','irina.ason@gmail.com','test');
 COMMIT;
-
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

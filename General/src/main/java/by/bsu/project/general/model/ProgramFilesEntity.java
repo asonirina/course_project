@@ -42,7 +42,7 @@ public class ProgramFilesEntity {
     private Date uploadProgramTime;
 
     @Column(name = "testResults")
-    private byte[] testResults;
+    private String testResults;
 
     @Column(name = "tree_content")
     private byte[] treeContent;
@@ -117,11 +117,11 @@ public class ProgramFilesEntity {
         this.contentType = contentType;
     }
 
-    public byte[] getTestResults() {
+    public String getTestResults() {
         return testResults;
     }
 
-    public void setTestResults(byte[] testResults) {
+    public void setTestResults(String testResults) {
         this.testResults = testResults;
     }
 
