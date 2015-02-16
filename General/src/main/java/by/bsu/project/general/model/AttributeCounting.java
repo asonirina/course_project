@@ -10,9 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "attribute_countings")
 public class AttributeCounting {
-    public AttributeCounting() {
-
-    }
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,10 +51,6 @@ public class AttributeCounting {
 
     @Column(name = "cycles")
     private Integer cycles = 0;
-
-    public AttributeCounting(String progrName) {
-        this.progrName = progrName;
-    }
 
     public void incIfs() {
         this.ifs++;

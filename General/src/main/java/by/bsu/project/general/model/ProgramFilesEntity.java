@@ -20,6 +20,10 @@ public class ProgramFilesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="program_id")
+    private AttributeCounting ac;
+
     @Column(name = "user_id",insertable = false,updatable = false)
     private Long userId;
 
@@ -147,6 +151,14 @@ public class ProgramFilesEntity {
 
     public void setTreeContent(byte[] treeContent) {
         this.treeContent = treeContent;
+    }
+
+    public AttributeCounting getAc() {
+        return ac;
+    }
+
+    public void setAc(AttributeCounting ac) {
+        this.ac = ac;
     }
 
     public LangWrap.Lang getLang() {

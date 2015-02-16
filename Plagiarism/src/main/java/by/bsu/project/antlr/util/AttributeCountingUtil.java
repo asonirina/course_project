@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class AttributeCountingUtil {
 
-    public static int checkAC(List<AttributeCounting> list, AttributeCounting ac) {
+    public static int checkAC(List<ProgramFilesEntity> list, AttributeCounting ac) {
         if (list.isEmpty()) {
             return 0;
         }
         int max = 0;
-        for (AttributeCounting a : list) {
-            int diff = getDiff(a, ac);
+        for (ProgramFilesEntity a : list) {
+            int diff = getDiff(a.getAc(), ac);
             if (max < diff) {
                 max = diff;
             }
@@ -26,6 +26,9 @@ public class AttributeCountingUtil {
     }
 
     public static int getDiff(AttributeCounting ac1, AttributeCounting ac2) {
+        if(ac1 == null || ac2==null){
+            return 0;
+        }
         double res = 0;
         res += 10 / (Math.abs(ac1.getAssigns() - ac2.getAssigns()) + 1);
         res += 10 / (Math.abs(ac1.getCalls() - ac2.getCalls()) + 1);

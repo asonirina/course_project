@@ -40,7 +40,8 @@ public class TreeParser {
     }
 
     public TreeParser(String id, Lang lang) {
-        this.ac = new AttributeCounting(id);
+        this.ac = new AttributeCounting();
+        ac.setProgrName(id);
         this.lang = lang;
         this.factory = new LangFactory(lang);
     }

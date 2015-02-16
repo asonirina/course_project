@@ -1,7 +1,6 @@
 package by.bsu.project.mvc;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.entity.UserInfoEntity;
@@ -13,7 +12,6 @@ import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
-import by.bsu.project.service.AttributeService;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
@@ -52,8 +50,7 @@ public class ProgramUploadController {
 
     @Autowired
     private UserInfoService userInfoService;
-    @Autowired
-    private AttributeService attributeService;
+
     private SpringUser user;
 
     @InitBinder
@@ -94,7 +91,7 @@ public class ProgramUploadController {
             @ModelAttribute("UploadProgram") ProgramFilesEntity programFilesEntity,
             Model model) throws Exception{
 
-//        try {
+        try {
             UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
             List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
@@ -128,10 +125,8 @@ public class ProgramUploadController {
             AttributeCounting ac = parser.getAc();
             ac.setProgrName(programFilesEntity.getProgramName());
 
-            int plagiat1 = AttributeCountingUtil.checkAC(attributeService.getByProgrName(ac), ac);
-            if (plagiat1 <= 30) {
-                attributeService.save(ac);
-            }
+            int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
+            programFilesEntity.setAc(ac);
 
             int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
 
@@ -143,10 +138,10 @@ public class ProgramUploadController {
             currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html", ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
 
-//        } catch (Exception ex) {
-//            logger.error("Unable to save entity " + ex.getMessage());
-//            return new ModelAndView("redirect:/e-Testing/error503.html");
-//        }
+        } catch (Exception ex) {
+            logger.error("Unable to save entity " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html");
+        }
     }
 
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
