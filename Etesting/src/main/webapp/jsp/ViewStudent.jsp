@@ -48,8 +48,6 @@
     </c:if>
     <c:if test="${not empty program.testResults}">
         <span style="margin-left: 200px; display:inline-block;"><c:out value="Результаты тестов"/></span>
-        <%--<a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">--%>
-            <%--<input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>--%>
         <div class="layer">
             <p class="heading">Развернуть</p>
 

@@ -51,12 +51,8 @@ public class News {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl, boolean isLiceum) {
-        if(isLiceum) {
-        this.imageUrl = "http://liceum.bsu.by/" +imageUrl;}
-        else {
-            this.imageUrl = imageUrl;
-        }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = "http://liceum.bsu.by/" +imageUrl;
     }
 
     public String getDate() {

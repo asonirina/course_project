@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
+<head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/results.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/results.css">
+</head>
 <body>
             <span style="margin-left: 200px"><c:out value="Название лабораторной"/></span>
             <span style="margin-left: 113px;"><c:out value="Лабораторная ${program.programName}"/></span><br>
@@ -20,10 +26,29 @@
                 </c:forEach>
                 </c:if>
             </c:if>
+            <%--<c:if test="${not empty program.testResults}">--%>
+                <%--<span style="margin-left: 200px"><c:out value="Результаты тестов"/></span>--%>
+                <%--<a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">--%>
+                    <%--<input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>--%>
+            <%--</c:if>--%>
             <c:if test="${not empty program.testResults}">
-                <span style="margin-left: 200px"><c:out value="Результаты тестов"/></span>
-                <a href="<c:url value="/e-Testing/DownloadResults.html?programId=${program.id}"/>" style="margin-left: 146px;">
-                    <input type="image" value="<c:out value="testResults"/>" src="/images/download.png"></a><br>
+                <span style="margin-left: 200px; display:inline-block;"><c:out value="Результаты тестов"/></span>
+                <div class="layer">
+                    <p class="heading">Развернуть</p>
+
+                    <div class="content">
+                        <c:set var="str" value="${program.testResults}"/>
+                        <c:forEach var="line" items="${fn:split(str, ';')}">
+                            <c:if test="${fn:contains(line, 'passed')}">
+                                <span style="color: green;">${line}</span><br/>
+                            </c:if>
+                            <c:if test="${!fn:contains(line, 'passed')}">
+                                <span style="color: #ff4102;">${line}</span><br/>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+
+                </div>
             </c:if>
 
 </body>

@@ -2,7 +2,6 @@ package by.bsu.project.utils;
 
 import by.bsu.project.model.News;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,11 +38,8 @@ public class NewsHelper {
         news.setUrl(element.getElementsByAttributeValue("class", "to-full-page").get(0).attr("href"));
         news.setTitle(element.getElementsByAttributeValue("class", "to-full-page").get(0).getElementsByTag("h3").get(0).text());
         if(!element.getElementsByTag("img").isEmpty()){
-        news.setImageUrl(element.getElementsByTag("img").get(0).attr("src"), true);
-        } else {
-            news.setImageUrl("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ7gMg6q6WEIOVs8Z4T8JLBrPzNBqLwCPVEPPORD50IZFzhJ1va", false);
+        news.setImageUrl(element.getElementsByTag("img").get(0).attr("src"));
         }
-
         if(!element.getElementsByAttributeValue("class", "teaser clearfix").isEmpty()){
         news.setContent(element.getElementsByAttributeValue("class", "teaser clearfix").get(0).text());
         } else {
@@ -51,6 +47,4 @@ public class NewsHelper {
         }
         return news;
     }
-
-
 }
