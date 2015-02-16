@@ -71,24 +71,26 @@ public class UserInfoController {
                 model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
                         userInfoService.studentsList(userInfoService.setPage(page, paging1, model)));
                 model.addAttribute("students", new UserInfoEntity());
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
             } else {
                 Paging paging1 = new Paging(userInfoService.studentsByFormCountList(form).intValue());
                 model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
                         userInfoService.studentListByForm(userInfoService.setPage(page, paging1, model), form));
                 model.addAttribute("students", new UserInfoEntity());
                 model.addAttribute("currentForm", form);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
             }
             return new ModelAndView("StudentList");
         } catch (Exception ex) {
             logger.error("Unable to display students list " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
     @RequestMapping(value = "/e-Testing/GetStudentListByForm")
     public ModelAndView getStudentListById(@ModelAttribute("StudentList") UserInfoEntity userInfoEntity) {
         form = userInfoEntity.getForm();
-        return new ModelAndView("redirect:/e-Testing/StudentList.html");
+        return new ModelAndView("redirect:/e-Testing/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
     }
 
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
@@ -104,35 +106,37 @@ public class UserInfoController {
             if (errors != null && errors.size() != 0) {
                 model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
                 model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_STUDENT);
                 return new ModelAndView("EditStudent");
             }
-
             userInfoService.save(userInfoEntity);
-
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
             return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
 
         } catch (Exception ex) {
             logger.error("Unable to save student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
     @RequestMapping(value = "/e-Testing/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
-                                       UserInfoEntity userInfoEntity) {
+                                       UserInfoEntity userInfoEntity, Model model) {
         try {
             if (null != id) {
                 userInfoEntity = userInfoService.getStudentById(id);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_STUDENT);
             } else {
                 userInfoEntity = new UserInfoEntity();
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.ADD_STUDENT);
             }
             programFilesEntityList = userInfoEntity.getProgramFiles();
-
-            return new ModelAndView("EditStudent", ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
+            return new ModelAndView("EditStudent");
 
         } catch (Exception ex) {
             logger.error("Unable to edit student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -147,12 +151,12 @@ public class UserInfoController {
             Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
             model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
                     userInfoService.setPage(page, paging1, model), id));
-
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
             return new ModelAndView("ViewStudent");
 
         } catch (Exception ex) {
             logger.error("Unable to display student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -161,11 +165,11 @@ public class UserInfoController {
         try {
             userInfoService.deleteStudentById(id);
 
-            return new ModelAndView("redirect:/e-Testing/StudentList.html");
+            return new ModelAndView("redirect:/e-Testing/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
 
         } catch (Exception ex) {
             logger.error("Unable to delete student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -257,7 +261,7 @@ public class UserInfoController {
 
         } catch (Exception ex) {
             logger.error("Unable to change password " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -267,10 +271,10 @@ public class UserInfoController {
             @RequestParam(value = "password1", required = false) String password1,
             @RequestParam(value = "password2", required = false) String password2,
             @RequestParam(value = "email", required = false) String email,
-            HttpServletRequest request
+            Model model
     ) throws Exception {
         if (!LinkGenerator.checkHash(hash)) {
-            return new ModelAndView("redirect:/e-Testing/error404.html");
+            return new ModelAndView("redirect:/e-Testing/error404.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
 
         try {
@@ -279,15 +283,17 @@ public class UserInfoController {
                 if (password1.equals(password2)) {
                     user.setPassword(password1);
                     userInfoService.save(user);
+                    model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
                     return new ModelAndView("redirect:/e-Testing/Login.html");
                 }
-                return new ModelAndView("ResetPassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
+                model.addAttribute(ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
+                return new ModelAndView("ResetPassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD );
             }
-            return new ModelAndView("ResetPassword");
+            return new ModelAndView("ResetPassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD);
 
         } catch (Exception ex) {
             logger.error("Unable to change password " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 }

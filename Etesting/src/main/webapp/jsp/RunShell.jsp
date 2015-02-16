@@ -20,10 +20,10 @@
 
         <br/> <br/><br/>
 
-        <input type="submit" class="button" value="Run" style="margin-left: 300px;"/>
+        <input type="submit" class="button" value="Run" style="margin-left: 340px;"/>
 
     </form>
-    <a href="<c:url value="/e-Testing/Login.html"/>" style="margin-left: 308px;">Login</a>
+    <a href="<c:url value="/e-Testing/Login.html"/>" style="margin-left: 348px;">Login</a>
 </div>
 </body>
 </html>

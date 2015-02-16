@@ -83,7 +83,7 @@ public class ProgramUploadController {
 
         } catch (Exception ex) {
             logger.error("Unable to display upload file page " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -141,7 +141,7 @@ public class ProgramUploadController {
             userInfoEntity.getProgramFiles().add(programFilesEntity);
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
-            return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html");
+            return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html", ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
 
 //        } catch (Exception ex) {
 //            logger.error("Unable to save entity " + ex.getMessage());
