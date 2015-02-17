@@ -15,7 +15,7 @@ import java.util.List;
 public class TreeJavaTest {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test/Test.java"));
-        TreeParser helper1 = new TreeParser("ghj", Lang.JAVA);
+        TreeParser helper1 = new TreeParser(Lang.JAVA);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
     }
 }

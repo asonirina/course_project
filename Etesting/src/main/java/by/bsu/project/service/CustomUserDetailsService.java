@@ -1,7 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

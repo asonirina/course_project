@@ -1,7 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import org.springframework.ui.Model;
 

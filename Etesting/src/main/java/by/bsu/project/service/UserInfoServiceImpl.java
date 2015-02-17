@@ -1,7 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.paging.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
-        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUserId());
+        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId());
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {

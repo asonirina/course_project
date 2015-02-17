@@ -20,12 +20,17 @@ public class ProgramFilesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="program_id")
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name="program_id")
+//    @OneToOne(mappedBy="program_files", cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, /*mappedBy = "program_files",*/ cascade = CascadeType.ALL)
     private AttributeCounting ac;
 
-    @Column(name = "user_id",insertable = false,updatable = false)
-    private Long userId;
+//    @Column(name = "user_id",insertable = false,updatable = false)
+//    private Long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id", insertable=false, updatable=false, nullable=false)
+    private UserInfoEntity user;
 
     @Column(name = "status")
     private String status;
@@ -57,6 +62,8 @@ public class ProgramFilesEntity {
     @Column(name = "plagiat2")
     private Integer plagiat2;
 
+    public ProgramFilesEntity(){}
+
     public Long getId() {
         return id;
     }
@@ -73,12 +80,21 @@ public class ProgramFilesEntity {
         this.status = status;
     }
 
-    public Long getUserId() {
-        return userId;
+//    public Long getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(Long userId) {
+//        this.userId = userId;
+//    }
+
+
+    public UserInfoEntity getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(UserInfoEntity user) {
+        this.user = user;
     }
 
     public String getProgramName() {

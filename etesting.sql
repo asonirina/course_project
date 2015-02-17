@@ -19,7 +19,6 @@ USE `etesting`;
 
 CREATE TABLE `attribute_countings` (
   `id` int(11) NOT NULL auto_increment,
-  `ProgrName` varchar(50) NOT NULL,
   `imports` int(3) NOT NULL,
   `functions` int(3) NOT NULL,
   `calls` int(3) NOT NULL,
@@ -32,7 +31,8 @@ CREATE TABLE `attribute_countings` (
   `ifs` int(3) NOT NULL,
   `cycles` int(3) NOT NULL,
   `program_id` int(11) default NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FKEMPL` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
 
@@ -51,8 +51,10 @@ CREATE TABLE `program_files` (
   `content_type` varchar(100) default NULL,
   `testResults` varchar(150),
   `tree_content` longblob,
-  `user_id` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  `user_id` int(11) NULL default NULL,
+  PRIMARY KEY  (`id`),
+  INDEX `FK_DEPT` (`user_id`),
+  CONSTRAINT `FK_DEPT` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2340 COMMENT='InnoDB free: 11264 kB';
 
 
@@ -78,5 +80,6 @@ CREATE TABLE `user_info` (
 
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
   (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234'),
-  (2,'Iryna','Ason','11','irina.ason@gmail.com','test');
+  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
+  (3,'XXX','XXX','11','asonirina@mail.ru','111');
 COMMIT;

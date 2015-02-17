@@ -1,4 +1,4 @@
-package by.bsu.project.entity;
+package by.bsu.project.general.model;
 
 import by.bsu.project.general.model.ProgramFilesEntity;
 
@@ -80,10 +80,12 @@ public class UserInfoEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private List<ProgramFilesEntity> programFiles;
+//    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//    @JoinColumn(name="user_id")
+//    private List<ProgramFilesEntity> programFiles;
 
     public List<ProgramFilesEntity> getProgramFiles() {
         return programFiles;

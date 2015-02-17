@@ -1,6 +1,6 @@
 package by.bsu.project.mvc;
 
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.constants.PageTitles;

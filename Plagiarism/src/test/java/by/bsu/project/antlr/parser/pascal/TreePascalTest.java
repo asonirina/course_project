@@ -15,7 +15,7 @@ import java.util.List;
 public class TreePascalTest {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-files/Test.pas"));
-        TreeParser helper1 = new TreeParser("ghj", Lang.PASCAL);
+        TreeParser helper1 = new TreeParser(Lang.PASCAL);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
     }
 }

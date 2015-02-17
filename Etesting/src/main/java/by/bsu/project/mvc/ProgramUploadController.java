@@ -3,7 +3,7 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
@@ -93,6 +93,7 @@ public class ProgramUploadController {
 
         try {
             UserInfoEntity userInfoEntity = userInfoService.getStudentById(studentId);
+            userInfoEntity.getProgramFiles().add(programFilesEntity);
             List<String> errors = Validator.validateFile(file, programFilesEntity.getProgramName());
 
             if (errors.size() != 0) {
@@ -111,29 +112,28 @@ public class ProgramUploadController {
             }
 
 //            programStatus = ETestingConstants.PASSED_STATUS;
-
+            programFilesEntity.setUser(userInfoEntity);
             programFilesEntity.setFile(Huffman.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setStatus(programStatus);
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
-            programFilesEntity.setUserId(getUser().getId());
 
-            TreeParser parser = new TreeParser(programFilesEntity.getProgramName(), programFilesEntity.getLang());
+            TreeParser parser = new TreeParser(programFilesEntity.getLang());
             List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
             AttributeCounting ac = parser.getAc();
-            ac.setProgrName(programFilesEntity.getProgramName());
 
             int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
             programFilesEntity.setAc(ac);
+            ac.setEntity(programFilesEntity);
 
             int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
 
             programFilesEntity.setPlagiat1(plagiat1);
             programFilesEntity.setPlagiat2(plagiat2);
             programFilesEntity.setTreeContent(Huffman.compress(TreeNode.getBytes(nodes)));
-            userInfoEntity.getProgramFiles().add(programFilesEntity);
+
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
             return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html", ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);

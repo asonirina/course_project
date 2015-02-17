@@ -21,9 +21,9 @@ public class TestRTED {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test1.pas"));
         byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test2.pas"));
-        TreeParser helper1 = new TreeParser("ghj", LangWrap.Lang.PASCAL);
+        TreeParser helper1 = new TreeParser(LangWrap.Lang.PASCAL);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
-        TreeParser helper2 = new TreeParser("ghj1", LangWrap.Lang.PASCAL);
+        TreeParser helper2 = new TreeParser(LangWrap.Lang.PASCAL);
         List<TreeNode> nodes2 = helper2.getTree(bytes2);
 
         TreeEditDistance.numerateTree(nodes1.get(0));

@@ -1,5 +1,8 @@
 package by.bsu.project.general.model;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.*;
 
 
@@ -10,14 +13,19 @@ import javax.persistence.*;
 @Entity
 @Table(name = "attribute_countings")
 public class AttributeCounting {
+//    @Id
+//    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @Column(name="id", unique=true, nullable=false)
+//    @GeneratedValue(generator="gen")
+//    @GenericGenerator(name="gen", strategy="foreign", parameters=@Parameter(name="property", value="program_files"))
+//    @GenericGenerator(name = "generator", strategy = "foreign",
+//            parameters = @Parameter(name = "property", value = "program_files"))
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)//generator = "generator")
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
-
-
-    @Column(name = "progrName")
-    private String progrName;
 
     @Column(name = "imports")
     private Integer imports = 0;
@@ -52,6 +60,13 @@ public class AttributeCounting {
     @Column(name = "cycles")
     private Integer cycles = 0;
 
+    @OneToOne(fetch = FetchType.EAGER)
+//    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "program_id")
+    private ProgramFilesEntity entity;
+
+    public AttributeCounting(){}
+
     public void incIfs() {
         this.ifs++;
     }
@@ -82,14 +97,6 @@ public class AttributeCounting {
 
     public void incCycle() {
         this.cycles++;
-    }
-
-    public String getProgrName() {
-        return progrName;
-    }
-
-    public void setProgrName(String progrName) {
-        this.progrName = progrName;
     }
 
     public Integer getImports() {
@@ -182,5 +189,13 @@ public class AttributeCounting {
 
     public Long getId() {
         return id;
+    }
+
+    public ProgramFilesEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(ProgramFilesEntity entity) {
+        this.entity = entity;
     }
 }

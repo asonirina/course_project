@@ -39,15 +39,14 @@ public class TreeParser {
         return ac;
     }
 
-    public TreeParser(String id, Lang lang) {
+    public TreeParser(Lang lang) {
         this.ac = new AttributeCounting();
-        ac.setProgrName(id);
         this.lang = lang;
         this.factory = new LangFactory(lang);
     }
 
-    public TreeParser(String id, Lang lang, boolean checkIdentifiers) {
-        this(id, lang);
+    public TreeParser(Lang lang, boolean checkIdentifiers) {
+        this(lang);
         this.checkIdentifiers = checkIdentifiers;
     }
 

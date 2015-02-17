@@ -2,7 +2,7 @@ package by.bsu.project.dao;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where userId = :id order by uploadProgramTime desc").
+        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where user_id = :id order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id);
         return getSubList(query, pageNumber);
 
@@ -38,7 +38,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public List<ProgramFilesEntity> getProgramsByName(String name, Long userId) {
         Query query = sessionFactory.getCurrentSession().
-                createQuery("from ProgramFilesEntity where programName = :progrName and userId <> :userId").
+                createQuery("from ProgramFilesEntity where programName = :progrName and user_id <> :userId").
                 setParameter(ETestingConstants.PROGRAM_NAME, name).
                 setParameter(ETestingConstants.USER_ID, userId);
         return query.list();

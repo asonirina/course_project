@@ -1,7 +1,7 @@
 package by.bsu.project.utils;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.entity.UserInfoEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;

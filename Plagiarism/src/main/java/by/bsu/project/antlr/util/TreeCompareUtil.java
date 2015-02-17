@@ -20,7 +20,7 @@ public class TreeCompareUtil {
 //        String source[] = getTokenizeString(tree);
         int max = 0;
         for (ProgramFilesEntity entity : programs) {
-            TreeParser builder = new TreeParser(String.valueOf(entity.getId()), entity.getLang());
+            TreeParser builder = new TreeParser(entity.getLang());
             List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
 //            String arr[] = getTokenizeString(nodes);
 
