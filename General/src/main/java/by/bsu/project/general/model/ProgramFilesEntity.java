@@ -20,14 +20,9 @@ public class ProgramFilesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name="program_id")
-//    @OneToOne(mappedBy="program_files", cascade=CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER, /*mappedBy = "program_files",*/ cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private AttributeCounting ac;
 
-//    @Column(name = "user_id",insertable = false,updatable = false)
-//    private Long userId;
     @ManyToOne
     @JoinColumn(name="user_id", insertable=false, updatable=false, nullable=false)
     private UserInfoEntity user;

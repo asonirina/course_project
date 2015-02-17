@@ -18,14 +18,14 @@
 
 .paginationTG a:hover, .paginationTG a:active{
     color: #ffffff;
-    background: url(/images/pagination_bg1.png) no-repeat top center;
+    background: url(/images/pagination_bg.png) no-repeat top center;
     text-decoration: none;
 }
 
 .paginationTG currentpage {
     font-weight: bold;
     padding: 5px 9px;
-    background: url(/images/pagination_bg1.png) no-repeat top center;
+    background: url(/images/pagination_bg.png) no-repeat top center;
     background-color: inherit;
     color: #ffffff;
 }

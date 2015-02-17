@@ -13,17 +13,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "attribute_countings")
 public class AttributeCounting {
-//    @Id
-//    @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Id
-//    @Column(name="id", unique=true, nullable=false)
-//    @GeneratedValue(generator="gen")
-//    @GenericGenerator(name="gen", strategy="foreign", parameters=@Parameter(name="property", value="program_files"))
-//    @GenericGenerator(name = "generator", strategy = "foreign",
-//            parameters = @Parameter(name = "property", value = "program_files"))
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)//generator = "generator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -61,7 +52,6 @@ public class AttributeCounting {
     private Integer cycles = 0;
 
     @OneToOne(fetch = FetchType.EAGER)
-//    @PrimaryKeyJoinColumn
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity entity;
 
