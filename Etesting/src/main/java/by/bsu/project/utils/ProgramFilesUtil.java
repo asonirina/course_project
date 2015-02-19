@@ -42,7 +42,7 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         dir = tmp.getAbsolutePath();
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
         cmdC = path+config.getProperty("c") + " "  + dir + "/" + file.getOriginalFilename();
-        cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I/dm/stlport/stlport";
+        cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I"+path+"compilers/dm/dm/stlport/stlport";
         cmdPascal = path + config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
         cmdJava = System.getenv("JAVA_HOME")+"/bin/"+config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }

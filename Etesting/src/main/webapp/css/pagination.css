@@ -12,25 +12,23 @@
     padding: 5px 8px;
     text-decoration: none;
     background-color: inherit;
-    color: #2e52d0;
+    color: #294b9a;
     font-weight: bold;
 }
 
 .paginationTG a:hover, .paginationTG a:active{
-    color: #ffffff;
-    background: url(/images/pagination_bg.png) no-repeat top center;
+    color: #7094ff;
     text-decoration: none;
 }
 
-.paginationTG currentpage {
+.paginationTG .currentpage {
     font-weight: bold;
     padding: 5px 9px;
-    background: url(/images/pagination_bg.png) no-repeat top center;
     background-color: inherit;
-    color: #ffffff;
+    color: #7094ff;
 }
 
 
-.paginationTG nextpage{
+.paginationTG .nextpage{
     font-weight: bold;
 }

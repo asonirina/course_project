@@ -140,7 +140,7 @@ public class ProgramUploadController {
 
         } catch (Exception ex) {
             logger.error("Unable to save entity " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html");
+            return new ModelAndView("errors/error503", ETestingConstants.MODEL_ERRORS, ex.getMessage());
         }
     }
 
@@ -170,7 +170,7 @@ public class ProgramUploadController {
 
         } catch (Exception ex) {
             logger.error("Unable to display upload file history page " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+            return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
