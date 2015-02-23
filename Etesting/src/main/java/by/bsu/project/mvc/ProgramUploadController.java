@@ -69,7 +69,7 @@ public class ProgramUploadController {
             userInfoEntity = userInfoService.getStudentById(user.getId());
             programFilesEntity = new ProgramFilesEntity();
 
-            File dir = new File(System.getProperty("java.io.tmpdir") + "/tasks/" + userInfoEntity.getForm());
+            File dir = new File(ProgramUploadController.class.getClassLoader().getResource("tasks/" + userInfoEntity.getForm()).getFile());
             List<String> tasks = Arrays.asList(dir.list());
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
             Map<String, Object> params = new HashMap<>();
