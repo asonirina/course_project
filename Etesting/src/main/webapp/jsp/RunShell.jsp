@@ -12,6 +12,7 @@
 <div class="wrapper">
     <label> main folder - /opt/tomcat/temp/</label>
     <label> unzip /opt/tomcat/temp/tasks.zip -d /opt/tomcat/temp/</label>
+    <label><%=System.getProperty("java.io.tmpdir")%></label>
 
     <form method="post" id="form">
 
