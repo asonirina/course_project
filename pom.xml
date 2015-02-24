@@ -174,18 +174,27 @@
             <build>
                 <finalName>course_project</finalName>
                 <plugins>
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                        <!--<configuration>-->
+                            <!--<source>1.7</source>-->
+                            <!--<target>1.7</target>-->
+                            <!--<showDeprecation>true</showDeprecation>-->
+                            <!--<showWarnings>true</showWarnings>-->
+                            <!--<executable>${env.JAVA_HOME}/bin/javac</executable>-->
+                            <!--<fork>true</fork>-->
+                        <!--</configuration>-->
+                        <!--<version>3.0</version>-->
+                    <!--</plugin>-->
+
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.1.1</version>
                         <configuration>
-                            <source>1.7</source>
-                            <target>1.7</target>
-                            <showDeprecation>true</showDeprecation>
-                            <showWarnings>true</showWarnings>
-                            <executable>${env.JAVA_HOME}/bin/javac</executable>
-                            <fork>true</fork>
+                            <outputDirectory>Etesting/target</outputDirectory>
+                            <warName>Etesting</warName>
                         </configuration>
-                        <version>3.0</version>
                     </plugin>
 
                 </plugins>
