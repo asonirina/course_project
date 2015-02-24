@@ -91,7 +91,7 @@ public class ProgramFilesUtil {
             } else if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
                 getJavaMessages(process.getErrorStream());
             }
-            testResults.append("Ошибка компиляции");
+            testResults.append("Compilation error");
             deleteDir(dir);
             return false;
         }
