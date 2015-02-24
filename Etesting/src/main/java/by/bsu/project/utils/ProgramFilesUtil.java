@@ -24,9 +24,7 @@ public class ProgramFilesUtil {
     private String cmdCpp;
     private String cmdPascal;
     private String cmdJava;
-
-    private String path =System.getProperty("java.io.tmpdir") + "/";
-    private String taskPath =ProgramFilesUtil.class.getClassLoader().getResource("tasks/").getFile();
+    private String path =System.getProperty("java.io.tmpdir") + "\\";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
@@ -44,7 +42,9 @@ public class ProgramFilesUtil {
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
         cmdC = path+config.getProperty("c") + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I"+path+"compilers/dm/dm/stlport/stlport";
-        cmdPascal = path + config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
+        String pp = path + config.getProperty("pas");
+        cmdPascal = String.format("%s\\bin.w32\\vpc -b %s -O%s\\units.w32 -L%s\\lib.w32 -E%s -R%s\\res.w32",
+                pp,  dir + "\\" + file.getOriginalFilename(), pp, pp, dir, pp);
         cmdJava = System.getenv("JAVA_HOME")+"/bin/"+config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }
 
@@ -145,11 +145,11 @@ public class ProgramFilesUtil {
 
     private boolean checkAllInputFiles(String postfix) throws Exception {
         boolean res = true;
-        File inDir = new File(taskPath + form+ "/" + programName + "/in");
+        File inDir = new File(path + "/tasks/" + form+ "/" + programName + "/in");
 
         for (int i = 0; i < inDir.list().length; ++i) {
-            FileUtils.copyFile(new File(taskPath  + form+ "/"+ programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
-            FileUtils.copyFile(new File(taskPath  + form+ "/"+ programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/"  + form+ "/"+ programName + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
+            FileUtils.copyFile(new File(path + "/tasks/"  + form+ "/"+ programName + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
 
             Process p = null;
             if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
