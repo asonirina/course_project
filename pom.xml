@@ -186,7 +186,7 @@
         <profile>
             <id>openshift</id>
             <build>
-                <finalName>etesting</finalName>
+                <finalName>Etesting</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -207,7 +207,7 @@
                         <version>2.1.1</version>
                         <configuration>
                             <outputDirectory>webapps</outputDirectory>
-                            <warName>Etesting</warName>
+                            <warName>Etesting/Etesting</warName>
                         </configuration>
                     </plugin>
 
