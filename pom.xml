@@ -37,6 +37,19 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>eap</id>
+            <url>http://maven.repository.redhat.com/techpreview/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <modules>
         <module>Etesting</module>
         <module>Plagiarism</module>
@@ -173,7 +186,7 @@
         <profile>
             <id>openshift</id>
             <build>
-                <finalName>course_project</finalName>
+                <finalName>etesting</finalName>
                 <plugins>
                     <!--<plugin>-->
                         <!--<groupId>org.apache.maven.plugins</groupId>-->
@@ -193,8 +206,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.1.1</version>
                         <configuration>
-                            <outputDirectory>Etesting/target</outputDirectory>
-                            <warName>Etesting</warName>
+                            <outputDirectory>webapps</outputDirectory>
+                            <warName>ROOT</warName>
                         </configuration>
                     </plugin>
 
