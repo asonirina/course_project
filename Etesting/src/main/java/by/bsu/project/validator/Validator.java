@@ -16,7 +16,7 @@ public class Validator {
 
     private static final Integer MAX_FILE_SIZE_KB = 200;
 
-    private static List<String> errors = new ArrayList<>();
+    private static List<String> errors = new ArrayList<String>();
 
     public static List<String> validateFile(MultipartFile file, String programName) {
         errors.clear();

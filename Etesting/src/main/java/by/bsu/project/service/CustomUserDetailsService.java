@@ -64,7 +64,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public List<String> getRoles(Integer role) {
-        List<String> roles = new ArrayList<>();
+        List<String> roles = new ArrayList<String>();
 
         if (role == 1) {
             roles.add(ROLE_ADMIN);
@@ -77,7 +77,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public static List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for (String role : roles) {
             authorities.add(new SimpleGrantedAuthority(role));
         }

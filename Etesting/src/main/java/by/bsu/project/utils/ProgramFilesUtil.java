@@ -27,7 +27,7 @@ public class ProgramFilesUtil {
 
     private String path =System.getProperty("java.io.tmpdir") + "/";
     private String taskPath =ProgramFilesUtil.class.getClassLoader().getResource("tasks/").getFile();
-    private List<String> messages = new ArrayList<>();
+    private List<String> messages = new ArrayList<String>();
     private StringBuffer testResults = new StringBuffer();
 
     private String dir;
@@ -218,7 +218,7 @@ public class ProgramFilesUtil {
 
     private List getList(File file) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-        List<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<String>();
         String line = br.readLine();
 
         while (line != null) {

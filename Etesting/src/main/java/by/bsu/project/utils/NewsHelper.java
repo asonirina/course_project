@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class NewsHelper {
     public static List<News> getRandomNews() throws Exception{
-        List<News> news = new ArrayList<>();
+        List<News> news = new ArrayList<News>();
         Document doc = Jsoup.connect("http://liceum.bsu.by/").get();
         Elements elements = doc.getElementsByAttributeValue("class", "news-item");
 

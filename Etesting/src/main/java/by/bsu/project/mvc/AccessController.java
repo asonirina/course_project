@@ -69,7 +69,7 @@ public class AccessController {
         String url = request.getRequestURL().toString();
         url = url.substring(0, url.lastIndexOf('/'));
         sender.sendActivationMessage(email, url);
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put(ETestingConstants.MODEL_ALERT, "Activation link was sent! Check email.");
         params.put(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
         return new ModelAndView("redirect:/e-Testing/Login.html", params);

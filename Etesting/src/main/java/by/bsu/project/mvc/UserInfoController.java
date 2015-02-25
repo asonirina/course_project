@@ -41,7 +41,7 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     private String form = null;
-    private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+    private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<ProgramFilesEntity>();
     private static final Logger logger = Logger.getLogger(UserInfoController.class);
 
     @RequestMapping(value = "/e-Testing/ChangePassword")
@@ -227,13 +227,13 @@ public class UserInfoController {
     }
 
     private ModelAndView newsPage(String base) {
-        List<News> news = new ArrayList<>();
+        List<News> news = new ArrayList<News>();
         try{
             news = NewsHelper.getRandomNews();
         } catch (Exception ex) {
             logger.info("News are not loaded");
         }
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put(ETestingConstants.MODEL_NEWS, news);
         params.put(ETestingConstants.MODEL_TITLE, PageTitles.HOME_PAGE);
         return new ModelAndView(base, params);
