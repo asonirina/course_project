@@ -207,7 +207,7 @@
                         <version>2.1.1</version>
                         <configuration>
                             <outputDirectory>webapps</outputDirectory>
-                            <warName>ROOT</warName>
+                            <warName>Etesting</warName>
                         </configuration>
                     </plugin>
 
