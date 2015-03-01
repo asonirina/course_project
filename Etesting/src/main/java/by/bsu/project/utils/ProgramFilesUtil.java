@@ -25,7 +25,7 @@ public class ProgramFilesUtil {
     private String cmdPascal;
     private String cmdJava;
 //    private String path = System.getenv("CATALINA_HOME") + "/bin/";
-private String path =System.getProperty("java.io.tmpdir") + "/";
+private String path =System.getProperty("java.io.tmpdir") + "\\";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
 
@@ -43,7 +43,10 @@ private String path =System.getProperty("java.io.tmpdir") + "/";
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
         cmdC = path+config.getProperty("c") + " "  + dir + "/" + file.getOriginalFilename();
         cmdCpp =path+config.getProperty("cpp") + " "  + dir + "/" + file.getOriginalFilename() + " -I"+path+"compilers/dm/dm/stlport/stlport";
-        cmdPascal = path + config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
+       // cmdPascal = path + config.getProperty("pas") + " " + dir + "/" + file.getOriginalFilename();
+        String pp = path + config.getProperty("pas");
+        cmdPascal = String.format("%s\\bin.w32\\vpc -b %s -O%s\\units.w32 -L%s\\lib.w32 -E%s -R%s\\res.w32",
+                pp,  dir + "\\" + file.getOriginalFilename(), pp, pp, dir, pp);
         cmdJava = System.getenv("JAVA_HOME")+"/bin/"+config.getProperty("java") + " " +dir+ "/"+ file.getOriginalFilename();
     }
 

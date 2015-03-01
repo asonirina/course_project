@@ -1,2 +1,5 @@
 hinton diagrams
 neural net
+
+
+/opt/tomcat/temp/compilers/vp/bin.lnx/vpc -b /opt/tomcat/temp/hh.pas -O/opt/tomcat/temp/compilers/vp/units.lnx -L/opt/tomcat/temp/compilers/vp/lib.lnx -E/opt/tomcat/temp -R/opt/tomcat/temp/compilers/vp/res.lnx
