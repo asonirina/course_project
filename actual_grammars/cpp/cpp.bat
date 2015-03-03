@@ -1,1 +1,0 @@
-java -cp antlr-3.5.1.jar  org.antlr.Tool CPPGrammar.g
