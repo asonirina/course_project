@@ -1,4 +1,4 @@
-git clone ssh://54f592505973ca98780000cc@etesting-liceum.rhcloud.com/~/git/etesting.git/
+git clone ssh://54f59ef7fcf933a28e00006a@etesting-liceum.rhcloud.com/~/git/etesting.git/
 cd etesting/
 
 MySQL 5.5 database added.  Please make note of these credentials:
