@@ -1,0 +1,19 @@
+git clone ssh://54f592505973ca98780000cc@etesting-liceum.rhcloud.com/~/git/etesting.git/
+cd etesting/
+
+MySQL 5.5 database added.  Please make note of these credentials:
+
+       Root User: adminmk3ZlPu
+   Root Password: DLLI4l3Eav9c
+   Database Name: etesting
+
+Connection URL: mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
+
+You can manage your new MySQL database by also embedding phpmyadmin.
+The phpmyadmin username and password will be the same as the MySQL credentials above.
+
+
+Please make note of these MySQL credentials again:
+  Root User: adminmk3ZlPu
+  Root Password: DLLI4l3Eav9c
+URL: https://etesting-liceum.rhcloud.com/phpmyadmin/
