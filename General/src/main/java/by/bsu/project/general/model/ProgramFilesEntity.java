@@ -30,6 +30,9 @@ public class ProgramFilesEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "run_status")
+    private int runStatus;
+
     @Column(name = "program_name")
     private String programName;
 
@@ -75,14 +78,13 @@ public class ProgramFilesEntity {
         this.status = status;
     }
 
-//    public Long getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(Long userId) {
-//        this.userId = userId;
-//    }
+    public int getRunStatus() {
+        return runStatus;
+    }
 
+    public void setRunStatus(int runStatus) {
+        this.runStatus = runStatus;
+    }
 
     public UserInfoEntity getUser() {
         return user;

@@ -44,6 +44,7 @@ CREATE TABLE `program_files` (
   `id` int(11) NOT NULL auto_increment,
   `status` varchar(20) default NULL,
   `program_name` varchar(50) NOT NULL,
+  `run_status` int(2) NOT NULL,
   `plagiat1` int(3),
   `plagiat2` int(3),
   `file` longblob,

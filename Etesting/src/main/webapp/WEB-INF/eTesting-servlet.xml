@@ -10,4 +10,25 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <bean id="testsRunner"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass"
+                  value="by.bsu.project.scheduller.TestsRunnerCron"/>
+    </bean>
+
+    <bean id="testsRunnerTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="testsRunner"/>
+        <property name="cronExpression" value="0 0/1 * * * ?"/>
+    </bean>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+        <property name="triggers">
+            <list>
+                <ref bean="testsRunnerTrigger"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>

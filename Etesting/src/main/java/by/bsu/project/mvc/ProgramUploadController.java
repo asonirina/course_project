@@ -103,21 +103,16 @@ public class ProgramUploadController {
             }
 
             programFilesUtil = new ProgramFilesUtil(file, userInfoEntity, programFilesEntity.getProgramName());
-            String programStatus;
 
-            if (programFilesUtil.checkFile()) {
-                programStatus = ETestingConstants.PASSED_STATUS;
-            } else {
-                programStatus = ETestingConstants.FAILED_STATUS;
-            }
+            String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
 
-//            programStatus = ETestingConstants.PASSED_STATUS;
             programFilesEntity.setUser(userInfoEntity);
             programFilesEntity.setFile(Huffman.compress(file.getBytes()));
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setStatus(programStatus);
+            programFilesEntity.setRunStatus(0);
             programFilesEntity.setTestResults(programFilesUtil.getTestResults());
 
             TreeParser parser = new TreeParser(programFilesEntity.getLang());
