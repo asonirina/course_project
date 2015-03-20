@@ -48,7 +48,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus) {
         Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where runStatus = :run_status order by uploadProgramTime desc").
-                setParameter(ETestingConstants.TABLE_FIELD_ID, runStatus);
+                setParameter(ETestingConstants.TABLE_FIELD_RUN_STATUS, runStatus);
         return query.list();
     }
 

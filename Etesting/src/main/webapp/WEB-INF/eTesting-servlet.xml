@@ -35,12 +35,5 @@
         </property>
     </bean>
 
-    <bean id="userInfoService" class="by.bsu.project.service.UserInfoServiceImpl">
-        <property name="userInfoDAO" ref="userInfoDAO"/>
-    </bean>
-
-    <bean id="userInfoDAO" class="by.bsu.project.dao.UserInfoDAOImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
 
 </beans>
