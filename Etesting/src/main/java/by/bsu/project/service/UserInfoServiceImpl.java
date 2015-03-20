@@ -1,6 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
+import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.paging.Paging;
@@ -75,6 +76,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
         return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId());
+    }
+
+    @Transactional
+    @Override
+    public List<ProgramFilesEntity> getUploadedProgramFiles() {
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.UPLOADED_FILE);
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {

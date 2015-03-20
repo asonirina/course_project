@@ -23,4 +23,5 @@ public interface UserInfoService {
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form);
     public Long studentsByFormCountList(String form);
     public List<ProgramFilesEntity> getProgramsByName (ProgramFilesEntity entity);
+    public List<ProgramFilesEntity> getUploadedProgramFiles();
 }

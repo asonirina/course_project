@@ -21,4 +21,5 @@ public interface UserInfoDAO {
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form);
     public Long studentsByFormCountList(String form);
     public List<ProgramFilesEntity> getProgramsByName(String name, Long userId);
+    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus);
 }

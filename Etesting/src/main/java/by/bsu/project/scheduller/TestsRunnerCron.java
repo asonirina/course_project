@@ -1,12 +1,13 @@
 package by.bsu.project.scheduller;
 
+import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.service.UserInfoService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: iason
@@ -18,7 +19,7 @@ public class TestsRunnerCron extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println(userInfoService);
+        List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
     }
 
     public UserInfoService getUserInfoService() {
