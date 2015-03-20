@@ -6,11 +6,7 @@ import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
-import by.bsu.project.general.model.AttributeCounting;
-import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.antlr.util.AttributeCountingUtil;
-import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.validator.Validator;
 import org.apache.log4j.Logger;
@@ -103,21 +99,7 @@ public class ProgramUploadController {
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
-            programFilesEntity.setRunStatus(0);
-
-//            TreeParser parser = new TreeParser(programFilesEntity.getLang());
-//            List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
-//            AttributeCounting ac = parser.getAc();
-//
-//            int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
-//            programFilesEntity.setAc(ac);
-//            ac.setEntity(programFilesEntity);
-//
-//            int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
-//
-//            programFilesEntity.setPlagiat1(plagiat1);
-//            programFilesEntity.setPlagiat2(plagiat2);
-//            programFilesEntity.setTreeContent(Huffman.compress(TreeNode.getBytes(nodes)));
+            programFilesEntity.setRunStatus(ETestingConstants.UPLOADED_FILE);
 
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();

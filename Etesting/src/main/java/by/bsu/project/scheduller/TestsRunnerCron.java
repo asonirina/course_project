@@ -25,18 +25,17 @@ public class TestsRunnerCron extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-        List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
-        for (ProgramFilesEntity programFilesEntity : programs) {
-            ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity);
-            String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
-            programFilesEntity.setStatus(programStatus);
-            programFilesEntity.setRunStatus(1);
-            programFilesEntity.setTestResults(programFilesUtil.getTestResults());
-            userInfoService.save(programFilesEntity.getUser());
-        }
-        }
-        catch (ConfigurationException|IOException|InterruptedException ex) {
-              logger.error(ex.getMessage());
+            List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
+            for (ProgramFilesEntity programFilesEntity : programs) {
+                ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity);
+                String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
+                programFilesEntity.setStatus(programStatus);
+                programFilesEntity.setRunStatus(ETestingConstants.TESTED_FILE);
+                programFilesEntity.setTestResults(programFilesUtil.getTestResults());
+                userInfoService.save(programFilesEntity.getUser());
+            }
+        } catch (ConfigurationException | IOException | InterruptedException ex) {
+            logger.error(ex.getMessage());
         }
     }
 

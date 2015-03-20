@@ -84,6 +84,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDAO.getProgramsByRunStatus(ETestingConstants.UPLOADED_FILE);
     }
 
+    @Transactional
+    @Override
+    public List<ProgramFilesEntity> getTestedProgramFiles() {
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.TESTED_FILE);
+    }
+
     public int setPage(Integer page, Paging paging1, Model model) {
         int pageNumber = 0;
         if (null != page) {

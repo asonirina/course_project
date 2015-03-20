@@ -26,11 +26,28 @@
         <property name="cronExpression" value="0 0/5 * * * ?"/>
     </bean>
 
+    <bean id="plagiarismRunner"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="by.bsu.project.scheduller.PlagiarismRunnerCron"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="userInfoService" value-ref="userInfoService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="plagiarismRunnerTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="plagiarismRunner"/>
+        <property name="cronExpression" value="0 0/10 * * * ?"/>
+    </bean>
+
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
         <property name="triggers">
             <list>
                 <ref bean="testsRunnerTrigger"/>
+                <ref bean="plagiarismRunnerTrigger"/>
             </list>
         </property>
     </bean>
