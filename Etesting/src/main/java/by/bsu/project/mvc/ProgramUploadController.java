@@ -4,7 +4,6 @@ import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
-import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.general.model.AttributeCounting;
@@ -13,7 +12,6 @@ import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.service.UserInfoService;
-import by.bsu.project.utils.ProgramFilesUtil;
 import by.bsu.project.validator.Validator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,6 @@ public class ProgramUploadController {
     private static final Logger logger = Logger.getLogger(ProgramUploadController.class);
 
     private Long currentFileId;
-    private ProgramFilesUtil programFilesUtil;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -55,7 +52,6 @@ public class ProgramUploadController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        // Convert multipart object to byte[]
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 
@@ -102,32 +98,26 @@ public class ProgramUploadController {
                 return new ModelAndView("UploadProgram", ETestingConstants.MODEL_PROGRAM, programFilesEntity);
             }
 
-            programFilesUtil = new ProgramFilesUtil(file, userInfoEntity, programFilesEntity.getProgramName());
-
-            String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
-
             programFilesEntity.setUser(userInfoEntity);
-            programFilesEntity.setFile(Huffman.compress(file.getBytes()));
+            programFilesEntity.setFile(file.getBytes());
             programFilesEntity.setFileName(file.getOriginalFilename());
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
-            programFilesEntity.setStatus(programStatus);
             programFilesEntity.setRunStatus(0);
-            programFilesEntity.setTestResults(programFilesUtil.getTestResults());
 
-            TreeParser parser = new TreeParser(programFilesEntity.getLang());
-            List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
-            AttributeCounting ac = parser.getAc();
-
-            int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
-            programFilesEntity.setAc(ac);
-            ac.setEntity(programFilesEntity);
-
-            int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
-
-            programFilesEntity.setPlagiat1(plagiat1);
-            programFilesEntity.setPlagiat2(plagiat2);
-            programFilesEntity.setTreeContent(Huffman.compress(TreeNode.getBytes(nodes)));
+//            TreeParser parser = new TreeParser(programFilesEntity.getLang());
+//            List<TreeNode>nodes = parser.getTree(Huffman.expand(programFilesEntity.getFile()));
+//            AttributeCounting ac = parser.getAc();
+//
+//            int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
+//            programFilesEntity.setAc(ac);
+//            ac.setEntity(programFilesEntity);
+//
+//            int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
+//
+//            programFilesEntity.setPlagiat1(plagiat1);
+//            programFilesEntity.setPlagiat2(plagiat2);
+//            programFilesEntity.setTreeContent(Huffman.compress(TreeNode.getBytes(nodes)));
 
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
@@ -142,7 +132,6 @@ public class ProgramUploadController {
     @RequestMapping(value = "/e-Testing/UploadProgramStatus")
     public ModelAndView processUploadPreview(Model model) {
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
-        model.addAttribute(ETestingConstants.MODEL_MESSAGES, programFilesUtil.getMessages());
         model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
         return new ModelAndView("UploadProgramStatus");
     }
@@ -169,12 +158,10 @@ public class ProgramUploadController {
         }
     }
 
-
     @RequestMapping(value = "/e-Testing/viewTree")
-    public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId,
-                                 Model model) {
+    public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId, Model model) {
         try {
-            byte[] content = Huffman.expand(userInfoService.getFileById(programId).getTreeContent());
+            byte[] content = userInfoService.getFileById(programId).getTreeContent();
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
@@ -190,19 +177,8 @@ public class ProgramUploadController {
     }
 
     @RequestMapping(value = "/e-Testing/Run")
-    public ModelAndView script(
-            @RequestParam(value = "command", required = false) String command
-    ) throws Exception {
-        // 755
-        //  (rwxr-xr-x) The file's owner may read, write, and execute the file. All others may read and execute the file.
-        // This setting is common for programs that are used by all users.
+    public ModelAndView script(@RequestParam(value = "command", required = false) String command ) throws Exception {
 
-        //unzip file.zip -d destination_folder
-//        Process  process = Runtime.getRuntime().exec("chmod -R 755 /opt/tomcat/temp/compilers/fpc", null);
-//
-//        int result  = process.waitFor();
-//
-        //find /opt/lampp/htdocs -type f -exec chmod 644 {} \;
         if (command != null) {
             Process process = Runtime.getRuntime().exec(command, null);
 

@@ -1,5 +1,6 @@
 package by.bsu.project.general.model;
 
+import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.general.lang.LangWrap;
 import by.bsu.project.general.constants.ETestingConstants;
 
@@ -111,11 +112,11 @@ public class ProgramFilesEntity {
     }
 
     public byte[] getFile() {
-        return file;
+        return Huffman.expand(file);
     }
 
     public void setFile(byte[] file) {
-        this.file = file;
+        this.file = Huffman.compress(file);
     }
 
     public String getFileName() {
@@ -159,11 +160,11 @@ public class ProgramFilesEntity {
     }
 
     public byte[] getTreeContent() {
-        return treeContent;
+        return Huffman.expand(treeContent);
     }
 
     public void setTreeContent(byte[] treeContent) {
-        this.treeContent = treeContent;
+        this.treeContent = Huffman.compress(treeContent);
     }
 
     public AttributeCounting getAc() {
