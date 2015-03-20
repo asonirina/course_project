@@ -99,4 +99,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         paging1.setPage(page);
         model.addAttribute("paging1", paging1);
     }
+
+    public void setUserInfoDAO(UserInfoDAO userInfoDAO) {
+        this.userInfoDAO = userInfoDAO;
+    }
 }

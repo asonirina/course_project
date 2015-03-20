@@ -103,4 +103,8 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         query.setMaxResults(PAGE_SIZE);
         return query.list();
     }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }

@@ -14,12 +14,18 @@ import java.util.Date;
  */
 public class TestsRunnerCron extends QuartzJobBean {
 
-    @Autowired
     private UserInfoService userInfoService;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         System.out.println(userInfoService);
+    }
 
+    public UserInfoService getUserInfoService() {
+        return userInfoService;
+    }
+
+    public void setUserInfoService(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
     }
 }
