@@ -112,11 +112,11 @@ public class ProgramFilesEntity {
     }
 
     public byte[] getFile() {
-        return Huffman.expand(file);
+        return file == null ? null : Huffman.expand(file);
     }
 
     public void setFile(byte[] file) {
-        this.file = Huffman.compress(file);
+        this.file = file == null ? null : Huffman.compress(file);
     }
 
     public String getFileName() {
@@ -160,11 +160,11 @@ public class ProgramFilesEntity {
     }
 
     public byte[] getTreeContent() {
-        return Huffman.expand(treeContent);
+        return treeContent == null ? null : Huffman.expand(treeContent);
     }
 
     public void setTreeContent(byte[] treeContent) {
-        this.treeContent = Huffman.compress(treeContent);
+        this.treeContent = treeContent == null ? null :Huffman.compress(treeContent);
     }
 
     public AttributeCounting getAc() {

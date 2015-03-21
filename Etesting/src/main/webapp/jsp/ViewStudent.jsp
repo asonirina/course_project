@@ -18,7 +18,7 @@
 <span style="margin-left: 228px"><c:out value="${student.firstName}"/></span><br>
 <span style="margin-left: 200px"><c:out value="Фамилия"/></span>
 <span style="margin-left: 199px"><c:out value="${student.secondName}"/></span><br>
-<span style="margin-left: 200"><c:out value="Класс"/></span>
+<span style="margin-left: 200px"><c:out value="Класс"/></span>
 <span style="margin-left: 220px"><c:out value="${student.form}"/></span><br>
 <span style="margin-left: 200px"><c:out value="Логин"/></span>
 <span style="margin-left: 218px"><c:out value="${student.login}"/></span><br>
@@ -29,19 +29,24 @@
     <span style="margin-left: 113px;"><c:out value="${program.programName}"/></span><br>
     <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
     <span style="margin-left: 146px"><c:out value="${program.uploadProgramTime}"/></span><br>
+    <c:if test="${program.status == null}">
+        <span style="margin-left: 200px"><c:out value="Статус"/></span>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/wait.png"></a><br></span><br>
+    </c:if>
     <c:if test="${program.status == 'passed'}">
         <span style="margin-left: 200px"><c:out value="Статус"/></span>
-        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
     </c:if>
     <c:if test="${program.status == 'failed'}">
         <span style="margin-left: 200px"><c:out value="Статус"/></span>
-        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
     </c:if>
     <c:if test="${not empty program.file}">
         <span style="margin-left: 200px"><c:out value="Программа"/></span>
         <a href="<c:url value="/e-Testing/Download.html?programId=${program.id}"/>" style="margin-left: 193px;">
             <input type="image" value="${program.fileName}" src="/images/download.png"></a><br>
-
+    </c:if>
+    <c:if test="${not empty program.treeContent}">
         <span style="margin-left: 200px"><c:out value="Схема программы"/></span>
         <a href="<c:url value="/e-Testing/viewTree.html?programId=${program.id}"/>" style="margin-left: 150px;">
             <input  type="image" value="${program.fileName}" src="/images/tree.png"></a><br>

@@ -13,13 +13,17 @@
     <span style="margin-left: 113px;"><c:out value="Лабораторная ${program.programName}"/></span><br>
     <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
     <span style="margin-left: 146px"><c:out value="${program.uploadProgramTime}"/></span><br>
+    <c:if test="${program.status == null}">
+        <span style="margin-left: 200px"><c:out value="Статус"/></span>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/wait.png"></a><br></span><br>
+    </c:if>
     <c:if test="${program.status == 'passed'}">
         <span style="margin-left: 200px"><c:out value="Статус"/></span>
-        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
     </c:if>
     <c:if test="${program.status == 'failed'}">
         <span style="margin-left: 200px"><c:out value="Статус"/></span>
-        <span style="margin-left: 217px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
+        <span style="margin-left: 225px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
     </c:if>
 
     <HR color="#A8A8A8" size="1">

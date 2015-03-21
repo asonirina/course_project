@@ -12,5 +12,4 @@ public class OrderComparator implements Comparator<TreeNode> {
     public int compare(TreeNode node1, TreeNode node2) {
         return node1.getI().compareTo(node2.getI());
     }
-
 }
