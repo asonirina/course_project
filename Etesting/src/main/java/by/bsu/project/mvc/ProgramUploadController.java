@@ -147,7 +147,7 @@ public class ProgramUploadController {
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
-            return new ModelAndView("tree/viewTree");
+            return new ModelAndView("tree/viewTree3");
         } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }

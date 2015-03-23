@@ -28,7 +28,7 @@ public class TreeNode implements Serializable {
         this.id = id;
         this.name = name;
         this.parent = node;
-        this.parentId = (parent != null) ? parent.getId() : null;
+        this.parentId = (parent != null) ? parent.getId() : -1;
         if (parent != null) {
             parent.addChild(this);
             parentName = node.getName();
