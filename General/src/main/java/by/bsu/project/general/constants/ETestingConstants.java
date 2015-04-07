@@ -25,6 +25,7 @@ public class ETestingConstants {
     public final static String MODEL_TASKS              = "tasks";
     public final static String MODEL_TITLE              = "title";
     public final static String MODEL_NEWS               = "news";
+    public final static String JSON_PATH                = "jsonPath";
 
     public final static String TABLE_FIELD_LOGIN        = "login";
     public final static String TABLE_FIELD_ID           = "id";

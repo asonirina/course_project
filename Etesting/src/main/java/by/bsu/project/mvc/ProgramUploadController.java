@@ -8,6 +8,7 @@ import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.service.UserInfoService;
+import by.bsu.project.utils.JsonHelper;
 import by.bsu.project.validator.Validator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +148,21 @@ public class ProgramUploadController {
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
-            return new ModelAndView("tree/viewTree3");
+            return new ModelAndView("tree/viewTree2");
+        } catch (Exception ex) {
+            return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/ShowGraph")
+    public ModelAndView showGraph(Model model) {
+        try {
+
+            JsonHelper helper = new JsonHelper();
+            File f =  helper.createJson(null);
+            model.addAttribute(ETestingConstants.JSON_PATH, f.getAbsolutePath());
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SHOW_GRAPH);
+            return new ModelAndView("graph/showGraph");
         } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
