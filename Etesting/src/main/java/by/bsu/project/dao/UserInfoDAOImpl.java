@@ -28,6 +28,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return getSubList(query, pageNumber);
     }
 
+    @Override
+    public List<UserInfoEntity> studentsList() {
+        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form != 'admin'  order by secondName");
+        return query.list();
+    }
+
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
         Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where user_id = :id order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id);

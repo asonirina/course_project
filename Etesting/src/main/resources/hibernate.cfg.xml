@@ -9,5 +9,6 @@
         <mapping class="by.bsu.project.general.model.UserInfoEntity" />
         <mapping class="by.bsu.project.general.model.ProgramFilesEntity" />
         <mapping class="by.bsu.project.general.model.AttributeCounting" />
+        <mapping class="by.bsu.project.general.model.NeuralNode" />
     </session-factory>
 </hibernate-configuration>

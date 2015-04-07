@@ -61,6 +61,9 @@ public class ProgramFilesEntity {
     @Column(name = "plagiat2")
     private Integer plagiat2;
 
+    @Column(name = "cluster")
+    private Integer cluster;
+
     public ProgramFilesEntity(){}
 
     public Long getId() {
@@ -173,6 +176,14 @@ public class ProgramFilesEntity {
 
     public void setAc(AttributeCounting ac) {
         this.ac = ac;
+    }
+
+    public Integer getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(Integer cluster) {
+        this.cluster = cluster;
     }
 
     public LangWrap.Lang getLang() {

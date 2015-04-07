@@ -48,6 +48,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public List<UserInfoEntity> studentsList() {
+        return userInfoDAO.studentsList();
+    }
+
+
+    @Transactional
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
         return userInfoDAO.programsList(pageNumber, id);
     }
@@ -88,6 +94,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public List<ProgramFilesEntity> getTestedProgramFiles() {
         return userInfoDAO.getProgramsByRunStatus(ETestingConstants.TESTED_FILE);
+    }
+
+    @Transactional
+    @Override
+    public List<ProgramFilesEntity> getReadyProgramFiles() {
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE);
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {

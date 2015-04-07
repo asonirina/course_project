@@ -32,9 +32,27 @@ CREATE TABLE `attribute_countings` (
   `cycles` int(3) NOT NULL,
   `program_id` int(11) default NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `FKEMPL` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
+  CONSTRAINT `FK_AC` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
+
+
+#
+# Structure for the `neural node` table :
+#
+
+CREATE TABLE `neural_node` (
+  `id` int(11) NOT NULL auto_increment,
+  `pluses` int(3) NOT NULL,
+  `variables` int(3) NOT NULL,
+  `ifs` int(3) NOT NULL,
+  `user_id` int(11) default NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK_NN` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
+
+
 
 #
 # Structure for the `program_files` table : 
@@ -47,6 +65,7 @@ CREATE TABLE `program_files` (
   `run_status` int(2) NOT NULL,
   `plagiat1` int(3),
   `plagiat2` int(3),
+  `cluster` int(3),
   `file` longblob,
   `file_name` varchar(20) NOT NULL,
   `content_type` varchar(100) default NULL,
@@ -80,7 +99,7 @@ CREATE TABLE `user_info` (
 #
 
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
-  (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234'),
-  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
-  (3,'XXX','XXX','11','asonirina@mail.ru','111');
+  (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234');
+#  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
+#  (3,'XXX','XXX','11','asonirina@mail.ru','111');
 COMMIT;

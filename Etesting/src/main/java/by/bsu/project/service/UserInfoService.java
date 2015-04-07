@@ -16,6 +16,7 @@ public interface UserInfoService {
     public void deleteStudentById(Long id);
     public ProgramFilesEntity getFileById(Long id);
     public List<UserInfoEntity> studentsList(int pageNumber);
+    public List<UserInfoEntity> studentsList();
     public Long studentsCountList ();
     public UserInfoEntity findStudentByLogin(String login);
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
@@ -25,4 +26,5 @@ public interface UserInfoService {
     public List<ProgramFilesEntity> getProgramsByName (ProgramFilesEntity entity);
     public List<ProgramFilesEntity> getUploadedProgramFiles();
     public List<ProgramFilesEntity> getTestedProgramFiles();
+    public List<ProgramFilesEntity> getReadyProgramFiles();
 }

@@ -3,6 +3,7 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.constants.PageTitles;
+import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.huffman.Huffman;
@@ -99,6 +100,9 @@ public class UserInfoController {
             List<String> errors = null;
             if (userInfoEntity.getId() == null) {
                 errors = Validator.validateLogin(userInfoEntity.getLogin(), userInfoService);
+                NeuralNode node = NeuralNode.createRandom();
+                userInfoEntity.setNeuralNode(node);
+                node.setEntity(userInfoEntity);
             }
             userInfoEntity.setProgramFiles(programFilesEntityList);
 
