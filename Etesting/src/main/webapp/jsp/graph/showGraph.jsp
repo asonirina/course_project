@@ -1,53 +1,42 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: iason
-  Date: 07.04.15
-  Time: 9:35
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <%--<meta charset="utf-8">--%>
-    <%--<style>--%>
+<meta charset="utf-8">
+<style>
+    .node {
+        cursor: pointer;
+    }
 
-        <%--.node {--%>
-            <%--cursor: pointer;--%>
-        <%--}--%>
+    .node:hover {
+        stroke: #000;
+        stroke-width: 1.5px;
+    }
 
-        <%--.node:hover {--%>
-            <%--stroke: #000;--%>
-            <%--stroke-width: 1.5px;--%>
-        <%--}--%>
+    .node--leaf {
+        fill: white;
+    }
 
-        <%--.node--leaf {--%>
-            <%--fill: white;--%>
-        <%--}--%>
+    .label {
+        font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        text-anchor: middle;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+    }
 
-        <%--.label {--%>
-            <%--font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;--%>
-            <%--text-anchor: middle;--%>
-            <%--text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;--%>
-        <%--}--%>
-
-        <%--.label,--%>
-        <%--.node--root,--%>
-        <%--.node--leaf {--%>
-            <%--pointer-events: none;--%>
-        <%--}--%>
-
-    <%--</style>--%>
+    .label,
+    .node--root,
+    .node--leaf {
+        pointer-events: none;
+    }
+</style>
 </head>
-
-
 
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
 <script>
 
-    var margin = 20,
-            diameter = 960;
+    var margin = 0,
+            diameter = 700;
 
     var color = d3.scale.linear()
             .domain([-1, 5])
@@ -59,38 +48,7 @@
             .size([diameter - margin, diameter - margin])
             .value(function(d) { return d.size; })
 
-    ///////////////////////
-    /* buttons */
-    var buttonData = ["flare.json"];
-    var buttonDiv = d3.select("body").append("svg")
-            .attr("width", diameter)
-            .attr("height", 50);
-    var buttons = buttonDiv.selectAll(".updateButton")
-            .data(buttonData)
-            .enter()
-            .append('g')
-            .attr("class", "updateButton")
-            .on("click", function(d, i) {
-                callJson(d);
-            });
-    buttons.append("rect")
-            .attr("x", function(d, i) { return (i * 100) + 300; })
-            .attr("width", 98)
-            .attr("height", 25)
-            .attr("ry", 5)
-            .style("stroke", "#787878")
-            .style("fill", "steelblue");
-    buttons.append("text")
-            .attr("x", function(d, i) { return (i * 100) + (100 / 2) + 290; })
-            .attr("y", 12)
-            .attr("dy", "0.35em")
-            .style("text-anchor", "middle")
-            .style("font-size", "15px")
-            .text(function(d) { return d; });
-    ///////////////////////
-
-
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#content-container").append("svg")
             .attr("width", diameter)
             .attr("height", diameter)
             .append("g")
@@ -112,7 +70,7 @@
                     .data(nodes)
                     .enter().append("circle")
                     .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
-                    .style("fill", function(d) { return d.children ? color(d.depth) : null; })
+                    .style("fill", function(d) { return d.children ? color(d.depth) : d.color; })
                     .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
             var text = svg.selectAll("text")
@@ -125,8 +83,8 @@
 
             var node = svg.selectAll("circle,text");
 
-            d3.select("body")
-                    .style("background", color(-1))
+            d3.select("#content-container")
+//                    .style("background", color(-1))
                     .on("click", function() { zoom(root); });
 
             zoomTo([root.x, root.y, root.r * 2 + margin]);
@@ -156,7 +114,7 @@
         });
     };
 
-    callJson("file:///C://tomcat//temp//programs9105313838381819739.json");
+    callJson("<%=request.getContextPath()%>/e-Testing/GetGraph.html");
 
     d3.select(self.frameElement).style("height", diameter + "px");
 

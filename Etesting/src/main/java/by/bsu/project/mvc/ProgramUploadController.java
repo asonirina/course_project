@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
@@ -157,14 +160,31 @@ public class ProgramUploadController {
     @RequestMapping(value = "/e-Testing/ShowGraph")
     public ModelAndView showGraph(Model model) {
         try {
-
-            JsonHelper helper = new JsonHelper();
-            File f =  helper.createJson(null);
-            model.addAttribute(ETestingConstants.JSON_PATH, f.getAbsolutePath());
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SHOW_GRAPH);
             return new ModelAndView("graph/showGraph");
         } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping("/e-Testing/GetGraph")
+    public String getGraph(@RequestParam(value = "programId", required = false) Long programId,
+                                  HttpServletResponse response) {
+        try {
+            JsonHelper helper = new JsonHelper();
+            String json =  helper.createJson(userInfoService.studentsList());
+            response.setHeader("Content-Disposition", "inline;filename=\"flare.json\"");
+            response.setContentType("application/json");
+
+            byte[] file = json.getBytes();
+            response.setContentLength(file.length);
+
+            FileCopyUtils.copy(file, response.getOutputStream());
+            return null;
+
+        } catch (Exception ex) {
+            logger.error("Unable to download test results file " + ex.getMessage());
+            return "redirect:/e-Testing/error503.html";
         }
     }
 
