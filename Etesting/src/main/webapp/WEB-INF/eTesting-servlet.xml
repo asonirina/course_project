@@ -23,7 +23,7 @@
     <bean id="testsRunnerTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="testsRunner"/>
-        <property name="cronExpression" value="0 0 0/1 * * ?"/>
+        <property name="cronExpression" value="0 0 * * * ?"/>
     </bean>
 
     <bean id="plagiarismRunner"
@@ -39,7 +39,7 @@
     <bean id="plagiarismRunnerTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="plagiarismRunner"/>
-        <property name="cronExpression" value="0 20 0/1 * * ?"/>
+        <property name="cronExpression" value="0 20 * * * ?"/>
     </bean>
 
 
@@ -56,7 +56,7 @@
     <bean id="neuralRunnerTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="plagiarismRunner"/>
-        <property name="cronExpression" value="0 40 0/1 * * ?"/>
+        <property name="cronExpression" value="0 40 * * * ?"/>
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
