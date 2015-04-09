@@ -10,7 +10,10 @@ import by.bsu.project.service.UserInfoService;
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,12 +22,14 @@ import java.util.List;
  * User: iason
  * Date: 19.03.15
  */
-public class PlagiarismRunnerCron extends QuartzJobBean {
+@Component
+public class PlagiarismRunnerCron {
     private static final Logger logger = Logger.getLogger(PlagiarismRunnerCron.class);
+    @Autowired
     private UserInfoService userInfoService;
 
-    @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    @Scheduled(fixedDelay = 20000)
+    protected void executeInternal() {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {

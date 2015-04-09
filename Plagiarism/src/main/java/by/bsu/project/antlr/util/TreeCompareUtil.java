@@ -21,7 +21,7 @@ public class TreeCompareUtil {
         int max = 0;
         for (ProgramFilesEntity entity : programs) {
             TreeParser builder = new TreeParser(entity.getLang());
-            List<TreeNode> nodes = builder.getTree(Huffman.expand(entity.getFile()));
+            List<TreeNode> nodes = builder.getTree(entity.getFile());
 //            String arr[] = getTokenizeString(nodes);
 
             TreeEditDistance.numerateTree(nodes.get(0));

@@ -3,14 +3,21 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
 
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx
-		http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+
+    <task:executor id="databasePollExecutor" pool-size="5"/>
+    <task:scheduler id="databasePollScheduler" pool-size="5"/>
+    <task:annotation-driven executor="databasePollExecutor" scheduler="databasePollScheduler"/>
+
 
     <context:annotation-config/>
     <context:component-scan base-package="by.bsu.project"/>
@@ -41,15 +48,6 @@
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
-    </bean>
-
-
-    <bean id="userInfoService" class="by.bsu.project.service.UserInfoServiceImpl">
-        <property name="userInfoDAO" ref="userInfoDAO"/>
-    </bean>
-
-    <bean id="userInfoDAO" class="by.bsu.project.dao.UserInfoDAOImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

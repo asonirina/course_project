@@ -185,8 +185,7 @@ public class UserInfoController {
             response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
             response.setContentType(programFilesEntity.getContentType());
 
-
-            byte[] file = Huffman.expand(programFilesEntity.getFile());
+            byte[] file = programFilesEntity.getFile();
             response.setContentLength(file.length);
 
             FileCopyUtils.copy(file, response.getOutputStream());

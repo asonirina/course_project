@@ -6,9 +6,9 @@ import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.service.UserInfoService;
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -16,14 +16,15 @@ import java.util.List;
  * User: iason
  * Date: 19.03.15
  */
-public class NeuralRunnerCron extends QuartzJobBean {
-    private static final Logger logger = Logger.getLogger(NeuralRunnerCron.class);
+@Component
+public class NeuralRunnerCron {
+    @Autowired
     private UserInfoService userInfoService;
 
-    @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    @Scheduled(fixedDelay = 20000)
+    protected void executeInternal() {
         List<UserInfoEntity> users = userInfoService.studentsList();
-        List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
+        List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();
         for (ProgramFilesEntity programFilesEntity : programs) {
 
             AttributeCounting ac = programFilesEntity.getAc();
