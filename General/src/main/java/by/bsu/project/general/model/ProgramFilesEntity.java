@@ -62,7 +62,7 @@ public class ProgramFilesEntity {
     private Integer plagiat2;
 
     @Column(name = "cluster")
-    private Integer cluster;
+    private Long cluster;
 
     public ProgramFilesEntity(){}
 
@@ -178,11 +178,11 @@ public class ProgramFilesEntity {
         this.ac = ac;
     }
 
-    public Integer getCluster() {
+    public Long getCluster() {
         return cluster;
     }
 
-    public void setCluster(Integer cluster) {
+    public void setCluster(Long cluster) {
         this.cluster = cluster;
     }
 

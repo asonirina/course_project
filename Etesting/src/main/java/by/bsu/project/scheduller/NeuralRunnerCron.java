@@ -46,7 +46,7 @@ public class NeuralRunnerCron {
             userInfoService.save(winner);
 
             programFilesEntity.setRunStatus(3);
-            programFilesEntity.setCluster(winner.getNeuralNode().getId().intValue());
+            programFilesEntity.setCluster(winner.getNeuralNode().getId());
             userInfoService.save(programFilesEntity.getUser());
         }
     }
