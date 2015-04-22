@@ -48,6 +48,12 @@ public class AttributeCounting {
     @Column(name = "cycles")
     private Integer cycles = 0;
 
+    @Column(name = "spaces")
+    private Integer spaces = 0;
+
+    @Column(name = "tabs")
+    private Integer tabs = 0;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity entity;
@@ -172,6 +178,22 @@ public class AttributeCounting {
 
     public void setCycles(Integer cycles) {
         this.cycles = cycles;
+    }
+
+    public Integer getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(Integer spaces) {
+        this.spaces = spaces;
+    }
+
+    public Integer getTabs() {
+        return tabs;
+    }
+
+    public void setTabs(Integer tabs) {
+        this.tabs = tabs;
     }
 
     public Long getId() {

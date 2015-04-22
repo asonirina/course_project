@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 19.03.15
  */
 @Component
-public class NeuralRunnerCron {
+public class NeuralRunner {
     @Autowired
     private UserInfoService userInfoService;
 
@@ -32,7 +32,8 @@ public class NeuralRunnerCron {
             int measure = 10000;
             for (UserInfoEntity entity : users) {
                 NeuralNode node = entity.getNeuralNode();
-                int temp = Math.abs(node.getIfs() - ac.getIfs()) + Math.abs(node.getPluses() - ac.getPluses()) + Math.abs(node.getVariables() - ac.getVariables());
+                int temp = Math.abs(node.getSpaces() - ac.getSpaces())
+                        + Math.abs(node.getTabs() - ac.getTabs());
                 if (temp <= measure) {
                     measure = temp;
                     winner = entity;
@@ -40,9 +41,9 @@ public class NeuralRunnerCron {
             }
 
             int h = (int) (1.0 / ac.getId() * Math.exp(-measure / (2 * sigma(ac.getId()) * sigma(ac.getId()))));
-            winner.getNeuralNode().setIfs(winner.getNeuralNode().getIfs() + h * (ac.getIfs() - winner.getNeuralNode().getIfs()));
-            winner.getNeuralNode().setPluses(winner.getNeuralNode().getPluses() + h * (ac.getPluses() - winner.getNeuralNode().getPluses()));
-            winner.getNeuralNode().setVariables(winner.getNeuralNode().getVariables() + h * (ac.getVariables() - winner.getNeuralNode().getVariables()));
+            winner.getNeuralNode().setSpaces(winner.getNeuralNode().getSpaces() + h * (ac.getSpaces() - winner.getNeuralNode().getSpaces()));
+            winner.getNeuralNode().setTabs(winner.getNeuralNode().getTabs() + h * (ac.getTabs() - winner.getNeuralNode().getTabs()));
+
             userInfoService.save(winner);
 
             programFilesEntity.setRunStatus(3);

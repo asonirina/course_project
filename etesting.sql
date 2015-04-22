@@ -30,6 +30,8 @@ CREATE TABLE `attribute_countings` (
   `variables` int(3) NOT NULL,
   `ifs` int(3) NOT NULL,
   `cycles` int(3) NOT NULL,
+  `spaces` int(3) NOT NULL,
+  `tabs` int(3) NOT NULL,
   `program_id` int(11) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_AC` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
@@ -46,6 +48,8 @@ CREATE TABLE `neural_node` (
   `pluses` int(3) NOT NULL,
   `variables` int(3) NOT NULL,
   `ifs` int(3) NOT NULL,
+  `spaces` int(3) NOT NULL,
+  `tabs` int(3) NOT NULL,
   `user_id` int(11) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_NN` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)

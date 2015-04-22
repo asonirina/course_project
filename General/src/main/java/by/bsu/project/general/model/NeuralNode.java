@@ -33,6 +33,12 @@ public class NeuralNode {
     @Column(name = "ifs")
     private Integer ifs = 0;
 
+    @Column(name = "spaces")
+    private Integer spaces = 0;
+
+    @Column(name = "tabs")
+    private Integer tabs = 0;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserInfoEntity entity;
@@ -80,6 +86,22 @@ public class NeuralNode {
         return id;
     }
 
+    public Integer getSpaces() {
+        return spaces;
+    }
+
+    public Integer getTabs() {
+        return tabs;
+    }
+
+    public void setSpaces(Integer spaces) {
+        this.spaces = spaces;
+    }
+
+    public void setTabs(Integer tabs) {
+        this.tabs = tabs;
+    }
+
     public UserInfoEntity getEntity() {
         return entity;
     }
@@ -93,6 +115,8 @@ public class NeuralNode {
         res.setPluses(RandomUtils.nextInt(20));
         res.setIfs(RandomUtils.nextInt(20));
         res.setVariables(RandomUtils.nextInt(20));
+        res.setSpaces(RandomUtils.nextInt(20));
+        res.setTabs(RandomUtils.nextInt(20));
         return res;
     }
 }

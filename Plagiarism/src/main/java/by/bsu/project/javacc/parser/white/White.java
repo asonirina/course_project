@@ -4,25 +4,17 @@ import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
 
-import java.io.*;
-
 public class White implements WhiteConstants {
-    static PrintStream save;
-    static File outputFile = null;
-    static int lineNo = 1;
-
-    static void ReInit(InputStream is, File f) {
-        White.ReInit(is);
-        White.outputFile = f;
-        White.lineNo = 1;
-    }
+    private int lineNo = 1;
+    private int spaces = 0;
+    private int tabs = 0;
 
     public static void main(String args[]) throws ParseException {
         White parser = new White(System.in);
         parser.Input();
     }
 
-    static final public void anyOldLines() throws ParseException {
+     public void anyOldLines() throws ParseException {
         switch ((jj_ntk == -1) ? jj_ntk_f() : jj_ntk) {
             case hashLine: {
                 jj_consume_token(hashLine);
@@ -34,18 +26,16 @@ public class White implements WhiteConstants {
             }
             case space: {
                 jj_consume_token(space);
-                save.print("<space>");
+                spaces++;
                 break;
             }
             case tab: {
                 jj_consume_token(tab);
-                save.print("<tab>");
+                tabs++;
                 break;
             }
             case newLine: {
                 jj_consume_token(newLine);
-                save.print("<new_line>");
-
                 lineNo++;
                 break;
             }
@@ -61,15 +51,7 @@ public class White implements WhiteConstants {
         }
     }
 
-    static final public void Input() throws ParseException {
-        try {
-            if (outputFile != null)
-                save = new PrintStream(new FileOutputStream(outputFile));
-            else
-                save = System.out;
-        } catch (IOException e) {
-            return;
-        }
+    public void Input() throws ParseException {
         label_1:
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk_f() : jj_ntk) {
@@ -88,42 +70,28 @@ public class White implements WhiteConstants {
             anyOldLines();
         }
         jj_consume_token(0);
-        save.flush();
-        save.close();
     }
 
-    static private boolean jj_initialized_once = false;
+    public WhiteTokenManager token_source;
+    SimpleCharStream jj_input_stream;
+    public Token token;
 
-    static public WhiteTokenManager token_source;
-    static SimpleCharStream jj_input_stream;
-    static public Token token;
+    public Token jj_nt;
+    private int jj_ntk;
+    private int jj_gen;
+    final private int[] jj_la1 = new int[2];
+    private int[] jj_la1_0;
 
-    static public Token jj_nt;
-    static private int jj_ntk;
-    static private int jj_gen;
-    static final private int[] jj_la1 = new int[2];
-    static private int[] jj_la1_0;
-
-    static {
-        jj_la1_init_0();
-    }
-
-    private static void jj_la1_init_0() {
+    private void jj_la1_init_0() {
         jj_la1_0 = new int[]{0x3e, 0x3e,};
     }
 
-    /**
-     * Constructor with InputStream.
-     */
     public White(java.io.InputStream stream) {
         this(stream, null);
     }
 
     public White(java.io.InputStream stream, String encoding) {
-        if (jj_initialized_once) {
-            throw new Error("Second call to constructor of static parser");
-        }
-        jj_initialized_once = true;
+        jj_la1_init_0();
         try {
             jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
         } catch (java.io.UnsupportedEncodingException e) {
@@ -136,11 +104,11 @@ public class White implements WhiteConstants {
         for (int i = 0; i < 2; i++) jj_la1[i] = -1;
     }
 
-    static public void ReInit(java.io.InputStream stream) {
+    public void ReInit(java.io.InputStream stream) {
         ReInit(stream, (String) null);
     }
 
-    static public void ReInit(java.io.InputStream stream, String encoding) {
+    public void ReInit(java.io.InputStream stream, String encoding) {
         try {
             jj_input_stream.ReInit(stream, encoding, 1, 1);
         } catch (java.io.UnsupportedEncodingException e) {
@@ -154,10 +122,6 @@ public class White implements WhiteConstants {
     }
 
     public White(java.io.Reader stream) {
-        if (jj_initialized_once) {
-            throw new Error("Second call to constructor of static parser");
-        }
-        jj_initialized_once = true;
         jj_input_stream = new SimpleCharStream(stream, 1, 1);
         token_source = new WhiteTokenManager(jj_input_stream);
         token = new Token();
@@ -166,7 +130,7 @@ public class White implements WhiteConstants {
         for (int i = 0; i < 2; i++) jj_la1[i] = -1;
     }
 
-    static public void ReInit(java.io.Reader stream) {
+    public void ReInit(java.io.Reader stream) {
         jj_input_stream.ReInit(stream, 1, 1);
         token_source.ReInit(jj_input_stream);
         token = new Token();
@@ -176,10 +140,6 @@ public class White implements WhiteConstants {
     }
 
     public White(WhiteTokenManager tm) {
-        if (jj_initialized_once) {
-            throw new Error("Second call to constructor of static parser");
-        }
-        jj_initialized_once = true;
         token_source = tm;
         token = new Token();
         jj_ntk = -1;
@@ -195,7 +155,7 @@ public class White implements WhiteConstants {
         for (int i = 0; i < 2; i++) jj_la1[i] = -1;
     }
 
-    static private Token jj_consume_token(int kind) throws ParseException {
+    private Token jj_consume_token(int kind) throws ParseException {
         Token oldToken;
         if ((oldToken = token).next != null) token = token.next;
         else token = token.next = token_source.getNextToken();
@@ -209,7 +169,7 @@ public class White implements WhiteConstants {
         throw generateParseException();
     }
 
-    static final public Token getNextToken() {
+    final public Token getNextToken() {
         if (token.next != null) token = token.next;
         else token = token.next = token_source.getNextToken();
         jj_ntk = -1;
@@ -217,7 +177,7 @@ public class White implements WhiteConstants {
         return token;
     }
 
-    static final public Token getToken(int index) {
+    final public Token getToken(int index) {
         Token t = token;
         for (int i = 0; i < index; i++) {
             if (t.next != null) t = t.next;
@@ -226,18 +186,18 @@ public class White implements WhiteConstants {
         return t;
     }
 
-    static private int jj_ntk_f() {
+    private int jj_ntk_f() {
         if ((jj_nt = token.next) == null)
             return (jj_ntk = (token.next = token_source.getNextToken()).kind);
         else
             return (jj_ntk = jj_nt.kind);
     }
 
-    static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-    static private int[] jj_expentry;
-    static private int jj_kind = -1;
+    private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+    private int[] jj_expentry;
+    private int jj_kind = -1;
 
-    static public ParseException generateParseException() {
+    public ParseException generateParseException() {
         jj_expentries.clear();
         boolean[] la1tokens = new boolean[6];
         if (jj_kind >= 0) {
@@ -267,9 +227,15 @@ public class White implements WhiteConstants {
         return new ParseException(token, exptokseq, tokenImage);
     }
 
-    static final public void enable_tracing() {
+    public int getSpaces() {
+        return spaces;
     }
 
-    static final public void disable_tracing() {
+    public int getTabs() {
+        return tabs;
+    }
+
+    public int getLineNo() {
+        return lineNo;
     }
 }
