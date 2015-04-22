@@ -3,12 +3,10 @@ package by.bsu.project.javacc.parser.white;
 import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
-import org.apache.log4j.Logger;
 
 import java.io.*;
 
-class White implements WhiteConstants {
-    private static final Logger logger = Logger.getLogger(White.class);
+public class White implements WhiteConstants {
     static PrintStream save;
     static File outputFile = null;
     static int lineNo = 1;
@@ -51,6 +49,11 @@ class White implements WhiteConstants {
                 lineNo++;
                 break;
             }
+            case others: {
+                jj_consume_token(others);
+
+                break;
+            }
             default:
                 jj_la1[0] = jj_gen;
                 jj_consume_token(-1);
@@ -65,7 +68,6 @@ class White implements WhiteConstants {
             else
                 save = System.out;
         } catch (IOException e) {
-            logger.error(e.getMessage());
             return;
         }
         label_1:
@@ -74,7 +76,8 @@ class White implements WhiteConstants {
                 case hashLine:
                 case newLine:
                 case space:
-                case tab: {
+                case tab:
+                case others: {
                     ;
                     break;
                 }
@@ -106,7 +109,7 @@ class White implements WhiteConstants {
     }
 
     private static void jj_la1_init_0() {
-        jj_la1_0 = new int[]{0x1e, 0x1e,};
+        jj_la1_0 = new int[]{0x3e, 0x3e,};
     }
 
     /**
@@ -236,7 +239,7 @@ class White implements WhiteConstants {
 
     static public ParseException generateParseException() {
         jj_expentries.clear();
-        boolean[] la1tokens = new boolean[5];
+        boolean[] la1tokens = new boolean[6];
         if (jj_kind >= 0) {
             la1tokens[jj_kind] = true;
             jj_kind = -1;
@@ -250,7 +253,7 @@ class White implements WhiteConstants {
                 }
             }
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             if (la1tokens[i]) {
                 jj_expentry = new int[1];
                 jj_expentry[0] = i;

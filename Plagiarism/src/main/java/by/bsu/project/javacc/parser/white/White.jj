@@ -10,7 +10,7 @@ package by.bsu.project.javacc.parser.white;
 import java.io.*;
 import java.util.Date;
 
-class White {
+public class White {
 
   static PrintStream save;
   static File outputFile = null;
@@ -22,7 +22,7 @@ class White {
     White.lineNo=1;
   } // ReInit
 
-  static void main(String args[]) throws ParseException {
+  public static void main(String args[]) throws ParseException {
     White parser = new White(System.in);
     parser.Input();
   }
@@ -49,6 +49,10 @@ TOKEN : {
   <tab : "\t">
 }
 
+TOKEN : {
+  <others : ~[] >
+}
+
 void anyOldLines () : {
 }
 {
@@ -59,20 +63,23 @@ void anyOldLines () : {
     lineNo--;
   }
 |
-   <space> {
+   (<space>) {
 
       save.print("<space>");
    }
 |
-     <tab>  {
+     (<tab> ) {
 
       save.print("<tab>");
    }
 |
-  <newLine> {
+  (<newLine>) {
       save.print("<new_line>");
 
     lineNo++;
+  }
+|
+  (<others> ) {
   }
 
 }
