@@ -6,16 +6,10 @@ import by.bsu.project.javacc.model.Token;
 
 @SuppressWarnings("unused")
 public class CommentTokenManager implements CommentConstants {
-    private static int commonCommentLength = 0;
-    static boolean justStartedComment = false;
+    private int commonCommentLength = 0;
+    boolean justStartedComment = false;
 
-    public static java.io.PrintStream debugStream = System.out;
-
-    public static void setDebugStream(java.io.PrintStream ds) {
-        debugStream = ds;
-    }
-
-    private static final int jjStopStringLiteralDfa_2(int pos, long active0) {
+    private int jjStopStringLiteralDfa_2(int pos, long active0) {
         switch (pos) {
             case 0:
                 if ((active0 & 0x80L) != 0L) {
@@ -28,17 +22,17 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    private static final int jjStartNfa_2(int pos, long active0) {
+    private int jjStartNfa_2(int pos, long active0) {
         return jjMoveNfa_2(jjStopStringLiteralDfa_2(pos, active0), pos + 1);
     }
 
-    static private int jjStopAtPos(int pos, int kind) {
+    private int jjStopAtPos(int pos, int kind) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
         return pos + 1;
     }
 
-    static private int jjMoveStringLiteralDfa0_2() {
+    private int jjMoveStringLiteralDfa0_2() {
         switch (curChar) {
             case 42:
                 return jjMoveStringLiteralDfa1_2(0x80L);
@@ -47,7 +41,7 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa1_2(long active0) {
+    private int jjMoveStringLiteralDfa1_2(long active0) {
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
@@ -65,11 +59,11 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_2(0, active0);
     }
 
-    static final long[] jjbitVec0 = {
+    final long[] jjbitVec0 = {
             0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
     };
 
-    static private int jjMoveNfa_2(int startState, int curPos) {
+    private int jjMoveNfa_2(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 7;
         int i = 1;
@@ -208,7 +202,7 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    private static final int jjStopStringLiteralDfa_0(int pos, long active0) {
+    private int jjStopStringLiteralDfa_0(int pos, long active0) {
         switch (pos) {
             case 0:
                 if ((active0 & 0x1000L) != 0L) {
@@ -263,11 +257,11 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    private static final int jjStartNfa_0(int pos, long active0) {
+    private int jjStartNfa_0(int pos, long active0) {
         return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0), pos + 1);
     }
 
-    static private int jjMoveStringLiteralDfa0_0() {
+    private int jjMoveStringLiteralDfa0_0() {
         switch (curChar) {
             case 35:
                 return jjMoveStringLiteralDfa1_0(0x1000L);
@@ -278,7 +272,7 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa1_0(long active0) {
+    private int jjMoveStringLiteralDfa1_0(long active0) {
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
@@ -303,7 +297,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_0(0, active0);
     }
 
-    static private int jjMoveStringLiteralDfa2_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa2_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(0, old0);
         try {
@@ -322,7 +316,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_0(1, active0);
     }
 
-    static private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(1, old0);
         try {
@@ -341,7 +335,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_0(2, active0);
     }
 
-    static private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(2, old0);
         try {
@@ -360,7 +354,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_0(3, active0);
     }
 
-    static private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(3, old0);
         try {
@@ -380,7 +374,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjStartNfa_0(4, active0);
     }
 
-    static private int jjStartNfaWithStates_0(int pos, int kind, int state) {
+    private int jjStartNfaWithStates_0(int pos, int kind, int state) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
         try {
@@ -391,7 +385,7 @@ public class CommentTokenManager implements CommentConstants {
         return jjMoveNfa_0(state, pos + 1);
     }
 
-    static private int jjMoveNfa_0(int startState, int curPos) {
+    private int jjMoveNfa_0(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 31;
         int i = 1;
@@ -704,11 +698,11 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa0_1() {
+    private int jjMoveStringLiteralDfa0_1() {
         return jjMoveNfa_1(1, 0);
     }
 
-    static private int jjMoveNfa_1(int startState, int curPos) {
+    private int jjMoveNfa_1(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 7;
         int i = 1;
@@ -847,15 +841,15 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static final int[] jjnextStates = {
+    final int[] jjnextStates = {
             23, 24, 26, 14, 16, 23, 24, 28, 26, 17, 18, 20, 25, 27, 29,
     };
 
-    public static final String[] jjstrLiteralImages = {
+    public final String[] jjstrLiteralImages = {
             "", "\57\57", null, null, null, null, "\57\52", null, null, null, null, null,
             null, null, null, null, null, null, null, null,};
 
-    static protected Token jjFillToken() {
+    protected Token jjFillToken() {
         final Token t;
         final String curTokenImage;
         final int beginLine;
@@ -878,14 +872,14 @@ public class CommentTokenManager implements CommentConstants {
         return t;
     }
 
-    static int curLexState = 0;
-    static int defaultLexState = 0;
-    static int jjnewStateCnt;
-    static int jjround;
-    static int jjmatchedPos;
-    static int jjmatchedKind;
+    int curLexState = 0;
+    int defaultLexState = 0;
+    int jjnewStateCnt;
+    int jjround;
+    int jjmatchedPos;
+    int jjmatchedKind;
 
-    public static Token getNextToken() {
+    public Token getNextToken() {
         Token matchedToken;
         int curPos = 0;
 
@@ -960,7 +954,7 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static void SkipLexicalActions(Token matchedToken) {
+    void SkipLexicalActions(Token matchedToken) {
         switch (jjmatchedKind) {
             case 2:
                 image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
@@ -992,7 +986,7 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static void TokenLexicalActions(Token matchedToken) {
+    void TokenLexicalActions(Token matchedToken) {
         switch (jjmatchedKind) {
             case 1:
                 image.append(jjstrLiteralImages[1]);
@@ -1014,25 +1008,25 @@ public class CommentTokenManager implements CommentConstants {
         }
     }
 
-    static private void jjCheckNAdd(int state) {
+    private void jjCheckNAdd(int state) {
         if (jjrounds[state] != jjround) {
             jjstateSet[jjnewStateCnt++] = state;
             jjrounds[state] = jjround;
         }
     }
 
-    static private void jjAddStates(int start, int end) {
+    private void jjAddStates(int start, int end) {
         do {
             jjstateSet[jjnewStateCnt++] = jjnextStates[start];
         } while (start++ != end);
     }
 
-    static private void jjCheckNAddTwoStates(int state1, int state2) {
+    private void jjCheckNAddTwoStates(int state1, int state2) {
         jjCheckNAdd(state1);
         jjCheckNAdd(state2);
     }
 
-    static private void jjCheckNAddStates(int start, int end) {
+    private void jjCheckNAddStates(int start, int end) {
         do {
             jjCheckNAdd(jjnextStates[start]);
         } while (start++ != end);
@@ -1051,60 +1045,60 @@ public class CommentTokenManager implements CommentConstants {
         SwitchTo(lexState);
     }
 
-    static public void ReInit(SimpleCharStream stream) {
+    public void ReInit(SimpleCharStream stream) {
         jjmatchedPos = jjnewStateCnt = 0;
         curLexState = defaultLexState;
         input_stream = stream;
         ReInitRounds();
     }
 
-    static private void ReInitRounds() {
+    private void ReInitRounds() {
         int i;
         jjround = 0x80000001;
         for (i = 31; i-- > 0; )
             jjrounds[i] = 0x80000000;
     }
 
-    static public void ReInit(SimpleCharStream stream, int lexState) {
+    public void ReInit(SimpleCharStream stream, int lexState) {
         ReInit(stream);
         SwitchTo(lexState);
     }
 
-    static public void SwitchTo(int lexState) {
+    public void SwitchTo(int lexState) {
         if (lexState >= 3 || lexState < 0)
             throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
         else
             curLexState = lexState;
     }
 
-    public static int getCommonCommentLength() {
+    public int getCommonCommentLength() {
         return commonCommentLength;
     }
 
-    public static final String[] lexStateNames = {
+    public final String[] lexStateNames = {
             "DEFAULT",
             "inSingleLineComment",
             "inFormalOrMultiLineComment",
     };
 
-    public static final int[] jjnewLexState = {
+    public final int[] jjnewLexState = {
             -1, 1, 0, -1, -1, 2, 2, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     };
-    static final long[] jjtoToken = {
+    final long[] jjtoToken = {
             0xf7863L,
     };
-    static final long[] jjtoSkip = {
+    final long[] jjtoSkip = {
             0x79cL,
     };
-    static protected SimpleCharStream input_stream;
+    protected SimpleCharStream input_stream;
 
-    static private final int[] jjrounds = new int[31];
-    static private final int[] jjstateSet = new int[2 * 31];
+    private final int[] jjrounds = new int[31];
+    private final int[] jjstateSet = new int[2 * 31];
 
-    private static final StringBuilder jjimage = new StringBuilder();
-    private static StringBuilder image = jjimage;
-    private static int jjimageLen;
-    private static int lengthOfMatch;
+    final StringBuilder jjimage = new StringBuilder();
+    StringBuilder image = jjimage;
+    int jjimageLen;
+    int lengthOfMatch;
 
-    static protected char curChar;
+    protected char curChar;
 }

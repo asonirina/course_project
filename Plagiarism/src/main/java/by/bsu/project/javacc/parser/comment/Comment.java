@@ -14,7 +14,7 @@ public class Comment implements CommentConstants {
         Comment parser = new Comment(new ByteArrayInputStream(("//123\n" +
                 "/*qwe qwre*/" +
                 "//124 bdgg bbbb\n" +
-                "dfg dfgg").getBytes()));
+                "dfg dfgg vv").getBytes()));
         parser.Input();
         System.out.println(parser.getCommentLength());
     }
