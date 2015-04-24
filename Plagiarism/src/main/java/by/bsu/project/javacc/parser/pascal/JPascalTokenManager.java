@@ -4,16 +4,18 @@ import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.general.TokenMgrError;
 import by.bsu.project.javacc.model.Token;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class JPascalTokenManager implements JPascalConstants {
+    List<String> nodes = new ArrayList<>();
 
-    public static java.io.PrintStream debugStream = System.out;
-
-    public static void setDebugStream(java.io.PrintStream ds) {
-        debugStream = ds;
+    public List<String> getNodes() {
+        return nodes;
     }
 
-    private static final int jjStopStringLiteralDfa_0(int pos, long active0, long active1) {
+    private int jjStopStringLiteralDfa_0(int pos, long active0, long active1) {
         switch (pos) {
             case 0:
                 if ((active1 & 0x400000L) != 0L)
@@ -136,17 +138,17 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    private static final int jjStartNfa_0(int pos, long active0, long active1) {
+    private int jjStartNfa_0(int pos, long active0, long active1) {
         return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0, active1), pos + 1);
     }
 
-    static private int jjStopAtPos(int pos, int kind) {
+    private int jjStopAtPos(int pos, int kind) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
         return pos + 1;
     }
 
-    static private int jjMoveStringLiteralDfa0_0() {
+    private int jjMoveStringLiteralDfa0_0() {
         switch (curChar) {
             case 34:
                 return jjStopAtPos(0, 87);
@@ -256,7 +258,7 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa1_0(long active0, long active1) {
+    private int jjMoveStringLiteralDfa1_0(long active0, long active1) {
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
@@ -349,7 +351,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(0, active0, active1);
     }
 
-    static private int jjMoveStringLiteralDfa2_0(long old0, long active0, long old1, long active1) {
+    private int jjMoveStringLiteralDfa2_0(long old0, long active0, long old1, long active1) {
         if (((active0 &= old0) | (active1 &= old1)) == 0L)
             return jjStartNfa_0(0, old0, old1);
         try {
@@ -433,7 +435,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(1, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(1, old0, 0L);
         try {
@@ -501,7 +503,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(2, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(2, old0, 0L);
         try {
@@ -550,7 +552,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(3, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(3, old0, 0L);
         try {
@@ -613,7 +615,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(4, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa6_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa6_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(4, old0, 0L);
         try {
@@ -659,7 +661,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(5, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa7_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa7_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(5, old0, 0L);
         try {
@@ -689,7 +691,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(6, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa8_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa8_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(6, old0, 0L);
         try {
@@ -717,7 +719,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(7, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa9_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa9_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(7, old0, 0L);
         try {
@@ -736,7 +738,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(8, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa10_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa10_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(8, old0, 0L);
         try {
@@ -755,7 +757,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(9, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa11_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa11_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(9, old0, 0L);
         try {
@@ -774,7 +776,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(10, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa12_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa12_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(10, old0, 0L);
         try {
@@ -793,7 +795,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(11, active0, 0L);
     }
 
-    static private int jjMoveStringLiteralDfa13_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa13_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(11, old0, 0L);
         try {
@@ -814,7 +816,7 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjStartNfa_0(12, active0, 0L);
     }
 
-    static private int jjStartNfaWithStates_0(int pos, int kind, int state) {
+    private int jjStartNfaWithStates_0(int pos, int kind, int state) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
         try {
@@ -825,11 +827,11 @@ public class JPascalTokenManager implements JPascalConstants {
         return jjMoveNfa_0(state, pos + 1);
     }
 
-    static final long[] jjbitVec0 = {
+    final long[] jjbitVec0 = {
             0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
     };
 
-    static private int jjMoveNfa_0(int startState, int curPos) {
+    private int jjMoveNfa_0(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 32;
         int i = 1;
@@ -1114,7 +1116,7 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa0_2() {
+    private int jjMoveStringLiteralDfa0_2() {
         switch (curChar) {
             case 125:
                 return jjStopAtPos(0, 9);
@@ -1123,7 +1125,7 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa0_1() {
+    private int jjMoveStringLiteralDfa0_1() {
         switch (curChar) {
             case 42:
                 return jjMoveStringLiteralDfa1_1(0x80L);
@@ -1132,7 +1134,7 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa1_1(long active0) {
+    private int jjMoveStringLiteralDfa1_1(long active0) {
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
@@ -1149,15 +1151,12 @@ public class JPascalTokenManager implements JPascalConstants {
         return 2;
     }
 
-    static final int[] jjnextStates = {
+    final int[] jjnextStates = {
             7, 8, 10, 0, 1, 3, 7, 8, 12, 10, 9, 11, 13, 16, 24, 31,
             4, 5,
     };
 
-    /**
-     * Token literal values.
-     */
-    public static final String[] jjstrLiteralImages = {
+    public final String[] jjstrLiteralImages = {
             "", null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null,
@@ -1166,7 +1165,7 @@ public class JPascalTokenManager implements JPascalConstants {
             "\54", "\72", "\53", "\55", "\52", "\52\52", "\57", "\56", "\56\56", "\72\75", "\75",
             "\74\75", "\76\75", "\74\76", "\76", "\74", "\100", "\136", "\47", "\42",};
 
-    static protected Token jjFillToken() {
+    protected Token jjFillToken() {
         final Token t;
         final String curTokenImage;
         final int beginLine;
@@ -1189,17 +1188,14 @@ public class JPascalTokenManager implements JPascalConstants {
         return t;
     }
 
-    static int curLexState = 0;
-    static int defaultLexState = 0;
-    static int jjnewStateCnt;
-    static int jjround;
-    static int jjmatchedPos;
-    static int jjmatchedKind;
+    int curLexState = 0;
+    int defaultLexState = 0;
+    int jjnewStateCnt;
+    int jjround;
+    int jjmatchedPos;
+    int jjmatchedKind;
 
-    /**
-     * Get the next Token.
-     */
-    public static Token getNextToken() {
+    public Token getNextToken() {
         Token matchedToken;
         int curPos = 0;
 
@@ -1298,33 +1294,30 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static private void jjCheckNAdd(int state) {
+    private void jjCheckNAdd(int state) {
         if (jjrounds[state] != jjround) {
             jjstateSet[jjnewStateCnt++] = state;
             jjrounds[state] = jjround;
         }
     }
 
-    static private void jjAddStates(int start, int end) {
+    private void jjAddStates(int start, int end) {
         do {
             jjstateSet[jjnewStateCnt++] = jjnextStates[start];
         } while (start++ != end);
     }
 
-    static private void jjCheckNAddTwoStates(int state1, int state2) {
+    private void jjCheckNAddTwoStates(int state1, int state2) {
         jjCheckNAdd(state1);
         jjCheckNAdd(state2);
     }
 
-    static private void jjCheckNAddStates(int start, int end) {
+    private void jjCheckNAddStates(int start, int end) {
         do {
             jjCheckNAdd(jjnextStates[start]);
         } while (start++ != end);
     }
 
-    /**
-     * Constructor.
-     */
     public JPascalTokenManager(SimpleCharStream stream) {
 
         if (input_stream != null)
@@ -1333,43 +1326,31 @@ public class JPascalTokenManager implements JPascalConstants {
         input_stream = stream;
     }
 
-    /**
-     * Constructor.
-     */
     public JPascalTokenManager(SimpleCharStream stream, int lexState) {
         ReInit(stream);
         SwitchTo(lexState);
     }
 
-    /**
-     * Reinitialise parser.
-     */
-    static public void ReInit(SimpleCharStream stream) {
+    public void ReInit(SimpleCharStream stream) {
         jjmatchedPos = jjnewStateCnt = 0;
         curLexState = defaultLexState;
         input_stream = stream;
         ReInitRounds();
     }
 
-    static private void ReInitRounds() {
+    private void ReInitRounds() {
         int i;
         jjround = 0x80000001;
         for (i = 32; i-- > 0; )
             jjrounds[i] = 0x80000000;
     }
 
-    /**
-     * Reinitialise parser.
-     */
-    static public void ReInit(SimpleCharStream stream, int lexState) {
+    public void ReInit(SimpleCharStream stream, int lexState) {
         ReInit(stream);
         SwitchTo(lexState);
     }
 
-    /**
-     * Switch to specified lex state.
-     */
-    static public void SwitchTo(int lexState) {
+    public void SwitchTo(int lexState) {
         if (lexState >= 3 || lexState < 0)
             throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
         else
@@ -1379,40 +1360,37 @@ public class JPascalTokenManager implements JPascalConstants {
     /**
      * Lexer state names.
      */
-    public static final String[] lexStateNames = {
+    public final String[] lexStateNames = {
             "DEFAULT",
             "WithinComment0",
             "WithinComment1",
     };
 
-    /**
-     * Lex State array.
-     */
-    public static final int[] jjnewLexState = {
+    public final int[] jjnewLexState = {
             -1, -1, -1, -1, -1, 1, 2, 0, -1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     };
-    static final long[] jjtoToken = {
+    final long[] jjtoToken = {
             0x9fffffffffff8801L, 0xffffffL,
     };
-    static final long[] jjtoSkip = {
+    final long[] jjtoSkip = {
             0x2feL, 0x0L,
     };
-    static final long[] jjtoMore = {
+    final long[] jjtoMore = {
             0x500L, 0x0L,
     };
-    static protected SimpleCharStream input_stream;
+    protected SimpleCharStream input_stream;
 
-    static private final int[] jjrounds = new int[32];
-    static private final int[] jjstateSet = new int[2 * 32];
+    private final int[] jjrounds = new int[32];
+    private final int[] jjstateSet = new int[2 * 32];
 
 
-    static protected char curChar;
-    private static int lengthOfMatch;
+    protected char curChar;
+    private int lengthOfMatch;
 
-    static void SkipLexicalActions(Token matchedToken) {
+    void SkipLexicalActions(Token matchedToken) {
         switch (jjmatchedKind) {
             case 5:
                 break;
@@ -1423,249 +1401,253 @@ public class JPascalTokenManager implements JPascalConstants {
         }
     }
 
-    static void TokenLexicalActions(Token matchedToken) {
+    void TokenLexicalActions(Token matchedToken) {
         switch (jjmatchedKind) {
 
             case 0:
                 //image.append(jjstrLiteralImages[3]);
                 lengthOfMatch = jjstrLiteralImages[3].length();
-                JPascal.out("<EOF>");
+                out("<EOF>");
                 break;
             case 11:
-                JPascal.out("<NUMBER>");
+                out("<NUMBER>");
                 break;
             case 12:
-                JPascal.out("<DECIMAL>");
+                out("<DECIMAL>");
                 break;
             case 13:
-                JPascal.out("<FRAC>");
+                out("<FRAC>");
                 break;
             case 14:
-                JPascal.out("<EXP>");
+                out("<EXP>");
                 break;
             case 15:
-                JPascal.out("<STRING_LITERAL>");
+                out("<STRING_LITERAL>");
                 break;
             case 16:
-                JPascal.out("<AND>");
+                out("<AND>");
                 break;
             case 17:
-                JPascal.out("<BEGIN>");
+                out("<BEGIN>");
                 break;
             case 18:
-                JPascal.out("<CASE>");
+                out("<CASE>");
                 break;
             case 19:
-                JPascal.out("<CONST>");
+                out("<CONST>");
                 break;
             case 20:
-                JPascal.out("<DIV>");
+                out("<DIV>");
                 break;
             case 21:
-                JPascal.out("<DO>");
+                out("<DO>");
                 break;
             case 22:
-                JPascal.out("<DOWNTO>");
+                out("<DOWNTO>");
                 break;
             case 23:
-                JPascal.out("<ELSE>");
+                out("<ELSE>");
                 break;
             case 24:
-                JPascal.out("<END>");
+                out("<END>");
                 break;
             case 25:
-                JPascal.out("<EXTERN>");
+                out("<EXTERN>");
                 break;
             case 26:
-                JPascal.out("<FOR>");
+                out("<FOR>");
                 break;
             case 27:
-                JPascal.out("<FORWARD>");
+                out("<FORWARD>");
                 break;
             case 28:
-                JPascal.out("<FUNCTION>");
+                out("<FUNCTION>");
                 break;
             case 29:
-                JPascal.out("<GOTO>");
+                out("<GOTO>");
                 break;
             case 30:                
-                JPascal.out("<IF>");
+                out("<IF>");
                 
                 break;
             case 31:
-                JPascal.out("<IN>");
+                out("<IN>");
                 break;
             case 32:
-                JPascal.out("<LABEL>");
+                out("<LABEL>");
                 break;
             case 33:
-                JPascal.out("<INTERFACE>");
+                out("<INTERFACE>");
                 break;
             case 34:
-                JPascal.out("<IMPLEMENTATION>");
+                out("<IMPLEMENTATION>");
                 break;
             case 35:
-                JPascal.out("<MOD>");
+                out("<MOD>");
                 break;
             case 36:
-                JPascal.out("<NIL>");
+                out("<NIL>");
                 break;
             case 37:
-                JPascal.out("<MAXINT>");
+                out("<MAXINT>");
                 break;
             case 38:
-                JPascal.out("<NOT>");
+                out("<NOT>");
                 break;
             case 39:
-                JPascal.out("<OF>");
+                out("<OF>");
                 break;
             case 40:
-                JPascal.out("<OR>");
+                out("<OR>");
                 break;
             case 41:
-                JPascal.out("<OTHERWISE>");
+                out("<OTHERWISE>");
                 break;
             case 42:
-                JPascal.out("<PACKED>");
+                out("<PACKED>");
                 break;
             case 43:
-                JPascal.out("<PROCEDURE>");
+                out("<PROCEDURE>");
                 break;
             case 44:
-                JPascal.out("<PROGRAM>");
+                out("<PROGRAM>");
                 break;
             case 45:
-                JPascal.out("<RECORD>");
+                out("<RECORD>");
                 break;
             case 46:
-                JPascal.out("<REPEAT>");
+                out("<REPEAT>");
                 break;
             case 47:
-                JPascal.out("<SETOF>");
+                out("<SETOF>");
                 break;
             case 48:
-                JPascal.out("<THEN>");
+                out("<THEN>");
                 break;
             case 49:
-                JPascal.out("<TO>");
+                out("<TO>");
                 break;
             case 50:
-                JPascal.out("<TYPE>");
+                out("<TYPE>");
                 break;
             case 51:
-                JPascal.out("<UNIT>");
+                out("<UNIT>");
                 break;
             case 52:
-                JPascal.out("<UNTIL>");
+                out("<UNTIL>");
                 break;
             case 53:
-                JPascal.out("<USES>");
+                out("<USES>");
                 break;
             case 54:
-                JPascal.out("<VAR>");
+                out("<VAR>");
                 break;
             case 55:
-                JPascal.out("<WHILE>");
+                out("<WHILE>");
                 break;
             case 56:
-                JPascal.out("<WITH>");
+                out("<WITH>");
                 break;
             case 57:
-                JPascal.out("<SINGLE>");
+                out("<SINGLE>");
                 break;
             case 58:
-                JPascal.out("<POINTER>");
+                out("<POINTER>");
                 break;
             case 59:
-                JPascal.out("<STRING>");
+                out("<STRING>");
                 break;
             case 60:
-                JPascal.out("<IDENTIFIER>");
+                out("<IDENTIFIER>");
                 break;
             case 61:
-                JPascal.out("<LETTER>");
+                out("<LETTER>");
                 break;
             case 62:
-                JPascal.out("<DIGIT>");
+                out("<DIGIT>");
                 break;
             case 63:
-                JPascal.out("<LPAREN>");
+                out("<LPAREN>");
                 break;
             case 64:
-                JPascal.out("<RPAREN>");
+                out("<RPAREN>");
                 break;
             case 65:
-                JPascal.out("<LBRACKET>");
+                out("<LBRACKET>");
                 break;
             case 66:
-                JPascal.out("<RBRACKET>");
+                out("<RBRACKET>");
                 break;
             case 67:
-                JPascal.out("<SEMICOLON>"); //TODO: ; maybe should remove it?
+                out("<SEMICOLON>");
                 break;
             case 68:
-                JPascal.out("<COMMA>");
+                out("<COMMA>");
                 break;
             case 69:
-                JPascal.out("<COLON>");
+                out("<COLON>");
                 break;
             case 70:
-                JPascal.out("<PLUS>");
+                out("<PLUS>");
                 break;
             case 71:
-                JPascal.out("<MINUS>");
+                out("<MINUS>");
                 break;
             case 72:
-                JPascal.out("<MULTIPLY>");
+                out("<MULTIPLY>");
                 break;
             case 73:
-                JPascal.out("<STARSTAR>");
+                out("<STARSTAR>");
                 break;
             case 74:
-                JPascal.out("<DIVIDE>");
+                out("<DIVIDE>");
                 break;
             case 75:
-                JPascal.out("<DOT>");
+                out("<DOT>");
                 break;
             case 76:
-                JPascal.out("<DOTDOT>");
+                out("<DOTDOT>");
                 break;
             case 77:
-                JPascal.out("<ASSIGN>");
+                out("<ASSIGN>");
                 break;
             case 78:
-                JPascal.out("<EQ>");
+                out("<EQ>");
                 break;
             case 79:
-                JPascal.out("<LE>");
+                out("<LE>");
                 break;
             case 80:
-                JPascal.out("<GE>");
+                out("<GE>");
                 break;
             case 81:
-                JPascal.out("<NE>");
+                out("<NE>");
                 break;
             case 82:
-                JPascal.out("<GT>");
+                out("<GT>");
                 break;
             case 83:
-                JPascal.out("<LT>");
+                out("<LT>");
                 break;
             case 84:
-                JPascal.out("<ADDR>");
+                out("<ADDR>");
                 break;
             case 85:
-                JPascal.out("<UPARROW>");
+                out("<UPARROW>");
                 break;
             case 86:
-                JPascal.out("<SQOUTE>");
+                out("<SQOUTE>");
                 break;
             case 87:
-                JPascal.out("<DQOUTE>");
+                out("<DQOUTE>");
                 break;
 
             default:
                 break;
         }
+    }
+    
+    private void out(String message) {
+        nodes.add(message);
     }
 }

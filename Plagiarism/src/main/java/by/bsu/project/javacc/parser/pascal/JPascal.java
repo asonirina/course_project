@@ -5,64 +5,27 @@ import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 public class JPascal implements JPascalConstants {
-    static List<String> nodes = new ArrayList<>();
+     public List<String> getNodes() {
+         return token_source.getNodes();
+     }
 
-    static boolean verbose = false,
-            quiet = false,
-            report = false,
-            ready = false,
-            ck_syntax = false;
+    Vector identifiers = new Vector();
 
-    static Vector identifiers = new Vector();
+    Vector procedures = new Vector();
 
-    static Vector procedures = new Vector();
-    /**
-     * The new file containing the output of this tokeniser.
-     */
-    static File outputFile = null;
-
-    /**
-     * Keep track of the line number from the file read in. Used to print #line xxx in the outputFile.
-     */
-    static int lineNo = 1;
+     int lineNo = 1;
 
     public static void main(String args[]) throws Exception {
         JPascal parser;
-        ready = true;
-        ck_syntax = true;
-        report = true;
-        if (ready) {
-            Token token;
-            parser = new JPascal(new FileInputStream("Pascal.pas"));
-            if (ck_syntax) {
-                try {
-                    while (true) {
-                        parser.Program();
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace(System.err);
-                }
-            }
-            if (report) {
-                generateReport(parser);
-            }
-            if (!ck_syntax && !report) {
-                for (; ; ) {
-                    token = parser.getNextToken();
-                    out(kindOf(token));
-                    if (kindOf(token).equals("<EOF>"))
-                        break;
-                }
-            }
-        }
+        parser = new JPascal(new ByteArrayInputStream("program p1; begin end.".getBytes()));
+        parser.Program();
     }
 
-    public static void generateReport(JPascal parser) {
+    public void generateReport(JPascal parser) {
         Token token;
         try {
             for (; ; ) {
@@ -78,28 +41,19 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static public void verbose(String message) {
-        if (verbose) out(message);
+
+    public void out(String message) {
     }
 
-    static public void out(String message) {
-            nodes.add(message);
-    }
-
-    static public void err(String message) {
+    public void err(String message) {
         System.err.println(message);
     }
 
-    public static String kindOf(Token token) {
+    public String kindOf(Token token) {
         return JPascalConstants.tokenImage[token.kind];
     }
 
-
-    public static void show(String message) {
-        System.out.println(message);
-    }
-
-    static final public void Program() throws ParseException {
+    public void Program() throws ParseException {
 
         Token program = null;
         if (jj_2_2(2)) {
@@ -131,7 +85,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void block() throws ParseException {
+    public void block() throws ParseException {
         label_1:
         while (true) {
             if (jj_2_4(2)) {
@@ -145,7 +99,7 @@ public class JPascal implements JPascalConstants {
         out("block");
     }
 
-    static final public void parts() throws ParseException {
+    public void parts() throws ParseException {
         if (jj_2_5(2)) {
             label_declaration_part();
         } else if (jj_2_6(2)) {
@@ -162,7 +116,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void label_declaration_part() throws ParseException {
+    public void label_declaration_part() throws ParseException {
         jj_consume_token(LABEL);
         jj_consume_token(NUMBER);
         label_2:
@@ -179,7 +133,7 @@ public class JPascal implements JPascalConstants {
         out("label_declaration_part");
     }
 
-    static final public void const_declaration_part() throws ParseException {
+    public void const_declaration_part() throws ParseException {
         jj_consume_token(CONST);
         const_definition();
         label_3:
@@ -196,14 +150,14 @@ public class JPascal implements JPascalConstants {
         out("const_declaration_part");
     }
 
-    static final public void const_definition() throws ParseException {
+    public void const_definition() throws ParseException {
         identifier();
         jj_consume_token(EQ);
         _const();
         out("const_definition");
     }
 
-    static final public void type_declaration_part() throws ParseException {
+    public void type_declaration_part() throws ParseException {
         jj_consume_token(TYPE);
         type_definition();
         label_4:
@@ -220,14 +174,14 @@ public class JPascal implements JPascalConstants {
         out("type_declaration_part");
     }
 
-    static final public void type_definition() throws ParseException {
+    public void type_definition() throws ParseException {
         identifier();
         jj_consume_token(EQ);
         type();
         out("type_definition");
     }
 
-    static final public void type() throws ParseException {
+    public void type() throws ParseException {
         if (jj_2_14(2)) {
             jj_consume_token(UPARROW);
             identifier();
@@ -264,7 +218,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void simple_type() throws ParseException {
+    public void simple_type() throws ParseException {
         if (jj_2_20(2)) {
             identifier();
         } else if (jj_2_21(2)) {
@@ -292,7 +246,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void _const() throws ParseException {
+    public void _const() throws ParseException {
         if (jj_2_26(2)) {
             jj_consume_token(STRING);
         } else if (jj_2_27(2)) {
@@ -316,7 +270,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void _const2() throws ParseException {
+    public void _const2() throws ParseException {
         if (jj_2_28(2)) {
             identifier();
         } else if (jj_2_29(2)) {
@@ -327,7 +281,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void field_list() throws ParseException {
+    public void field_list() throws ParseException {
         identifier_list();
         jj_consume_token(COLON);
         type();
@@ -346,7 +300,7 @@ public class JPascal implements JPascalConstants {
         out("field_list");
     }
 
-    static final public void var_declaration_part() throws ParseException {
+    public void var_declaration_part() throws ParseException {
         jj_consume_token(VAR);
         var_declaration();
         label_8:
@@ -363,14 +317,14 @@ public class JPascal implements JPascalConstants {
         out("var_declaration_part");
     }
 
-    static final public void var_declaration() throws ParseException {
+    public void var_declaration() throws ParseException {
         identifier_list();
         jj_consume_token(COLON);
         type();
         out("var_declaration");
     }
 
-    static final public Vector identifier_list() throws ParseException {
+    public Vector identifier_list() throws ParseException {
         Vector identifier_list;
         identifier_list = new Vector();
         single_identifier(identifier_list);
@@ -391,7 +345,7 @@ public class JPascal implements JPascalConstants {
         throw new Error("Missing return statement in function");
     }
 
-    static final public Token identifier() throws ParseException {
+    public Token identifier() throws ParseException {
         Token identifier;
         identifier = jj_consume_token(IDENTIFIER);
         identifiers.add(identifier);
@@ -401,7 +355,7 @@ public class JPascal implements JPascalConstants {
         throw new Error("Missing return statement in function");
     }
 
-    static final public void single_identifier(Vector identifier_list) throws ParseException {
+    public void single_identifier(Vector identifier_list) throws ParseException {
         Token identifier;
         identifier = identifier();
         if (identifier_list != null) {
@@ -409,7 +363,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void subroutine_declaration_part() throws ParseException {
+    public void subroutine_declaration_part() throws ParseException {
         if (jj_2_35(2)) {
             procedure_declaration();
             if (jj_2_33(2)) {
@@ -431,7 +385,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void procedure_declaration() throws ParseException {
+    public void procedure_declaration() throws ParseException {
         Token procedure;
         jj_consume_token(PROCEDURE);
         procedure = identifier();
@@ -446,7 +400,7 @@ public class JPascal implements JPascalConstants {
         procedures.add(procedure);
     }
 
-    static final public void function_declaration() throws ParseException {
+    public void function_declaration() throws ParseException {
         Token function;
         jj_consume_token(FUNCTION);
         function = identifier();
@@ -468,7 +422,7 @@ public class JPascal implements JPascalConstants {
         procedures.add(function);
     }
 
-    static final public void formal_parameters() throws ParseException {
+    public void formal_parameters() throws ParseException {
         jj_consume_token(LPAREN);
         param_section();
         label_10:
@@ -485,7 +439,7 @@ public class JPascal implements JPascalConstants {
         out("formal_parameters");
     }
 
-    static final public void param_section() throws ParseException {
+    public void param_section() throws ParseException {
         if (jj_2_42(2)) {
             if (jj_2_41(2)) {
                 jj_consume_token(VAR);
@@ -510,7 +464,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void compound_statement() throws ParseException {
+    public void compound_statement() throws ParseException {
         jj_consume_token(BEGIN);
         labeled_statement();
         label_11:
@@ -527,7 +481,7 @@ public class JPascal implements JPascalConstants {
         out("compound_statement");
     }
 
-    static final public void labeled_statement() throws ParseException {
+    public void labeled_statement() throws ParseException {
         if (jj_2_46(2)) {
             jj_consume_token(NUMBER);
             jj_consume_token(COLON);
@@ -538,7 +492,7 @@ public class JPascal implements JPascalConstants {
         out("labeled_statement");
     }
 
-    static final public void statement() throws ParseException {
+    public void statement() throws ParseException {
         if (jj_2_57(2)) {
             if (jj_2_47(2)) {
                 assign_statement();
@@ -570,7 +524,7 @@ public class JPascal implements JPascalConstants {
         out("statement");
     }
 
-    static final public void assign_statement() throws ParseException {
+    public void assign_statement() throws ParseException {
         identifier();
         infipo();
         jj_consume_token(ASSIGN);
@@ -578,7 +532,7 @@ public class JPascal implements JPascalConstants {
         out("assign_statement");
     }
 
-    static final public void procedure_call() throws ParseException {
+    public void procedure_call() throws ParseException {
         identifier();
         if (jj_2_58(2)) {
             jj_consume_token(LPAREN);
@@ -590,7 +544,7 @@ public class JPascal implements JPascalConstants {
         out("procedure_call");
     }
 
-    static final public void if_statement() throws ParseException {
+    public void if_statement() throws ParseException {
         jj_consume_token(IF);
         expr();
         jj_consume_token(THEN);
@@ -604,7 +558,7 @@ public class JPascal implements JPascalConstants {
         out("if_statement");
     }
 
-    static final public void while_statement() throws ParseException {
+     public void while_statement() throws ParseException {
         jj_consume_token(WHILE);
         expr();
         jj_consume_token(DO);
@@ -612,7 +566,7 @@ public class JPascal implements JPascalConstants {
         out("while_statement");
     }
 
-    static final public void repeat_statement() throws ParseException {
+     public void repeat_statement() throws ParseException {
         jj_consume_token(REPEAT);
         statement();
         label_12:
@@ -630,7 +584,7 @@ public class JPascal implements JPascalConstants {
         out("repeat_statement");
     }
 
-    static final public void for_statement() throws ParseException {
+     public void for_statement() throws ParseException {
         jj_consume_token(FOR);
         identifier();
         infipo();
@@ -650,7 +604,7 @@ public class JPascal implements JPascalConstants {
         out("for_statement");
     }
 
-    static final public void with_statement() throws ParseException {
+     public void with_statement() throws ParseException {
         jj_consume_token(WITH);
         identifier();
         infipo();
@@ -670,7 +624,7 @@ public class JPascal implements JPascalConstants {
         out("with_statement");
     }
 
-    static final public void case_statement() throws ParseException {
+     public void case_statement() throws ParseException {
         jj_consume_token(CASE);
         expr();
         jj_consume_token(OF);
@@ -689,7 +643,7 @@ public class JPascal implements JPascalConstants {
         out("case_statement");
     }
 
-    static final public void _case() throws ParseException {
+     public void _case() throws ParseException {
         if (jj_2_65(2)) {
             jj_consume_token(NUMBER);
         } else if (jj_2_66(2)) {
@@ -702,13 +656,13 @@ public class JPascal implements JPascalConstants {
         statement();
     }
 
-    static final public void goto_statement() throws ParseException {
+     public void goto_statement() throws ParseException {
         jj_consume_token(GOTO);
         jj_consume_token(NUMBER);
         out("goto_statement");
     }
 
-    static final public void infipo() throws ParseException {
+     public void infipo() throws ParseException {
         if (jj_2_68(2)) {
             jj_consume_token(LBRACKET);
             expr();
@@ -729,7 +683,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void expr_list() throws ParseException {
+     public void expr_list() throws ParseException {
         expr();
         label_16:
         while (true) {
@@ -744,7 +698,7 @@ public class JPascal implements JPascalConstants {
         out("expr_list");
     }
 
-    static final public void expr() throws ParseException {
+     public void expr() throws ParseException {
         simple_expr();
         if (jj_2_72(2)) {
             relop();
@@ -755,7 +709,7 @@ public class JPascal implements JPascalConstants {
         out("expr");
     }
 
-    static final public void relop() throws ParseException {
+     public void relop() throws ParseException {
         if (jj_2_73(2)) {
             jj_consume_token(EQ);
         } else if (jj_2_74(2)) {
@@ -777,7 +731,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void simple_expr() throws ParseException {
+     public void simple_expr() throws ParseException {
         if (jj_2_82(2)) {
             if (jj_2_80(2)) {
                 jj_consume_token(PLUS);
@@ -804,7 +758,7 @@ public class JPascal implements JPascalConstants {
         out("simple_expr");
     }
 
-    static final public void addop() throws ParseException {
+     public void addop() throws ParseException {
         if (jj_2_84(2)) {
             jj_consume_token(PLUS);
         } else if (jj_2_85(2)) {
@@ -818,7 +772,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void term() throws ParseException {
+     public void term() throws ParseException {
         factor();
         label_18:
         while (true) {
@@ -833,7 +787,7 @@ public class JPascal implements JPascalConstants {
         out("term");
     }
 
-    static final public void mulop() throws ParseException {
+     public void mulop() throws ParseException {
         if (jj_2_88(2)) {
             jj_consume_token(MULTIPLY);
         } else if (jj_2_89(2)) {
@@ -851,7 +805,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static final public void factor() throws ParseException {
+     public void factor() throws ParseException {
         if (jj_2_93(2)) {
             jj_consume_token(NUMBER);
         } else if (jj_2_94(2)) {
@@ -878,7 +832,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_1(int xla) {
+     private boolean jj_2_1(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -890,7 +844,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_2(int xla) {
+     private boolean jj_2_2(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -902,7 +856,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_3(int xla) {
+     private boolean jj_2_3(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -914,7 +868,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_4(int xla) {
+     private boolean jj_2_4(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -926,7 +880,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_5(int xla) {
+     private boolean jj_2_5(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -938,7 +892,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_6(int xla) {
+     private boolean jj_2_6(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -950,7 +904,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_7(int xla) {
+     private boolean jj_2_7(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -962,7 +916,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_8(int xla) {
+     private boolean jj_2_8(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -974,7 +928,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_9(int xla) {
+     private boolean jj_2_9(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -986,7 +940,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_10(int xla) {
+     private boolean jj_2_10(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -998,7 +952,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_11(int xla) {
+     private boolean jj_2_11(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1010,7 +964,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_12(int xla) {
+     private boolean jj_2_12(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1022,7 +976,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_13(int xla) {
+     private boolean jj_2_13(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1034,7 +988,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_14(int xla) {
+     private boolean jj_2_14(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1046,7 +1000,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_15(int xla) {
+     private boolean jj_2_15(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1058,7 +1012,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_16(int xla) {
+     private boolean jj_2_16(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1070,7 +1024,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_17(int xla) {
+     private boolean jj_2_17(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1082,7 +1036,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_18(int xla) {
+     private boolean jj_2_18(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1094,7 +1048,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_19(int xla) {
+     private boolean jj_2_19(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1106,7 +1060,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_20(int xla) {
+     private boolean jj_2_20(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1118,7 +1072,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_21(int xla) {
+     private boolean jj_2_21(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1130,7 +1084,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_22(int xla) {
+     private boolean jj_2_22(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1142,7 +1096,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_23(int xla) {
+     private boolean jj_2_23(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1154,7 +1108,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_24(int xla) {
+     private boolean jj_2_24(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1166,7 +1120,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_25(int xla) {
+     private boolean jj_2_25(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1178,7 +1132,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_26(int xla) {
+     private boolean jj_2_26(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1190,7 +1144,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_27(int xla) {
+     private boolean jj_2_27(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1202,7 +1156,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_28(int xla) {
+     private boolean jj_2_28(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1214,7 +1168,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_29(int xla) {
+     private boolean jj_2_29(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1226,7 +1180,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_30(int xla) {
+     private boolean jj_2_30(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1238,7 +1192,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_31(int xla) {
+     private boolean jj_2_31(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1250,7 +1204,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_32(int xla) {
+     private boolean jj_2_32(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1262,7 +1216,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_33(int xla) {
+     private boolean jj_2_33(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1274,7 +1228,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_34(int xla) {
+     private boolean jj_2_34(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1286,7 +1240,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_35(int xla) {
+     private boolean jj_2_35(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1298,7 +1252,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_36(int xla) {
+     private boolean jj_2_36(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1310,7 +1264,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_37(int xla) {
+     private boolean jj_2_37(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1322,7 +1276,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_38(int xla) {
+     private boolean jj_2_38(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1334,7 +1288,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_39(int xla) {
+     private boolean jj_2_39(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1346,7 +1300,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_40(int xla) {
+     private boolean jj_2_40(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1358,7 +1312,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_41(int xla) {
+     private boolean jj_2_41(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1370,7 +1324,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_42(int xla) {
+     private boolean jj_2_42(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1382,7 +1336,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_43(int xla) {
+     private boolean jj_2_43(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1394,7 +1348,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_44(int xla) {
+     private boolean jj_2_44(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1406,7 +1360,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_45(int xla) {
+     private boolean jj_2_45(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1418,7 +1372,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_46(int xla) {
+     private boolean jj_2_46(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1430,7 +1384,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_47(int xla) {
+     private boolean jj_2_47(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1442,7 +1396,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_48(int xla) {
+     private boolean jj_2_48(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1454,7 +1408,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_49(int xla) {
+     private boolean jj_2_49(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1466,7 +1420,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_50(int xla) {
+     private boolean jj_2_50(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1478,7 +1432,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_51(int xla) {
+     private boolean jj_2_51(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1490,7 +1444,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_52(int xla) {
+     private boolean jj_2_52(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1502,7 +1456,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_53(int xla) {
+     private boolean jj_2_53(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1514,7 +1468,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_54(int xla) {
+     private boolean jj_2_54(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1526,7 +1480,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_55(int xla) {
+     private boolean jj_2_55(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1538,7 +1492,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_56(int xla) {
+     private boolean jj_2_56(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1550,7 +1504,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_57(int xla) {
+     private boolean jj_2_57(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1562,7 +1516,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_58(int xla) {
+     private boolean jj_2_58(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1574,7 +1528,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_59(int xla) {
+     private boolean jj_2_59(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1586,7 +1540,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_60(int xla) {
+     private boolean jj_2_60(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1598,7 +1552,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_61(int xla) {
+     private boolean jj_2_61(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1610,7 +1564,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_62(int xla) {
+     private boolean jj_2_62(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1622,7 +1576,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_63(int xla) {
+     private boolean jj_2_63(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1634,7 +1588,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_64(int xla) {
+     private boolean jj_2_64(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1646,7 +1600,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_65(int xla) {
+     private boolean jj_2_65(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1658,7 +1612,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_66(int xla) {
+     private boolean jj_2_66(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1670,7 +1624,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_67(int xla) {
+     private boolean jj_2_67(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1682,7 +1636,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_68(int xla) {
+     private boolean jj_2_68(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1694,7 +1648,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_69(int xla) {
+     private boolean jj_2_69(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1706,7 +1660,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_70(int xla) {
+     private boolean jj_2_70(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1718,7 +1672,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_71(int xla) {
+     private boolean jj_2_71(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1730,7 +1684,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_72(int xla) {
+     private boolean jj_2_72(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1742,7 +1696,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_73(int xla) {
+     private boolean jj_2_73(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1754,7 +1708,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_74(int xla) {
+     private boolean jj_2_74(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1766,7 +1720,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_75(int xla) {
+     private boolean jj_2_75(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1778,7 +1732,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_76(int xla) {
+     private boolean jj_2_76(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1790,7 +1744,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_77(int xla) {
+     private boolean jj_2_77(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1802,7 +1756,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_78(int xla) {
+     private boolean jj_2_78(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1814,7 +1768,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_79(int xla) {
+     private boolean jj_2_79(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1826,7 +1780,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_80(int xla) {
+     private boolean jj_2_80(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1838,7 +1792,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_81(int xla) {
+     private boolean jj_2_81(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1850,7 +1804,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_82(int xla) {
+     private boolean jj_2_82(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1862,7 +1816,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_83(int xla) {
+     private boolean jj_2_83(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1874,7 +1828,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_84(int xla) {
+     private boolean jj_2_84(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1886,7 +1840,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_85(int xla) {
+     private boolean jj_2_85(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1898,7 +1852,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_86(int xla) {
+     private boolean jj_2_86(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1910,7 +1864,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_87(int xla) {
+     private boolean jj_2_87(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1922,7 +1876,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_88(int xla) {
+     private boolean jj_2_88(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1934,7 +1888,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_89(int xla) {
+     private boolean jj_2_89(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1946,7 +1900,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_90(int xla) {
+     private boolean jj_2_90(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1958,7 +1912,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_91(int xla) {
+     private boolean jj_2_91(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1970,7 +1924,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_92(int xla) {
+     private boolean jj_2_92(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1982,7 +1936,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_93(int xla) {
+     private boolean jj_2_93(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -1994,7 +1948,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_94(int xla) {
+     private boolean jj_2_94(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -2006,7 +1960,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_95(int xla) {
+     private boolean jj_2_95(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -2018,7 +1972,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_96(int xla) {
+     private boolean jj_2_96(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -2030,7 +1984,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_97(int xla) {
+     private boolean jj_2_97(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -2042,7 +1996,7 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_2_98(int xla) {
+     private boolean jj_2_98(int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
         try {
@@ -2054,79 +2008,79 @@ public class JPascal implements JPascalConstants {
         }
     }
 
-    static private boolean jj_3R_23() {
+     private boolean jj_3R_23() {
         if (jj_scan_token(CONST)) return true;
         if (jj_3R_27()) return true;
         return false;
     }
 
-    static private boolean jj_3R_22() {
+     private boolean jj_3R_22() {
         if (jj_scan_token(LABEL)) return true;
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3_98() {
+     private boolean jj_3_98() {
         if (jj_scan_token(NOT)) return true;
         if (jj_3R_60()) return true;
         return false;
     }
 
-    static private boolean jj_3_9() {
+     private boolean jj_3_9() {
         if (jj_3R_26()) return true;
         return false;
     }
 
-    static private boolean jj_3_1() {
+     private boolean jj_3_1() {
         if (jj_scan_token(LPAREN)) return true;
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3_97() {
+     private boolean jj_3_97() {
         if (jj_scan_token(LPAREN)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3_8() {
+     private boolean jj_3_8() {
         if (jj_3R_25()) return true;
         return false;
     }
 
-    static private boolean jj_3_96() {
+     private boolean jj_3_96() {
         if (jj_3R_20()) return true;
         if (jj_3R_54()) return true;
         return false;
     }
 
-    static private boolean jj_3_7() {
+     private boolean jj_3_7() {
         if (jj_3R_24()) return true;
         return false;
     }
 
-    static private boolean jj_3_95() {
+     private boolean jj_3_95() {
         if (jj_3R_20()) return true;
         if (jj_scan_token(LPAREN)) return true;
         return false;
     }
 
-    static private boolean jj_3_6() {
+     private boolean jj_3_6() {
         if (jj_3R_23()) return true;
         return false;
     }
 
-    static private boolean jj_3_94() {
+     private boolean jj_3_94() {
         if (jj_scan_token(STRING)) return true;
         return false;
     }
 
-    static private boolean jj_3_5() {
+     private boolean jj_3_5() {
         if (jj_3R_22()) return true;
         return false;
     }
 
-    static private boolean jj_3R_21() {
+     private boolean jj_3R_21() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_5()) {
@@ -2145,12 +2099,12 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_93() {
+     private boolean jj_3_93() {
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3R_60() {
+     private boolean jj_3R_60() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_93()) {
@@ -2172,38 +2126,38 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_92() {
+     private boolean jj_3_92() {
         if (jj_scan_token(AND)) return true;
         return false;
     }
 
-    static private boolean jj_3_91() {
+     private boolean jj_3_91() {
         if (jj_scan_token(MOD)) return true;
         return false;
     }
 
-    static private boolean jj_3_90() {
+     private boolean jj_3_90() {
         if (jj_scan_token(DIV)) return true;
         return false;
     }
 
-    static private boolean jj_3_87() {
+     private boolean jj_3_87() {
         if (jj_3R_59()) return true;
         if (jj_3R_60()) return true;
         return false;
     }
 
-    static private boolean jj_3_89() {
+     private boolean jj_3_89() {
         if (jj_scan_token(DIVIDE)) return true;
         return false;
     }
 
-    static private boolean jj_3_88() {
+     private boolean jj_3_88() {
         if (jj_scan_token(MULTIPLY)) return true;
         return false;
     }
 
-    static private boolean jj_3R_59() {
+     private boolean jj_3R_59() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_88()) {
@@ -2222,43 +2176,43 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_4() {
+     private boolean jj_3_4() {
         if (jj_3R_21()) return true;
         return false;
     }
 
-    static private boolean jj_3_83() {
+     private boolean jj_3_83() {
         if (jj_3R_57()) return true;
         if (jj_3R_58()) return true;
         return false;
     }
 
-    static private boolean jj_3R_58() {
+     private boolean jj_3R_58() {
         if (jj_3R_60()) return true;
         return false;
     }
 
-    static private boolean jj_3_3() {
+     private boolean jj_3_3() {
         if (jj_scan_token(0)) return true;
         return false;
     }
 
-    static private boolean jj_3_86() {
+     private boolean jj_3_86() {
         if (jj_scan_token(OR)) return true;
         return false;
     }
 
-    static private boolean jj_3_85() {
+     private boolean jj_3_85() {
         if (jj_scan_token(MINUS)) return true;
         return false;
     }
 
-    static private boolean jj_3_84() {
+     private boolean jj_3_84() {
         if (jj_scan_token(PLUS)) return true;
         return false;
     }
 
-    static private boolean jj_3R_57() {
+     private boolean jj_3R_57() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_84()) {
@@ -2271,23 +2225,23 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_2() {
+     private boolean jj_3_2() {
         if (jj_scan_token(PROGRAM)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_81() {
+     private boolean jj_3_81() {
         if (jj_scan_token(MINUS)) return true;
         return false;
     }
 
-    static private boolean jj_3_80() {
+     private boolean jj_3_80() {
         if (jj_scan_token(PLUS)) return true;
         return false;
     }
 
-    static private boolean jj_3_82() {
+     private boolean jj_3_82() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_80()) {
@@ -2297,7 +2251,7 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_56() {
+     private boolean jj_3R_56() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_82()) jj_scanpos = xsp;
@@ -2305,48 +2259,48 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_72() {
+     private boolean jj_3_72() {
         if (jj_3R_55()) return true;
         if (jj_3R_56()) return true;
         return false;
     }
 
-    static private boolean jj_3_79() {
+     private boolean jj_3_79() {
         if (jj_scan_token(IN)) return true;
         return false;
     }
 
-    static private boolean jj_3_78() {
+     private boolean jj_3_78() {
         if (jj_scan_token(LE)) return true;
         return false;
     }
 
-    static private boolean jj_3_77() {
+     private boolean jj_3_77() {
         if (jj_scan_token(GE)) return true;
         return false;
     }
 
-    static private boolean jj_3_76() {
+     private boolean jj_3_76() {
         if (jj_scan_token(NE)) return true;
         return false;
     }
 
-    static private boolean jj_3_75() {
+     private boolean jj_3_75() {
         if (jj_scan_token(GT)) return true;
         return false;
     }
 
-    static private boolean jj_3_74() {
+     private boolean jj_3_74() {
         if (jj_scan_token(LT)) return true;
         return false;
     }
 
-    static private boolean jj_3_73() {
+     private boolean jj_3_73() {
         if (jj_scan_token(EQ)) return true;
         return false;
     }
 
-    static private boolean jj_3R_55() {
+     private boolean jj_3R_55() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_73()) {
@@ -2371,83 +2325,83 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_71() {
+     private boolean jj_3_71() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3R_53() {
+     private boolean jj_3R_53() {
         if (jj_3R_56()) return true;
         return false;
     }
 
-    static private boolean jj_3_67() {
+     private boolean jj_3_67() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3_62() {
+     private boolean jj_3_62() {
         if (jj_scan_token(DOWNTO)) return true;
         return false;
     }
 
-    static private boolean jj_3R_50() {
+     private boolean jj_3R_50() {
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3_64() {
+     private boolean jj_3_64() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_52()) return true;
         return false;
     }
 
-    static private boolean jj_3_70() {
+     private boolean jj_3_70() {
         if (jj_scan_token(UPARROW)) return true;
         if (jj_3R_54()) return true;
         return false;
     }
 
-    static private boolean jj_3_69() {
+     private boolean jj_3_69() {
         if (jj_scan_token(DOT)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_61() {
+     private boolean jj_3_61() {
         if (jj_scan_token(TO)) return true;
         return false;
     }
 
-    static private boolean jj_3R_64() {
+     private boolean jj_3R_64() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_70()) jj_scanpos = xsp;
         return false;
     }
 
-    static private boolean jj_3_68() {
+     private boolean jj_3_68() {
         if (jj_scan_token(LBRACKET)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3R_63() {
+     private boolean jj_3R_63() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_69()) jj_scanpos = xsp;
         return false;
     }
 
-    static private boolean jj_3_63() {
+     private boolean jj_3_63() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_54() {
+     private boolean jj_3R_54() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_62()) {
@@ -2460,30 +2414,30 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_62() {
+     private boolean jj_3R_62() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_68()) jj_scanpos = xsp;
         return false;
     }
 
-    static private boolean jj_3_66() {
+     private boolean jj_3_66() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_48() {
+     private boolean jj_3R_48() {
         if (jj_scan_token(GOTO)) return true;
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3_65() {
+     private boolean jj_3_65() {
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3R_52() {
+     private boolean jj_3R_52() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_65()) {
@@ -2493,37 +2447,37 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_43() {
+     private boolean jj_3R_43() {
         if (jj_scan_token(CASE)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3_60() {
+     private boolean jj_3_60() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_51()) return true;
         return false;
     }
 
-    static private boolean jj_3_59() {
+     private boolean jj_3_59() {
         if (jj_scan_token(ELSE)) return true;
         if (jj_3R_51()) return true;
         return false;
     }
 
-    static private boolean jj_3R_47() {
+     private boolean jj_3R_47() {
         if (jj_scan_token(WITH)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_46() {
+     private boolean jj_3R_46() {
         if (jj_scan_token(FOR)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_45() {
+     private boolean jj_3R_45() {
         if (jj_scan_token(REPEAT)) return true;
         if (jj_3R_51()) return true;
         Token xsp;
@@ -2538,30 +2492,30 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_44() {
+     private boolean jj_3R_44() {
         if (jj_scan_token(WHILE)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3_58() {
+     private boolean jj_3_58() {
         if (jj_scan_token(LPAREN)) return true;
         if (jj_3R_50()) return true;
         return false;
     }
 
-    static private boolean jj_3R_42() {
+     private boolean jj_3R_42() {
         if (jj_scan_token(IF)) return true;
         if (jj_3R_53()) return true;
         return false;
     }
 
-    static private boolean jj_3R_61() {
+     private boolean jj_3R_61() {
         if (jj_3R_54()) return true;
         return false;
     }
 
-    static private boolean jj_3R_41() {
+     private boolean jj_3R_41() {
         if (jj_3R_20()) return true;
         Token xsp;
         xsp = jj_scanpos;
@@ -2569,12 +2523,12 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_39() {
+     private boolean jj_3_39() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_40() {
+     private boolean jj_3R_40() {
         if (jj_3R_20()) return true;
         Token xsp;
         xsp = jj_scanpos;
@@ -2583,58 +2537,58 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_45() {
+     private boolean jj_3_45() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_39()) return true;
         return false;
     }
 
-    static private boolean jj_3_56() {
+     private boolean jj_3_56() {
         if (jj_3R_49()) return true;
         return false;
     }
 
-    static private boolean jj_3_55() {
+     private boolean jj_3_55() {
         if (jj_3R_48()) return true;
         return false;
     }
 
-    static private boolean jj_3_54() {
+     private boolean jj_3_54() {
         if (jj_3R_47()) return true;
         return false;
     }
 
-    static private boolean jj_3_53() {
+     private boolean jj_3_53() {
         if (jj_3R_46()) return true;
         return false;
     }
 
-    static private boolean jj_3_52() {
+     private boolean jj_3_52() {
         if (jj_3R_45()) return true;
         return false;
     }
 
-    static private boolean jj_3_51() {
+     private boolean jj_3_51() {
         if (jj_3R_44()) return true;
         return false;
     }
 
-    static private boolean jj_3_50() {
+     private boolean jj_3_50() {
         if (jj_3R_43()) return true;
         return false;
     }
 
-    static private boolean jj_3_49() {
+     private boolean jj_3_49() {
         if (jj_3R_42()) return true;
         return false;
     }
 
-    static private boolean jj_3_48() {
+     private boolean jj_3_48() {
         if (jj_3R_41()) return true;
         return false;
     }
 
-    static private boolean jj_3_57() {
+     private boolean jj_3_57() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_47()) {
@@ -2668,25 +2622,25 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_47() {
+     private boolean jj_3_47() {
         if (jj_3R_40()) return true;
         return false;
     }
 
-    static private boolean jj_3R_51() {
+     private boolean jj_3R_51() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_57()) jj_scanpos = xsp;
         return false;
     }
 
-    static private boolean jj_3_46() {
+     private boolean jj_3_46() {
         if (jj_scan_token(NUMBER)) return true;
         if (jj_scan_token(COLON)) return true;
         return false;
     }
 
-    static private boolean jj_3R_39() {
+     private boolean jj_3R_39() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_46()) jj_scanpos = xsp;
@@ -2694,18 +2648,18 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_38() {
+     private boolean jj_3_38() {
         if (jj_3R_37()) return true;
         return false;
     }
 
-    static private boolean jj_3_40() {
+     private boolean jj_3_40() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_38()) return true;
         return false;
     }
 
-    static private boolean jj_3R_49() {
+     private boolean jj_3R_49() {
         if (jj_scan_token(BEGIN)) return true;
         if (jj_3R_39()) return true;
         Token xsp;
@@ -2720,29 +2674,29 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_37() {
+     private boolean jj_3_37() {
         if (jj_3R_37()) return true;
         return false;
     }
 
-    static private boolean jj_3_44() {
+     private boolean jj_3_44() {
         if (jj_scan_token(PROCEDURE)) return true;
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3_41() {
+     private boolean jj_3_41() {
         if (jj_scan_token(VAR)) return true;
         return false;
     }
 
-    static private boolean jj_3_43() {
+     private boolean jj_3_43() {
         if (jj_scan_token(FUNCTION)) return true;
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3_42() {
+     private boolean jj_3_42() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_41()) jj_scanpos = xsp;
@@ -2751,7 +2705,7 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_38() {
+     private boolean jj_3R_38() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_42()) {
@@ -2764,51 +2718,51 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_37() {
+     private boolean jj_3R_37() {
         if (jj_scan_token(LPAREN)) return true;
         if (jj_3R_38()) return true;
         return false;
     }
 
-    static private boolean jj_3_33() {
+     private boolean jj_3_33() {
         if (jj_scan_token(SEMICOLON)) return true;
         return false;
     }
 
-    static private boolean jj_3_34() {
+     private boolean jj_3_34() {
         if (jj_scan_token(SEMICOLON)) return true;
         return false;
     }
 
-    static private boolean jj_3R_36() {
+     private boolean jj_3R_36() {
         if (jj_scan_token(FUNCTION)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_35() {
+     private boolean jj_3R_35() {
         if (jj_scan_token(PROCEDURE)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_32() {
+     private boolean jj_3_32() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_34()) return true;
         return false;
     }
 
-    static private boolean jj_3_36() {
+     private boolean jj_3_36() {
         if (jj_3R_36()) return true;
         return false;
     }
 
-    static private boolean jj_3_35() {
+     private boolean jj_3_35() {
         if (jj_3R_35()) return true;
         return false;
     }
 
-    static private boolean jj_3R_26() {
+     private boolean jj_3R_26() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_35()) {
@@ -2818,29 +2772,29 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_34() {
+     private boolean jj_3R_34() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_20() {
+     private boolean jj_3R_20() {
         if (jj_scan_token(IDENTIFIER)) return true;
         return false;
     }
 
-    static private boolean jj_3_31() {
+     private boolean jj_3_31() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_33()) return true;
         return false;
     }
 
-    static private boolean jj_3_30() {
+     private boolean jj_3_30() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3R_19() {
+     private boolean jj_3R_19() {
         if (jj_3R_34()) return true;
         Token xsp;
         while (true) {
@@ -2853,50 +2807,50 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3R_33() {
+     private boolean jj_3R_33() {
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3R_25() {
+     private boolean jj_3R_25() {
         if (jj_scan_token(VAR)) return true;
         if (jj_3R_33()) return true;
         return false;
     }
 
-    static private boolean jj_3R_30() {
+     private boolean jj_3R_30() {
         if (jj_3R_19()) return true;
         return false;
     }
 
-    static private boolean jj_3_13() {
+     private boolean jj_3_13() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_29()) return true;
         return false;
     }
 
-    static private boolean jj_3_19() {
+     private boolean jj_3_19() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_29() {
+     private boolean jj_3_29() {
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3_24() {
+     private boolean jj_3_24() {
         if (jj_scan_token(MINUS)) return true;
         return false;
     }
 
-    static private boolean jj_3_28() {
+     private boolean jj_3_28() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_32() {
+     private boolean jj_3R_32() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_28()) {
@@ -2906,12 +2860,12 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_23() {
+     private boolean jj_3_23() {
         if (jj_scan_token(PLUS)) return true;
         return false;
     }
 
-    static private boolean jj_3_25() {
+     private boolean jj_3_25() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_23()) {
@@ -2921,7 +2875,7 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_27() {
+     private boolean jj_3_27() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_25()) jj_scanpos = xsp;
@@ -2929,12 +2883,12 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_26() {
+     private boolean jj_3_26() {
         if (jj_scan_token(STRING)) return true;
         return false;
     }
 
-    static private boolean jj_3R_31() {
+     private boolean jj_3R_31() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_26()) {
@@ -2944,24 +2898,24 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_22() {
+     private boolean jj_3_22() {
         if (jj_3R_31()) return true;
         if (jj_scan_token(DOTDOT)) return true;
         return false;
     }
 
-    static private boolean jj_3_21() {
+     private boolean jj_3_21() {
         if (jj_scan_token(LPAREN)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_20() {
+     private boolean jj_3_20() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_29() {
+     private boolean jj_3R_29() {
         Token xsp;
         xsp = jj_scanpos;
         if (jj_3_20()) {
@@ -2974,132 +2928,115 @@ public class JPascal implements JPascalConstants {
         return false;
     }
 
-    static private boolean jj_3_12() {
+     private boolean jj_3_12() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_28()) return true;
         return false;
     }
 
-    static private boolean jj_3_18() {
+     private boolean jj_3_18() {
         if (jj_3R_29()) return true;
         return false;
     }
 
-    static private boolean jj_3_17() {
+     private boolean jj_3_17() {
         if (jj_scan_token(RECORD)) return true;
         if (jj_3R_30()) return true;
         return false;
     }
 
-    static private boolean jj_3_16() {
+     private boolean jj_3_16() {
         if (jj_scan_token(SETOF)) return true;
         if (jj_3R_29()) return true;
         return false;
     }
 
-    static private boolean jj_3_15() {
+     private boolean jj_3_15() {
         if (jj_3R_20()) return true;
         if (jj_scan_token(LBRACKET)) return true;
         return false;
     }
 
-    static private boolean jj_3_14() {
+     private boolean jj_3_14() {
         if (jj_scan_token(UPARROW)) return true;
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3_11() {
+     private boolean jj_3_11() {
         if (jj_scan_token(SEMICOLON)) return true;
         if (jj_3R_27()) return true;
         return false;
     }
 
-    static private boolean jj_3R_28() {
+     private boolean jj_3R_28() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_3R_24() {
+     private boolean jj_3R_24() {
         if (jj_scan_token(TYPE)) return true;
         if (jj_3R_28()) return true;
         return false;
     }
 
-    static private boolean jj_3_10() {
+     private boolean jj_3_10() {
         if (jj_scan_token(COMMA)) return true;
         if (jj_scan_token(NUMBER)) return true;
         return false;
     }
 
-    static private boolean jj_3R_27() {
+     private boolean jj_3R_27() {
         if (jj_3R_20()) return true;
         return false;
     }
 
-    static private boolean jj_initialized_once = false;
-    /**
-     * Generated Token Manager.
-     */
-    static public JPascalTokenManager token_source;
-    static SimpleCharStream jj_input_stream;
+     public JPascalTokenManager token_source;
+     SimpleCharStream jj_input_stream;
     /**
      * Current token.
      */
-    static public Token token;
+     public Token token;
     /**
      * Next token.
      */
-    static public Token jj_nt;
-    static private int jj_ntk;
-    static private Token jj_scanpos, jj_lastpos;
-    static private int jj_la;
-    static private int jj_gen;
-    static final private int[] jj_la1 = new int[0];
-    static private int[] jj_la1_0;
-    static private int[] jj_la1_1;
-    static private int[] jj_la1_2;
+     public Token jj_nt;
+     private int jj_ntk;
+     private Token jj_scanpos, jj_lastpos;
+     private int jj_la;
+     private int jj_gen;
+     private int[] jj_la1 = new int[0];
+     private int[] jj_la1_0;
+     private int[] jj_la1_1;
+     private int[] jj_la1_2;
 
-    static {
+     {
         jj_la1_init_0();
         jj_la1_init_1();
         jj_la1_init_2();
     }
 
-    private static void jj_la1_init_0() {
+    private  void jj_la1_init_0() {
         jj_la1_0 = new int[]{};
     }
 
-    private static void jj_la1_init_1() {
+    private  void jj_la1_init_1() {
         jj_la1_1 = new int[]{};
     }
 
-    private static void jj_la1_init_2() {
+    private  void jj_la1_init_2() {
         jj_la1_2 = new int[]{};
     }
 
-    static final private JJCalls[] jj_2_rtns = new JJCalls[98];
-    static private boolean jj_rescan = false;
-    static private int jj_gc = 0;
+     private JJCalls[] jj_2_rtns = new JJCalls[98];
+     private boolean jj_rescan = false;
+     private int jj_gc = 0;
 
-    /**
-     * Constructor with InputStream.
-     */
     public JPascal(InputStream stream) {
         this(stream, null);
     }
 
-    /**
-     * Constructor with InputStream and supplied encoding
-     */
     public JPascal(InputStream stream, String encoding) {
-        if (jj_initialized_once) {
-            System.out.println("ERROR: Second call to constructor of static parser.  ");
-            System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-            System.out.println("       during parser generation.");
-            throw new Error();
-        }
-        jj_initialized_once = true;
         try {
             jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
         } catch (UnsupportedEncodingException e) {
@@ -3115,14 +3052,14 @@ public class JPascal implements JPascalConstants {
     /**
      * Reinitialise.
      */
-    static public void ReInit(InputStream stream) {
+     public void ReInit(InputStream stream) {
         ReInit(stream, (String) null);
     }
 
     /**
      * Reinitialise.
      */
-    static public void ReInit(InputStream stream, String encoding) {
+     public void ReInit(InputStream stream, String encoding) {
         try {
             jj_input_stream.ReInit(stream, encoding, 1, 1);
         } catch (UnsupportedEncodingException e) {
@@ -3136,25 +3073,7 @@ public class JPascal implements JPascalConstants {
         for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
     }
 
-    public static void ReInit(InputStream is, File f) {
-        // Don't need to reinitialise the PrintStream, it's done for us.
-        JPascal.outputFile = f;
-        JPascal.lineNo = 1;
-        JPascal.ReInit(is);
-    }
-
-
-    /**
-     * Constructor.
-     */
     public JPascal(Reader stream) {
-        if (jj_initialized_once) {
-            System.out.println("ERROR: Second call to constructor of static parser. ");
-            System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-            System.out.println("       during parser generation.");
-            throw new Error();
-        }
-        jj_initialized_once = true;
         jj_input_stream = new SimpleCharStream(stream, 1, 1);
         token_source = new JPascalTokenManager(jj_input_stream);
         token = new Token();
@@ -3166,7 +3085,7 @@ public class JPascal implements JPascalConstants {
     /**
      * Reinitialise.
      */
-    static public void ReInit(Reader stream) {
+     public void ReInit(Reader stream) {
         jj_input_stream.ReInit(stream, 1, 1);
         token_source.ReInit(jj_input_stream);
         token = new Token();
@@ -3179,13 +3098,6 @@ public class JPascal implements JPascalConstants {
      * Constructor with generated Token Manager.
      */
     public JPascal(JPascalTokenManager tm) {
-        if (jj_initialized_once) {
-            System.out.println("ERROR: Second call to constructor of static parser. ");
-            System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-            System.out.println("       during parser generation.");
-            throw new Error();
-        }
-        jj_initialized_once = true;
         token_source = tm;
         token = new Token();
         jj_ntk = -1;
@@ -3204,7 +3116,7 @@ public class JPascal implements JPascalConstants {
         for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
     }
 
-    static private Token jj_consume_token(int kind) throws ParseException {
+     private Token jj_consume_token(int kind) throws ParseException {
         Token oldToken;
         if ((oldToken = token).next != null) token = token.next;
         else token = token.next = token_source.getNextToken();
@@ -3229,12 +3141,12 @@ public class JPascal implements JPascalConstants {
     }
 
     @SuppressWarnings("serial")
-    static private final class LookaheadSuccess extends Error {
+     private final class LookaheadSuccess extends Error {
     }
 
-    static final private LookaheadSuccess jj_ls = new LookaheadSuccess();
+     private LookaheadSuccess jj_ls = new LookaheadSuccess();
 
-    static private boolean jj_scan_token(int kind) {
+     private boolean jj_scan_token(int kind) {
         if (jj_scanpos == jj_lastpos) {
             jj_la--;
             if (jj_scanpos.next == null) {
@@ -3263,7 +3175,7 @@ public class JPascal implements JPascalConstants {
     /**
      * Get the next Token.
      */
-    static final public Token getNextToken() {
+     public Token getNextToken() {
         if (token.next != null) token = token.next;
         else token = token.next = token_source.getNextToken();
         jj_ntk = -1;
@@ -3274,7 +3186,7 @@ public class JPascal implements JPascalConstants {
     /**
      * Get the specific Token.
      */
-    static final public Token getToken(int index) {
+     public Token getToken(int index) {
         Token t = token;
         for (int i = 0; i < index; i++) {
             if (t.next != null) t = t.next;
@@ -3283,20 +3195,20 @@ public class JPascal implements JPascalConstants {
         return t;
     }
 
-    static private int jj_ntk_f() {
+     private int jj_ntk_f() {
         if ((jj_nt = token.next) == null)
             return (jj_ntk = (token.next = token_source.getNextToken()).kind);
         else
             return (jj_ntk = jj_nt.kind);
     }
 
-    static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-    static private int[] jj_expentry;
-    static private int jj_kind = -1;
-    static private int[] jj_lasttokens = new int[100];
-    static private int jj_endpos;
+     private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+     private int[] jj_expentry;
+     private int jj_kind = -1;
+     private int[] jj_lasttokens = new int[100];
+     private int jj_endpos;
 
-    static private void jj_add_error_token(int kind, int pos) {
+     private void jj_add_error_token(int kind, int pos) {
         if (pos >= 100) return;
         if (pos == jj_endpos + 1) {
             jj_lasttokens[jj_endpos++] = kind;
@@ -3325,7 +3237,7 @@ public class JPascal implements JPascalConstants {
     /**
      * Generate ParseException.
      */
-    static public ParseException generateParseException() {
+     public ParseException generateParseException() {
         jj_expentries.clear();
         boolean[] la1tokens = new boolean[88];
         if (jj_kind >= 0) {
@@ -3367,16 +3279,16 @@ public class JPascal implements JPascalConstants {
     /**
      * Enable tracing.
      */
-    static final public void enable_tracing() {
+     public void enable_tracing() {
     }
 
     /**
      * Disable tracing.
      */
-    static final public void disable_tracing() {
+     public void disable_tracing() {
     }
 
-    static private void jj_rescan_token() {
+     private void jj_rescan_token() {
         jj_rescan = true;
         for (int i = 0; i < 98; i++) {
             try {
@@ -3690,7 +3602,7 @@ public class JPascal implements JPascalConstants {
         jj_rescan = false;
     }
 
-    static private void jj_save(int index, int xla) {
+    private void jj_save(int index, int xla) {
         JJCalls p = jj_2_rtns[index];
         while (p.gen > jj_gen) {
             if (p.next == null) {
@@ -3704,7 +3616,7 @@ public class JPascal implements JPascalConstants {
         p.arg = xla;
     }
 
-    static final class JJCalls {
+     class JJCalls {
         int gen;
         Token first;
         int arg;
