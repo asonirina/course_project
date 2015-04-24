@@ -13,10 +13,6 @@ public class JPascal implements JPascalConstants {
          return token_source.getNodes();
      }
 
-    Vector identifiers = new Vector();
-
-    Vector procedures = new Vector();
-
      int lineNo = 1;
 
     public static void main(String args[]) throws Exception {
@@ -76,7 +72,6 @@ public class JPascal implements JPascalConstants {
             } else {
                 out("eof");
                 out(String.format("errors"));
-                out(String.format("%d tokens presents in table", identifiers.size()));
                 System.exit(0);
             }
         } else {
@@ -348,7 +343,6 @@ public class JPascal implements JPascalConstants {
     public Token identifier() throws ParseException {
         Token identifier;
         identifier = jj_consume_token(IDENTIFIER);
-        identifiers.add(identifier);
         {
             if ("" != null) return identifier;
         }
@@ -397,7 +391,6 @@ public class JPascal implements JPascalConstants {
         jj_consume_token(SEMICOLON);
         block();
         out("procedure_declaration: " + procedure);
-        procedures.add(procedure);
     }
 
     public void function_declaration() throws ParseException {
@@ -419,7 +412,6 @@ public class JPascal implements JPascalConstants {
         jj_consume_token(SEMICOLON);
         block();
         out("function_declaration: " + function);
-        procedures.add(function);
     }
 
     public void formal_parameters() throws ParseException {
