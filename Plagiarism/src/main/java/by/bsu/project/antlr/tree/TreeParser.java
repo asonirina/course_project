@@ -380,18 +380,15 @@ public class TreeParser {
             }
             case ASSIGN: {
                 res = doBinOperator(t, node, Operation.ASSIGN);
-                ac.incAssign();
                 break;
             }
             case PLUS: {
                 res = doBinOperator(t, node, Operation.PLUS);
-                ac.incPlus();
                 break;
             }
 
             case MINUS: {
                 res = doBinOperator(t, node, Operation.MINUS);
-                ac.incMinus();
                 break;
             }
             case EQUAL: {
@@ -439,8 +436,6 @@ public class TreeParser {
         TreeNode postInc = new TreeNode(h++, name + ' ' + Operation.POST_INC.name(), node);
         nodes.add(postInc);
         postInc.setOperation(Operation.POST_INC);
-        ac.incPlus();
-        ac.incAssign();
         return postInc.getName();
     }
 
@@ -459,8 +454,6 @@ public class TreeParser {
         TreeNode postDec = new TreeNode(h++, name + ' ' + Operation.POST_DEC.name(), node);
         nodes.add(postDec);
         postDec.setOperation(Operation.POST_DEC);
-        ac.incMinus();
-        ac.incAssign();
         return postDec.getName();
     }
 
@@ -511,7 +504,6 @@ public class TreeParser {
         methodCall.setName(name);
         methodCall.setOperation(Operation.METHOD_CALL);
         nodes.add(methodCall);
-        ac.incCall();
         return name;
     }
 
@@ -562,7 +554,6 @@ public class TreeParser {
         constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
         nodes.add(constructor);
 
-        ac.incCall();
         return constructor.getName();
     }
 
@@ -577,7 +568,6 @@ public class TreeParser {
                 }
             }
         }
-        ac.incVar();
         return name;
     }
 
@@ -839,7 +829,6 @@ public class TreeParser {
         ifNode.setName(Operation.IF.name() + ' ' + c1 + ' ' + c2);
         ifNode.setOperation(Operation.IF);
         nodes.add(ifNode);
-        ac.incIfs();
     }
 
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
@@ -897,7 +886,6 @@ public class TreeParser {
         whileNode.setName(Operation.WHILE.name() + ' ' + c1 + ' ' + c2);
         whileNode.setOperation(Operation.WHILE);
         nodes.add(whileNode);
-        ac.incCycle();
     }
 
     private void doFor(CommonTree t, TreeNode node) {
@@ -939,7 +927,6 @@ public class TreeParser {
         forNode.setName(Operation.FOR.name() + ' ' + name);
         forNode.setOperation(Operation.FOR);
         nodes.add(forNode);
-        ac.incCycle();
     }
 
     private String doTo(CommonTree t, TreeNode node) {
@@ -1050,6 +1037,7 @@ public class TreeParser {
     }
 
     private String doIdent(CommonTree t) {
+        ac.incIdent(t.getText().length());
         return checkIdentifiers ? t.getText() : Operation.IDENT.name();
     }
 }

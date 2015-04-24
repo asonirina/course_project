@@ -90,7 +90,7 @@ public class White implements WhiteConstants {
         this(stream, null);
     }
 
-    public White(java.io.InputStream stream, String encoding) {
+    private White(java.io.InputStream stream, String encoding) {
         jj_la1_init_0();
         try {
             jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);
@@ -139,13 +139,13 @@ public class White implements WhiteConstants {
         for (int i = 0; i < 2; i++) jj_la1[i] = -1;
     }
 
-    public White(WhiteTokenManager tm) {
-        token_source = tm;
-        token = new Token();
-        jj_ntk = -1;
-        jj_gen = 0;
-        for (int i = 0; i < 2; i++) jj_la1[i] = -1;
-    }
+//    public White(WhiteTokenManager tm) {
+//        token_source = tm;
+//        token = new Token();
+//        jj_ntk = -1;
+//        jj_gen = 0;
+//        for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+//    }
 
     public void ReInit(WhiteTokenManager tm) {
         token_source = tm;

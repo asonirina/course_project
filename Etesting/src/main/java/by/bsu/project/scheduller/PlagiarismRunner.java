@@ -6,7 +6,7 @@ import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.javacc.utol.SpacesExtractor;
+import by.bsu.project.javacc.utol.SpacesCommentExtractor;
 import by.bsu.project.service.UserInfoService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class PlagiarismRunner {
                 List<TreeNode> nodes = parser.getTree(programFilesEntity.getFile());
                 AttributeCounting ac = parser.getAc();
 
-                SpacesExtractor spacesExtractor = new SpacesExtractor(programFilesEntity.getFile());
+                SpacesCommentExtractor spacesExtractor = new SpacesCommentExtractor(programFilesEntity.getFile());
                 spacesExtractor.extractSpaces(ac);
 
                 int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);

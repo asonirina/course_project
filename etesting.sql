@@ -19,19 +19,12 @@ USE `etesting`;
 
 CREATE TABLE `attribute_countings` (
   `id` int(11) NOT NULL auto_increment,
-  `imports` int(3) NOT NULL,
-  `functions` int(3) NOT NULL,
-  `calls` int(3) NOT NULL,
-  `assigns` int(3) NOT NULL,
-  `pluses` int(3) NOT NULL,
-  `minuses` int(3) NOT NULL,
-  `multiples` int(3) NOT NULL,
-  `divides` int(3) NOT NULL,
-  `variables` int(3) NOT NULL,
-  `ifs` int(3) NOT NULL,
-  `cycles` int(3) NOT NULL,
+  `lines` int(3) NOT NULL,
+  `methods` int(3) NOT NULL,
   `spaces` int(3) NOT NULL,
   `tabs` int(3) NOT NULL,
+  `ident` int(3) NOT NULL,
+  `comments` int(3) NOT NULL,
   `program_id` int(11) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_AC` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
@@ -45,11 +38,11 @@ CREATE TABLE `attribute_countings` (
 
 CREATE TABLE `neural_node` (
   `id` int(11) NOT NULL auto_increment,
-  `pluses` int(3) NOT NULL,
-  `variables` int(3) NOT NULL,
-  `ifs` int(3) NOT NULL,
+  `methods` int(3) NOT NULL,
   `spaces` int(3) NOT NULL,
   `tabs` int(3) NOT NULL,
+  `ident` int(3) NOT NULL,
+  `comments` int(3) NOT NULL,
   `user_id` int(11) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_NN` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)

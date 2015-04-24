@@ -30,16 +30,10 @@ public class AttributeCountingUtil {
             return 0;
         }
         double res = 0;
-        res += 10 / (Math.abs(ac1.getAssigns() - ac2.getAssigns()) + 1);
-        res += 10 / (Math.abs(ac1.getCalls() - ac2.getCalls()) + 1);
-        res += 10 / (Math.abs(ac1.getCycles() - ac2.getCycles()) + 1);
-        res += 10 / (Math.abs(ac1.getDivides() - ac2.getDivides()) + 1);
-        res += 10 / (Math.abs(ac1.getFunctions() - ac2.getFunctions()) + 1);
-        res += 10 / (Math.abs(ac1.getIfs() - ac2.getIfs()) + 1);
-        res += 10 / (Math.abs(ac1.getMinuses() - ac2.getMinuses()) + 1);
-        res += 10 / (Math.abs(ac1.getMultiples() - ac2.getMultiples()) + 1);
-        res += 10 / (Math.abs(ac1.getPluses() - ac2.getPluses()) + 1);
-        res += 10 / (Math.abs(ac1.getVariables() - ac2.getVariables()) + 1);
+        res += 10 / (Math.abs(ac1.getSpaces() - ac2.getSpaces()) + 1);
+        res += 10 / (Math.abs(ac1.getMethods() - ac2.getMethods()) + 1);
+        res += 10 / (Math.abs(ac1.getTabs() - ac2.getTabs()) + 1);
+        res += 10 / (Math.abs(ac1.getMethods() - ac2.getMethods()) + 1);
 
         return (int) res;
     }

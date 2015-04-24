@@ -24,20 +24,20 @@ public class NeuralNode {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "pluses")
-    private Integer pluses = 0;
-
-    @Column(name = "variables")
-    private Integer variables = 0;
-
-    @Column(name = "ifs")
-    private Integer ifs = 0;
+    @Column(name = "methods")
+    private Integer methods = 0;
 
     @Column(name = "spaces")
     private Integer spaces = 0;
 
     @Column(name = "tabs")
     private Integer tabs = 0;
+
+    @Column(name = "ident")
+    private Integer ident = 0;
+
+    @Column(name = "comments")
+    private Integer comments = 0;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -46,44 +46,16 @@ public class NeuralNode {
     public NeuralNode() {
     }
 
-    public void incIfs() {
-        this.ifs++;
-    }
-
-    public void incPlus() {
-        this.pluses++;
-    }
-
-    public void incVar() {
-        this.variables++;
-    }
-
-    public Integer getPluses() {
-        return pluses;
-    }
-
-    public void setPluses(Integer pluses) {
-        this.pluses = pluses;
-    }
-
-    public Integer getVariables() {
-        return variables;
-    }
-
-    public void setVariables(Integer variables) {
-        this.variables = variables;
-    }
-
-    public Integer getIfs() {
-        return ifs;
-    }
-
-    public void setIfs(Integer ifs) {
-        this.ifs = ifs;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public Integer getMethods() {
+        return methods;
+    }
+
+    public void setMethods(Integer methods) {
+        this.methods = methods;
     }
 
     public Integer getSpaces() {
@@ -102,6 +74,22 @@ public class NeuralNode {
         this.tabs = tabs;
     }
 
+    public Integer getIdent() {
+        return ident;
+    }
+
+    public void setIdent(Integer ident) {
+        this.ident = ident;
+    }
+
+    public Integer getComments() {
+        return comments;
+    }
+
+    public void setComments(Integer comments) {
+        this.comments = comments;
+    }
+
     public UserInfoEntity getEntity() {
         return entity;
     }
@@ -112,11 +100,9 @@ public class NeuralNode {
 
     public static NeuralNode createRandom() {
         NeuralNode res = new NeuralNode();
-        res.setPluses(RandomUtils.nextInt(20));
-        res.setIfs(RandomUtils.nextInt(20));
-        res.setVariables(RandomUtils.nextInt(20));
         res.setSpaces(RandomUtils.nextInt(20));
         res.setTabs(RandomUtils.nextInt(20));
+        res.setIdent(RandomUtils.nextInt(20));
         return res;
     }
 }

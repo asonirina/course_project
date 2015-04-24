@@ -168,8 +168,7 @@ public class ProgramUploadController {
     }
 
     @RequestMapping("/e-Testing/GetGraph")
-    public String getGraph(@RequestParam(value = "programId", required = false) Long programId,
-                                  HttpServletResponse response) {
+    public ModelAndView getGraph(                                  HttpServletResponse response) {
         try {
             JsonHelper helper = new JsonHelper();
             String json =  helper.createJson(userInfoService.studentsList());
@@ -184,7 +183,7 @@ public class ProgramUploadController {
 
         } catch (Exception ex) {
             logger.error("Unable to download test results file " + ex.getMessage());
-            return "redirect:/e-Testing/error503.html";
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 
@@ -198,9 +197,7 @@ public class ProgramUploadController {
 
         if (command != null) {
             Process process = Runtime.getRuntime().exec(command, null);
-
             int result = process.waitFor();
-
             return new ModelAndView("RunShell", ETestingConstants.MODEL_MESSAGE, String.valueOf(result));
         }
         return new ModelAndView("RunShell");

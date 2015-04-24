@@ -15,38 +15,11 @@ public class AttributeCounting {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "imports")
-    private Integer imports = 0;
+    @Column(name = "lines")
+    private Integer lines = 0;
 
-    @Column(name = "functions")
-    private Integer functions = 0;
-
-    @Column(name = "calls")
-    private Integer calls = 0;
-
-    @Column(name = "assigns")
-    private Integer assigns = 0;
-
-    @Column(name = "pluses")
-    private Integer pluses = 0;
-
-    @Column(name = "minuses")
-    private Integer minuses = 0;
-
-    @Column(name = "multiples")
-    private Integer multiples = 0;
-
-    @Column(name = "divides")
-    private Integer divides = 0;
-
-    @Column(name = "variables")
-    private Integer variables = 0;
-
-    @Column(name = "ifs")
-    private Integer ifs = 0;
-
-    @Column(name = "cycles")
-    private Integer cycles = 0;
+    @Column(name = "methods")
+    private Integer methods = 0;
 
     @Column(name = "spaces")
     private Integer spaces = 0;
@@ -54,130 +27,36 @@ public class AttributeCounting {
     @Column(name = "tabs")
     private Integer tabs = 0;
 
+    @Column(name = "ident")
+    private Integer ident = 0;
+
+    @Column(name = "comments")
+    private Integer comments = 0;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity entity;
 
     public AttributeCounting(){}
 
-    public void incIfs() {
-        this.ifs++;
+    public Integer getLines() {
+        return lines;
     }
 
-    public void incPlus() {
-        this.pluses++;
-    }
-
-    public void incAssign() {
-        this.assigns++;
-    }
-
-    public void incMinus() {
-        this.minuses++;
-    }
-
-    public void incCall() {
-        this.calls++;
-    }
-
-    public void incVar() {
-        this.variables++;
+    public void setLines(Integer lines) {
+        this.lines = lines;
     }
 
     public void incMethod() {
-        this.functions++;
+        this.methods++;
     }
 
-    public void incCycle() {
-        this.cycles++;
+    public Integer getMethods() {
+        return methods;
     }
 
-    public Integer getImports() {
-        return imports;
-    }
-
-    public void setImports(Integer imports) {
-        this.imports = imports;
-    }
-
-    public Integer getFunctions() {
-        return functions;
-    }
-
-    public void setFunctions(Integer functions) {
-        this.functions = functions;
-    }
-
-    public Integer getCalls() {
-        return calls;
-    }
-
-    public void setCalls(Integer calls) {
-        this.calls = calls;
-    }
-
-    public Integer getAssigns() {
-        return assigns;
-    }
-
-    public void setAssigns(Integer assigns) {
-        this.assigns = assigns;
-    }
-
-    public Integer getPluses() {
-        return pluses;
-    }
-
-    public void setPluses(Integer pluses) {
-        this.pluses = pluses;
-    }
-
-    public Integer getMinuses() {
-        return minuses;
-    }
-
-    public void setMinuses(Integer minuses) {
-        this.minuses = minuses;
-    }
-
-    public Integer getMultiples() {
-        return multiples;
-    }
-
-    public void setMultiples(Integer multiples) {
-        this.multiples = multiples;
-    }
-
-    public Integer getDivides() {
-        return divides;
-    }
-
-    public void setDivides(Integer divides) {
-        this.divides = divides;
-    }
-
-    public Integer getVariables() {
-        return variables;
-    }
-
-    public void setVariables(Integer variables) {
-        this.variables = variables;
-    }
-
-    public Integer getIfs() {
-        return ifs;
-    }
-
-    public void setIfs(Integer ifs) {
-        this.ifs = ifs;
-    }
-
-    public Integer getCycles() {
-        return cycles;
-    }
-
-    public void setCycles(Integer cycles) {
-        this.cycles = cycles;
+    public void setMethods(Integer methods) {
+        this.methods = methods;
     }
 
     public Integer getSpaces() {
@@ -194,6 +73,26 @@ public class AttributeCounting {
 
     public void setTabs(Integer tabs) {
         this.tabs = tabs;
+    }
+
+    public Integer getIdent() {
+        return ident;
+    }
+
+    public void setIdent(Integer ident) {
+        this.ident = ident;
+    }
+
+    public void incIdent(int value) {
+        ident += value;
+    }
+
+    public Integer getComments() {
+        return comments;
+    }
+
+    public void setComments(Integer comments) {
+        this.comments = comments;
     }
 
     public Long getId() {
