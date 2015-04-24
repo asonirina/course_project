@@ -426,34 +426,8 @@ if (seenNewLine)
   }
 
   static final public void Input() throws ParseException {
-      try    {
-      if (outputFile!=null)
-        CPP.save = new PrintStream(new FileOutputStream(outputFile));
-      else
         save = System.out;
-  } catch (IOException e) {
-      Date day = new Date(System.currentTimeMillis());
-      if (outputFile != null) {
-        try {
-            String file = new String
-                (System.getProperty("user.home") + Settings.fileSep
-                 + "sherlock.log");
-            BufferedWriter bw = new BufferedWriter
-                (new FileWriter(file, true));
-            bw.write(day + "-" + "Cannot write to: "
-                     + outputFile.getAbsolutePath());
-            bw.newLine();
-            bw.close();
-        }
-        catch (IOException e2) {
-            if (outputFile != null)
-                System.err.println(day + "-" + "Cannot write to: "
-                                   + outputFile.getAbsolutePath());
-        }
-      }
-      else System.err.println(day + "-" + "Cannot write to System.out");
-      return;
-  }
+
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
