@@ -3,27 +3,20 @@ package by.bsu.project.javacc.parser.pascal;
 import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
-import by.bsu.project.javacc.settings.Settings;
 
 import java.io.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class JPascal implements JPascalConstants {
+    static List<String> nodes = new ArrayList<>();
 
     static boolean verbose = false,
             quiet = false,
             report = false,
             ready = false,
-            ck_syntax = false,
-            out_syntax = false;
-
-    static FileInputStream in;
-
-    /**
-     * The stream used to save the output file.
-     */
-    static PrintStream save;
+            ck_syntax = false;
 
     static Vector identifiers = new Vector();
 
@@ -37,18 +30,15 @@ public class JPascal implements JPascalConstants {
      * Keep track of the line number from the file read in. Used to print #line xxx in the outputFile.
      */
     static int lineNo = 1;
-    static boolean seenNewLine = false;
 
     public static void main(String args[]) throws Exception {
         JPascal parser;
-        JPascal.save = System.out;
         ready = true;
         ck_syntax = true;
         report = true;
-        in = new FileInputStream("Pascal.pas");
         if (ready) {
             Token token;
-            parser = new JPascal(in);
+            parser = new JPascal(new FileInputStream("Pascal.pas"));
             if (ck_syntax) {
                 try {
                     while (true) {
@@ -59,7 +49,6 @@ public class JPascal implements JPascalConstants {
                 }
             }
             if (report) {
-                save.println("----------------------------------------------------------------------------------");
                 generateReport(parser);
             }
             if (!ck_syntax && !report) {
@@ -94,12 +83,7 @@ public class JPascal implements JPascalConstants {
     }
 
     static public void out(String message) {
-        if (out_syntax) {
-            if (seenNewLine)
-                save.println();
-            seenNewLine = false;
-            save.print(message);
-        }
+            nodes.add(message);
     }
 
     static public void err(String message) {
@@ -116,9 +100,6 @@ public class JPascal implements JPascalConstants {
     }
 
     static final public void Program() throws ParseException {
-
-                save = System.out;
-
 
         Token program = null;
         if (jj_2_2(2)) {
@@ -148,9 +129,6 @@ public class JPascal implements JPascalConstants {
             jj_consume_token(-1);
             throw new ParseException();
         }
-
-        save.flush();
-        save.close();
     }
 
     static final public void block() throws ParseException {
@@ -3162,10 +3140,6 @@ public class JPascal implements JPascalConstants {
         // Don't need to reinitialise the PrintStream, it's done for us.
         JPascal.outputFile = f;
         JPascal.lineNo = 1;
-
-        JPascal.seenNewLine = false;
-        JPascal.out_syntax = false;
-
         JPascal.ReInit(is);
     }
 

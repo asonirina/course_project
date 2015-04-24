@@ -7,14 +7,8 @@ import by.bsu.project.javacc.model.Token;
 @SuppressWarnings("unused")
 public class JPascalTokenManager implements JPascalConstants {
 
-    /**
-     * Debug output.
-     */
     public static java.io.PrintStream debugStream = System.out;
 
-    /**
-     * Set debug output.
-     */
     public static void setDebugStream(java.io.PrintStream ds) {
         debugStream = ds;
     }
@@ -1213,7 +1207,7 @@ public class JPascalTokenManager implements JPascalConstants {
         for (; ; ) {
             try {
                 curChar = input_stream.BeginToken();
-                if (curChar == 13) JPascal.seenNewLine = true;
+                if (curChar == 13) {}
             } catch (java.io.IOException e) {
                 jjmatchedKind = 0;
                 jjmatchedPos = -1;
@@ -1228,7 +1222,7 @@ public class JPascalTokenManager implements JPascalConstants {
                             input_stream.backup(0);
                             while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L) {
                                 curChar = input_stream.BeginToken();
-                                if (curChar == 13) JPascal.seenNewLine = true;
+                                if (curChar == 13) {}
                             }
                         } catch (java.io.IOException e1) {
                             continue EOFLoop;
@@ -1421,7 +1415,6 @@ public class JPascalTokenManager implements JPascalConstants {
     static void SkipLexicalActions(Token matchedToken) {
         switch (jjmatchedKind) {
             case 5:
-                JPascal.seenNewLine = true;
                 break;
             case 6:
                 break;
@@ -1436,401 +1429,242 @@ public class JPascalTokenManager implements JPascalConstants {
             case 0:
                 //image.append(jjstrLiteralImages[3]);
                 lengthOfMatch = jjstrLiteralImages[3].length();
-                JPascal.out_syntax = true;
                 JPascal.out("<EOF>");
-                JPascal.out_syntax = false;
                 break;
             case 11:
-                JPascal.out_syntax = true;
                 JPascal.out("<NUMBER>");
-                JPascal.out_syntax = false;
                 break;
             case 12:
-                JPascal.out_syntax = true;
                 JPascal.out("<DECIMAL>");
-                JPascal.out_syntax = false;
                 break;
             case 13:
-                JPascal.out_syntax = true;
                 JPascal.out("<FRAC>");
-                JPascal.out_syntax = false;
                 break;
             case 14:
-                JPascal.out_syntax = true;
                 JPascal.out("<EXP>");
-                JPascal.out_syntax = false;
                 break;
             case 15:
-                JPascal.out_syntax = true;
                 JPascal.out("<STRING_LITERAL>");
-                JPascal.out_syntax = false;
                 break;
             case 16:
-                JPascal.out_syntax = true;
                 JPascal.out("<AND>");
-                JPascal.out_syntax = false;
                 break;
             case 17:
-                JPascal.out_syntax = true;
                 JPascal.out("<BEGIN>");
-                JPascal.out_syntax = false;
                 break;
             case 18:
-                JPascal.out_syntax = true;
                 JPascal.out("<CASE>");
-                JPascal.out_syntax = false;
                 break;
             case 19:
-                JPascal.out_syntax = true;
                 JPascal.out("<CONST>");
-                JPascal.out_syntax = false;
                 break;
             case 20:
-                JPascal.out_syntax = true;
                 JPascal.out("<DIV>");
-                JPascal.out_syntax = false;
                 break;
             case 21:
-                JPascal.out_syntax = true;
                 JPascal.out("<DO>");
-                JPascal.out_syntax = false;
                 break;
             case 22:
-                JPascal.out_syntax = true;
                 JPascal.out("<DOWNTO>");
-                JPascal.out_syntax = false;
                 break;
             case 23:
-                JPascal.out_syntax = true;
                 JPascal.out("<ELSE>");
-                JPascal.out_syntax = false;
                 break;
             case 24:
-                JPascal.out_syntax = true;
                 JPascal.out("<END>");
-                JPascal.out_syntax = false;
                 break;
             case 25:
-                JPascal.out_syntax = true;
                 JPascal.out("<EXTERN>");
-                JPascal.out_syntax = false;
                 break;
             case 26:
-                JPascal.out_syntax = true;
                 JPascal.out("<FOR>");
-                JPascal.out_syntax = false;
                 break;
             case 27:
-                JPascal.out_syntax = true;
                 JPascal.out("<FORWARD>");
-                JPascal.out_syntax = false;
                 break;
             case 28:
-                JPascal.out_syntax = true;
                 JPascal.out("<FUNCTION>");
-                JPascal.out_syntax = false;
                 break;
             case 29:
-                JPascal.out_syntax = true;
                 JPascal.out("<GOTO>");
-                JPascal.out_syntax = false;
                 break;
-            case 30:
-                JPascal.out_syntax = true;
+            case 30:                
                 JPascal.out("<IF>");
-                JPascal.out_syntax = false;
+                
                 break;
             case 31:
-                JPascal.out_syntax = true;
                 JPascal.out("<IN>");
-                JPascal.out_syntax = false;
                 break;
             case 32:
-                JPascal.out_syntax = true;
                 JPascal.out("<LABEL>");
-                JPascal.out_syntax = false;
                 break;
             case 33:
-                JPascal.out_syntax = true;
                 JPascal.out("<INTERFACE>");
-                JPascal.out_syntax = false;
                 break;
             case 34:
-                JPascal.out_syntax = true;
                 JPascal.out("<IMPLEMENTATION>");
-                JPascal.out_syntax = false;
                 break;
             case 35:
-                JPascal.out_syntax = true;
                 JPascal.out("<MOD>");
-                JPascal.out_syntax = false;
                 break;
             case 36:
-                JPascal.out_syntax = true;
                 JPascal.out("<NIL>");
-                JPascal.out_syntax = false;
                 break;
             case 37:
-                JPascal.out_syntax = true;
                 JPascal.out("<MAXINT>");
-                JPascal.out_syntax = false;
                 break;
             case 38:
-                JPascal.out_syntax = true;
                 JPascal.out("<NOT>");
-                JPascal.out_syntax = false;
                 break;
             case 39:
-                JPascal.out_syntax = true;
                 JPascal.out("<OF>");
-                JPascal.out_syntax = false;
                 break;
             case 40:
-                JPascal.out_syntax = true;
                 JPascal.out("<OR>");
-                JPascal.out_syntax = false;
                 break;
             case 41:
-                JPascal.out_syntax = true;
                 JPascal.out("<OTHERWISE>");
-                JPascal.out_syntax = false;
                 break;
             case 42:
-                JPascal.out_syntax = true;
                 JPascal.out("<PACKED>");
-                JPascal.out_syntax = false;
                 break;
             case 43:
-                JPascal.out_syntax = true;
                 JPascal.out("<PROCEDURE>");
-                JPascal.out_syntax = false;
                 break;
             case 44:
-                JPascal.out_syntax = true;
                 JPascal.out("<PROGRAM>");
-                JPascal.out_syntax = false;
                 break;
             case 45:
-                JPascal.out_syntax = true;
                 JPascal.out("<RECORD>");
-                JPascal.out_syntax = false;
                 break;
             case 46:
-                JPascal.out_syntax = true;
                 JPascal.out("<REPEAT>");
-                JPascal.out_syntax = false;
                 break;
             case 47:
-                JPascal.out_syntax = true;
                 JPascal.out("<SETOF>");
-                JPascal.out_syntax = false;
                 break;
             case 48:
-                JPascal.out_syntax = true;
                 JPascal.out("<THEN>");
-                JPascal.out_syntax = false;
                 break;
             case 49:
-                JPascal.out_syntax = true;
                 JPascal.out("<TO>");
-                JPascal.out_syntax = false;
                 break;
             case 50:
-                JPascal.out_syntax = true;
                 JPascal.out("<TYPE>");
-                JPascal.out_syntax = false;
                 break;
             case 51:
-                JPascal.out_syntax = true;
                 JPascal.out("<UNIT>");
-                JPascal.out_syntax = false;
                 break;
             case 52:
-                JPascal.out_syntax = true;
                 JPascal.out("<UNTIL>");
-                JPascal.out_syntax = false;
                 break;
             case 53:
-                JPascal.out_syntax = true;
                 JPascal.out("<USES>");
-                JPascal.out_syntax = false;
                 break;
             case 54:
-                JPascal.out_syntax = true;
                 JPascal.out("<VAR>");
-                JPascal.out_syntax = false;
                 break;
             case 55:
-                JPascal.out_syntax = true;
                 JPascal.out("<WHILE>");
-                JPascal.out_syntax = false;
                 break;
             case 56:
-                JPascal.out_syntax = true;
                 JPascal.out("<WITH>");
-                JPascal.out_syntax = false;
                 break;
             case 57:
-                JPascal.out_syntax = true;
                 JPascal.out("<SINGLE>");
-                JPascal.out_syntax = false;
                 break;
             case 58:
-                JPascal.out_syntax = true;
                 JPascal.out("<POINTER>");
-                JPascal.out_syntax = false;
                 break;
             case 59:
-                JPascal.out_syntax = true;
                 JPascal.out("<STRING>");
-                JPascal.out_syntax = false;
                 break;
             case 60:
-                JPascal.out_syntax = true;
                 JPascal.out("<IDENTIFIER>");
-                JPascal.out_syntax = false;
                 break;
             case 61:
-                JPascal.out_syntax = true;
                 JPascal.out("<LETTER>");
-                JPascal.out_syntax = false;
                 break;
             case 62:
-                JPascal.out_syntax = true;
                 JPascal.out("<DIGIT>");
-                JPascal.out_syntax = false;
                 break;
             case 63:
-                JPascal.out_syntax = true;
                 JPascal.out("<LPAREN>");
-                JPascal.out_syntax = false;
                 break;
             case 64:
-                JPascal.out_syntax = true;
                 JPascal.out("<RPAREN>");
-                JPascal.out_syntax = false;
                 break;
             case 65:
-                JPascal.out_syntax = true;
                 JPascal.out("<LBRACKET>");
-                JPascal.out_syntax = false;
                 break;
             case 66:
-                JPascal.out_syntax = true;
                 JPascal.out("<RBRACKET>");
-                JPascal.out_syntax = false;
                 break;
             case 67:
-                JPascal.out_syntax = true;
                 JPascal.out("<SEMICOLON>"); //TODO: ; maybe should remove it?
-                JPascal.out_syntax = false;
                 break;
             case 68:
-                JPascal.out_syntax = true;
                 JPascal.out("<COMMA>");
-                JPascal.out_syntax = false;
                 break;
             case 69:
-                JPascal.out_syntax = true;
                 JPascal.out("<COLON>");
-                JPascal.out_syntax = false;
                 break;
             case 70:
-                JPascal.out_syntax = true;
                 JPascal.out("<PLUS>");
-                JPascal.out_syntax = false;
                 break;
             case 71:
-                JPascal.out_syntax = true;
                 JPascal.out("<MINUS>");
-                JPascal.out_syntax = false;
                 break;
             case 72:
-                JPascal.out_syntax = true;
                 JPascal.out("<MULTIPLY>");
-                JPascal.out_syntax = false;
                 break;
             case 73:
-                JPascal.out_syntax = true;
                 JPascal.out("<STARSTAR>");
-                JPascal.out_syntax = false;
                 break;
             case 74:
-                JPascal.out_syntax = true;
                 JPascal.out("<DIVIDE>");
-                JPascal.out_syntax = false;
                 break;
             case 75:
-                JPascal.out_syntax = true;
                 JPascal.out("<DOT>");
-                JPascal.out_syntax = false;
                 break;
             case 76:
-                JPascal.out_syntax = true;
                 JPascal.out("<DOTDOT>");
-                JPascal.out_syntax = false;
                 break;
             case 77:
-                JPascal.out_syntax = true;
                 JPascal.out("<ASSIGN>");
-                JPascal.out_syntax = false;
                 break;
             case 78:
-                JPascal.out_syntax = true;
                 JPascal.out("<EQ>");
-                JPascal.out_syntax = false;
                 break;
             case 79:
-                JPascal.out_syntax = true;
                 JPascal.out("<LE>");
-                JPascal.out_syntax = false;
                 break;
             case 80:
-                JPascal.out_syntax = true;
                 JPascal.out("<GE>");
-                JPascal.out_syntax = false;
                 break;
             case 81:
-                JPascal.out_syntax = true;
                 JPascal.out("<NE>");
-                JPascal.out_syntax = false;
                 break;
             case 82:
-                JPascal.out_syntax = true;
                 JPascal.out("<GT>");
-                JPascal.out_syntax = false;
                 break;
             case 83:
-                JPascal.out_syntax = true;
                 JPascal.out("<LT>");
-                JPascal.out_syntax = false;
                 break;
             case 84:
-                JPascal.out_syntax = true;
                 JPascal.out("<ADDR>");
-                JPascal.out_syntax = false;
                 break;
             case 85:
-                JPascal.out_syntax = true;
                 JPascal.out("<UPARROW>");
-                JPascal.out_syntax = false;
                 break;
             case 86:
-                JPascal.out_syntax = true;
                 JPascal.out("<SQOUTE>");
-                JPascal.out_syntax = false;
                 break;
             case 87:
-                JPascal.out_syntax = true;
                 JPascal.out("<DQOUTE>");
-                JPascal.out_syntax = false;
                 break;
 
-
             default:
-                JPascal.out_syntax = true;
-                JPascal.out("<***********>");
-                JPascal.out_syntax = false;
                 break;
         }
     }

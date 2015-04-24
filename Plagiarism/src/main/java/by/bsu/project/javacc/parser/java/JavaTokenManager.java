@@ -2571,7 +2571,6 @@ static void SkipLexicalActions(Token matchedToken)
       case 6 :
          image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     Java.lineNo++;
-    Java.seenNewLine = true;
          break;
       case 7 :
          image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
@@ -2588,8 +2587,6 @@ static void TokenLexicalActions(Token matchedToken)
       case 1 :
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     Java.lineNo++;
-    if (Java.seenNewLine)
-    Java.seenNewLine = true;
          break;
       case 3 :
         image.append(jjstrLiteralImages[3]);

@@ -10,11 +10,6 @@ import java.util.List;
 public class Java implements JavaConstants {
 
   /**
-   * The stream used to save the output file.
-   */
-  static PrintStream save;
-
-  /**
    * Stream containing the output of this tokenizer.
    */
 
@@ -25,11 +20,6 @@ public class Java implements JavaConstants {
    */
   static int lineNo = 1;
 
-
-  /**
-   * Used to control when a new line is started in the outputted file.
-   */
-  static boolean seenNewLine = false;
 
     static List<String> nodes = new ArrayList<>();
 
@@ -50,7 +40,6 @@ public class Java implements JavaConstants {
       }
       Java.baos = new ByteArrayOutputStream();
       Java.lineNo = 1;
-      Java.seenNewLine = false;
       Java.nodes = new ArrayList<>();
       Java.ReInit(is);
   }
@@ -61,14 +50,8 @@ public class Java implements JavaConstants {
    * @param stringToPrint the string to print.
    */
   static void toPrint(String stringToPrint) {
-   // printLineNo();
-    if (seenNewLine)
-      save.println();
-    seenNewLine = false;
-    save.print(stringToPrint);
       nodes.add(stringToPrint);
   }
-
 
     public static void main(String args[]) throws ParseException {
         Java parser = new Java(System.in);
@@ -100,7 +83,6 @@ public class Java implements JavaConstants {
     case hashLine:{
       jj_consume_token(hashLine);
       jj_consume_token(INTEGER_LITERAL);
-      seenNewLine = false;
     lineNo = Integer.parseInt(getToken(0).image);
 //    printLineNumber = true;
 //    printLineNo();
@@ -439,9 +421,6 @@ public class Java implements JavaConstants {
       }
     case others:{
       jj_consume_token(others);
-if (seenNewLine)
-        Java.save.println();
-      seenNewLine=false;
       Java.toPrint(token.image);
       break;
       }
@@ -453,7 +432,6 @@ if (seenNewLine)
   }
 
     static final public void Input() throws ParseException {
-        Java.save = new PrintStream(baos);//System.out;
 
     label_1:
     while (true) {
@@ -762,14 +740,4 @@ if (seenNewLine)
     }
     return new ParseException(token, exptokseq, tokenImage);
   }
-
-  /** Enable tracing. */
-  static final public void enable_tracing() {
-  }
-
-  /** Disable tracing. */
-  static final public void disable_tracing() {
-  }
-
 }
-

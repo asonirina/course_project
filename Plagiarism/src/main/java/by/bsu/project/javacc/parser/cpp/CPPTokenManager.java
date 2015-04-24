@@ -2567,7 +2567,6 @@ static void SkipLexicalActions(Token matchedToken)
       case 5 :
          image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     CPP.lineNo++;
-    CPP.seenNewLine = true;
          break;
       case 6 :
          image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
@@ -2584,9 +2583,6 @@ static void TokenLexicalActions(Token matchedToken)
       case 1 :
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
     CPP.lineNo++;
-    if (CPP.seenNewLine)
-      CPP.print=true;
-    CPP.seenNewLine=true;
          break;
       case 3 :
         image.append(jjstrLiteralImages[3]);
