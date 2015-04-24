@@ -9,22 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CPP implements CPPConstants {
-    static List<String> nodes = new ArrayList<>();
+  List<String> nodes = new ArrayList<>();
 
-  static int lineNo = 1;
+    public List<String> getNodes() {
+        return token_source.getNodes();
+    }
 
-  static boolean print=false;
-
-  static void toPrint(String stringToPrint) {
-      nodes.add(stringToPrint);
-  }
+    int lineNo = 1;
 
   public static void main(String args[]) throws ParseException {
-    CPP parser = new CPP(System.in);
+    CPP parser = new CPP(new ByteArrayInputStream("void main() {}".getBytes()));
     parser.Input();
   }
 
-  static final public void anyOldLines() throws ParseException {
+  public void anyOldLines() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case singleLineComment:{
       jj_consume_token(singleLineComment);
@@ -356,7 +354,6 @@ public class CPP implements CPPConstants {
       }
     case others:{
       jj_consume_token(others);
-        CPP.toPrint(token.image);
       break;
       }
     default:
@@ -366,7 +363,7 @@ public class CPP implements CPPConstants {
     }
   }
 
-  static final public void Input() throws ParseException {
+  public void Input() throws ParseException {
 
     label_1:
     while (true) {
@@ -465,53 +462,45 @@ public class CPP implements CPPConstants {
     jj_consume_token(0);
   }
 
-  static private boolean jj_initialized_once = false;
-  /** Generated Token Manager. */
-  static public CPPTokenManager token_source;
-  static SimpleCharStream jj_input_stream;
+  public CPPTokenManager token_source;
+  SimpleCharStream jj_input_stream;
   /** Current token. */
-  static public Token token;
+  public Token token;
   /** Next token. */
-  static public Token jj_nt;
-  static private int jj_ntk;
-  static private int jj_gen;
-  static final private int[] jj_la1 = new int[2];
-  static private int[] jj_la1_0;
-  static private int[] jj_la1_1;
-  static private int[] jj_la1_2;
-  static private int[] jj_la1_3;
+  public Token jj_nt;
+  private int jj_ntk;
+  private int jj_gen;
+  final private int[] jj_la1 = new int[2];
+  private int[] jj_la1_0;
+  private int[] jj_la1_1;
+  private int[] jj_la1_2;
+  private int[] jj_la1_3;
   static {
+
+   }
+   private void jj_la1_init_0() {
+      jj_la1_0 = new int[] {0x779bf61e,0x779bf61e,};
+   }
+   private void jj_la1_init_1() {
+      jj_la1_1 = new int[] {0x138fc33f,0x138fc33f,};
+   }
+   private void jj_la1_init_2() {
+      jj_la1_2 = new int[] {0xffef9ffd,0xffef9ffd,};
+   }
+   private void jj_la1_init_3() {
+      jj_la1_3 = new int[] {0x5fc7f,0x5fc7f,};
+   }
+
+  public CPP (InputStream stream) {
+     this(stream, null);
+  }
+
+  public CPP (InputStream stream, String encoding) {
       jj_la1_init_0();
       jj_la1_init_1();
       jj_la1_init_2();
       jj_la1_init_3();
-   }
-   private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x779bf61e,0x779bf61e,};
-   }
-   private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x138fc33f,0x138fc33f,};
-   }
-   private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0xffef9ffd,0xffef9ffd,};
-   }
-   private static void jj_la1_init_3() {
-      jj_la1_3 = new int[] {0x5fc7f,0x5fc7f,};
-   }
 
-  /** Constructor with InputStream. */
-  public CPP (InputStream stream) {
-     this(stream, null);
-  }
-  /** Constructor with InputStream and supplied encoding */
-  public CPP (InputStream stream, String encoding) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new CPPTokenManager(jj_input_stream);
     token = new Token();
@@ -520,12 +509,11 @@ public class CPP implements CPPConstants {
     for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
-  /** Reinitialise. */
-  static public void ReInit(InputStream stream) {
+  public void ReInit(InputStream stream) {
      ReInit(stream, (String)null);
   }
-  /** Reinitialise. */
-  static public void ReInit(InputStream stream, String encoding) {
+
+  public void ReInit(InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -534,25 +522,7 @@ public class CPP implements CPPConstants {
     for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
-  /** Constructor. */
-  public CPP(Reader stream) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
-    jj_input_stream = new SimpleCharStream(stream, 1, 1);
-    token_source = new CPPTokenManager(jj_input_stream);
-    token = new Token();
-    jj_ntk = -1;
-    jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
-  }
-
-  /** Reinitialise. */
-  static public void ReInit(Reader stream) {
+  public void ReInit(Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -561,15 +531,8 @@ public class CPP implements CPPConstants {
     for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
-  /** Constructor with generated Token Manager. */
   public CPP(CPPTokenManager tm) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
+
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
@@ -577,7 +540,6 @@ public class CPP implements CPPConstants {
     for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
-  /** Reinitialise. */
   public void ReInit(CPPTokenManager tm) {
     token_source = tm;
     token = new Token();
@@ -586,7 +548,7 @@ public class CPP implements CPPConstants {
     for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
-  static private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -600,9 +562,7 @@ public class CPP implements CPPConstants {
     throw generateParseException();
   }
 
-
-/** Get the next Token. */
-  static final public Token getNextToken() {
+  public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -610,8 +570,7 @@ public class CPP implements CPPConstants {
     return token;
   }
 
-/** Get the specific Token. */
-  static final public Token getToken(int index) {
+  public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -620,19 +579,18 @@ public class CPP implements CPPConstants {
     return t;
   }
 
-  static private int jj_ntk_f() {
+  private int jj_ntk_f() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-  static private int[] jj_expentry;
-  static private int jj_kind = -1;
+  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+  private int[] jj_expentry;
+  private int jj_kind = -1;
 
-  /** Generate ParseException. */
-  static public ParseException generateParseException() {
+  public ParseException generateParseException() {
     jj_expentries.clear();
     boolean[] la1tokens = new boolean[115];
     if (jj_kind >= 0) {
@@ -670,5 +628,4 @@ public class CPP implements CPPConstants {
     }
     return new ParseException(token, exptokseq, tokenImage);
   }
-
 }
