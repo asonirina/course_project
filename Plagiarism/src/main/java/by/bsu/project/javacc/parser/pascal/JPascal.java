@@ -1,5 +1,6 @@
 package by.bsu.project.javacc.parser.pascal;
 
+import by.bsu.project.javacc.JavaCCParser;
 import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
@@ -8,7 +9,8 @@ import java.io.*;
 import java.util.List;
 import java.util.Vector;
 
-public class JPascal implements JPascalConstants {
+public class JPascal implements JPascalConstants, JavaCCParser {
+    @Override
      public List<String> getNodes() {
          return token_source.getNodes();
      }
@@ -18,7 +20,7 @@ public class JPascal implements JPascalConstants {
     public static void main(String args[]) throws Exception {
         JPascal parser;
         parser = new JPascal(new ByteArrayInputStream("program p1; begin end.".getBytes()));
-        parser.Program();
+        parser.Input();
     }
 
     public void generateReport(JPascal parser) {
@@ -49,7 +51,8 @@ public class JPascal implements JPascalConstants {
         return JPascalConstants.tokenImage[token.kind];
     }
 
-    public void Program() throws ParseException {
+    @Override
+    public void Input() throws ParseException {
 
         Token program = null;
         if (jj_2_2(2)) {

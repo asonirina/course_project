@@ -2,11 +2,11 @@ package by.bsu.project.scheduller;
 
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.tree.TreeParser;
-import by.bsu.project.antlr.util.AttributeCountingUtil;
+import by.bsu.project.antlr.util.JavaCCNodesUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.javacc.utol.SpacesCommentExtractor;
+import by.bsu.project.javacc.util.SpacesCommentExtractor;
 import by.bsu.project.service.UserInfoService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class PlagiarismRunner {
                 SpacesCommentExtractor spacesExtractor = new SpacesCommentExtractor(programFilesEntity.getFile());
                 spacesExtractor.extractSpaces(ac);
 
-                int plagiat1 = AttributeCountingUtil.checkAC(userInfoService.getProgramsByName(programFilesEntity), ac);
+                int plagiat1 = JavaCCNodesUtil.checkNodes(userInfoService.getProgramsByName(programFilesEntity), programFilesEntity);
                 programFilesEntity.setAc(ac);
                 ac.setEntity(programFilesEntity);
 

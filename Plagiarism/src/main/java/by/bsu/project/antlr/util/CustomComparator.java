@@ -12,5 +12,4 @@ public class CustomComparator implements Comparator<TreeNode> {
     public int compare(TreeNode node1, TreeNode node2) {
         return node1.getId().compareTo(node2.getId());
     }
-
 }

@@ -1,5 +1,6 @@
 package by.bsu.project.javacc.parser.cpp;
 
+import by.bsu.project.javacc.JavaCCParser;
 import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
@@ -8,9 +9,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CPP implements CPPConstants {
+public class CPP implements CPPConstants, JavaCCParser {
   List<String> nodes = new ArrayList<>();
 
+    @Override
     public List<String> getNodes() {
         return token_source.getNodes();
     }
@@ -363,6 +365,7 @@ public class CPP implements CPPConstants {
     }
   }
 
+    @Override
   public void Input() throws ParseException {
 
     label_1:
