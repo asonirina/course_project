@@ -4,13 +4,15 @@ import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.SimpleCharStream;
 import by.bsu.project.javacc.model.Token;
 
+import java.io.ByteArrayInputStream;
+
 public class White implements WhiteConstants {
     private int lineNo = 1;
     private int spaces = 0;
     private int tabs = 0;
 
     public static void main(String args[]) throws ParseException {
-        White parser = new White(System.in);
+        White parser = new White(new ByteArrayInputStream("   ".getBytes()));
         parser.Input();
     }
 
@@ -60,7 +62,6 @@ public class White implements WhiteConstants {
                 case space:
                 case tab:
                 case others: {
-                    ;
                     break;
                 }
                 default:

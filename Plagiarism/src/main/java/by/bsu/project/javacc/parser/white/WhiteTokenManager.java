@@ -8,30 +8,24 @@ import by.bsu.project.javacc.model.Token;
 @SuppressWarnings("unused")
 public class WhiteTokenManager implements WhiteConstants {
 
-    public static java.io.PrintStream debugStream = System.out;
-
-    public static void setDebugStream(java.io.PrintStream ds) {
-        debugStream = ds;
-    }
-
-    private static final int jjStopStringLiteralDfa_0(int pos, long active0) {
+    private  int jjStopStringLiteralDfa_0(int pos, long active0) {
         switch (pos) {
             default:
                 return -1;
         }
     }
 
-    private static final int jjStartNfa_0(int pos, long active0) {
+    private int jjStartNfa_0(int pos, long active0) {
         return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0), pos + 1);
     }
 
-    static private int jjStopAtPos(int pos, int kind) {
+    private int jjStopAtPos(int pos, int kind) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
         return pos + 1;
     }
 
-    static private int jjMoveStringLiteralDfa0_0() {
+    private int jjMoveStringLiteralDfa0_0() {
         switch (curChar) {
             case 9:
                 return jjStopAtPos(0, 4);
@@ -44,7 +38,7 @@ public class WhiteTokenManager implements WhiteConstants {
         }
     }
 
-    static private int jjMoveStringLiteralDfa1_0(long active0) {
+    private int jjMoveStringLiteralDfa1_0(long active0) {
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
@@ -61,7 +55,7 @@ public class WhiteTokenManager implements WhiteConstants {
         return jjStartNfa_0(0, active0);
     }
 
-    static private int jjMoveStringLiteralDfa2_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa2_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(0, old0);
         try {
@@ -80,7 +74,7 @@ public class WhiteTokenManager implements WhiteConstants {
         return jjStartNfa_0(1, active0);
     }
 
-    static private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(1, old0);
         try {
@@ -99,7 +93,7 @@ public class WhiteTokenManager implements WhiteConstants {
         return jjStartNfa_0(2, active0);
     }
 
-    static private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(2, old0);
         try {
@@ -118,7 +112,7 @@ public class WhiteTokenManager implements WhiteConstants {
         return jjStartNfa_0(3, active0);
     }
 
-    static private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
+    private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(3, old0);
         try {
@@ -138,7 +132,7 @@ public class WhiteTokenManager implements WhiteConstants {
         return jjStartNfa_0(4, active0);
     }
 
-    static private int jjMoveNfa_0(int startState, int curPos) {
+    private int jjMoveNfa_0(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 3;
         int i = 1;
@@ -205,13 +199,13 @@ public class WhiteTokenManager implements WhiteConstants {
         }
     }
 
-    static final int[] jjnextStates = {
+    final int[] jjnextStates = {
     };
 
     public static final String[] jjstrLiteralImages = {
             "", null, null, "\40", "\11", null,};
 
-    static protected Token jjFillToken() {
+    protected Token jjFillToken() {
         final Token t;
         final String curTokenImage;
         final int beginLine;
@@ -241,7 +235,7 @@ public class WhiteTokenManager implements WhiteConstants {
     static int jjmatchedPos;
     static int jjmatchedKind;
 
-    public static Token getNextToken() {
+    public Token getNextToken() {
         Token matchedToken;
         int curPos = 0;
 
@@ -292,20 +286,20 @@ public class WhiteTokenManager implements WhiteConstants {
         }
     }
 
-    static private void jjCheckNAdd(int state) {
+    private void jjCheckNAdd(int state) {
         if (jjrounds[state] != jjround) {
             jjstateSet[jjnewStateCnt++] = state;
             jjrounds[state] = jjround;
         }
     }
 
-    static private void jjAddStates(int start, int end) {
+    private void jjAddStates(int start, int end) {
         do {
             jjstateSet[jjnewStateCnt++] = jjnextStates[start];
         } while (start++ != end);
     }
 
-    static private void jjCheckNAddTwoStates(int state1, int state2) {
+    private void jjCheckNAddTwoStates(int state1, int state2) {
         jjCheckNAdd(state1);
         jjCheckNAdd(state2);
     }
@@ -323,46 +317,40 @@ public class WhiteTokenManager implements WhiteConstants {
         SwitchTo(lexState);
     }
 
-    /**
-     * Reinitialise parser.
-     */
-    static public void ReInit(SimpleCharStream stream) {
+    public void ReInit(SimpleCharStream stream) {
         jjmatchedPos = jjnewStateCnt = 0;
         curLexState = defaultLexState;
         input_stream = stream;
         ReInitRounds();
     }
 
-    static private void ReInitRounds() {
+    private void ReInitRounds() {
         int i;
         jjround = 0x80000001;
         for (i = 3; i-- > 0; )
             jjrounds[i] = 0x80000000;
     }
 
-    static public void ReInit(SimpleCharStream stream, int lexState) {
+    public void ReInit(SimpleCharStream stream, int lexState) {
         ReInit(stream);
         SwitchTo(lexState);
     }
 
-    static public void SwitchTo(int lexState) {
+    public void SwitchTo(int lexState) {
         if (lexState >= 1 || lexState < 0)
             throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
         else
             curLexState = lexState;
     }
 
-    /**
-     * Lexer state names.
-     */
     public static final String[] lexStateNames = {
             "DEFAULT",
     };
-    static protected SimpleCharStream input_stream;
+    protected SimpleCharStream input_stream;
 
-    static private final int[] jjrounds = new int[3];
-    static private final int[] jjstateSet = new int[2 * 3];
+    private final int[] jjrounds = new int[3];
+    private final int[] jjstateSet = new int[2 * 3];
 
 
-    static protected char curChar;
+    protected char curChar;
 }
