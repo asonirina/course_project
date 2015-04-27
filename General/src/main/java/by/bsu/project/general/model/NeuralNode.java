@@ -119,6 +119,8 @@ public class NeuralNode {
         res.setSpaces(RandomUtils.nextInt(20));
         res.setTabs(RandomUtils.nextInt(20));
         res.setIdent(RandomUtils.nextInt(20));
+        res.setComments(RandomUtils.nextInt(20));
+        res.setMethods(RandomUtils.nextInt(20));
         return res;
     }
 }

@@ -6,7 +6,6 @@ import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
-import by.bsu.project.general.huffman.Huffman;
 import by.bsu.project.model.News;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
