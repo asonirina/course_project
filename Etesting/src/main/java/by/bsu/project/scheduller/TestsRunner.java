@@ -23,7 +23,7 @@ public class TestsRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Scheduled(fixedDelay = 20000)
+    @Scheduled(cron = "0 0 * * * ?")
     protected void executeInternal () {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
@@ -38,13 +38,5 @@ public class TestsRunner {
         } catch (ConfigurationException | IOException | InterruptedException ex) {
             logger.error(ex.getMessage());
         }
-    }
-
-    public UserInfoService getUserInfoService() {
-        return userInfoService;
-    }
-
-    public void setUserInfoService(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
     }
 }

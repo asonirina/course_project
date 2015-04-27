@@ -26,7 +26,7 @@ public class PlagiarismRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Scheduled(fixedDelay = 20000)
+    @Scheduled(cron = "0 20 * * * ?")
     protected void executeInternal() {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
@@ -54,13 +54,5 @@ public class PlagiarismRunner {
         } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
-    }
-
-    public UserInfoService getUserInfoService() {
-        return userInfoService;
-    }
-
-    public void setUserInfoService(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
     }
 }

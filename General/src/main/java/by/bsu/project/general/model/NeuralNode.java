@@ -90,6 +90,22 @@ public class NeuralNode {
         this.comments = comments;
     }
 
+    public void incSpaces(Integer value) {
+        spaces +=value;
+    }
+    public void incTabs(Integer value) {
+        tabs +=value;
+    }
+    public void incIdent(Integer value) {
+        ident +=value;
+    }
+    public void incComments(Integer value) {
+        comments +=value;
+    }
+    public void incMethods(Integer value) {
+        methods +=value;
+    }
+
     public UserInfoEntity getEntity() {
         return entity;
     }
