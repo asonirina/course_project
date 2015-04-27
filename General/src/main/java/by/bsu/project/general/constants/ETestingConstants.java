@@ -4,6 +4,7 @@ public class ETestingConstants {
     public static int UPLOADED_FILE                     = 0;
     public static int TESTED_FILE                       = 1;
     public static int READY_FILE                        = 2;
+    public static int COMPLETE_FILE                     = 3;
 
     public final static String POSTFIX_C                = ".c";
     public final static String POSTFIX_CPP              = ".cpp";

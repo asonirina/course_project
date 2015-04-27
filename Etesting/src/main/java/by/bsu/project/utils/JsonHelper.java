@@ -1,5 +1,6 @@
 package by.bsu.project.utils;
 
+import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
 import org.json.simple.JSONArray;
@@ -23,11 +24,13 @@ public class JsonHelper {
 
             JSONArray programFiles = new JSONArray();
             for(ProgramFilesEntity program: user.getProgramFiles()) {
-                JSONObject programFile = new JSONObject();
-                programFile.put("name", program.getProgramName());
-                programFile.put("size", "2000");
-                programFile.put("color", user.getNeuralNode().getId().equals(program.getCluster())?"white" : "orange");
-                programFiles.add(programFile);
+                if (program.getRunStatus() == ETestingConstants.COMPLETE_FILE) {
+                    JSONObject programFile = new JSONObject();
+                    programFile.put("name", "Lab #" + program.getProgramName() + ", Plagiarism = " + program.getPlagiat2());
+                    programFile.put("size", String.valueOf(50 + program.getPlagiat2()));
+                    programFile.put("color", user.getNeuralNode().getId().equals(program.getCluster()) ? "white" : "orange");
+                    programFiles.add(programFile);
+                }
             }
             student.put("children", programFiles);
 
