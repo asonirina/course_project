@@ -1567,22 +1567,16 @@ public class JPascalTokenManager implements JPascalConstants {
                 out("<DIGIT>");
                 break;
             case 63:
-                out("<LPAREN>");
                 break;
             case 64:
-                out("<RPAREN>");
                 break;
             case 65:
-                out("<LBRACKET>");
                 break;
             case 66:
-                out("<RBRACKET>");
                 break;
             case 67:
-                out("<SEMICOLON>");
                 break;
             case 68:
-                out("<COMMA>");
                 break;
             case 69:
                 out("<COLON>");
@@ -1603,10 +1597,8 @@ public class JPascalTokenManager implements JPascalConstants {
                 out("<DIVIDE>");
                 break;
             case 75:
-                out("<DOT>");
                 break;
             case 76:
-                out("<DOTDOT>");
                 break;
             case 77:
                 out("<ASSIGN>");

@@ -21,7 +21,8 @@ public class NeuralRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Scheduled(cron = "0 40 * * * ?")
+    //    @Scheduled(cron = "0 40 * * * ?")
+    @Scheduled(cron = "40 * * * * ?")
     protected void executeInternal() {
         List<UserInfoEntity> users = userInfoService.studentsList();
         List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();

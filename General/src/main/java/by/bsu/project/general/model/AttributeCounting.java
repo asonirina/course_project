@@ -15,7 +15,7 @@ public class AttributeCounting {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "lines")
+    @Column(name = "line_count")
     private Integer lines = 0;
 
     @Column(name = "methods")

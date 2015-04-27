@@ -2752,7 +2752,6 @@ public  Token getNextToken()
          break;
       case 48 :
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
-    toPrint("");
          break;
       case 49 :
         image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
@@ -2809,47 +2808,38 @@ public  Token getNextToken()
       case 68 :
         image.append(jjstrLiteralImages[68]);
         lengthOfMatch = jjstrLiteralImages[68].length();
-          toPrint("(");
          break;
       case 69 :
         image.append(jjstrLiteralImages[69]);
         lengthOfMatch = jjstrLiteralImages[69].length();
-    toPrint(")");
          break;
       case 70 :
         image.append(jjstrLiteralImages[70]);
         lengthOfMatch = jjstrLiteralImages[70].length();
-          toPrint("{");
          break;
       case 71 :
         image.append(jjstrLiteralImages[71]);
         lengthOfMatch = jjstrLiteralImages[71].length();
-          toPrint("}");
          break;
       case 72 :
         image.append(jjstrLiteralImages[72]);
         lengthOfMatch = jjstrLiteralImages[72].length();
-          toPrint("[");
          break;
       case 73 :
         image.append(jjstrLiteralImages[73]);
         lengthOfMatch = jjstrLiteralImages[73].length();
-          toPrint("]");
          break;
       case 74 :
         image.append(jjstrLiteralImages[74]);
         lengthOfMatch = jjstrLiteralImages[74].length();
-          toPrint("");
          break;
       case 75 :
         image.append(jjstrLiteralImages[75]);
         lengthOfMatch = jjstrLiteralImages[75].length();
-          toPrint(",");
          break;
       case 76 :
         image.append(jjstrLiteralImages[76]);
         lengthOfMatch = jjstrLiteralImages[76].length();
-          toPrint(".");
          break;
       case 77 :
         image.append(jjstrLiteralImages[77]);
@@ -2859,7 +2849,6 @@ public  Token getNextToken()
       case 78 :
         image.append(jjstrLiteralImages[78]);
         lengthOfMatch = jjstrLiteralImages[78].length();
-          toPrint("...");
          break;
       case 79 :
         image.append(jjstrLiteralImages[79]);
@@ -2879,7 +2868,6 @@ public  Token getNextToken()
       case 82 :
         image.append(jjstrLiteralImages[82]);
         lengthOfMatch = jjstrLiteralImages[82].length();
-          toPrint("");
          break;
       case 83 :
         image.append(jjstrLiteralImages[83]);

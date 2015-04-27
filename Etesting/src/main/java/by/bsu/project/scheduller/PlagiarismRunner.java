@@ -26,7 +26,8 @@ public class PlagiarismRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Scheduled(cron = "0 20 * * * ?")
+//    @Scheduled(cron = "0 20 * * * ?")
+    @Scheduled(cron = "20 * * * * ?")
     protected void executeInternal() {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();

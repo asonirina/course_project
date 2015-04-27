@@ -38,6 +38,7 @@ public class UserInfoEntity {
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "neuralNode_id")
     private NeuralNode neuralNode;
 
     public Long getId() {

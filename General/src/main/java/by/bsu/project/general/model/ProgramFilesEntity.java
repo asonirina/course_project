@@ -22,6 +22,7 @@ public class ProgramFilesEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ac_id")
     private AttributeCounting ac;
 
     @ManyToOne

@@ -1,7 +1,5 @@
 package by.bsu.project.antlr.util;
 
-import org.apache.commons.lang.math.NumberUtils;
-
 import java.util.List;
 
 /**
@@ -9,38 +7,44 @@ import java.util.List;
  * Date: 27.01.15
  */
 public class LinesAlignment {
-    private static final int m = 1;
-    private static final int d = -1;
-    private static final int g = -2;
+    private static final int cost = 1;
 
-    private String m1[];
-    private String m2[];
-
-    public LinesAlignment(String[] m1, String[] m2) {
-        this.m1 = m1;
-        this.m2 = m2;
+    public static int diff(List<String> m1, List<String>m2) {
+        int diffCount = DLevenstein(m1.toArray(new String[m1.size()]), m2.toArray(new String[m2.size()]));
+        return (int)(100* Math.exp(-diffCount));
     }
 
-    public LinesAlignment(List<String> m1, List<String>m2) {
-        this.m1 = m1.toArray(new String[m1.size()]);
-        this.m2 = m1.toArray(new String[m2.size()]);
+    private static int DLevenstein(String s1[], String s2[]) {
+        int m = s1.length, n = s2.length;
+        int[] d1;
+        int[] d2 = new int[n + 1];
+
+        for (int i = 0; i <= n; i++)
+            d2[i] = i;
+
+        for (int i = 1; i <= m; i++) {
+            d1 = d2;
+            d2 = new int[n + 1];
+            for (int j = 0; j <= n; j++) {
+                if (j == 0) d2[j] = i;
+                else {
+                    int cost = m(s1[i - 1], s2[j - 1]);
+                    if (d2[j - 1] < d1[j] && d2[j - 1] < d1[j - 1] + cost)
+                        d2[j] = d2[j - 1] + 1;
+                    else if (d1[j] < d1[j - 1] + cost)
+                        d2[j] = d1[j] + 1;
+                    else
+                        d2[j] = d1[j - 1] + cost;
+                }
+            }
+        }
+        return d2[n];
     }
 
-    private static int score (String s1, String s2) {
-        if(s1.equals(s2)) return m;
-        else return d;
-    }
-
-    private int D(int i, int j) {
-        if (i == 0) return 0;
-        if (j == 0) return 0;
-        return NumberUtils.max(new int[]{D(i - 1, j - 1) + score(m1[i], m2[j]),
-                D(i - 1, j) + g,
-                D(i, j - 1) + g,
-                0});
-    }
-
-    public int diff() {
-        return D(m1.length - 1, m2.length - 1);
+    private static int m(String a, String b) {
+        if (!a.equals(b)) {
+            return 1;
+        }
+        return 0;
     }
 }

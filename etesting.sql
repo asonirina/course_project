@@ -19,7 +19,7 @@ USE `etesting`;
 
 CREATE TABLE `attribute_countings` (
   `id` int(11) NOT NULL auto_increment,
-  `lines` int(3) NOT NULL,
+  `line_count` int(3) NOT NULL,
   `methods` int(3) NOT NULL,
   `spaces` int(3) NOT NULL,
   `tabs` int(3) NOT NULL,

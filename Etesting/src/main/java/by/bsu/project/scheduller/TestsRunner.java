@@ -23,7 +23,9 @@ public class TestsRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Scheduled(cron = "0 0 * * * ?")
+//    @Scheduled(cron = "0 0 * * * ?")
+@Scheduled(cron = "0 * * * * ?")
+
     protected void executeInternal () {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();

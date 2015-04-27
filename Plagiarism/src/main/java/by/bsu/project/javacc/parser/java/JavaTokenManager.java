@@ -2816,47 +2816,38 @@ public  Token getNextToken()
       case 57 :
         image.append(jjstrLiteralImages[57]);
         lengthOfMatch = jjstrLiteralImages[57].length();
-    toPrint("(");
          break;
       case 58 :
         image.append(jjstrLiteralImages[58]);
         lengthOfMatch = jjstrLiteralImages[58].length();
-    toPrint(")");
          break;
       case 59 :
         image.append(jjstrLiteralImages[59]);
         lengthOfMatch = jjstrLiteralImages[59].length();
-    toPrint("{");
          break;
       case 60 :
         image.append(jjstrLiteralImages[60]);
         lengthOfMatch = jjstrLiteralImages[60].length();
-    toPrint("}");
          break;
       case 61 :
         image.append(jjstrLiteralImages[61]);
         lengthOfMatch = jjstrLiteralImages[61].length();
-    toPrint("[");
          break;
       case 62 :
         image.append(jjstrLiteralImages[62]);
         lengthOfMatch = jjstrLiteralImages[62].length();
-    toPrint("]");
          break;
       case 63 :
         image.append(jjstrLiteralImages[63]);
         lengthOfMatch = jjstrLiteralImages[63].length();
-    toPrint("");
          break;
       case 64 :
         image.append(jjstrLiteralImages[64]);
         lengthOfMatch = jjstrLiteralImages[64].length();
-    toPrint(",");
          break;
       case 65 :
         image.append(jjstrLiteralImages[65]);
         lengthOfMatch = jjstrLiteralImages[65].length();
-    toPrint(".");
          break;
       case 66 :
         image.append(jjstrLiteralImages[66]);
