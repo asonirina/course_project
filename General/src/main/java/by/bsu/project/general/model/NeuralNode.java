@@ -120,7 +120,7 @@ public class NeuralNode {
         res.setTabs(RandomUtils.nextInt(20));
         res.setIdent(RandomUtils.nextInt(20));
         res.setComments(RandomUtils.nextInt(20));
-        res.setMethods(RandomUtils.nextInt(20));
+        res.setMethods(RandomUtils.nextInt(5));
         return res;
     }
 }

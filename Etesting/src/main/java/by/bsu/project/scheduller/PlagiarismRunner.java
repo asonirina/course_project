@@ -4,8 +4,11 @@ import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.util.JavaCCNodesUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
+import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.javacc.general.ParseException;
+import by.bsu.project.javacc.general.UnsupportedLanguageException;
 import by.bsu.project.javacc.util.SpacesCommentExtractor;
 import by.bsu.project.service.UserInfoService;
 import org.apache.log4j.Logger;
@@ -32,6 +35,7 @@ public class PlagiarismRunner {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
+                try {
                 TreeParser parser = new TreeParser(programFilesEntity.getLang());
                 List<TreeNode> nodes = parser.getTree(programFilesEntity.getFile());
                 AttributeCounting ac = parser.getAc();
@@ -49,10 +53,14 @@ public class PlagiarismRunner {
                 programFilesEntity.setPlagiat2(plagiat2);
                 programFilesEntity.setTreeContent(TreeNode.getBytes(nodes));
 
-                programFilesEntity.setRunStatus(2);
+                programFilesEntity.setRunStatus(ETestingConstants.READY_FILE);
                 userInfoService.save(programFilesEntity.getUser());
+                } catch (ParseException|UnsupportedLanguageException ex) {
+                    programFilesEntity.setRunStatus(ETestingConstants.FAILED_FILE);
+                    userInfoService.save(programFilesEntity.getUser());
+                }
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
     }
