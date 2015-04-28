@@ -43,11 +43,12 @@ public class PlagiarismRunner {
                 SpacesCommentExtractor spacesExtractor = new SpacesCommentExtractor(programFilesEntity.getFile());
                 spacesExtractor.extractSpaces(ac);
 
-                int plagiat1 = JavaCCNodesUtil.checkNodes(userInfoService.getProgramsByName(programFilesEntity), programFilesEntity);
+                List<ProgramFilesEntity> programFilesEntities = userInfoService.getProgramsByName(programFilesEntity);
+                int plagiat1 = JavaCCNodesUtil.checkNodes(programFilesEntities, programFilesEntity);
                 programFilesEntity.setAc(ac);
                 ac.setEntity(programFilesEntity);
 
-                int plagiat2 = TreeCompareUtil.checkTrees(userInfoService.getProgramsByName(programFilesEntity), nodes);
+                int plagiat2 = TreeCompareUtil.checkTrees(programFilesEntities, nodes);
 
                 programFilesEntity.setPlagiat1(plagiat1);
                 programFilesEntity.setPlagiat2(plagiat2);
