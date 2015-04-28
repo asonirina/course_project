@@ -76,8 +76,8 @@ public class RTED {
 
     public void init(List<TreeNode> t1, List<TreeNode> t2) {
         map = new TreeNodeDistanceMap();
-        it1 = new InfoTree(t1, map);
-        it2 = new InfoTree(t2, map);
+        it1 = new InfoTree(t1, map, Order.FIRST);
+        it2 = new InfoTree(t2, map, Order.SECOND);
         size1 = it1.getSize();
         size2 = it2.getSize();
         IJ = new int[Math.max(size1, size2)][Math.max(size1, size2)];
@@ -402,8 +402,7 @@ public class RTED {
                         && (it2.info[POST2_LLD][j1 + joff] == it2.info[POST2_LLD][j])) {
                     double u = 0.0;
                     if (it1.info[POST2_LABEL][i1 + ioff] != it2.info[POST2_LABEL][j1 + joff]) {
-                        u = //ld.rename(it1.info[POST2_LABEL][i1 + ioff],it2.info[POST2_LABEL][j1 + joff]);//costMatch;
-                        deltaBit [i1 + ioff][j1 + joff];
+                        u = it1.getOrder().equals(Order.FIRST) ? deltaBit[i1 + ioff][j1 + joff] : deltaBit[j1 + joff][i1 + ioff];
                     }
                     da = forestdist[i1 - 1][j1] + map.delete();
                     db = forestdist[i1][j1 - 1] + map.insert();

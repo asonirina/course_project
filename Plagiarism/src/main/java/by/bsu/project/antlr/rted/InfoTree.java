@@ -34,6 +34,7 @@ import static by.bsu.project.antlr.rted.RTEDConstants.PRE2_POST;
 public class InfoTree {
 
     private List<TreeNode> inputTree;
+    private Order order;
 
     public int[][] info;
     private TreeNodeDistanceMap map;
@@ -58,7 +59,8 @@ public class InfoTree {
     private int leafCount = 0;
     private int treeSize = 0;
     
-    public InfoTree(List<TreeNode> aInputTree, TreeNodeDistanceMap aMap) {
+    public InfoTree(List<TreeNode> aInputTree, TreeNodeDistanceMap aMap, Order order) {
+        this.order = order;
         this.inputTree = aInputTree;
         this.treeSize = inputTree.size();
         this.info = new int[16][treeSize];
@@ -116,6 +118,10 @@ public class InfoTree {
     
     private int gatherInfo(List<TreeNode> aT, int postorder) {
           return gatherInfo(aT.get(aT.size() - 1), postorder);
+    }
+
+    public Order getOrder() {
+        return order;
     }
 
     private int gatherInfo(TreeNode aT, int postorder) {
