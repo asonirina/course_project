@@ -3,6 +3,7 @@ package by.bsu.project.utils;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
+import org.apache.commons.lang.math.RandomUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,16 +29,18 @@ public class JsonHelper {
                     JSONObject programFile = new JSONObject();
                     programFile.put("name", "Lab #" + program.getProgramName() + ", Plagiarism = " + program.getPlagiat2());
                     programFile.put("size", String.valueOf(50 + program.getPlagiat2()));
-                    programFile.put("color", user.getNeuralNode().getId().equals(program.getCluster()) ? "white" : "orange");
+//                    programFile.put("color", user.getNeuralNode().getId().equals(program.getCluster()) ? "white" : "orange");
+                    programFile.put("color", RandomUtils.nextBoolean() ? "white" : "orange");
                     programFiles.add(programFile);
                 }
             }
             student.put("children", programFiles);
-
-            students.add(student);
+            if (!programFiles.isEmpty()) {
+                students.add(student);
+            }
         }
         obj.put("children", students);
 
-        return obj.toJSONString();
+        return new String(obj.toJSONString().getBytes(), "windows-1251");
     }
 }

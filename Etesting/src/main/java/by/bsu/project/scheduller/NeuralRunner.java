@@ -30,7 +30,7 @@ public class NeuralRunner {
             AttributeCounting ac = programFilesEntity.getAc();
             NeuralNode checkingNode = createNeuralNode(ac);
             UserInfoEntity winner = users.get(0);
-            int measure = 100000;
+            int measure = Integer.MAX_VALUE;
             for (UserInfoEntity entity : users) {
                 NeuralNode node = entity.getNeuralNode();
                 int temp = getDiff(node, checkingNode);
@@ -39,23 +39,23 @@ public class NeuralRunner {
                     winner = entity;
                 }
             }
-
-            int h = (int) (1.0 / ac.getId() * Math.exp(-measure / (2 * sigma(ac.getId()) * sigma(ac.getId()))));
-            changeWinner(winner.getNeuralNode(), checkingNode, h);
-
-            userInfoService.save(winner);
+            if (winner.getId().equals(programFilesEntity.getUser().getId())) {
+                double h = Math.sqrt(1.0 / ac.getId());
+                changeWinner(winner.getNeuralNode(), checkingNode, h);
+                userInfoService.save(winner);
+            }
             programFilesEntity.setRunStatus(3);
             programFilesEntity.setCluster(winner.getNeuralNode().getId());
             userInfoService.save(programFilesEntity.getUser());
         }
     }
 
-    private void changeWinner(NeuralNode winner, NeuralNode current, int h) {
-        winner.incSpaces(h * (current.getSpaces() - winner.getSpaces()));
-        winner.incTabs(h * (current.getTabs() - winner.getTabs()));
-        winner.incIdent(h * (current.getIdent() - winner.getIdent()));
-        winner.incComments(h * (current.getComments() - winner.getComments()));
-        winner.incMethods(h * (current.getMethods() - winner.getMethods()));
+    private void changeWinner(NeuralNode winner, NeuralNode current, double h) {
+        winner.incSpaces((int)h * (current.getSpaces() - winner.getSpaces()));
+        winner.incTabs((int)h * (current.getTabs() - winner.getTabs()));
+        winner.incIdent((int)h * (current.getIdent() - winner.getIdent()));
+        winner.incComments((int)h * (current.getComments() - winner.getComments()));
+        winner.incMethods((int)h * (current.getMethods() - winner.getMethods()));
     }
 
     private int getDiff(NeuralNode n1, NeuralNode n2) {
