@@ -17,7 +17,7 @@
     }
 
     .label {
-        font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
         text-anchor: middle;
         text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
     }
@@ -40,7 +40,7 @@
 
     var color = d3.scale.linear()
             .domain([-1, 5])
-            .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+            .range(["hsl(0, 3.2%,100%)", "hsl(0, 3.2%,  46%)"])
             .interpolate(d3.interpolateHcl);
 
     var pack = d3.layout.pack()
