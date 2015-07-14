@@ -92,6 +92,11 @@ public class UserInfoController {
         return new ModelAndView("redirect:/e-Testing/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
     }
 
+    @RequestMapping(value = "/e-Testing/vklogin")
+    public ModelAndView vklogin(@ModelAttribute("StudentList") UserInfoEntity userInfoEntity) {
+        return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+    }
+
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
 
