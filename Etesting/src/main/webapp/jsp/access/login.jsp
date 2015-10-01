@@ -16,7 +16,7 @@
         <div class="alertblock"><c:out value="${alert}"/></div>
     </c:if>
 
-    <a href="http://oauth.vk.com/authorize?client_id=4994933&redirect_uri=whispering-refuge-5133.herokuapp.com/e-Testing&response_type=code" title="Зайти через ВКонтакте">Зайти через ВКонтакте</a>
+    <a href="http://oauth.vk.com/authorize?client_id=4994933&redirect_uri=http://whispering-refuge-5133.herokuapp.com/e-Testing/vkLogin.html&response_type=code&scope=1" title="Зайти через ВКонтакте">Зайти через ВКонтакте</a>
 
 	<form id="loginForm" action="j_spring_security_check" method="post" >
         <div class="field">
