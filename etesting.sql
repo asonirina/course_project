@@ -13,9 +13,26 @@ CREATE DATABASE `etesting`
 
 USE `etesting`;
 
-#
-# Structure for the `attribute_countings` table :
-#
+CREATE TABLE `single_test` (
+  `id` int(11) NOT NULL auto_increment,
+  `test_no` int(3) NOT NULL,
+  `data_in` longblob,
+  `data_out` longblob,
+  `task_id` int(11) default NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK_ST` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
+
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL auto_increment,
+  `form` varchar(20) NOT NULL,
+  `program_name` int(3) NOT NULL,
+  `description` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
+
 
 CREATE TABLE `attribute_countings` (
   `id` int(11) NOT NULL auto_increment,
@@ -32,9 +49,6 @@ CREATE TABLE `attribute_countings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
 
 
-#
-# Structure for the `neural node` table :
-#
 
 CREATE TABLE `neural_node` (
   `id` int(11) NOT NULL auto_increment,
@@ -51,9 +65,6 @@ CREATE TABLE `neural_node` (
 
 
 
-#
-# Structure for the `program_files` table : 
-#
 
 CREATE TABLE `program_files` (
   `id` int(11) NOT NULL auto_increment,
@@ -75,10 +86,6 @@ CREATE TABLE `program_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2340 COMMENT='InnoDB free: 11264 kB';
 
 
-#
-# Structure for the `user_info` table : 
-#
-
 CREATE TABLE `user_info` (
   `id` int(11) NOT NULL auto_increment,
   `FirstName` varchar(50) NOT NULL,
@@ -91,12 +98,21 @@ CREATE TABLE `user_info` (
 
 
 
-#
-# Data for the `user_info` table  (LIMIT 0,500)
-#
-
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
   (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234');
 #  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
 #  (3,'XXX','XXX','11','asonirina@mail.ru','111');
+
+INSERT INTO `task` (`id`, `form`, `program_name`, `description`) values
+(1, '11', '1', 'Lab 1')  ,
+(2, '11', '2', 'Lab 2')     ;
+
+
+INSERT INTO `single_test` (`id`, `test_no`,  `data_in`, `data_out`, `task_id`) values
+(1, 1,  '1 2 3', '1 2 3', 1),
+(2, 2,  '1 2 3', '1 2 3', 1),
+(3, 3,  '1 2 3', '1 2 3', 1),
+(4, 1,  '1 2 3', '1 2 3', 2),
+(5, 2,  '1 2 3', '1 2 3', 2),
+(6, 3,  '1 2 3', '1 2 3', 2);
 COMMIT;

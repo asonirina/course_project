@@ -1,6 +1,7 @@
 package by.bsu.project.dao;
 
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 
 import java.util.List;
@@ -23,4 +24,5 @@ public interface UserInfoDAO {
     public Long studentsByFormCountList(String form);
     public List<ProgramFilesEntity> getProgramsByName(String name, Long userId);
     public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus);
+    public Task getTask(String form, String programName);
 }

@@ -2,6 +2,9 @@ package by.bsu.project.utils;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.SingleTest;
+import by.bsu.project.general.model.Task;
+import by.bsu.project.service.UserInfoService;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
@@ -10,6 +13,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,27 +22,34 @@ import java.util.concurrent.TimeUnit;
 
 public class ProgramFilesUtil {
     private ProgramFilesEntity entity;
+    private Task task;
+
+    @Autowired
+    private UserInfoService service;
+
     private String cmdC;
     private String cmdCpp;
     private String cmdPascal;
     private String cmdJava;
-    private String path = System.getProperty("java.io.tmpdir") + "\\";
     private List<String> messages = new ArrayList<>();
     private StringBuffer testResults = new StringBuffer();
+
 
     private String dir;
 
     private static final Logger logger = Logger.getLogger(ProgramFilesUtil.class);
 
-    public ProgramFilesUtil(ProgramFilesEntity entity) throws ConfigurationException {
+    public ProgramFilesUtil(ProgramFilesEntity entity, Task task) throws ConfigurationException {
+        String tmpDir = System.getProperty("java.io.tmpdir") + "\\";
         this.entity = entity;
+        this.task = task;
         File tmp = Files.createTempDir();
         tmp.deleteOnExit();
         dir = tmp.getAbsolutePath();
         PropertiesConfiguration config = new PropertiesConfiguration("compilers.properties");
-        cmdC = path + config.getProperty("c") + " " + dir + "/" + entity.getFileName();
-        cmdCpp = path + config.getProperty("cpp") + " " + dir + "/" + entity.getFileName() + " -I" + path + "compilers/dm/dm/stlport/stlport";
-        String pp = path + config.getProperty("pas");
+        cmdC = tmpDir + config.getProperty("c") + " " + dir + "/" + entity.getFileName();
+        cmdCpp = tmpDir + config.getProperty("cpp") + " " + dir + "/" + entity.getFileName() + " -I" + tmpDir + "compilers/dm/dm/stlport/stlport";
+        String pp = tmpDir + config.getProperty("pas");
         cmdPascal = String.format("%s\\bin.w32\\vpc -b %s -O%s\\units.w32 -L%s\\lib.w32 -E%s -R%s\\res.w32",
                 pp, dir + "\\" + entity.getFileName(), pp, pp, dir, pp);
         cmdJava = System.getenv("JAVA_HOME") + "/bin/" + config.getProperty("java") + " " + dir + "/" + entity.getFileName();
@@ -140,13 +151,11 @@ public class ProgramFilesUtil {
 
     private boolean checkAllInputFiles(String postfix) throws IOException, InterruptedException {
         boolean res = true;
+        List<SingleTest> tests = task.getTests();
 
-        File inDir = new File(path + "/tasks/" + entity.getUser().getForm() + "/" + entity.getProgramName() + "/in");
-
-        for (int i = 0; i < inDir.list().length; ++i) {
-            FileUtils.copyFile(new File(path + "/tasks/" + entity.getUser().getForm() + "/" + entity.getProgramName() + "/in/in" + String.valueOf(i + 1) + ".txt"), new File(dir + "/in.txt"));
-            FileUtils.copyFile(new File(path + "/tasks/" + entity.getUser().getForm() + "/" + entity.getProgramName() + "/out/out" + String.valueOf(i + 1) + ".txt"), new File(dir + "/right.txt"));
-
+        for (SingleTest test: tests) {
+            FileUtils.writeByteArrayToFile(new File(dir + "/in.txt"), test.getDataIn());
+            FileUtils.writeByteArrayToFile(new File(dir + "/right.txt"), test.getDataOut());
             Process p = null;
             if (postfix.equals(ETestingConstants.POSTFIX_JAVA)) {
                 p = Runtime.getRuntime().exec("java -cp " + dir + " " + getName(entity.getFileName()), null, new File(dir));
@@ -162,15 +171,15 @@ public class ProgramFilesUtil {
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to run file " + e.getMessage());
                 p.destroy();
-                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + ETestingConstants.FAILED_STATUS + ";");
                 res = false;
             }
 
             if (!compareFiles()) {
                 res = false;
-                testResults.append(i + 1).append(":" + ETestingConstants.FAILED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + ETestingConstants.FAILED_STATUS + ";");
             } else {
-                testResults.append(i + 1).append(":" + ETestingConstants.PASSED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + ETestingConstants.PASSED_STATUS + ";");
             }
         }
         deleteDir(dir);
@@ -215,11 +224,9 @@ public class ProgramFilesUtil {
     private List getList(File file) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
         List<String> result = new ArrayList<>();
-        String line = br.readLine();
 
-        while (line != null) {
-            result.add(line.trim());
-            line = br.readLine();
+        while (br.ready()) {
+            result.add(br.readLine().trim());
         }
 
         br.close();

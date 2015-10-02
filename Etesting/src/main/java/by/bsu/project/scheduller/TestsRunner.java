@@ -2,6 +2,7 @@ package by.bsu.project.scheduller;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import org.apache.commons.configuration.ConfigurationException;
@@ -30,7 +31,8 @@ public class TestsRunner {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
-                ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity);
+                Task task = userInfoService.getTask(programFilesEntity);
+                ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity, task);
                 String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
                 programFilesEntity.setStatus(programStatus);
                 programFilesEntity.setRunStatus(ETestingConstants.TESTED_FILE);

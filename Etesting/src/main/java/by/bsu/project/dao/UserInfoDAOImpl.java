@@ -2,6 +2,7 @@ package by.bsu.project.dao;
 
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -34,6 +35,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return query.list();
     }
 
+    @Override
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
         Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where user_id = :id order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id);
@@ -56,6 +58,13 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where runStatus = :run_status order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_RUN_STATUS, runStatus);
         return query.list();
+    }
+
+    @Override
+    public Task getTask(String form, String programName) {
+        return (Task) sessionFactory.getCurrentSession().createQuery("from Task where programName = :program_name and form = :form").
+                setParameter(ETestingConstants.TABLE_FIELD_PROGRAM_NAME, programName).
+                setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
     }
 
     @Override

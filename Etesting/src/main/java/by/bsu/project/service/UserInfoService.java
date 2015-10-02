@@ -1,6 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import org.springframework.ui.Model;
@@ -27,4 +28,5 @@ public interface UserInfoService {
     public List<ProgramFilesEntity> getUploadedProgramFiles();
     public List<ProgramFilesEntity> getTestedProgramFiles();
     public List<ProgramFilesEntity> getReadyProgramFiles();
+    public Task getTask(ProgramFilesEntity entity);
 }
