@@ -40,7 +40,6 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where user_id = :id order by uploadProgramTime desc").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id);
         return getSubList(query, pageNumber);
-
     }
 
     @Override
@@ -73,6 +72,11 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
+    public Long taskCountList() {
+        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from Task").uniqueResult();
+    }
+
+    @Override
     public Long studentsByFormCountList(String form) {
         return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form =:form").
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
@@ -86,6 +90,14 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         }
     }
 
+    public void save(Task task) {
+        if (isExist(task.getId())) {
+            sessionFactory.getCurrentSession().update(task);
+        } else {
+            sessionFactory.getCurrentSession().save(task);
+        }
+    }
+
     @Override
     public void deleteStudentById(Long id) {
         sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(UserInfoEntity.class, id));
@@ -94,6 +106,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public UserInfoEntity getStudentById(Long id) {
         return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where id = :id").
+                setParameter(ETestingConstants.TABLE_FIELD_ID, id).uniqueResult();
+    }
+
+    @Override
+    public Task getTaskById(Long id) {
+        return (Task) sessionFactory.getCurrentSession().createQuery("from Task where id = :id").
                 setParameter(ETestingConstants.TABLE_FIELD_ID, id).uniqueResult();
     }
 
@@ -116,6 +134,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
         Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form order by secondName").
+                setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
+        return getSubList(query, pageNumber);
+    }
+
+    public List<Task> taskListByForm(int pageNumber, String form) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Task where form = :form order by id").
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
         return getSubList(query, pageNumber);
     }

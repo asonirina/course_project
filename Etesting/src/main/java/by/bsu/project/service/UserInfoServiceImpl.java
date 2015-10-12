@@ -29,6 +29,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public void save(Task task) {
+        userInfoDAO.save(task);
+    }
+
+    @Transactional
     public ProgramFilesEntity getFileById(Long id) {
         return userInfoDAO.getFileById(id);
     }
@@ -36,6 +41,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     public UserInfoEntity getStudentById(Long id) {
         return userInfoDAO.getStudentById(id);
+    }
+
+    @Transactional
+    public Task getTaskById(Long id) {
+        return userInfoDAO.getTaskById(id);
     }
 
     @Transactional
@@ -75,8 +85,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public List<Task> taskListByForm(int pageNumber, String form) {
+        return userInfoDAO.taskListByForm(pageNumber, form);
+    }
+
+    @Transactional
     public Long studentsByFormCountList(String form) {
         return userInfoDAO.studentsByFormCountList(form);
+    }
+
+    @Transactional
+    @Override
+    public Long taskCountList() {
+        return userInfoDAO.taskCountList();
     }
 
     @Transactional

@@ -51,12 +51,28 @@ public class SingleTest {
         return dataIn;
     }
 
+    public String getDataInStr() {
+        return dataIn==null ? "" : new String(dataIn);
+    }
+
+    public void setDataInStr(String dataInStr) {
+        dataIn = dataInStr.getBytes();
+    }
+
     public void setDataIn(byte[] dataIn) {
         this.dataIn = dataIn;
     }
 
     public byte[] getDataOut() {
         return dataOut;
+    }
+
+    public String getDataOutStr() {
+        return new String(dataOut);
+    }
+
+    public void setDataOutStr(String dataOutStr) {
+        dataOut = dataOutStr.getBytes();
     }
 
     public void setDataOut(byte[] dataOut) {
@@ -78,4 +94,6 @@ public class SingleTest {
     public void setTestNum(Integer testNum) {
         this.testNum = testNum;
     }
+
+
 }

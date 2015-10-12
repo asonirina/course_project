@@ -1,5 +1,8 @@
 package by.bsu.project.general.model;
 
+import org.apache.commons.collections.FactoryUtils;
+import org.apache.commons.collections.list.LazyList;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +42,10 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    public Task(){}
+    public Task() {
+        tests = LazyList.decorate(new ArrayList(),
+                FactoryUtils.instantiateFactory(Task.class));
+    }
 
     public Long getId() {
         return id;

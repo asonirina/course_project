@@ -5,6 +5,7 @@ import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.News;
 import by.bsu.project.paging.Paging;
@@ -86,6 +87,23 @@ public class UserInfoController {
         }
     }
 
+    @RequestMapping(value = "/e-Testing/TaskList")
+    public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
+                                            Model model) {
+        try {
+                form = "11";
+                Paging paging1 = new Paging(userInfoService.taskCountList().intValue());
+                model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
+                        userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
+                model.addAttribute("currentForm", form);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
+            return new ModelAndView("TaskList");
+        } catch (Exception ex) {
+            logger.error("Unable to display tasks list " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
     @RequestMapping(value = "/e-Testing/GetStudentListByForm")
     public ModelAndView getStudentListById(@ModelAttribute("StudentList") UserInfoEntity userInfoEntity) {
         form = userInfoEntity.getForm();
@@ -121,6 +139,20 @@ public class UserInfoController {
         }
     }
 
+    @RequestMapping(value = "/e-Testing/SaveTask", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute("EditTask") Task task, HttpServletRequest request, Model model) {
+
+        try {
+            userInfoService.save(task);
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
+            return new ModelAndView("redirect:/e-Testing/EditTask.html?id=" + task.getId());
+
+        } catch (Exception ex) {
+            logger.error("Unable to save student " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
     @RequestMapping(value = "/e-Testing/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
                                        UserInfoEntity userInfoEntity, Model model) {
@@ -138,6 +170,26 @@ public class UserInfoController {
 
         } catch (Exception ex) {
             logger.error("Unable to edit student " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/EditTask")
+    public ModelAndView displayTask(@RequestParam(value = "id", required = false) Long id,
+                                       Task task, Model model) {
+        try {
+            if (null != id) {
+                task = userInfoService.getTaskById(id);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_STUDENT);
+            } else {
+                task = new Task();
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.ADD_TASK);
+            }
+            model.addAttribute(ETestingConstants.MODEL_TASK, task);
+            return new ModelAndView("EditTask");
+
+        } catch (Exception ex) {
+            logger.error("Unable to edit task " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
