@@ -24,15 +24,19 @@
 
         <span style="margin-left: 100px"><label>Название</label></span>
         <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
-        <%--<span style="margin-left: 100px"><label>Фамилия</label></span>--%>
-        <%--<span style="margin-left: 69px"><c:out value="${student.secondName}"/></span><br>--%>
-        <%--<span style="margin-left: 100px"><label>Класс</label></span>--%>
-        <%--<span style="margin-left: 89px"><c:out value="${student.form}"/></span><br>--%>
+        <c:if test="${form != 'admin'}">
+        <br/>
+        <span style="margin-left: 100px"><label>Описание</label></span>
+        <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>
+        </c:if>
 
+
+        <c:if test="${form == 'admin'}">
         <div style="text-align: right;">
             <a href="<c:url value="/e-Testing/EditTask.html?id=${task.id}"/>">
                 <input type="button" value="Редактировать" name="edit" class="button"/></a>
         </div>
+        </c:if>
         <HR color="#A8A8A8" size="1">
     </c:forEach>
 

@@ -25,7 +25,7 @@
         <intercept-url pattern="/e-Testing/MainStudentPage.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/MainAdminPage.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/StudentList.html" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/e-Testing/TaskList.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/TaskList.html" access="isAuthenticated()"/>
         <intercept-url pattern="/e-Testing/SaveStudent.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/EditStudent.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/viewTree.html" access="hasRole('ROLE_ADMIN')"/>
