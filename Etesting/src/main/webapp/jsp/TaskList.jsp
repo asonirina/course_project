@@ -13,47 +13,48 @@
 </head>
 <body>
 
-<div class="layer" style="margin-left: 483px">
-    <p class="button heading">Классы: ${currentForm}</p>
-
-    <div class="content" style="background: none">
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=6"/>">6</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=7"/>">7</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=8"/>">8</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=9"/>">9</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=10"/>">10</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=11"/>">11</a>
-    </div>
-</div>
-<br/>
-<br/>
-
 <c:if test="${form == 'admin'}">
+
+    <div class="layer" style="margin-left: 483px">
+        <p class="button heading">Классы: ${currentForm}</p>
+
+        <div class="content" style="background: none">
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=6"/>">6</a>
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=7"/>">7</a>
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=8"/>">8</a>
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=9"/>">9</a>
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=10"/>">10</a>
+            <a class="white-option button" href="<c:url value="/e-Testing/TaskList.html?form=11"/>">11</a>
+        </div>
+    </div>
+    <br/>
+    <br/>
+
     <div style="text-align: right;">
         <a href="<c:url value="/e-Testing/EditTask.html"/>">
             <input type="button" value="Добавить задание" name="edit" class="button"/></a>
     </div>
 </c:if>
 
-    <c:forEach var="task" items="${taskList}">
+<c:forEach var="task" items="${taskList}">
 
-        <span style="margin-left: 100px"><label>Название</label></span>
-        <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
-        <c:if test="${form != 'admin'}">
+    <span style="margin-left: 100px"><label>Название</label></span>
+    <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
+    <c:if test="${form != 'admin'}">
         <br/>
         <span style="margin-left: 100px"><label>Описание</label></span>
         <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>
-        </c:if>
+    </c:if>
 
 
-        <c:if test="${form == 'admin'}">
+    <c:if test="${form == 'admin'}">
         <div style="text-align: right;">
             <a href="<c:url value="/e-Testing/EditTask.html?id=${task.id}"/>">
                 <input type="button" value="Редактировать" name="edit" class="button"/></a>
         </div>
-        </c:if>
-        <HR color="#A8A8A8" size="1">
-    </c:forEach>
+    </c:if>
+    <HR color="#A8A8A8" size="1">
+</c:forEach>
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
