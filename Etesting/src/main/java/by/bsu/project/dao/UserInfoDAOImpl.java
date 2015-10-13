@@ -138,10 +138,10 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return getSubList(query, pageNumber);
     }
 
-    public List<Task> taskListByForm(int pageNumber, String form) {
+    public List<Task> taskListByForm(Integer pageNumber, String form) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Task where form = :form order by id").
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
-        return getSubList(query, pageNumber);
+        return (pageNumber != null) ? getSubList(query, pageNumber) : query.list();
     }
 
     private List getSubList(Query query, int pageNumber) {

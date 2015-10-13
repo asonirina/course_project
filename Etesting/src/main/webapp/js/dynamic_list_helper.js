@@ -47,15 +47,6 @@
  *      function rowRemoved( element ) {
  *          var rowHtml = $(element).html();
  *      }
- *   beforeSubmit = 
- *      Optional
- *      The function to be invoked before the form is submitted
- *      beforeSubmit : validate,
- *      function validate() {
- *          //do validation
- *          return valid;
- *      }
- *      function should return true or false, false will prevent form submission
  */
 function DynamicListHelper( config ) {
     init();
@@ -72,13 +63,9 @@ function DynamicListHelper( config ) {
         addRemoveRowListener();
         addAddRowListener();
         prepRows();
-        $(config.formId).submit( function() {
+        $(config.formId).submit(function () {
             prepFormForSubmit();
-            if( config.beforeSubmit != null ) {
-                return config.beforeSubmit();
-            } else {
-                return true;
-            }
+            return true;
         });
         dealWithPotentialDefaultRow();
     }

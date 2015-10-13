@@ -38,30 +38,10 @@ import java.util.Map;
  */
 
 @Controller
-public class UserInfoController {
-
-    @Autowired
-    private UserInfoService userInfoService;
+public class UserInfoController extends BaseController {
 
     private String form = null;
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(UserInfoController.class);
-
-    @RequestMapping(value = "/e-Testing/ChangePassword")
-    public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
-                                       @RequestParam(value = "password1", required = false) String password1,
-                                       @RequestParam(value = "password2", required = false) String password2,
-                                       HttpServletRequest request) {
-        return changeUserPassword(oldPassword, password1, password2, request);
-    }
-
-    @RequestMapping(value = "/e-Testing/ChangeStudentPassword")
-    public ModelAndView changeStudentPassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
-                                              @RequestParam(value = "password1", required = false) String password1,
-                                              @RequestParam(value = "password2", required = false) String password2,
-                                              HttpServletRequest request) {
-        return changeUserPassword(oldPassword, password1, password2, request);
-    }
 
     @RequestMapping(value = "/e-Testing/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
@@ -85,24 +65,6 @@ public class UserInfoController {
             return new ModelAndView("StudentList");
         } catch (Exception ex) {
             logger.error("Unable to display students list " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/e-Testing/TaskList")
-    public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
-                                            Model model) {
-        try {
-            String f = userInfoService.getStudentById(getUser().getId()).getForm();
-                Paging paging1 = new Paging(userInfoService.taskCountList().intValue());
-                model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
-                        userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), f));
-//
-                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
-                model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, f);
-            return new ModelAndView("TaskList");
-        } catch (Exception ex) {
-            logger.error("Unable to display tasks list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
@@ -142,20 +104,6 @@ public class UserInfoController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/SaveTask", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute("EditTask") Task task, HttpServletRequest request, Model model) {
-
-        try {
-            userInfoService.save(task);
-            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
-            return new ModelAndView("redirect:/e-Testing/EditTask.html?id=" + task.getId());
-
-        } catch (Exception ex) {
-            logger.error("Unable to save student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
     @RequestMapping(value = "/e-Testing/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
                                        UserInfoEntity userInfoEntity, Model model) {
@@ -173,26 +121,6 @@ public class UserInfoController {
 
         } catch (Exception ex) {
             logger.error("Unable to edit student " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/e-Testing/EditTask")
-    public ModelAndView displayTask(@RequestParam(value = "id", required = false) Long id,
-                                       Task task, Model model) {
-        try {
-            if (null != id) {
-                task = userInfoService.getTaskById(id);
-                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_STUDENT);
-            } else {
-                task = new Task();
-                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.ADD_TASK);
-            }
-            model.addAttribute(ETestingConstants.MODEL_TASK, task);
-            return new ModelAndView("EditTask");
-
-        } catch (Exception ex) {
-            logger.error("Unable to edit task " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
@@ -294,66 +222,5 @@ public class UserInfoController {
         params.put(ETestingConstants.MODEL_NEWS, news);
         params.put(ETestingConstants.MODEL_TITLE, PageTitles.HOME_PAGE);
         return new ModelAndView(base, params);
-    }
-
-    private ModelAndView changeUserPassword(String oldPassword,
-                                            String password1,
-                                            String password2,
-                                            HttpServletRequest request) {
-        try {
-            if (oldPassword != null) {
-                String login = request.getRemoteUser();
-                UserInfoEntity user = userInfoService.findStudentByLogin(login);
-                if (oldPassword.equals(user.getPassword()) && password1.equals(password2)) {
-                    user.setPassword(password1);
-                    userInfoService.save(user);
-                    if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
-                        return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
-                    } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
-                }
-                return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
-            }
-            return new ModelAndView("ChangePassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD);
-
-        } catch (Exception ex) {
-            logger.error("Unable to change password " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/e-Testing/ResetPassword")
-    public ModelAndView resetPassword(
-            @RequestParam(value = "hash", required = true) String hash,
-            @RequestParam(value = "password1", required = false) String password1,
-            @RequestParam(value = "password2", required = false) String password2,
-            @RequestParam(value = "email", required = false) String email,
-            Model model
-    ) throws Exception {
-        if (!LinkGenerator.checkHash(hash)) {
-            return new ModelAndView("redirect:/e-Testing/error404.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-
-        try {
-            if (password1 != null) {
-                UserInfoEntity user = userInfoService.findStudentByLogin(email);
-                if (password1.equals(password2)) {
-                    user.setPassword(password1);
-                    userInfoService.save(user);
-                    model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.LOGIN_PAGE);
-                    return new ModelAndView("redirect:/e-Testing/Login.html");
-                }
-                model.addAttribute(ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
-                return new ModelAndView("ResetPassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD );
-            }
-            return new ModelAndView("ResetPassword", ETestingConstants.MODEL_TITLE, PageTitles.CHANGE_PASSWORD);
-
-        } catch (Exception ex) {
-            logger.error("Unable to change password " + ex.getMessage());
-            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
-    private SpringUser getUser() {
-        return (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

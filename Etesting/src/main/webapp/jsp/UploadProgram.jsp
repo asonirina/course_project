@@ -31,7 +31,7 @@
     <form:select path="programName" cssStyle="margin-left: 100px">
 
         <c:forEach var="task" items="${tasks}">
-            <form:option value="${task}" label="Лабораторная ${task}"/>
+            <form:option value="${task.programName}" label="Лабораторная ${task.programName}"/>
         </c:forEach>
 
     </form:select><br><br>

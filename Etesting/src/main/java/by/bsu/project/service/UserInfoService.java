@@ -26,6 +26,7 @@ public interface UserInfoService {
     public int setPage(Integer page, Paging paging1, Model model);
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form);
     public List<Task> taskListByForm(int pageNumber, String form);
+    public List<Task> taskListByForm(String form);
     public Long studentsByFormCountList(String form);
     public Long taskCountList();
     public List<ProgramFilesEntity> getProgramsByName (ProgramFilesEntity entity);

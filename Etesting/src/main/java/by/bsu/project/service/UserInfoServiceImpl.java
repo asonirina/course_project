@@ -93,6 +93,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public List<Task> taskListByForm(String form) {
+        if (form.equals("admin")) {
+            form = "11";
+        }
+        return userInfoDAO.taskListByForm(null, form);
+    }
+
+    @Transactional
     public Long studentsByFormCountList(String form) {
         return userInfoDAO.studentsByFormCountList(form);
     }

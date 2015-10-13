@@ -99,7 +99,6 @@
             <a class="button" href="#" id="addSingleTest">+++</a>
         </p>
 
-
         <br/>
 
         <div style="text-align: center">
@@ -135,11 +134,6 @@
             }
         }
 
-        function beforeSubmit() {
-            alert('submitting....');
-            return true;
-        }
-
         $(document).ready(function () {
             var config = {
                 rowClass:'single-test',
@@ -150,8 +144,7 @@
                 indexedPropertyName:'tests',
                 indexedPropertyMemberNames:'id, testNum, dataInStr, dataOutStr',
                 rowAddedListener:rowAdded,
-                rowRemovedListener:rowRemoved,
-                beforeSubmit:beforeSubmit
+                rowRemovedListener:rowRemoved
             };
             new DynamicListHelper(config);
         });

@@ -3,6 +3,7 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
@@ -39,16 +40,9 @@ import java.util.Map;
  */
 
 @Controller
-public class ProgramUploadController {
-
-    private static final Logger logger = Logger.getLogger(ProgramUploadController.class);
+public class ProgramUploadController extends BaseController {
 
     private Long currentFileId;
-
-    @Autowired
-    private UserInfoService userInfoService;
-
-    private SpringUser user;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -61,12 +55,10 @@ public class ProgramUploadController {
             ProgramFilesEntity programFilesEntity,
             Model model) {
         try {
-            user = getUser();
-            userInfoEntity = userInfoService.getStudentById(user.getId());
+            userInfoEntity = userInfoService.getStudentById(getUser().getId());
             programFilesEntity = new ProgramFilesEntity();
 
-            File dir = new File(ProgramUploadController.class.getClassLoader().getResource("tasks/" + userInfoEntity.getForm()).getFile());
-            List<String> tasks = Arrays.asList(dir.list());
+            List<Task> tasks = userInfoService.taskListByForm(userInfoEntity.getForm());
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
             Map<String, Object> params = new HashMap<>();
             params.put(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
@@ -129,11 +121,10 @@ public class ProgramUploadController {
             Model model) {
 
         try {
-            user = getUser();
-            userInfoEntity = userInfoService.getStudentById(user.getId());
+            userInfoEntity = userInfoService.getStudentById(getUser().getId());
             Paging paging1 = new Paging(userInfoEntity.getProgramFiles().size());
             model.addAttribute(ETestingConstants.MODEL_PROGRAM_LIST, userInfoService.programsList(
-                    userInfoService.setPage(page, paging1, model), user.getId()));
+                    userInfoService.setPage(page, paging1, model), getUser().getId()));
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_HISTORY);
 
             return new ModelAndView("UploadProgramsHistory");
@@ -201,9 +192,5 @@ public class ProgramUploadController {
             return new ModelAndView("RunShell", ETestingConstants.MODEL_MESSAGE, String.valueOf(result));
         }
         return new ModelAndView("RunShell");
-    }
-
-    private SpringUser getUser() {
-        return (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
