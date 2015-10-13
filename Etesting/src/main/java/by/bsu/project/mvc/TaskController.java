@@ -18,14 +18,17 @@ public class TaskController extends BaseController {
 
     @RequestMapping(value = "/e-Testing/TaskList")
     public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
+                                        @RequestParam(value = "form", required = false, defaultValue = "11") String form,
                                         Model model) {
         try {
-            String f = userInfoService.getStudentById(getUser().getId()).getForm();
-            Paging paging1 = new Paging(userInfoService.taskCountList().intValue());
+            form=form==null? "11" : form;
+            String userForm = userInfoService.getStudentById(getUser().getId()).getForm();
+            Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
             model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
-                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), f));
+                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
-            model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, f);
+            model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, userForm);
+            model.addAttribute(ETestingConstants.CURRENT_FORM, form);
             return new ModelAndView("TaskList");
         } catch (Exception ex) {
             logger.error("Unable to display tasks list " + ex.getMessage());

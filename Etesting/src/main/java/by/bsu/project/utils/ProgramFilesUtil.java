@@ -4,7 +4,6 @@ import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.SingleTest;
 import by.bsu.project.general.model.Task;
-import by.bsu.project.service.UserInfoService;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
@@ -13,7 +12,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,9 +21,6 @@ import java.util.concurrent.TimeUnit;
 public class ProgramFilesUtil {
     private ProgramFilesEntity entity;
     private Task task;
-
-    @Autowired
-    private UserInfoService service;
 
     private String cmdC;
     private String cmdCpp;

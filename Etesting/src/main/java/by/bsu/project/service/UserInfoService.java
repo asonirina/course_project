@@ -28,7 +28,7 @@ public interface UserInfoService {
     public List<Task> taskListByForm(int pageNumber, String form);
     public List<Task> taskListByForm(String form);
     public Long studentsByFormCountList(String form);
-    public Long taskCountList();
+    public Long taskCountList(String form);
     public List<ProgramFilesEntity> getProgramsByName (ProgramFilesEntity entity);
     public List<ProgramFilesEntity> getUploadedProgramFiles();
     public List<ProgramFilesEntity> getTestedProgramFiles();

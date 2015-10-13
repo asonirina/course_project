@@ -31,11 +31,12 @@ import java.util.Map;
 @Controller
 public class UserInfoController extends BaseController {
 
-    private String form = null;
+//    private String form = null;
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
 
     @RequestMapping(value = "/e-Testing/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
+                                            @RequestParam(value = "form", required = false) String form,
                                             Model model) {
 
         try {
@@ -49,7 +50,6 @@ public class UserInfoController extends BaseController {
                 Paging paging1 = new Paging(userInfoService.studentsByFormCountList(form).intValue());
                 model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST,
                         userInfoService.studentListByForm(userInfoService.setPage(page, paging1, model), form));
-                model.addAttribute("students", new UserInfoEntity());
                 model.addAttribute("currentForm", form);
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
             }
@@ -58,12 +58,6 @@ public class UserInfoController extends BaseController {
             logger.error("Unable to display students list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
-    }
-
-    @RequestMapping(value = "/e-Testing/GetStudentListByForm")
-    public ModelAndView getStudentListById(@ModelAttribute("StudentList") UserInfoEntity userInfoEntity) {
-        form = userInfoEntity.getForm();
-        return new ModelAndView("redirect:/e-Testing/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
     }
 
     @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)

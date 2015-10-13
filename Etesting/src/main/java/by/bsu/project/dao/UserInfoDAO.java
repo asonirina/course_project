@@ -20,7 +20,7 @@ public interface UserInfoDAO {
     public List studentsList(int pageNumber);
     public List studentsList();
     public Long studentsCountList();
-    public Long taskCountList();
+    public Long taskCountList(String form);
     public UserInfoEntity findStudentByLogin(String login);
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form);

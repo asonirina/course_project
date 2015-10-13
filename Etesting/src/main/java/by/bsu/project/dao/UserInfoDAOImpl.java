@@ -72,8 +72,9 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public Long taskCountList() {
-        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from Task").uniqueResult();
+    public Long taskCountList(String form) {
+        return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from Task where form= :form")
+                .setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
     }
 
     @Override

@@ -107,8 +107,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
-    public Long taskCountList() {
-        return userInfoDAO.taskCountList();
+    public Long taskCountList(String form) {
+        return userInfoDAO.taskCountList(form);
     }
 
     @Transactional

@@ -5,20 +5,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
+<head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/results.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/results.css">
+</head>
 <body>
-<form:form method="post" action="/e-Testing/GetStudentListByForm.html" commandName="students">
-    <form:label  path="form" cssStyle="margin-left: 560px;"><c:out value="Класс"/></form:label>
-    <form:select path="form" cssStyle="margin-left: 10px">
-    <form:option value="" label="Все"/>
-    <form:option value="6" label="6"/>
-    <form:option value="7" label="7"/>
-    <form:option value="8" label="8"/>
-    <form:option value="9" label="9"/>
-    <form:option value="10" label="10"/>
-    <form:option value="11" label="11"/>
-   </form:select>
-   <input type="submit" style="text-align: left" class="button" value="Выбрать"/><br><br>
- </form:form>
+
+<div class="layer" style="margin-left: 485px">
+    <p class="button heading">Классы: ${currentForm}</p>
+
+    <div class="content" style="background: none">
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html"/>">Все</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=6"/>">6</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=7"/>">7</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=8"/>">8</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=9"/>">9</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=10"/>">10</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=11"/>">11</a>
+    </div>
+</div>
+<br/>
+<br/>
 
     <c:forEach var="student" items="${studentList}">
 
@@ -42,6 +50,7 @@
 <div class="paging">
     <c:url value="/e-Testing/StudentList.html" var="pagedLink">
         <c:param name="page" value="~"/>
+        <c:param name="form" value="${currentForm}"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
 </div>
