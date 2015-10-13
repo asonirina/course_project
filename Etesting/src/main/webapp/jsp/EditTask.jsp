@@ -67,11 +67,11 @@
 
 
                     <td><form:textarea path="tests[${status.index}].dataInStr" value="${test.dataInStr}" class="text"
-                                    name="dataIn${test.id}"/></td>
+                                       name="dataIn${test.id}"/></td>
 
 
                     <td><form:textarea path="tests[${status.index}].dataOutStr" value="${test.dataOutStr}" class="text"
-                                    name="dataOut${test.id}"/></td>
+                                       name="dataOut${test.id}"/></td>
 
                     <td><a href="#" class="button removeSingleTest">Remove</a></td>
 
@@ -116,6 +116,10 @@
     <script type="text/javascript">
         function rowAdded(rowElement) {
             $(rowElement).find("textarea").val('');
+            $(rowElement).find(".DynamicListHelper_id").val('');
+            var value = parseInt($(rowElement).find(".DynamicListHelper_testNum").val()) + 1;
+            $(rowElement).find(".DynamicListHelper_testNum").val(value);
+
             saveNeeded();
         }
         function rowRemoved(rowElement) {
