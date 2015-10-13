@@ -21,8 +21,10 @@ public class TaskController extends BaseController {
                                         @RequestParam(value = "form", required = false, defaultValue = "11") String form,
                                         Model model) {
         try {
-            form=form==null? "11" : form;
             String userForm = userInfoService.getStudentById(getUser().getId()).getForm();
+            if (!userForm.equals("admin")) {
+                form = userForm;
+            }
             Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
             model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
                     userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
