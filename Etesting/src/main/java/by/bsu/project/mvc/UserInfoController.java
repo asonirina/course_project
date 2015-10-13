@@ -8,6 +8,7 @@ import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.News;
+import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.LinkGenerator;
@@ -15,6 +16,7 @@ import by.bsu.project.utils.NewsHelper;
 import by.bsu.project.validator.Validator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -91,12 +93,13 @@ public class UserInfoController {
     public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
                                             Model model) {
         try {
-                form = "11";
+            String f = userInfoService.getStudentById(getUser().getId()).getForm();
                 Paging paging1 = new Paging(userInfoService.taskCountList().intValue());
                 model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
-                        userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
-                model.addAttribute("currentForm", form);
+                        userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), f));
+//
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
+                model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, f);
             return new ModelAndView("TaskList");
         } catch (Exception ex) {
             logger.error("Unable to display tasks list " + ex.getMessage());
@@ -348,5 +351,9 @@ public class UserInfoController {
             logger.error("Unable to change password " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
+    }
+
+    private SpringUser getUser() {
+        return (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

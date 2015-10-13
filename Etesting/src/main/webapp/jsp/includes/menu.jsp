@@ -10,7 +10,7 @@
         <li><a href="<c:url value="/e-Testing/StudentList.html"/>">Список учеников<span>Список</span></a></li>
         <li><a href="<c:url value="/e-Testing/TaskList.html"/>">Список заданий<span>Список</span></a></li>
         <li><a href="<c:url value="/e-Testing/ShowGraph.html"/>">Проверка<span>Плагиат</span></a></li>
-        <li style="margin-left: 130px"><a href="<c:url value="/e-Testing/ChangePassword.html"/>">Сменить пароль<span>Сменить</span></a></li>
+        <li style="margin-left: 70px"><a href="<c:url value="/e-Testing/ChangePassword.html"/>">Сменить пароль<span>Сменить</span></a></li>
         <li><a href="<c:url value="/e-Testing/Logout/Success.html"/>">Выйти из программы<span>Выйти</span></a></li>
     </ul>
 
