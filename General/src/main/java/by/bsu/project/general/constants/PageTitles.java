@@ -17,6 +17,7 @@ public class PageTitles {
     public static final String STUDENT_LIST              = "Список учеников";
     public static final String TASK_LIST                 = "Список заданий";
     public static final String EDIT_STUDENT              = "Редактировать профиль";
+    public static final String EDIT_TASK                 = "Редактировать задание";
     public static final String ADD_STUDENT               = "Добавить ученика";
     public static final String ADD_TASK                  = "Добавить задание";
     public static final String VIEW_STUDENT              = "Профиль";

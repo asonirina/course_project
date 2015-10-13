@@ -1,22 +1,14 @@
 package by.bsu.project.mvc;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.constants.ErrorsMessages;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.News;
-import by.bsu.project.model.SpringUser;
 import by.bsu.project.paging.Paging;
-import by.bsu.project.service.UserInfoService;
-import by.bsu.project.utils.LinkGenerator;
 import by.bsu.project.utils.NewsHelper;
 import by.bsu.project.validator.Validator;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -26,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;

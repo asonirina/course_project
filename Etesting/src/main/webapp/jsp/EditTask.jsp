@@ -52,8 +52,8 @@
         <table>
             <thead>
             <tr>
-                <th>In</th>
-                <th>Out</th>
+                <th width="220">In</th>
+                <th width="220">Out</th>
                 <th></th>
             </tr>
             </thead>
@@ -81,12 +81,13 @@
 
             <c:if test="${task.tests.size() == 0}">
                 <tr class="single-test defaultRow">
-                    <hidden name="tests[].id" value=""/>
-                    <hidden name="tests[].testNum" value=""/>
-                    <td><textarea type="text" name="tests[].dataInStr" value=""/></td>
-                    <td><textarea type="text" name="tests[].dataOutStr" value=""/></td>
+                    <input type="hidden" name="tests[].id" value=""/>
+                    <input type="hidden" name="tests[].testNum" value="0"/>
 
-                    <td><a href="#" class="removeSingleTest">Remove Test</a></td>
+                    <td><textarea rows="1" cols="30" class="text" name="tests[].dataInStr"></textarea></td>
+                     <td><textarea rows="1" cols="30" class="text" name="tests[].dataOutStr"></textarea></td>
+
+                    <td><a href="#" class="button removeSingleTest">Remove</a></td>
                 </tr>
             </c:if>
 
@@ -108,7 +109,6 @@
                                                                        value="Отмена"
                                                                        name="canceled" class="button"/></a>
         </div>
-
 
     </form:form>
 

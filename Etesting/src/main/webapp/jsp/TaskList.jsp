@@ -6,6 +6,14 @@
 
 <html>
 <body>
+
+<c:if test="${form == 'admin'}">
+    <div style="text-align: right;">
+        <a href="<c:url value="/e-Testing/EditTask.html"/>">
+            <input type="button" value="Добавить задание" name="edit" class="button"/></a>
+    </div>
+</c:if>
+
 <%--<form:form method="post" action="/e-Testing/GetStudentListByForm.html" commandName="students">--%>
     <%--<form:label  path="form" cssStyle="margin-left: 560px;"><c:out value="Класс"/></form:label>--%>
     <%--<form:select path="form" cssStyle="margin-left: 10px">--%>

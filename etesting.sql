@@ -28,7 +28,7 @@ CREATE TABLE `task` (
   `id` int(11) NOT NULL auto_increment,
   `form` varchar(20) NOT NULL,
   `program_name` int(3) NOT NULL,
-  `description` varchar(20) NOT NULL,
+  `description` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
@@ -100,8 +100,8 @@ CREATE TABLE `user_info` (
 
 INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Password`) VALUES 
   (1,'Nataliya','Karpovich','admin','etesting.admin@tut.by','1234');
-#  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
-#  (3,'XXX','XXX','11','asonirina@mail.ru','111');
+  (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
+  (3,'XXX','XXX','11','asonirina@mail.ru','111');
 
 INSERT INTO `task` (`id`, `form`, `program_name`, `description`) values
 (1, '11', '1', 'Lab 1')  ,

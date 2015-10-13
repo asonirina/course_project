@@ -53,7 +53,7 @@ public class TaskController extends BaseController {
         try {
             if (null != id) {
                 task = userInfoService.getTaskById(id);
-                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_STUDENT);
+                model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_TASK);
             } else {
                 task = new Task();
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.ADD_TASK);
