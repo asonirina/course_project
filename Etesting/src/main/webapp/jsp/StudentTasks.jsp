@@ -15,7 +15,7 @@
 
 <c:forEach var="task" items="${taskList}">
 
-    <span style="margin-left: 100px"><label>Название</label></span>
+    <span style="margin-left: 100px"><label>Лабораторная №</label></span>
     <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
     <span style="margin-left: 100px"><label>Описание</label></span>
     <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>

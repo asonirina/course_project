@@ -17,6 +17,7 @@ public interface UserInfoDAO {
     public Task getTaskById(Long id);
     public ProgramFilesEntity getFileById(Long id);
     public void deleteStudentById(Long id);
+    public void deleteTaskById(Long id);
     public List studentsList(int pageNumber);
     public List studentsList();
     public Long studentsCountList();

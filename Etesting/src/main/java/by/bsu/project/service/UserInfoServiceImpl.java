@@ -54,6 +54,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public void deleteTaskById(Long id) {
+        userInfoDAO.deleteTaskById(id);
+    }
+
+    @Transactional
     public List<UserInfoEntity> studentsList(int pageNumber) {
         return userInfoDAO.studentsList(pageNumber);
     }

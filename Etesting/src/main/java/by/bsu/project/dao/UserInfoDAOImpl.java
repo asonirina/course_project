@@ -104,6 +104,12 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(UserInfoEntity.class, id));
     }
 
+
+    @Override
+    public void deleteTaskById(Long id) {
+        sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(Task.class, id));
+    }
+
     @Override
     public UserInfoEntity getStudentById(Long id) {
         return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where id = :id").

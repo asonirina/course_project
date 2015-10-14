@@ -17,6 +17,7 @@ public interface UserInfoService {
     public UserInfoEntity getStudentById(Long id);
     public Task getTaskById(Long id);
     public void deleteStudentById(Long id);
+    public void deleteTaskById(Long id);
     public ProgramFilesEntity getFileById(Long id);
     public List<UserInfoEntity> studentsList(int pageNumber);
     public List<UserInfoEntity> studentsList();

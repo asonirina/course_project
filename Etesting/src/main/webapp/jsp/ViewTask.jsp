@@ -44,10 +44,10 @@
     <a href="<c:url value="/e-Testing/EditTask.html?id=${task.id}"/>"><input type="button"
                                                                                    value="Редактировать"
                                                                                    name="edit" class="button"/></a>
-    <%--<a href="<c:url value="/e-Testing/DeleteStudent.html?id=${student.id}"/>"><input type="button"--%>
-                                                                                     <%--onclick="return confirm('Вы действительно хотите удалить эту запись?')"--%>
-                                                                                     <%--value="Удалить"--%>
-                                                                                     <%--name="delete" class="button"/></a>--%>
+    <a href="<c:url value="/e-Testing/DeleteTask.html?id=${task.id}&form=${task.form}"/>"><input type="button"
+                                                                                     onclick="return confirm('Вы действительно хотите удалить эту запись?')"
+                                                                                     value="Удалить"
+                                                                                     name="delete" class="button"/></a>
 </div>
 </body>
 

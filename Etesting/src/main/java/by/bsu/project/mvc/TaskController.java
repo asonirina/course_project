@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Controller
 public class TaskController extends BaseController {
@@ -96,6 +99,22 @@ public class TaskController extends BaseController {
 
         } catch (Exception ex) {
             logger.error("Unable to display task " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping("/e-Testing/DeleteTask")
+    public ModelAndView deleteTask(@RequestParam(value = "id", required = false) Long id,
+                                   @RequestParam(value = "form", required = false) String form) {
+        try {
+            userInfoService.deleteTaskById(id);
+            Map<String, Object> params = new HashMap<>();
+            params.put(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
+            params.put(ETestingConstants.TABLE_FIELD_FORM, form);
+            return new ModelAndView("redirect:/e-Testing/TaskList.html", params);
+
+        } catch (Exception ex) {
+            logger.error("Unable to delete task " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
