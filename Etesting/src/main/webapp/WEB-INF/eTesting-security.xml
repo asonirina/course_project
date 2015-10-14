@@ -24,11 +24,12 @@
         <intercept-url pattern="/e-Testing/UploadProgramStatus.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/MainStudentPage.html" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/e-Testing/MainAdminPage.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/ShowGraph.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/StudentList.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/TaskList.html" access="isAuthenticated()"/>
         <intercept-url pattern="/e-Testing/SaveStudent.html" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/e-Testing/EditStudent.html" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/e-Testing/viewTree.html" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/e-Testing/ViewTree.html" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login login-page="/e-Testing/Login.html"
                     authentication-failure-url="/e-Testing/Login/Failure.html"

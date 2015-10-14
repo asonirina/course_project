@@ -127,14 +127,14 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/viewTree")
+    @RequestMapping(value = "/e-Testing/ViewTree")
     public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId, Model model) {
         try {
             byte[] content = userInfoService.getFileById(programId).getTreeContent();
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
-            return new ModelAndView("tree/viewTree2");
+            return new ModelAndView("tree/ViewTree2");
         } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
