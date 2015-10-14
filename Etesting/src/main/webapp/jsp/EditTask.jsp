@@ -21,7 +21,7 @@
     </div>
 </c:if>
 <div class="wrapper">
-    <form:form method="post" id="taskForm" class="blocks" action="/e-Testing/SaveTask.html" commandName="task"
+    <form:form method="post" id="form" class="blocks" action="/e-Testing/SaveTask.html" commandName="task"
                modelAttribute="task">
 
         <c:if test="${not empty task.id}">
@@ -40,7 +40,6 @@
             <form:input path="form" value="${task.form}"
                         class="text" name="form"/>
         </p>
-
 
         <p>
             <form:label path="description">Описание</form:label>
@@ -85,7 +84,7 @@
                     <input type="hidden" name="tests[].testNum" value="0"/>
 
                     <td><textarea rows="1" cols="30" class="text" name="tests[].dataInStr"></textarea></td>
-                     <td><textarea rows="1" cols="30" class="text" name="tests[].dataOutStr"></textarea></td>
+                    <td><textarea rows="1" cols="30" class="text" name="tests[].dataOutStr"></textarea></td>
 
                     <td><a href="#" class="button removeSingleTest">Remove</a></td>
                 </tr>
@@ -94,7 +93,7 @@
             </tbody>
         </table>
 
-        </p>
+        <%--</p>--%>
 
         <p>
             <a class="button" href="#" id="addSingleTest">+++</a>
@@ -139,7 +138,7 @@
                 rowClass:'single-test',
                 addRowId:'addSingleTest',
                 removeRowClass:'removeSingleTest',
-                formId:'taskForm',
+                formId:'form',
                 rowContainerId:'task',
                 indexedPropertyName:'tests',
                 indexedPropertyMemberNames:'id, testNum, dataInStr, dataOutStr',

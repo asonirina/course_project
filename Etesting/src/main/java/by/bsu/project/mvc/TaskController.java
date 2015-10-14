@@ -21,17 +21,28 @@ public class TaskController extends BaseController {
                                         @RequestParam(value = "form", required = false, defaultValue = "11") String form,
                                         Model model) {
         try {
-            String userForm = userInfoService.getStudentById(getUser().getId()).getForm();
-            if (!userForm.equals("admin")) {
-                form = userForm;
-            }
             Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
             model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
                     userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
-            model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, userForm);
             model.addAttribute(ETestingConstants.CURRENT_FORM, form);
             return new ModelAndView("TaskList");
+        } catch (Exception ex) {
+            logger.error("Unable to display tasks list " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/StudentTasks")
+    public ModelAndView displayStudentTasks(@RequestParam(value = "page", required = false) Integer page,
+                                        Model model) {
+        try {
+            String form = userInfoService.getStudentById(getUser().getId()).getForm();
+            Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
+            model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
+                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
+            return new ModelAndView("StudentTasks");
         } catch (Exception ex) {
             logger.error("Unable to display tasks list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);

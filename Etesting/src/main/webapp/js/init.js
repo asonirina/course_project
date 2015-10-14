@@ -27,6 +27,10 @@ $(function(){
             },
             password2: {
                 required: true
+            },
+            programName:{
+                required:true,
+                number:true
             }
 		},
 		messages: {
@@ -55,6 +59,10 @@ $(function(){
             } ,
             password2: {
                 required: 'Обязательное поле'
+            },
+            programName:{
+                required: 'Обязательное поле',
+                number:   'Введите число'
             }
 		},
 		success: function(label) {

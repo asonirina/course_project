@@ -12,6 +12,7 @@
         <pattern>/e-Testing/MainStudentPage.html</pattern>
         <pattern>/e-Testing/UploadProgramsHistory.html</pattern>
         <pattern>/e-Testing/ChangeStudentPassword.html</pattern>
+        <pattern>/e-Testing/StudentTasks.html</pattern>
     </decorator>
 
     <decorator name="layoutLogin" page="layoutLogin.jsp">
