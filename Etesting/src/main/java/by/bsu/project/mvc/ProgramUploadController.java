@@ -91,7 +91,7 @@ public class ProgramUploadController extends BaseController {
 
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();
-            return new ModelAndView("redirect:/e-Testing/UploadProgramStatus.html", ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
+            return new ModelAndView("redirect:/e-Testing/student/UploadProgramStatus.html", ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
 
         } catch (Exception ex) {
             logger.error("Unable to save entity " + ex.getMessage());

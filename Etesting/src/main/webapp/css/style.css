@@ -5,13 +5,14 @@ body {
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 13px;
     line-height: 1.5em;
-    background: #e7e7e7 /*url(/images/templatemo_body.jpg) repeat-y left; */
+    background: #e7e7e7
 }
 
 a, a:link, a:visited {
     color: #0066CC;
     text-decoration: none;
 }
+
 a:hover {
     color: #CC3300;
     text-decoration: none;
@@ -49,6 +50,7 @@ h1{
     color: #ff7003;
     font-size: 12px;
 }
+
 .span_info {
     width: 150px;
     color: #666;
@@ -57,16 +59,17 @@ h1{
 }
 
 #page-container {
-    width: 970px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* header */
 #page-header {
-    width: 740px;
-    height: 180px;
-    padding: 0 100px 0 130px;
+    width: 970px;
+    height: 184px;
     background: url(/images/templatemo_header.png) top no-repeat ;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #page-header  #site_title {
@@ -96,25 +99,23 @@ h1{
 
 #navigation {
     clear: both;
-    width: 950px;
-    height: 122px;
-    padding: 0 10px;
-    margin-bottom: 20px;
-    background: url(/images/templatemo_menu.png) no-repeat top;
+    height: 150px;
+    width: -moz-fit-content;
+    margin: auto;
+    background:  none
 }
 
 #navigation .home a {
     float: left;
     width: 52px;
     height: 52px;
-    margin: 9px 19px;
+    margin: 0 20px;
     background: url(/images/templatemo_home.png) no-repeat center;
 }
 
 #navigation .home a:hover {
     background: url(/images/templatemo_home_hover.png) no-repeat center;
 }
-
 
 #navigation ul {
     float: left;
@@ -126,18 +127,16 @@ h1{
 }
 
 #navigation ul li {
-    padding: 0;
-    margin: 0;
-    display: inline-block;
+    float: left;
 }
 
 #navigation ul li a {
     float: left;
     display: block;
     height: 45px;
-    width: 125px;
+    width: 170px;
     padding: 5px 0 0 0;
-    font-size: 10px;
+    font-size: 11px;
     color: #666;
 
     text-align: center;
@@ -174,24 +173,26 @@ h1{
 /* content */
 
 #templatemo_content_wrapper {
-    width: 802px;
-    padding: 0 68px 0 100px;
+    padding: 0 20% 0 20%;
 }
 
 #templatemo_content_top {
-    width: 802px;
+    /*width: 1200px;*/
     height: 0;
 }
 
 #templatemo_content_bottom {
-    width: 802px;
-    height: 10px;
+
 }
 
 #content-container {
-     padding: 20px 30px;
- }
-
+    padding-bottom: 100px;
+}
+#content-container form {
+    margin-left: auto;
+    margin-right: auto;
+    width: -moz-fit-content;
+}
 
 #content-container p {
     margin-bottom: 10px;
@@ -208,10 +209,7 @@ h1{
 }
 
 /* footer */
-
 #page-footer {
-    width: 1000px;
-    /*padding: 20px 100px;*/
     padding: 20px  100px 20px 130px;
     color: #000000;
     text-align: center;

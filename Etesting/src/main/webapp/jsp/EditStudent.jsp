@@ -18,7 +18,7 @@
         </c:forEach>
     </div>
 </c:if>
-<div class="wrapper">
+<%--<div class="wrapper">--%>
 <form:form method="post" id="form" class="blocks" action="/e-Testing/admin/SaveStudent.html" commandName="student">
 
     <c:if test="${not empty student.id}">
@@ -53,15 +53,16 @@
     </p>
     <p>
     <br>
-    <div style="text-align: center">
-        <input type="submit" class="button" value="Сохранить" />
-    <a href="<c:url value="/e-Testing/admin/StudentList.html"/>"><input type="button"
-            value="Отмена"
-            name="canceled" class="button"/></a>
-   </div>
+
+    <div style="float: right;">
+        <input type="submit" class="button" value="Сохранить"/>
+        <a href="<c:url value="/e-Testing/admin/StudentList.html"/>"><input type="button"
+                                                                            value="Отмена"
+                                                                            name="canceled" class="button"/></a>
+    </div>
     </p>
 
 </form:form>
-</div>
+<%--</div>--%>
 </body>
 </html>

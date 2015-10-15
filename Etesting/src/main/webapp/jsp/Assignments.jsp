@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="layer">
+<div class="layer" style="float: left">
     <p class="button heading">Классы: ${currentForm}</p>
 
     <div class="content" style="background: none">
@@ -28,33 +28,26 @@
 <br/>
 <br/>
 
-<div style="text-align: right;">
-    <a href="<c:url value="/e-Testing/admin/EditTask.html"/>">
-        <input type="button" value="Добавить задание" name="edit" class="button"/></a>
-</div>
+<%--<div style="text-align: right;">--%>
+    <%--<a href="<c:url value="/e-Testing/admin/EditTask.html"/>">--%>
+        <%--<input type="button" value="Добавить задание" name="edit" class="button"/></a>--%>
+<%--</div>--%>
 
-<c:forEach var="task" items="${taskList}">
+<%--<c:forEach var="task" items="${taskList}">--%>
 
-    <span style="margin-left: 100px"><label>Лабораторная №</label></span>
-    <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
+    <%--<span style="margin-left: 100px"><label>Лабораторная №</label></span>--%>
+    <%--<span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>--%>
 
-    <div style="text-align: right;">
-        <a href="<c:url value="/e-Testing/admin/ViewTask.html?id=${task.id}"/>">
-            <input type="button" value="Посмотреть" name="edit" class="button"/></a>
-        <a href="<c:url value="/e-Testing/admin/EditTask.html?id=${task.id}"/>">
-            <input type="button" value="&nbsp;&nbsp;&nbsp;Редактировать&nbsp;&nbsp;&nbsp;" name="edit" class="button"/></a>
-    </div>
-    <HR color="#A8A8A8" size="1">
-</c:forEach>
+    <%--<div style="text-align: right;">--%>
+        <%--<a href="<c:url value="/e-Testing/admin/ViewTask.html?id=${task.id}"/>">--%>
+            <%--<input type="button" value="Посмотреть" name="edit" class="button"/></a>--%>
+        <%--<a href="<c:url value="/e-Testing/admin/EditTask.html?id=${task.id}"/>">--%>
+            <%--<input type="button" value="Редактировать" name="edit" class="button"/></a>--%>
+    <%--</div>--%>
+    <%--<HR color="#A8A8A8" size="1">--%>
+<%--</c:forEach>--%>
 
-<%-- // create link for pages, "~" will be replaced with the proper page number --%>
-<div class="paging">
-    <c:url value="/e-Testing/admin/TaskList.html" var="pagedLink">
-        <c:param name="page" value="~"/>
-        <c:param name="form" value="${currentForm}"/>
-    </c:url>
-    <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
-</div>
+
 
 </body>
 </html>

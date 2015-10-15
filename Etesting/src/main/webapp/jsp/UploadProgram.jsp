@@ -1,6 +1,11 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
+<%@ page import="by.bsu.project.model.SpringUser" %>
+<%@ page import="org.springframework.security.core.Authentication" %>
+<%@ page import="org.springframework.security.core.userdetails.UserDetails" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <html>
 <body>
 
@@ -23,9 +28,7 @@
     <input type="hidden" id="studentId" name="studentId"
            value="${student.id}"/>
 </c:if>
-      <div style="margin-left: 600px">
-      <c:out value="Hello, ${student.firstName} ${student.secondName}"/>
-      </div>
+
 
     <form:label path="programName" cssStyle="margin-left: 130px;"><c:out value="Название лабораторной"/></form:label>
     <form:select path="programName" cssStyle="margin-left: 100px">

@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="layer" style="margin-left: 485px">
+<div class="layer">
     <p class="button heading">Классы: ${currentForm}</p>
 
     <div class="content" style="background: none">

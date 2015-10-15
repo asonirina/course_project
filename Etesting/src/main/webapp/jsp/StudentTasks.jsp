@@ -9,24 +9,25 @@
 <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript" src="/js/results.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/results.css">
 </head>
 <body>
+<div class="wrapper>">
+    <c:forEach var="task" items="${taskList}">
 
-<c:forEach var="task" items="${taskList}">
+        <span style="margin-left: 200px"><label>Лабораторная №</label></span>
+        <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
+        <span style="margin-left: 100px"><label>Описание</label></span>
+        <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>
+        <HR color="#A8A8A8" size="1">
+    </c:forEach>
 
-    <span style="margin-left: 100px"><label>Лабораторная №</label></span>
-    <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
-    <span style="margin-left: 100px"><label>Описание</label></span>
-    <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>
-    <HR color="#A8A8A8" size="1">
-</c:forEach>
+    <div class="paging">
+        <c:url value="/e-Testing/student/StudentTasks.html" var="pagedLink">
+            <c:param name="page" value="~"/>
+        </c:url>
+        <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
+    </div>
 
-<div class="paging">
-    <c:url value="/e-Testing/student/StudentTasks.html" var="pagedLink">
-        <c:param name="page" value="~"/>
-    </c:url>
-    <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
 </div>
 
 </body>

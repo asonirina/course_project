@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/css/results.css">
 </head>
 <body>
+<div class="wrapper">
             <span style="margin-left: 200px"><c:out value="Название лабораторной"/></span>
             <span style="margin-left: 113px;"><c:out value="Лабораторная ${program.programName}"/></span><br>
             <span style="margin-left: 200px"><c:out value="Время добавления"/></span>
@@ -33,7 +34,7 @@
 
             <c:if test="${not empty program.testResults}">
                 <span style="margin-left: 200px; display:inline-block;"><c:out value="Результаты тестов"/></span>
-                <div class="layer">
+                <div class="layer" style="margin: 0 130px;">
                     <p class="heading">Развернуть</p>
 
                     <div class="content">
@@ -50,6 +51,6 @@
 
                 </div>
             </c:if>
-
+</div>
 </body>
 </html>

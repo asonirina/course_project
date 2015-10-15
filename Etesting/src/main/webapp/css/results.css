@@ -1,7 +1,6 @@
 .layer {
-    /*margin-left: 146px;*/
     display:inline-block;
-    padding: 0 140px;
+    /*padding: 0 140px;*/
     width: 120px;
 }
 
@@ -11,7 +10,7 @@
     padding: 3px 10px;
     cursor: pointer;
     position: relative;
-    background-color: #f65803;
+    background-color: #f57814;
     text-align: center;
 }
 .content {

@@ -118,4 +118,20 @@ public class TaskController extends BaseController {
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
+
+    @RequestMapping(value = "/e-Testing/admin/Assignments")
+    public ModelAndView displayAssignTable(@RequestParam(value = "form", required = false, defaultValue = "11") String form,
+                                        Model model) {
+        try {
+//            Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
+//            model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
+//                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
+            model.addAttribute(ETestingConstants.CURRENT_FORM, form);
+            return new ModelAndView("Assignments");
+        } catch (Exception ex) {
+            logger.error("Unable to display tasks list " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
 }

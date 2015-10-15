@@ -53,7 +53,7 @@
     </c:if>
     <c:if test="${not empty program.testResults}">
         <span style="margin-left: 200px; display:inline-block;"><c:out value="Результаты тестов"/></span>
-        <div class="layer">
+        <div class="layer" style="margin: 0 130px;">
             <p class="heading">Развернуть</p>
 
             <div class="content">
@@ -69,6 +69,7 @@
             </div>
 
         </div>
+        <br/>
     </c:if>
 
     <c:if test="${not empty program.plagiat1}">
