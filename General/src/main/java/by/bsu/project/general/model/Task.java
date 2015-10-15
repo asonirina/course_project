@@ -1,8 +1,5 @@
 package by.bsu.project.general.model;
 
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.list.LazyList;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,8 +40,7 @@ public class Task {
     private String description;
 
     public Task() {
-        tests = LazyList.decorate(new ArrayList(),
-                FactoryUtils.instantiateFactory(Task.class));
+        tests = new ArrayList<>();
     }
 
     public Long getId() {

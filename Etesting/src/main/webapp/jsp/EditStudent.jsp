@@ -18,7 +18,6 @@
         </c:forEach>
     </div>
 </c:if>
-<%--<div class="wrapper">--%>
 <form:form method="post" id="form" class="blocks" action="/e-Testing/admin/SaveStudent.html" commandName="student">
 
     <c:if test="${not empty student.id}">
@@ -63,6 +62,5 @@
     </p>
 
 </form:form>
-<%--</div>--%>
 </body>
 </html>

@@ -7,18 +7,18 @@
 
 <html>
 <head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/results.js"></script>
+    <script type="text/css" src="/css/form.css"></script>
 </head>
 <body>
-<div class="wrapper>">
-    <c:forEach var="task" items="${taskList}">
 
+    <c:forEach var="task" items="${taskList}">
+    <div class="wrapper">
         <span style="margin-left: 200px"><label>Лабораторная №</label></span>
-        <span style="margin-left: 100px"><c:out value="${task.programName}"/></span><br>
-        <span style="margin-left: 100px"><label>Описание</label></span>
-        <span style="margin-left: 100px"><c:out value="${task.description}"/></span><br>
+        <span style="margin: 100px 200px"><c:out value="${task.programName}"/></span><br>
+        <span style="margin-left: 200px"><label>Описание</label></span>
+        <span style="margin-left: 250px"><c:out value="${task.description}"/></span><br>
         <HR color="#A8A8A8" size="1">
+    </div>
     </c:forEach>
 
     <div class="paging">
@@ -28,7 +28,7 @@
         <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
     </div>
 
-</div>
+
 
 </body>
 </html>
