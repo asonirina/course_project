@@ -21,10 +21,10 @@
             <td>
                 <a class="imagelink" title="${n.title}" href="${n.url}">
                     <c:if test="${not empty n.imageUrl}">
-                        <img class="narrow" src="${n.imageUrl}"/>
+                        <img style="width: 50%; height: 50%;" alt="${n.title}" class="narrow" src="${n.imageUrl}"/>
                     </c:if>
                     <c:if test="${empty n.imageUrl}">
-                        <img class="narrow" src="/images/no_image.png"/>
+                        <img style="width: 75%; height: 75%;" alt="${n.title}" class="narrow" src="/images/no_image.png"/>
                     </c:if>
                 </a>
             </td>

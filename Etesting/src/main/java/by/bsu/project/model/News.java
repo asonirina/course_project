@@ -36,7 +36,7 @@ public class News {
     }
 
     public void setUrl(String url) {
-        this.url = "http://liceum.bsu.by" + url;
+        this.url = url.startsWith("http") ? url : "http://liceum.bsu.by" + url;
     }
 
     public String getContent() {
