@@ -31,7 +31,7 @@
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
-    <c:url value="/e-Testing/UploadProgramsHistory.html" var="pagedLink">
+    <c:url value="/e-Testing/student/UploadProgramsHistory.html" var="pagedLink">
         <c:param name="page" value="~"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>

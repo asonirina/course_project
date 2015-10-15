@@ -41,7 +41,7 @@ public class ProgramUploadController extends BaseController {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 
-    @RequestMapping(value = "/e-Testing/UploadProgram")
+    @RequestMapping(value = "/e-Testing/student/UploadProgram")
     public ModelAndView displayUploadFile(
             UserInfoEntity userInfoEntity,
             ProgramFilesEntity programFilesEntity,
@@ -64,7 +64,7 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/SaveProgram")
+    @RequestMapping(value = "/e-Testing/student/SaveProgram")
     public ModelAndView processUploadPreview(
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "studentId", required = false) Long studentId,
@@ -99,14 +99,14 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/UploadProgramStatus")
+    @RequestMapping(value = "/e-Testing/student/UploadProgramStatus")
     public ModelAndView processUploadPreview(Model model) {
         model.addAttribute(ETestingConstants.MODEL_PROGRAM, userInfoService.getFileById(currentFileId));
         model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_STATUS);
         return new ModelAndView("UploadProgramStatus");
     }
 
-    @RequestMapping(value = "/e-Testing/UploadProgramsHistory")
+    @RequestMapping(value = "/e-Testing/student/UploadProgramsHistory")
     public ModelAndView processHistoryPreview(
             @RequestParam(value = "page", required = false) Integer page,
             UserInfoEntity userInfoEntity,
@@ -127,7 +127,7 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/ViewTree")
+    @RequestMapping(value = "/e-Testing/admin/ViewTree")
     public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId, Model model) {
         try {
             byte[] content = userInfoService.getFileById(programId).getTreeContent();
@@ -140,7 +140,7 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/ShowGraph")
+    @RequestMapping(value = "/e-Testing/admin/ShowGraph")
     public ModelAndView showGraph(Model model) {
         try {
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SHOW_GRAPH);
@@ -150,8 +150,8 @@ public class ProgramUploadController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/GetGraph")
-    public ModelAndView getGraph(                                  HttpServletResponse response) {
+    @RequestMapping("/e-Testing/admin/GetGraph")
+    public ModelAndView getGraph(HttpServletResponse response) {
         try {
             JsonHelper helper = new JsonHelper();
             String json =  helper.createJson(userInfoService.studentsList());

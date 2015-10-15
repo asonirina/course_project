@@ -44,26 +44,11 @@ public class PasswordController extends BaseController {
         return new ModelAndView("redirect:/e-Testing/Login.html", params);
     }
 
-    @RequestMapping(value = "/e-Testing/ChangePassword")
+    @RequestMapping(value = "/e-Testing/{admin|student}/ChangePassword")
     public ModelAndView changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
                                        @RequestParam(value = "password1", required = false) String password1,
                                        @RequestParam(value = "password2", required = false) String password2,
                                        HttpServletRequest request) {
-        return changeUserPassword(oldPassword, password1, password2, request);
-    }
-
-    @RequestMapping(value = "/e-Testing/ChangeStudentPassword")
-    public ModelAndView changeStudentPassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
-                                              @RequestParam(value = "password1", required = false) String password1,
-                                              @RequestParam(value = "password2", required = false) String password2,
-                                              HttpServletRequest request) {
-        return changeUserPassword(oldPassword, password1, password2, request);
-    }
-
-    private ModelAndView changeUserPassword(String oldPassword,
-                                            String password1,
-                                            String password2,
-                                            HttpServletRequest request) {
         try {
             if (oldPassword != null) {
                 String login = request.getRemoteUser();
@@ -72,8 +57,8 @@ public class PasswordController extends BaseController {
                     user.setPassword(password1);
                     userInfoService.save(user);
                     if (user.getForm().equals(ETestingConstants.ADMIN_ROLE)) {
-                        return new ModelAndView("redirect:/e-Testing/MainAdminPage.html");
-                    } else return new ModelAndView("redirect:/e-Testing/MainStudentPage.html");
+                        return new ModelAndView("redirect:/e-Testing/admin/MainPage.html");
+                    } else return new ModelAndView("redirect:/e-Testing/student/MainPage.html");
                 }
                 return new ModelAndView("ChangePassword", ETestingConstants.MODEL_MESSAGE, ErrorsMessages.WRONG_PASSWORD);
             }
@@ -84,8 +69,6 @@ public class PasswordController extends BaseController {
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
-
-
 
     @RequestMapping(value = "/e-Testing/ResetPassword")
     public ModelAndView resetPassword(

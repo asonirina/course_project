@@ -18,7 +18,7 @@
 
 <c:if test="${not empty tasks}">
 
-<form:form method="post" action="/e-Testing/SaveProgram.html" commandName="program" encType="multipart/form-data">
+<form:form method="post" action="/e-Testing/student/SaveProgram.html" commandName="program" encType="multipart/form-data">
 <c:if test="${not empty student.id}">
     <input type="hidden" id="studentId" name="studentId"
            value="${student.id}"/>

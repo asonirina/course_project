@@ -34,17 +34,17 @@
 </c:forEach>
 
 <div class="paging">
-    <c:url value="/e-Testing/ViewTask.html?id=${task.id}" var="pagedLink">
+    <c:url value="/e-Testing/admin/ViewTask.html?id=${task.id}" var="pagedLink">
         <c:param name="page" value="~"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
 </div>
 
 <div style="text-align: right">
-    <a href="<c:url value="/e-Testing/EditTask.html?id=${task.id}"/>"><input type="button"
+    <a href="<c:url value="/e-Testing/admin/EditTask.html?id=${task.id}"/>"><input type="button"
                                                                                    value="Редактировать"
                                                                                    name="edit" class="button"/></a>
-    <a href="<c:url value="/e-Testing/DeleteTask.html?id=${task.id}&form=${task.form}"/>"><input type="button"
+    <a href="<c:url value="/e-Testing/admin/DeleteTask.html?id=${task.id}&form=${task.form}"/>"><input type="button"
                                                                                      onclick="return confirm('Вы действительно хотите удалить эту запись?')"
                                                                                      value="Удалить"
                                                                                      name="delete" class="button"/></a>

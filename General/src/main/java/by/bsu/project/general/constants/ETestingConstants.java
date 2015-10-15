@@ -14,6 +14,7 @@ public class ETestingConstants {
     public final static String POSTFIX_JAVA             = ".java";
 
     public final static String ADMIN_ROLE               = "admin";
+    public final static String USER_ROLE                = "student";
 
     public final static String MODEL_ERRORS             = "errors";
     public final static String MODEL_STUDENT            = "student";

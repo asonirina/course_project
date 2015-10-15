@@ -16,13 +16,13 @@
     <p class="button heading">Классы: ${currentForm}</p>
 
     <div class="content" style="background: none">
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html"/>">Все</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=6"/>">6</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=7"/>">7</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=8"/>">8</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=9"/>">9</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=10"/>">10</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/StudentList.html?form=11"/>">11</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Все</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=6"/>">6</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=7"/>">7</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=8"/>">8</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=9"/>">9</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=10"/>">10</a>
+        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=11"/>">11</a>
     </div>
 </div>
 <br/>
@@ -38,9 +38,9 @@
         <span style="margin-left: 89px"><c:out value="${student.form}"/></span><br>
 
         <div style="text-align: right;">
-            <a href="<c:url value="/e-Testing/ViewStudent.html?id=${student.id}"/>">
+            <a href="<c:url value="/e-Testing/admin/ViewStudent.html?id=${student.id}"/>">
                 <input type="button" value="Посмотреть" name="view" class="button"/></a>
-            <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>">
+            <a href="<c:url value="/e-Testing/admin/EditStudent.html?id=${student.id}"/>">
                 <input type="button" value="Редактировать" name="edit" class="button"/></a>
         </div>
         <HR color="#A8A8A8" size="1">
@@ -48,7 +48,7 @@
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
-    <c:url value="/e-Testing/StudentList.html" var="pagedLink">
+    <c:url value="/e-Testing/admin/StudentList.html" var="pagedLink">
         <c:param name="page" value="~"/>
         <c:param name="form" value="${currentForm}"/>
     </c:url>

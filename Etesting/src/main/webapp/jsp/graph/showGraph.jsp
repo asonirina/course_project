@@ -114,7 +114,7 @@
         });
     };
 
-    callJson("<%=request.getContextPath()%>/e-Testing/GetGraph.html");
+    callJson("<%=request.getContextPath()%>/e-Testing/admin/GetGraph.html");
 
     d3.select(self.frameElement).style("height", diameter + "px");
 

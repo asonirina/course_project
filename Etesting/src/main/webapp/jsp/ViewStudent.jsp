@@ -43,12 +43,12 @@
     </c:if>
     <c:if test="${not empty program.file}">
         <span style="margin-left: 200px"><c:out value="Программа"/></span>
-        <a href="<c:url value="/e-Testing/Download.html?programId=${program.id}"/>" style="margin-left: 193px;">
+        <a href="<c:url value="/e-Testing/admin/Download.html?programId=${program.id}"/>" style="margin-left: 193px;">
             <input type="image" value="${program.fileName}" src="/images/download.png"></a><br>
     </c:if>
     <c:if test="${not empty program.treeContent}">
         <span style="margin-left: 200px"><c:out value="Схема программы"/></span>
-        <a href="<c:url value="/e-Testing/viewTree.html?programId=${program.id}"/>" style="margin-left: 150px;">
+        <a href="<c:url value="/e-Testing/admin/ViewTree.html?programId=${program.id}"/>" style="margin-left: 150px;">
             <input  type="image" value="${program.fileName}" src="/images/tree.png"></a><br>
     </c:if>
     <c:if test="${not empty program.testResults}">
@@ -86,17 +86,17 @@
 
 <%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
-    <c:url value="/e-Testing/ViewStudent.html?id=${student.id}" var="pagedLink">
+    <c:url value="/e-Testing/admin/ViewStudent.html?id=${student.id}" var="pagedLink">
         <c:param name="page" value="~"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
 </div>
 
 <div style="text-align: right">
-    <a href="<c:url value="/e-Testing/EditStudent.html?id=${student.id}"/>"><input type="button"
+    <a href="<c:url value="/e-Testing/admin/EditStudent.html?id=${student.id}"/>"><input type="button"
                                                                                    value="Редактировать"
                                                                                    name="edit" class="button"/></a>
-    <a href="<c:url value="/e-Testing/DeleteStudent.html?id=${student.id}"/>"><input type="button"
+    <a href="<c:url value="/e-Testing/admin/DeleteStudent.html?id=${student.id}"/>"><input type="button"
                                                                                      onclick="return confirm('Вы действительно хотите удалить эту запись?')"
                                                                                      value="Удалить"
                                                                                      name="delete" class="button"/></a>

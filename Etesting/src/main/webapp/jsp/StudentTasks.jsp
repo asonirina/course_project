@@ -23,7 +23,7 @@
 </c:forEach>
 
 <div class="paging">
-    <c:url value="/e-Testing/StudentTasks.html" var="pagedLink">
+    <c:url value="/e-Testing/student/StudentTasks.html" var="pagedLink">
         <c:param name="page" value="~"/>
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>

@@ -21,7 +21,7 @@
     </div>
 </c:if>
 <div class="wrapper">
-    <form:form method="post" id="form" class="blocks" action="/e-Testing/SaveTask.html" commandName="task"
+    <form:form method="post" id="form" class="blocks" action="/e-Testing/admin/SaveTask.html" commandName="task"
                modelAttribute="task">
 
         <c:if test="${not empty task.id}">
@@ -104,7 +104,7 @@
         <div style="text-align: center">
             <input type="submit" class="button" value="Сохранить"/>
 
-            <a href="<c:url value="/e-Testing/TaskList.html"/>"><input type="button"
+            <a href="<c:url value="/e-Testing/admin/TaskList.html"/>"><input type="button"
                                                                        value="Отмена"
                                                                        name="canceled" class="button"/></a>
         </div>

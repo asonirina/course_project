@@ -8,12 +8,12 @@
 <body>
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
-    <core:redirect url="/e-Testing/MainAdminPage.html"/>
+    <core:redirect url="/e-Testing/admin/MainPage.html"/>
 </sec:authorize>
 
 
 <sec:authorize access="hasRole('ROLE_USER')">
-    <core:redirect url="/e-Testing/MainStudentPage.html"/>
+    <core:redirect url="/e-Testing/student/MainPage.html"/>
 </sec:authorize>
 
 </body>

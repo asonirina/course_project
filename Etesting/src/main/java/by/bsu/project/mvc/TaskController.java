@@ -19,7 +19,7 @@ import java.util.Map;
 @Controller
 public class TaskController extends BaseController {
 
-    @RequestMapping(value = "/e-Testing/TaskList")
+    @RequestMapping(value = "/e-Testing/admin/TaskList")
     public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
                                         @RequestParam(value = "form", required = false, defaultValue = "11") String form,
                                         Model model) {
@@ -36,7 +36,7 @@ public class TaskController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/StudentTasks")
+    @RequestMapping(value = "/e-Testing/student/StudentTasks")
     public ModelAndView displayStudentTasks(@RequestParam(value = "page", required = false) Integer page,
                                         Model model) {
         try {
@@ -52,7 +52,7 @@ public class TaskController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/SaveTask", method = RequestMethod.POST)
+    @RequestMapping(value = "/e-Testing/admin/SaveTask", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("EditTask") Task task, Model model) {
 
         try {
@@ -66,7 +66,7 @@ public class TaskController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/EditTask")
+    @RequestMapping(value = "/e-Testing/admin/EditTask")
     public ModelAndView displayTask(@RequestParam(value = "id", required = false) Long id,
                                     Task task, Model model) {
         try {
@@ -86,7 +86,7 @@ public class TaskController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/ViewTask")
+    @RequestMapping("/e-Testing/admin/ViewTask")
     public ModelAndView taskView(@RequestParam(value = "id", required = false) Long id,
                                  @RequestParam(value = "page", required = false) Integer page,
                                  Task task,
@@ -103,7 +103,7 @@ public class TaskController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/DeleteTask")
+    @RequestMapping("/e-Testing/admin/DeleteTask")
     public ModelAndView deleteTask(@RequestParam(value = "id", required = false) Long id,
                                    @RequestParam(value = "form", required = false) String form) {
         try {

@@ -31,10 +31,9 @@ import java.util.Map;
 @Controller
 public class UserInfoController extends BaseController {
 
-//    private String form = null;
     private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
 
-    @RequestMapping(value = "/e-Testing/StudentList")
+    @RequestMapping(value = "/e-Testing/admin/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
                                             @RequestParam(value = "form", required = false) String form,
                                             Model model) {
@@ -60,7 +59,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/SaveStudent", method = RequestMethod.POST)
+    @RequestMapping(value = "/e-Testing/admin/SaveStudent", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("EditStudent") UserInfoEntity userInfoEntity, Model model) {
 
         try {
@@ -89,7 +88,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/EditStudent")
+    @RequestMapping(value = "/e-Testing/admin/EditStudent")
     public ModelAndView displayStudent(@RequestParam(value = "id", required = false) Long id,
                                        UserInfoEntity userInfoEntity, Model model) {
         try {
@@ -110,7 +109,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/ViewStudent")
+    @RequestMapping("/e-Testing/admin/ViewStudent")
     public ModelAndView studentView(@RequestParam(value = "id", required = false) Long id,
                                     @RequestParam(value = "page", required = false) Integer page,
                                     UserInfoEntity userInfoEntity,
@@ -130,7 +129,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/DeleteStudent")
+    @RequestMapping("/e-Testing/admin/DeleteStudent")
     public ModelAndView deleteStudent(@RequestParam(value = "id", required = false) Long id) {
         try {
             userInfoService.deleteStudentById(id);
@@ -143,7 +142,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/Download")
+    @RequestMapping("/e-Testing/admin/Download")
     public String download(@RequestParam(value = "programId", required = false) Long programId,
                            HttpServletResponse response,
                            ProgramFilesEntity programFilesEntity) {
@@ -165,7 +164,7 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping("/e-Testing/DownloadResults")
+    @RequestMapping("/e-Testing/admin/DownloadResults")
     public String downloadResults(@RequestParam(value = "programId", required = false) Long programId,
                                   HttpServletResponse response,
                                   ProgramFilesEntity programFilesEntity) {
@@ -186,14 +185,9 @@ public class UserInfoController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/e-Testing/MainAdminPage")
-    public ModelAndView displayMainAdminPage() {
-        return newsPage("MainAdminPage");
-    }
-
-    @RequestMapping(value = "/e-Testing/MainStudentPage")
-    public ModelAndView displayMainStudentPage() {
-        return newsPage("MainStudentPage");
+    @RequestMapping(value = "/e-Testing/{admin|student}/MainPage")
+    public ModelAndView displayMainPage() {
+        return newsPage("MainPage");
     }
 
     private ModelAndView newsPage(String base) {
