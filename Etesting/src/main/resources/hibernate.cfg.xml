@@ -12,5 +12,6 @@
         <mapping class="by.bsu.project.general.model.NeuralNode" />
         <mapping class="by.bsu.project.general.model.Task" />
         <mapping class="by.bsu.project.general.model.SingleTest" />
+        <mapping class="by.bsu.project.general.model.UserTask" />
     </session-factory>
 </hibernate-configuration>

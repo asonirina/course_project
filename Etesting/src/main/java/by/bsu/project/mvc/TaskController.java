@@ -58,7 +58,7 @@ public class TaskController extends BaseController {
         try {
             userInfoService.save(task);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
-            return new ModelAndView("redirect:/e-Testing/ViewTask.html?id=" + task.getId());
+            return new ModelAndView("redirect:/e-Testing/admin/ViewTask.html?id=" + task.getId());
 
         } catch (Exception ex) {
             logger.error("Unable to save student " + ex.getMessage());

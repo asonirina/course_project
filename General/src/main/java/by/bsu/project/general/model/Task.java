@@ -1,5 +1,7 @@
 package by.bsu.project.general.model;
 
+import org.hibernate.annotations.IndexColumn;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +30,13 @@ public class Task {
 
     @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="task_id")
+    @IndexColumn(name="idx")
     private List<SingleTest> tests;
+
+    @OneToMany(cascade= CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name="task_id")
+    @IndexColumn(name="idx_2")
+    private List<UserTask> userTasks;
 
     @Column(name = "program_name")
     private String programName;
@@ -41,6 +49,7 @@ public class Task {
 
     public Task() {
         tests = new ArrayList<>();
+        userTasks = new ArrayList<>();
     }
 
     public Long getId() {
@@ -82,5 +91,13 @@ public class Task {
 
     public void setTests(List<SingleTest> tests) {
         this.tests = tests;
+    }
+
+    public List<UserTask> getUserTasks() {
+        return userTasks;
+    }
+
+    public void setUserTasks(List<UserTask> userTasks) {
+        this.userTasks = userTasks;
     }
 }

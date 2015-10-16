@@ -6,6 +6,7 @@ import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -84,7 +85,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     public void save(UserInfoEntity userInfoEntity) {
-        if (isExist(userInfoEntity.getId())) {
+        if (isExist(UserInfoEntity.class, userInfoEntity.getId())) {
             sessionFactory.getCurrentSession().update(userInfoEntity);
         } else {
             sessionFactory.getCurrentSession().save(userInfoEntity);
@@ -92,7 +93,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     public void save(Task task) {
-        if (isExist(task.getId())) {
+        if (isExist(Task.class, task.getId())) {
             sessionFactory.getCurrentSession().update(task);
         } else {
             sessionFactory.getCurrentSession().save(task);
@@ -112,8 +113,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public UserInfoEntity getStudentById(Long id) {
-        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where id = :id").
-                setParameter(ETestingConstants.TABLE_FIELD_ID, id).uniqueResult();
+        return (UserInfoEntity) sessionFactory.getCurrentSession().createCriteria(UserInfoEntity.class).add(Restrictions.idEq(id)).uniqueResult();
     }
 
     @Override
@@ -129,8 +129,8 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public boolean isExist(Long id) {
-        return id != null && null != (UserInfoEntity) sessionFactory.getCurrentSession().load(UserInfoEntity.class, id);
+    public boolean isExist(Class c, Long id) {
+        return id != null && null != sessionFactory.getCurrentSession().load(c, id);
     }
 
     @Override

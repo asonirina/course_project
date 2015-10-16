@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserInfoDAO {
     public void save(UserInfoEntity userInfoEntity);
     public void save(Task task);
-    public boolean isExist(Long id);
+    public boolean isExist(Class c, Long id);
     public UserInfoEntity getStudentById(Long id);
     public Task getTaskById(Long id);
     public ProgramFilesEntity getFileById(Long id);

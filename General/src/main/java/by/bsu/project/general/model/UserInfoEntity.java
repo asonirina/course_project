@@ -1,8 +1,12 @@
 package by.bsu.project.general.model;
 
 import by.bsu.project.general.model.ProgramFilesEntity;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +24,13 @@ public class UserInfoEntity {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
+    @IndexColumn(name="idx")
     private List<ProgramFilesEntity> programFiles;
+
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    @IndexColumn(name="idx_1")
+    private List<UserTask> userTasks;
 
     @Column(name = "FirstName")
     private String firstName;
@@ -41,6 +51,10 @@ public class UserInfoEntity {
 //    @JoinColumn(name = "neuralNode_id")
     private NeuralNode neuralNode;
 
+    public UserInfoEntity() {
+        programFiles = new ArrayList<>();
+        userTasks = new ArrayList<>();
+    }
     public Long getId() {
         return id;
     }
@@ -104,5 +118,13 @@ public class UserInfoEntity {
 
     public void setNeuralNode(NeuralNode neuralNode) {
         this.neuralNode = neuralNode;
+    }
+
+    public List<UserTask> getUserTasks() {
+        return userTasks;
+    }
+
+    public void setUserTasks(List<UserTask> userTasks) {
+        this.userTasks = userTasks;
     }
 }

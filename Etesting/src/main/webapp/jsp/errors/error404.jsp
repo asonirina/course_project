@@ -4,6 +4,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
 </head>
 <body id="body">
 <div id="page-container">
@@ -18,12 +19,14 @@
         <div id="templatemo_content_top"></div>
         <div id="templatemo_content">
             <div id="content-container">
-      <div style="margin-left: 100px"><input type="image" src="/images/error404.jpg"></div>
-      <br>
-      <a style="margin-left: 330px;" href="<c:url value="/e-Testing/Login.html"/>">На главную</a>
+                <div class="wrapper">
+                <input type="image" src="/images/error404.jpg">
+                <br>
+                <a style="margin-left: 235px" href="<c:url value="/e-Testing/Login.html"/>">На главную</a>
+                    </div>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 </div>

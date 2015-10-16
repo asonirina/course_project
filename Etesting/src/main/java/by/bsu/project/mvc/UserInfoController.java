@@ -80,7 +80,7 @@ public class UserInfoController extends BaseController {
             }
             userInfoService.save(userInfoEntity);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
-            return new ModelAndView("redirect:/e-Testing/ViewStudent.html?id=" + userInfoEntity.getId());
+            return new ModelAndView("redirect:/e-Testing/adminViewStudent.html?id=" + userInfoEntity.getId());
 
         } catch (Exception ex) {
             logger.error("Unable to save student " + ex.getMessage());
@@ -187,6 +187,7 @@ public class UserInfoController extends BaseController {
 
     @RequestMapping(value = "/e-Testing/{admin|student}/MainPage")
     public ModelAndView displayMainPage() {
+        UserInfoEntity entity = userInfoService.getStudentById(getUser().getId());
         return newsPage("MainPage");
     }
 
