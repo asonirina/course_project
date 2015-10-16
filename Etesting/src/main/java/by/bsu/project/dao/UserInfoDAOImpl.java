@@ -4,6 +4,7 @@ import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
+import by.bsu.project.general.model.UserTask;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -101,6 +102,15 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
+    public void save(UserTask userTask) {
+        if (isExist(Task.class, userTask.getId())) {
+            sessionFactory.getCurrentSession().update(userTask);
+        } else {
+            sessionFactory.getCurrentSession().save(userTask);
+        }
+    }
+
+    @Override
     public void deleteStudentById(Long id) {
         sessionFactory.getCurrentSession().delete(sessionFactory.getCurrentSession().load(UserInfoEntity.class, id));
     }
@@ -143,6 +153,11 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form order by secondName").
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
         return getSubList(query, pageNumber);
+    }
+
+    public List<UserInfoEntity> studentListByForm(String form) {
+        return sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form = :form order by secondName").
+                setParameter(ETestingConstants.TABLE_FIELD_FORM, form).list();
     }
 
     public List<Task> taskListByForm(Integer pageNumber, String form) {

@@ -3,6 +3,7 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.Task;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.paging.Paging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -123,9 +125,13 @@ public class TaskController extends BaseController {
     public ModelAndView displayAssignTable(@RequestParam(value = "form", required = false, defaultValue = "11") String form,
                                         Model model) {
         try {
+            List<UserInfoEntity> users = userInfoService.studentListByForm(form);
+            List<Task> tasks = userInfoService.taskListByForm(form);
 //            Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
 //            model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
 //                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
+            model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST, users);
+            model.addAttribute(ETestingConstants.MODEL_TASKS, tasks);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
             model.addAttribute(ETestingConstants.CURRENT_FORM, form);
             return new ModelAndView("Assignments");

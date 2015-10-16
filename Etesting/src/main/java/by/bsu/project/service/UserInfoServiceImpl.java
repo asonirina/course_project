@@ -5,6 +5,7 @@ import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     public void save(Task task) {
         userInfoDAO.save(task);
+    }
+
+    @Transactional
+    public void save(UserTask userTask) {
+        userInfoDAO.save(userTask);
     }
 
     @Transactional
@@ -89,6 +95,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDAO.studentListByForm(pageNumber, form);
     }
 
+
+
+    @Transactional
+    public List<UserInfoEntity> studentListByForm(String form) {
+        return userInfoDAO.studentListByForm(form);
+    }
     @Transactional
     public List<Task> taskListByForm(int pageNumber, String form) {
         if(form.equals("admin")) {

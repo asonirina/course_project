@@ -25,6 +25,9 @@ CREATE TABLE `user_task` (
   CONSTRAINT `FK_UT2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
 
+ALTER TABLE `user_task`
+  ADD CONSTRAINT UQ_UT UNIQUE(`task_id`, `user_id`);
+
 CREATE TABLE `single_test` (
   `id` int(11) NOT NULL auto_increment,
   `test_no` int(3) NOT NULL,
@@ -115,10 +118,10 @@ INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Pass
   (2,'Iryna','Ason','11','irina.ason@gmail.com','test'),
   (3,'XXX','XXX','11','asonirina@mail.ru','111');
 
--- INSERT INTO `task` (`id`, `form`, `program_name`, `description`) values
--- (1, '11', '1', 'Lab 1'),
--- (2, '11', '2', 'Lab 2');
---
+INSERT INTO `task` (`id`, `form`, `program_name`, `description`) values
+(1, '11', '1', 'Lab 1'),
+(2, '11', '2', 'Lab 2');
+
 --
 -- INSERT INTO `single_test` (`id`, `test_no`,  `data_in`, `data_out`, `task_id`) VALUES
 -- (1, 1,  '1 2 3', '1 2 3', 1),
