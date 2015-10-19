@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/js/results.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/results.css">
     <link rel="stylesheet" type="text/css" href="/css/form.css">
+    <link rel="stylesheet" type="text/css" href="/css/table.css">
     <script type="text/javascript">
         function createUserTask(studentId, taskId) {
             $.ajax({
@@ -45,7 +46,7 @@
     </div>
     <br/>
     <br/>
-    <table border="1">
+    <table>
         <thead>
         <tr>
             <td></td>
@@ -55,8 +56,13 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="student" items="${studentList}">
-            <tr>
+        <c:forEach var="student" items="${studentList}" varStatus="status">
+            <c:set var="css_style" value="odd"/>
+            <c:if test="${status.count%2==1}">
+                <c:set var="css_style" value="even"/>
+            </c:if>
+            <tr class="${css_style}">
+
                 <td>${student.secondName} ${student.firstName}</td>
                 <c:forEach items="${tasks}" var="task">
                     <c:set var="isSet" value="false"/>
@@ -95,7 +101,7 @@
                     </c:if>
                     <c:if test="${isSet eq 'false'}">
                         <td>
-                            <button id="${student.id}_${task.id}" class="white option button"
+                            <button id="${student.id}_${task.id}" class="white option"
                                     onclick="createUserTask(${student.id}, ${task.id})">+
                             </button>
                         </td>
