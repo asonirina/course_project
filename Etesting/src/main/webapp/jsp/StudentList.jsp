@@ -16,13 +16,13 @@
     <p class="button heading">Классы: ${currentForm}</p>
 
     <div class="content" style="background: none">
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Все</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=6"/>">6</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=7"/>">7</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=8"/>">8</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=9"/>">9</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=10"/>">10</a>
-        <a class="white-option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=11"/>">11</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Все</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=6"/>">6</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=7"/>">7</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=8"/>">8</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=9"/>">9</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=10"/>">10</a>
+        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=11"/>">11</a>
     </div>
 </div>
 <br/>

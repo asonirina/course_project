@@ -3,6 +3,7 @@ package by.bsu.project.scheduller;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
+import by.bsu.project.general.model.UserTask;
 import by.bsu.project.service.UserInfoService;
 import by.bsu.project.utils.ProgramFilesUtil;
 import org.apache.commons.configuration.ConfigurationException;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
+
+import static by.bsu.project.general.constants.ETestingConstants.UserTaskStatus;
 
 /**
  * User: iason
@@ -33,10 +36,16 @@ public class TestsRunner {
             for (ProgramFilesEntity programFilesEntity : programs) {
                 Task task = userInfoService.getTask(programFilesEntity);
                 ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity, task);
-                String programStatus = programFilesUtil.checkFile() ? ETestingConstants.PASSED_STATUS : ETestingConstants.FAILED_STATUS;
-                programFilesEntity.setStatus(programStatus);
+                UserTaskStatus programStatus = programFilesUtil.checkFile() ? UserTaskStatus.PASSED : UserTaskStatus.FAILED;
+                programFilesEntity.setStatus(programStatus.getName());
                 programFilesEntity.setRunStatus(ETestingConstants.TESTED_FILE);
                 programFilesEntity.setTestResults(programFilesUtil.getTestResults());
+                for (UserTask userTask : programFilesEntity.getUser().getUserTasks()) {
+                    if (userTask.getTask().getId().equals(task.getId())) {
+                        userTask.incTryNo();
+                        userTask.setStatus(programStatus.getId());
+                    }
+                }
                 userInfoService.save(programFilesEntity.getUser());
             }
         } catch (ConfigurationException | IOException | InterruptedException ex) {

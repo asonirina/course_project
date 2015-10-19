@@ -17,11 +17,11 @@
 </div>
 </c:if>
 
-<c:if test="${empty tasks}">
+<c:if test="${empty student.userTasks}">
     <p style="margin-left: 230px">На данный момент нет лабораторных работ</p>
 </c:if>
 
-<c:if test="${not empty tasks}">
+<c:if test="${not empty student.userTasks}">
 
 <form:form method="post" action="/e-Testing/student/SaveProgram.html" commandName="program" encType="multipart/form-data">
 <c:if test="${not empty student.id}">
@@ -33,8 +33,8 @@
     <form:label path="programName" cssStyle="margin-left: 130px;"><c:out value="Название лабораторной"/></form:label>
     <form:select path="programName" cssStyle="margin-left: 100px">
 
-        <c:forEach var="task" items="${tasks}">
-            <form:option value="${task.programName}" label="Лабораторная ${task.programName}"/>
+        <c:forEach var="task" items="${student.userTasks}">
+            <form:option value="${task.task.programName}" label="Лабораторная ${task.task.programName}"/>
         </c:forEach>
 
     </form:select><br><br>

@@ -49,15 +49,11 @@ public class ProgramUploadController extends BaseController {
         try {
             userInfoEntity = userInfoService.getStudentById(getUser().getId());
             programFilesEntity = new ProgramFilesEntity();
-
-            List<Task> tasks = userInfoService.taskListByForm(userInfoEntity.getForm());
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
             Map<String, Object> params = new HashMap<>();
             params.put(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
-            params.put(ETestingConstants.MODEL_TASKS, tasks);
             params.put(ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_PROGRAM);
             return new ModelAndView("UploadProgram", params);
-
         } catch (Exception ex) {
             logger.error("Unable to display upload file page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);

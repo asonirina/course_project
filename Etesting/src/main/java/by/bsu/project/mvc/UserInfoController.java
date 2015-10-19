@@ -5,6 +5,7 @@ import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
+import by.bsu.project.general.model.UserTask;
 import by.bsu.project.model.News;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.utils.NewsHelper;
@@ -31,7 +32,8 @@ import java.util.Map;
 @Controller
 public class UserInfoController extends BaseController {
 
-    private static List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+    private List<ProgramFilesEntity> programFilesEntityList = new ArrayList<>();
+    private List<UserTask> userTasks = new ArrayList<>();
 
     @RequestMapping(value = "/e-Testing/admin/StudentList")
     public ModelAndView displayStudentsList(@RequestParam(value = "page", required = false) Integer page,
@@ -71,6 +73,7 @@ public class UserInfoController extends BaseController {
                 node.setEntity(userInfoEntity);
             }
             userInfoEntity.setProgramFiles(programFilesEntityList);
+            userInfoEntity.setUserTasks(userTasks);
 
             if (errors != null && errors.size() != 0) {
                 model.addAttribute(ETestingConstants.MODEL_ERRORS, errors);
@@ -80,7 +83,7 @@ public class UserInfoController extends BaseController {
             }
             userInfoService.save(userInfoEntity);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
-            return new ModelAndView("redirect:/e-Testing/adminViewStudent.html?id=" + userInfoEntity.getId());
+            return new ModelAndView("redirect:/e-Testing/admin/ViewStudent.html?id=" + userInfoEntity.getId());
 
         } catch (Exception ex) {
             logger.error("Unable to save student " + ex.getMessage());
@@ -100,6 +103,7 @@ public class UserInfoController extends BaseController {
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.ADD_STUDENT);
             }
             programFilesEntityList = userInfoEntity.getProgramFiles();
+            userTasks = userInfoEntity.getUserTasks();
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
             return new ModelAndView("EditStudent");
 

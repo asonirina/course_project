@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static by.bsu.project.general.constants.ETestingConstants.UserTaskStatus;
+
 public class ProgramFilesUtil {
     private ProgramFilesEntity entity;
     private Task task;
@@ -166,15 +168,15 @@ public class ProgramFilesUtil {
             } catch (UncheckedTimeoutException e) {
                 logger.error("Unable to run file " + e.getMessage());
                 p.destroy();
-                testResults.append(test.getTestNum()).append(":" + ETestingConstants.FAILED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + UserTaskStatus.FAILED.getName() + ";");
                 res = false;
             }
 
             if (!compareFiles()) {
                 res = false;
-                testResults.append(test.getTestNum()).append(":" + ETestingConstants.FAILED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + UserTaskStatus.FAILED.getName() + ";");
             } else {
-                testResults.append(test.getTestNum()).append(":" + ETestingConstants.PASSED_STATUS + ";");
+                testResults.append(test.getTestNum()).append(":" + UserTaskStatus.PASSED.getName() + ";");
             }
         }
         deleteDir(dir);

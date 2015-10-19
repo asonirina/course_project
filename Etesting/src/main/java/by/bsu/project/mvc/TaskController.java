@@ -4,6 +4,7 @@ import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
+import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import java.util.Map;
 
 @Controller
 public class TaskController extends BaseController {
+    private List<UserTask> userTasks = new ArrayList<>();
 
     @RequestMapping(value = "/e-Testing/admin/TaskList")
     public ModelAndView displayTaskList(@RequestParam(value = "page", required = false) Integer page,
@@ -58,6 +62,7 @@ public class TaskController extends BaseController {
     public ModelAndView save(@ModelAttribute("EditTask") Task task, Model model) {
 
         try {
+            task.setUserTasks(userTasks);
             userInfoService.save(task);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_STUDENT);
             return new ModelAndView("redirect:/e-Testing/admin/ViewTask.html?id=" + task.getId());
@@ -74,6 +79,7 @@ public class TaskController extends BaseController {
         try {
             if (null != id) {
                 task = userInfoService.getTaskById(id);
+                userTasks = task.getUserTasks();
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_TASK);
             } else {
                 task = new Task();
@@ -127,9 +133,6 @@ public class TaskController extends BaseController {
         try {
             List<UserInfoEntity> users = userInfoService.studentListByForm(form);
             List<Task> tasks = userInfoService.taskListByForm(form);
-//            Paging paging1 = new Paging(userInfoService.taskCountList(form).intValue());
-//            model.addAttribute(ETestingConstants.MODEL_TASK_LIST,
-//                    userInfoService.taskListByForm(userInfoService.setPage(page, paging1, model), form));
             model.addAttribute(ETestingConstants.MODEL_STUDENT_LIST, users);
             model.addAttribute(ETestingConstants.MODEL_TASKS, tasks);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.TASK_LIST);
@@ -139,5 +142,24 @@ public class TaskController extends BaseController {
             logger.error("Unable to display tasks list " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
+    }
+
+    @RequestMapping(value = "/e-Testing/admin/AssignTask", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String assignTask(@RequestParam(value = "userId", required = true) Long userId,
+                      @RequestParam(value = "taskId", required = true) Long taskId) throws Exception {
+
+        UserInfoEntity user = userInfoService.getStudentById(userId);
+        Task task = userInfoService.getTaskById(taskId);
+
+        UserTask userTask = new UserTask();
+        userTask.setUser(user);
+        userTask.setTask(task);
+        user.getUserTasks().add(userTask);
+        task.getUserTasks().add(userTask);
+        userInfoService.save(user);
+        userInfoService.save(task);
+        return "";
     }
 }

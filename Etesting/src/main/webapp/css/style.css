@@ -242,11 +242,28 @@ h1{
     box-shadow:0 1px 1px rgba(255,255,255,.5), inset 0 2px 5px rgba(0,0,100,.5);
 }
 
-.white-option {
-    background-color: #f5f6ea;
+.option {
     padding: 0;
     margin: auto;
     display:block;
     width: 100px;
     text-align: center;
+    color: #7d2308;
+}
+
+.white {
+    background-color: #f5f6ea;
+}
+
+.yellow {
+    background-color: rgba(204, 199, 52, 0.33);
+}
+
+.red {
+    background-color: rgba(255, 29, 4, 0.37);
+}
+
+.green {
+    background-color: rgba(96, 204, 15, 0.33);
+
 }
