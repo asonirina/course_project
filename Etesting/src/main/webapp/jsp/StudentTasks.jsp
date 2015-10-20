@@ -6,28 +6,30 @@
 
 
 <html>
-<head>
-</head>
 <body>
+<c:forEach var="task" items="${taskList}">
+    <div class="form-group">
 
-    <c:forEach var="task" items="${taskList}">
-    <div class="wrapper">
-        <span style="margin-left: 200px"><label>Лабораторная №</label></span>
-        <span style="margin: 100px 200px"><c:out value="${task.programName}"/></span><br>
-        <span style="margin-left: 200px"><label>Описание</label></span>
-        <span style="margin-left: 250px"><c:out value="${task.description}"/></span><br>
+        <div class="input-group">
+            <span style="width: 200px;" class="input-group-addon">Лабораторная № </span>
+            <label style="border: none" class="form-control input"><c:out value="${task.programName}"/></label>
+        </div>
+
+        <div class="input-group">
+            <span style="width: 200px;" class="input-group-addon">Описание</span>
+            <label style="border: none" class="form-control input"><c:out value="${task.description}"/></label>
+        </div>
+
         <HR color="#A8A8A8" size="1">
     </div>
-    </c:forEach>
+</c:forEach>
 
-    <div class="paging">
-        <c:url value="/e-Testing/student/StudentTasks.html" var="pagedLink">
-            <c:param name="page" value="~"/>
-        </c:url>
-        <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
-    </div>
-
-
+<div class="paging">
+    <c:url value="/e-Testing/student/StudentTasks.html" var="pagedLink">
+        <c:param name="page" value="~"/>
+    </c:url>
+    <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
+</div>
 
 </body>
 </html>
