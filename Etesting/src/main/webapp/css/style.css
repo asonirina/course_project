@@ -55,6 +55,7 @@ body {
     clear: both;
     height: 150px;
     width: -moz-fit-content;
+    width: intrinsic;
     margin: auto;
     background:  none
 }
@@ -143,6 +144,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: -moz-fit-content;
+    width: intrinsic;
 }
 
 #content-container p {
@@ -162,10 +164,12 @@ body {
 
 .option {
     width: 20px;
+    text-align: center;
 }
 
 .wrapper {
     margin-left: auto;
     margin-right: auto;
     width: -moz-fit-content;
+    width: intrinsic;
 }
