@@ -4,23 +4,22 @@
 
 <html>
 <head>
-    <script type="text/javascript" src="/js/validator.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="/js/validate.min.js" type="text/javascript"></script>
     <script src="/js/dynamic_list_helper.js" type="text/javascript"></script>
-
 </head>
 <body>
 
 <c:if test="${not empty errors}">
-    <div id="output" class="errorblock">
-        <c:forEach var="errors" items="${errors}">
-            <c:out value="${errors}"/><br>
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">×</a>
+        <c:forEach var="err" items="${errors}">
+            <c:out value="${err}"/><br>
         </c:forEach>
     </div>
 </c:if>
+
 <div class="wrapper">
     <form:form method="post" id="form" class="blocks" action="/e-Testing/admin/SaveTask.html" commandName="task"
+               role="form"
                modelAttribute="task">
 
         <c:if test="${not empty task.id}">
@@ -28,26 +27,26 @@
                    value="${task.id}"/>
         </c:if>
 
-        <p>
+        <div class="form-group">
             <form:label path="programName">Название</form:label>
             <form:input path="programName" value="${task.programName}"
-                        class="text" name="programName"/>
-        </p>
+                        class="form-control" name="programName"/>
+        </div>
 
-        <p>
+        <div class="form-group">
             <form:label path="form">Класс</form:label>
             <form:input path="form" value="${task.form}"
-                        class="text" name="form"/>
-        </p>
+                        class="form-control" name="form"/>
+        </div>
 
-        <p>
+        <div class="form-group">
             <form:label path="description">Описание</form:label>
             <form:textarea path="description" value="${task.description}"
-                           class="text" name="description"/>
-        </p>
+                           class="form-control" name="description"/>
+        </div>
 
         <p>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th width="220">In</th>
@@ -58,21 +57,16 @@
             <tbody id='task'>
             <c:forEach var="test" items="${task.tests}" varStatus="status">
                 <tr class="single-test">
-
                     <form:hidden path="tests[${status.index}].id" value="${test.id}" name="test${test.id}"/>
                     <form:hidden path="tests[${status.index}].testNum" value="${test.testNum}"
                                  name="num${test.testNum}"/>
-
-
-                    <td><form:textarea path="tests[${status.index}].dataInStr" value="${test.dataInStr}" class="text"
+                    <td><form:textarea path="tests[${status.index}].dataInStr" value="${test.dataInStr}"
+                                       class="form-control"
                                        name="dataIn${test.id}"/></td>
-
-
-                    <td><form:textarea path="tests[${status.index}].dataOutStr" value="${test.dataOutStr}" class="text"
+                    <td><form:textarea path="tests[${status.index}].dataOutStr" value="${test.dataOutStr}"
+                                       class="form-control"
                                        name="dataOut${test.id}"/></td>
-
-                    <td><a href="#" class="button removeSingleTest">Remove</a></td>
-
+                    <td><a href="#" class="btn removeSingleTest">Remove</a></td>
                 </tr>
 
             </c:forEach>
@@ -82,30 +76,24 @@
                     <input type="hidden" name="tests[].id" value=""/>
                     <input type="hidden" name="tests[].testNum" value="0"/>
 
-                    <td><textarea rows="1" cols="30" class="text" name="tests[].dataInStr"></textarea></td>
-                    <td><textarea rows="1" cols="30" class="text" name="tests[].dataOutStr"></textarea></td>
+                    <td><textarea rows="1" cols="30" class="form-control" name="tests[].dataInStr"></textarea></td>
+                    <td><textarea rows="1" cols="30" class="form-control" name="tests[].dataOutStr"></textarea></td>
 
-                    <td><a href="#" class="button removeSingleTest">Remove</a></td>
+                    <td><a href="#" class="btn removeSingleTest">Remove</a></td>
                 </tr>
             </c:if>
 
             </tbody>
         </table>
 
-        <%--</p>--%>
-
         <p>
-            <a class="button" href="#" id="addSingleTest">+++</a>
+            <a class="btn" href="#" id="addSingleTest">+++</a>
         </p>
-
         <br/>
 
-        <div style="text-align: center">
-            <input type="submit" class="button" value="Сохранить"/>
-
-            <a href="<c:url value="/e-Testing/admin/TaskList.html"/>"><input type="button"
-                                                                       value="Отмена"
-                                                                       name="canceled" class="button"/></a>
+        <div style="text-align: right">
+            <input type="submit" class="btn btn-default" value="Сохранить"/>
+            <a class="btn" href="<c:url value="/e-Testing/admin/TaskList.html"/>">Отмена</a>
         </div>
 
     </form:form>

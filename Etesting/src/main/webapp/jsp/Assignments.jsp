@@ -55,12 +55,7 @@
         </thead>
         <tbody>
         <c:forEach var="student" items="${studentList}" varStatus="status">
-            <c:set var="css_style" value="odd"/>
-            <c:if test="${status.count%2==1}">
-                <c:set var="css_style" value="even"/>
-            </c:if>
-            <tr class="${css_style}">
-
+            <tr>
                 <td>${student.secondName} ${student.firstName}</td>
                 <c:forEach items="${tasks}" var="task">
                     <c:set var="isSet" value="false"/>
