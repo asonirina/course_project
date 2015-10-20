@@ -7,7 +7,6 @@
     <script type="text/javascript" src="/js/validator.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/js/validate.min.js" type="text/javascript"></script>
-    <script src="/js/init.js" type="text/javascript"></script>
     <script src="/js/dynamic_list_helper.js" type="text/javascript"></script>
 
 </head>

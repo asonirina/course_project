@@ -7,7 +7,6 @@
     <script type="text/javascript" src="/js/validator.js"></script>
 
     <script src="/js/validate.min.js" type="text/javascript"></script>
-    <script src="/js/init.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -54,7 +53,7 @@
                        class="form-control" name="password"/>
     </div>
 
-    <div>
+    <div style="text-align: right">
         <input type="submit" class="btn-primary btn" value="Сохранить"/>
         <a class="btn" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Отмена</a>
     </div>

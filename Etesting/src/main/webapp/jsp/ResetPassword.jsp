@@ -6,7 +6,6 @@
 <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script src="/js/validate.min.js" type="text/javascript"></script>
-    <script src="/js/init.js" type="text/javascript"></script>
 </head>
 <body>
 

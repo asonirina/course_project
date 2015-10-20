@@ -29,9 +29,9 @@
         <input id="j_username" name="j_username" type="email" class="form-control" placeholder="Enter email"/>
     </div>
     <div class="form-group">
-        <a href="javascript:forgot()" id="forgot">Забыли пароль?</a>
         <label for="j_password">Пароль:</label>
         <input class="form-control" id="j_password" name="j_password" type="password" placeholder="Enter password"/>
+        <a href="javascript:forgot()" id="forgot">Забыли пароль?</a>
     </div>
     <div class="checkbox">
         <label><input type="checkbox"> Запомнить меня</label>

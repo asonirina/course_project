@@ -6,32 +6,35 @@
 <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script src="/js/validate.min.js" type="text/javascript"></script>
-    <script src="/js/init.js" type="text/javascript"></script>
 </head>
 <body>
 
 <c:if test="${not empty message}">
-    <div class="errorblock"><c:out value="${message}"/></div>
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">×</a>
+        <c:out value="${message}"/>
+    </div>
 </c:if>
 
 <div class="wrapper">
-<form method="post" id="form" class="blocks">
-    <p>
-    <c:out value="Старый пароль"/>
-    <input name="oldPassword" id="oldPassword" class="text" type="password" style="margin-left: 34px;"/>
-    </p>
-    <p>
-    <c:out value="Новый пароль"/>
-    <input name="password1" id="password1" class="text" type="password" style="margin-left: 40px;"/>
-    </p>
-    <p>
-    <c:out value="Повторите пароль"/>
-    <input name="password2" id="password2" class="text" type="password" style="margin-left: 13px;" /><br><br>
-    </p>
-    <p>
-    <input type="submit" class="button" value="Сменить пароль" style="margin-left: 320px;"/>
-    </p>
-</form>
- </div>
+    <form method="post" id="form" role="form">
+        <div class="form-group">
+            <label for="oldPassword">Старый пароль</label>
+            <input name="oldPassword" id="oldPassword" class="form-control" type="password"
+                   placeholder="Enter old password"/>
+        </div>
+        <div class="form-group">
+            <label for="password1">Новый пароль</label>
+            <input name="password1" id="password1" class="form-control" type="password" placeholder="Enter new password"/>
+        </div>
+
+        <div class="form-group">
+            <label for="password2">Повторите пароль</label>
+            <input name="password2" id="password2" class="form-control" type="password" placeholder="Repeat new password"/>
+        </div>
+
+            <input type="submit" class="btn btn-primary" value="Сменить пароль" />
+    </form>
+</div>
 </body>
 </html>

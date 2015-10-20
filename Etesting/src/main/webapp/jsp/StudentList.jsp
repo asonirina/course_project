@@ -5,48 +5,48 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
-<head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/results.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/results.css">
-</head>
 <body>
 
-<div class="layer">
-    <p class="button heading">Классы: ${currentForm}</p>
-
-    <div class="content" style="background: none">
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Все</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=6"/>">6</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=7"/>">7</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=8"/>">8</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=9"/>">9</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=10"/>">10</a>
-        <a class="white option button" href="<c:url value="/e-Testing/admin/StudentList.html?form=11"/>">11</a>
-    </div>
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Классы: ${currentForm}
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html"/>">Все</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=6"/>">6</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=7"/>">7</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=8"/>">8</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=9"/>">9</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=10"/>">10</a></li>
+        <li><a href="<c:url value="/e-Testing/admin/StudentList.html?form=11"/>">11</a></li>
+    </ul>
 </div>
 <br/>
-<br/>
-
     <c:forEach var="student" items="${studentList}">
-
-        <span style="margin-left: 100px"><label>Имя</label></span>
-        <span style="margin-left: 100px"><c:out value="${student.firstName}"/></span><br>
-        <span style="margin-left: 100px"><label>Фамилия</label></span>
-        <span style="margin-left: 69px"><c:out value="${student.secondName}"/></span><br>
-        <span style="margin-left: 100px"><label>Класс</label></span>
-        <span style="margin-left: 89px"><c:out value="${student.form}"/></span><br>
+        <div class="form-group">
+         <div class="input-group">
+             <span style="width: 100px;" class="input-group-addon">Имя </span>
+             <label style="border: none" class="form-control input"><c:out value="${student.firstName}"/></label>
+         </div>
+        <div class="input-group">
+            <span style="width: 100px;" class="input-group-addon">Фамилия </span>
+            <label style="border: none" class="form-control input"><c:out value="${student.secondName}"/></label>
+        </div>
+        <div class="input-group">
+            <span style="width: 100px;" class="input-group-addon">Класс </span>
+            <label style="border: none" class="form-control input"><c:out value="${student.form}"/></label>
+        </div>
 
         <div style="text-align: right;">
             <a href="<c:url value="/e-Testing/admin/ViewStudent.html?id=${student.id}"/>">
-                <input type="button" value="Посмотреть" name="view" class="button"/></a>
+                <input type="button" value="Посмотреть" name="view" class="btn btn-default"/></a>
             <a href="<c:url value="/e-Testing/admin/EditStudent.html?id=${student.id}"/>">
-                <input type="button" value="Редактировать" name="edit" class="button"/></a>
+                <input type="button" value="Редактировать" name="edit" class="btn btn-default"/></a>
+        </div>
+
         </div>
         <HR color="#A8A8A8" size="1">
     </c:forEach>
 
-<%-- // create link for pages, "~" will be replaced with the proper page number --%>
 <div class="paging">
     <c:url value="/e-Testing/admin/StudentList.html" var="pagedLink">
         <c:param name="page" value="~"/>
