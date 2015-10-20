@@ -138,7 +138,7 @@ public class UserInfoController extends BaseController {
         try {
             userInfoService.deleteStudentById(id);
 
-            return new ModelAndView("redirect:/e-Testing/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
+            return new ModelAndView("redirect:/e-Testing/admin/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
 
         } catch (Exception ex) {
             logger.error("Unable to delete student " + ex.getMessage());

@@ -7,9 +7,6 @@
 
 <html>
 <head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/results.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/results.css">
     <script type="text/javascript">
         function createUserTask(studentId, taskId) {
             $.ajax({
@@ -30,19 +27,20 @@
 </head>
 <body>
 <div class="wrapper">
-    <div class="layer" style="float: left">
-        <p class="button heading">Классы: ${currentForm}</p>
 
-        <div class="content" style="background: none">
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=6"/>">6</a>
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=7"/>">7</a>
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=8"/>">8</a>
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=9"/>">9</a>
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=10"/>">10</a>
-            <a class="white option button" href="<c:url value="/e-Testing/admin/Assignments.html?form=11"/>">11</a>
-        </div>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Классы: ${currentForm}
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=6"/>">6</a></li>
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=7"/>">7</a></li>
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=8"/>">8</a></li>
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=9"/>">9</a></li>
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=10"/>">10</a></li>
+            <li><a href="<c:url value="/e-Testing/admin/Assignments.html?form=11"/>">11</a></li>
+        </ul>
     </div>
-    <br/>
+
     <br/>
     <table class="table table-hover">
         <thead>
@@ -81,7 +79,7 @@
                         </c:if>
                         <c:if test="${status == 2}">
                             <td>
-                                <button disabled="true" class="green option">Passed</button>
+                                <button disabled="true" class="green badge  option ">Passed</button>
                             </td>
                         </c:if>
 
@@ -94,7 +92,7 @@
                     </c:if>
                     <c:if test="${isSet eq 'false'}">
                         <td>
-                            <button id="${student.id}_${task.id}" class="white option"
+                            <button id="${student.id}_${task.id}" class="white option btn"
                                     onclick="createUserTask(${student.id}, ${task.id})">+
                             </button>
                         </td>

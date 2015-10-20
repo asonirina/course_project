@@ -3,11 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
-<head>
-    <script type="text/javascript" src="/js/validator.js"></script>
 
-    <script src="/js/validate.min.js" type="text/javascript"></script>
-</head>
 <body>
 
 <c:if test="${not empty errors}">

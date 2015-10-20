@@ -1,6 +1,6 @@
 body {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     color: #333;
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 13px;
@@ -8,47 +8,9 @@ body {
     background: #e7e7e7
 }
 
-a, a:link, a:visited {
-    color: #0066CC;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #CC3300;
-    text-decoration: none;
-}
-
 h1{
     color: #ff0f09;
     font-size: 14px;
-    /*text-align: center;*/
-}
-
-.errorblock {
-    color: #ff5503;
-    background-color: #fff5e7;
-    border: 3px solid #d3530d;
-    padding: 8px;
-    margin: 16px;
-}
-
-.alertblock {
-    color: #01330b;
-    background-color: #e5ffbe;
-    border: 3px solid #3f9903;
-    padding: 8px;
-    margin: 16px;
-}
-
-/* класс сообщений о правильно введенных данных */
-.correct {
-    color: green;
-    font-size: 12px;
-}
-/* класс сообщений об ошибках */
-.acorrect {
-    color: #ff7003;
-    font-size: 12px;
 }
 
 .span_info {
@@ -168,9 +130,6 @@ h1{
 #navigation ul li a span:hover {
     color: #a13c03;
 }
-/* end of menu */
-
-/* content */
 
 #templatemo_content_wrapper {
     padding: 0 20% 0 20%;
@@ -198,17 +157,6 @@ h1{
     margin-bottom: 10px;
 }
 
-#content-container h2 {
-    margin-left: -46px;
-    height: 36px;
-    padding: 12px 0 0 46px;
-    text-shadow: 1px 1px 1px #555;
-    margin-bottom: 10px;
-    font-weight: bold;
-    background: url(/images/templatemo_h2.png) no-repeat;
-}
-
-/* footer */
 #page-footer {
     padding: 20px  100px 20px 130px;
     color: #000000;
@@ -220,35 +168,9 @@ h1{
     color: #223d7a;
 }
 
-.button{
-    cursor:pointer;
-    padding:3px 10px;
-    text-decoration:none;
-    color:#fff;
-    font-size:10px;
-    background-color: #f57814;
-    border-radius:23px;
-    border:1px solid #9a3117;
-    box-shadow:0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3);
-}
-
-.button:hover, .button:focus{
-    background: #e8b658;
-    box-shadow:0 1px 0 rgba(255,255,255,.6), inset 0 1px 0 rgba(255,255,255,.3);
-}
-
-.button:active {
-    background-color: #d18531;
-    box-shadow:0 1px 1px rgba(255,255,255,.5), inset 0 2px 5px rgba(0,0,100,.5);
-}
-
 .option {
-    padding: 0;
-    margin: auto;
-    display:block;
     width: 100px;
-    text-align: center;
-    color: #7d2308;
+    color: black;
 }
 
 .white {
@@ -256,15 +178,15 @@ h1{
 }
 
 .yellow {
-    background-color: rgba(204, 199, 52, 0.33);
+    background-color: yellow;
 }
 
 .red {
-    background-color: rgba(255, 29, 4, 0.37);
+    background-color: red;
 }
 
 .green {
-    background-color: rgba(96, 204, 15, 0.33);
+    background-color: green;
 
 }
 

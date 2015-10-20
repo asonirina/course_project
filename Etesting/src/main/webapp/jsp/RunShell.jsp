@@ -6,7 +6,10 @@
 <body>
 
 <c:if test="${not empty message}">
-    <div class="errorblock"><c:out value="${message}"/></div>
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">×</a>
+        <c:out value="${message}"/>
+    </div>
 </c:if>
 
 <div class="wrapper">
@@ -24,7 +27,7 @@
 
         <br/> <br/><br/>
 
-        <input type="submit" class="button" value="Run" style="margin-left: 340px;"/>
+        <input type="submit" class="btn" value="Run" style="margin-left: 340px;"/>
 
     </form>
     <a href="<c:url value="/e-Testing/Login.html"/>" style="margin-left: 348px;">Login</a>

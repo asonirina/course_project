@@ -3,9 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
 <head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript" src="/js/results.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/results.css">
 </head>
 <body>
 <div class="wrapper">

@@ -3,14 +3,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
-<head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-    <script src="/js/validate.min.js" type="text/javascript"></script>
-</head>
+
 <body>
 
 <c:if test="${not empty message}">
-    <div class="errorblock"><c:out value="${message}"/></div>
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">×</a>
+        <c:out value="${message}"/>
+    </div>
 </c:if>
 
 <div class="wrapper">
@@ -25,7 +25,7 @@
             <input name="password2" id="password2" class="text" type="password" style="margin-left: 13px;" /><br><br>
         </p>
         <p>
-            <input type="submit" class="button" value="Сменить пароль" style="margin-left: 320px;"/>
+            <input type="submit" class="btn btn-default" value="Сменить пароль" style="margin-left: 320px;"/>
         </p>
     </form>
 </div>
