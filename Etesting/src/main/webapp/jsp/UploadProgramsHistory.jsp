@@ -7,37 +7,48 @@
 
 <html>
 <body>
- <div class="wrapper">
-<c:forEach var="program" items="${programList}">
-    <span style="margin-left: 100px"><c:out value="Название лабораторной"/></span>
-    <span style="margin: 113px 100px;"><c:out value="Лабораторная ${program.programName}"/></span><br>
-    <span style="margin-left: 100px"><c:out value="Время добавления"/></span>
-    <span style="margin: 130px"><c:out value="${program.uploadProgramTime}"/></span><br>
-    <c:if test="${program.status == null}">
-        <span style="margin-left: 100px"><c:out value="Статус"/></span>
-        <span style="margin-left: 210px"><input type="image" value="${program.status}" src="/images/wait.png"></a><br></span><br>
-    </c:if>
-    <c:if test="${program.status == 'passed'}">
-        <span style="margin-left: 100px"><c:out value="Статус"/></span>
-        <span style="margin-left: 210px"><input type="image" value="${program.status}" src="/images/passed.png"></a><br></span><br>
-    </c:if>
-    <c:if test="${program.status == 'failed'}">
-        <span style="margin-left: 100px"><c:out value="Статус"/></span>
-        <span style="margin-left: 210px"><input type="image" value="${program.status}" src="/images/failed.png"></a><br></span><br>
-    </c:if>
+<div class="wrapper">
 
-    <HR color="#A8A8A8" size="1">
-</c:forEach>
+    <c:forEach var="program" items="${programList}">
+        <div class="form-group">
 
-<%-- // create link for pages, "~" will be replaced with the proper page number --%>
-<div class="paging">
-    <c:url value="/e-Testing/student/UploadProgramsHistory.html" var="pagedLink">
-        <c:param name="page" value="~"/>
-    </c:url>
-    <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
+            <div class="input-group">
+                <span style="width: 200px;" class="input-group-addon">Название лабораторной</span>
+                <label style="border: none" class="form-control input"><c:out
+                        value="Лабораторная ${program.programName}"/></label>
+            </div>
+
+            <div class="input-group">
+                <span style="width: 200px;" class="input-group-addon">Время добавления</span>
+                <label style="border: none" class="form-control input"><c:out
+                        value="${program.uploadProgramTime}"/></label>
+            </div>
+
+            <div class="input-group">
+                <span style="width: 200px;" class="input-group-addon">Статус</span>
+                <c:if test="${program.status == null}">
+                    <input type="image" value="${program.status}" src="/images/wait.png">
+                </c:if>
+                <c:if test="${program.status == 'passed'}">
+                    <input type="image" value="${program.status}" src="/images/passed.png">
+                </c:if>
+                <c:if test="${program.status == 'failed'}">
+                    <input type="image" value="${program.status}" src="/images/failed.png">
+                </c:if>
+            </div>
+
+            <HR color="#A8A8A8" size="1">
+        </div>
+    </c:forEach>
+
+    <div class="paging">
+        <c:url value="/e-Testing/student/UploadProgramsHistory.html" var="pagedLink">
+            <c:param name="page" value="~"/>
+        </c:url>
+        <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
+    </div>
+
 </div>
-
- </div>
 </body>
 
 </html>
