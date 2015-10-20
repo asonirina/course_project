@@ -202,7 +202,11 @@ public class ProgramFilesUtil {
     }
 
     private boolean compareFiles() throws IOException {
-        List out = getList(new File(dir + "/out.txt"));
+        File outFile = new File(dir + "/out.txt");
+        if (!outFile.exists()){
+            return false;
+        }
+        List out = getList(outFile);
         List right = getList(new File(dir + "/right.txt"));
 
         if (out.size() != right.size()) {
