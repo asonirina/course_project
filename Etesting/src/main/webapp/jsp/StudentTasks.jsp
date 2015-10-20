@@ -7,7 +7,6 @@
 
 <html>
 <head>
-    <script type="text/css" src="/css/form.css"></script>
 </head>
 <body>
 

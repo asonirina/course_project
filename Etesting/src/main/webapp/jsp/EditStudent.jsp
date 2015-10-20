@@ -5,61 +5,60 @@
 <html>
 <head>
     <script type="text/javascript" src="/js/validator.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
     <script src="/js/validate.min.js" type="text/javascript"></script>
     <script src="/js/init.js" type="text/javascript"></script>
 </head>
 <body>
 
 <c:if test="${not empty errors}">
-    <div id="output" class="errorblock">
-        <c:forEach var="errors" items="${errors}">
-            <c:out value="${errors}"/><br>
-        </c:forEach>
-    </div>
+    <c:forEach var="err" items="${errors}">
+        <div class="alert alert-danger fade in">
+            <a class="close" data-dismiss="alert">×</a>
+            <c:out value="${err}"/>
+        </div>
+    </c:forEach>
 </c:if>
-<form:form method="post" id="form" class="blocks" action="/e-Testing/admin/SaveStudent.html" commandName="student">
+
+<form:form method="post" id="form" action="/e-Testing/admin/SaveStudent.html" commandName="student"
+           role="form">
 
     <c:if test="${not empty student.id}">
         <input type="hidden" id="id" name="id"
                value="${student.id}"/>
     </c:if>
 
-    <p>
-    <form:label path="firstName">Имя</form:label>
-    <form:input path="firstName" value="${student.firstName}"
-                class="text" name="firstName"/>
-    </p>
-    <p>
-    <form:label path="secondName">Фамилия</form:label>
-    <form:input path="secondName" value="${student.secondName}"
-                class="text" name="secondName"/>
-    </p>
-    <p>
-    <form:label path="form">Класс</form:label>
-    <form:input path="form" value="${student.form}"
-                class="text" name="form" />
-    </p>
-    <p>
-    <form:label path="login">Email</form:label>
-    <form:input path="login" value="${student.login}"
-                class="text" name="login"/>
-    </p>
-    <p>
-    <form:label path="password">Пароль</form:label>
-    <form:password path="password" value="${student.password}"
-                   class="text" name="password"/>
-    </p>
-    <p>
-    <br>
-
-    <div style="float: right;">
-        <input type="submit" class="button" value="Сохранить"/>
-        <a href="<c:url value="/e-Testing/admin/StudentList.html"/>"><input type="button"
-                                                                            value="Отмена"
-                                                                            name="canceled" class="button"/></a>
+    <div class="form-group">
+        <form:label path="firstName">Имя</form:label>
+        <form:input path="firstName" value="${student.firstName}"
+                    class="form-control" name="firstName"/>
     </div>
-    </p>
+    <div class="form-group">
+        <form:label path="secondName">Фамилия</form:label>
+        <form:input path="secondName" value="${student.secondName}"
+                    class="form-control" name="secondName"/>
+    </div>
+    <div class="form-group">
+        <form:label path="form">Класс</form:label>
+        <form:input path="form" value="${student.form}"
+                    class="form-control" name="form"/>
+    </div>
+    <div class="form-group">
+        <form:label path="login">Email</form:label>
+        <form:input path="login" value="${student.login}"
+                    class="form-control" name="login"/>
+    </div>
+    <div class="form-group">
+        <form:label path="password">Пароль</form:label>
+        <form:password path="password" value="${student.password}"
+                       class="form-control" name="password"/>
+    </div>
+
+    <div>
+        <input type="submit" class="btn-primary btn" value="Сохранить"/>
+        <a class="btn" href="<c:url value="/e-Testing/admin/StudentList.html"/>">Отмена</a>
+    </div>
+
 
 </form:form>
 </body>

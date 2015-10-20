@@ -8,32 +8,37 @@
     <script type="text/javascript" src="../../js/validator.js"></script>
 </head>
 <body>
-    <c:if test="${not empty message}">
-    <div class="errorblock"><c:out value="${message}"/></div>
-    </c:if>
 
-    <c:if test="${not empty alert}">
-        <div class="alertblock"><c:out value="${alert}"/></div>
-    </c:if>
+<c:if test="${not empty message}">
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">×</a>
+        <c:out value="${message}"/>
+    </div>
+</c:if>
 
-	<form id="loginForm" action="j_spring_security_check" method="post" >
-        <div class="field">
-            <label for="j_username">Email:</label>
-            <div class="input"><input id="j_username" name="j_username" type="text"/></div>
-        </div>
-        <div class="field">
-            <a href="javascript:forgot()" id="forgot">Забыли пароль?</a>
-            <label for="j_password">Пароль:</label>
-            <div class="input"><input id="j_password" name="j_password" type="password"/></div>
-        </div>
-        <div class="submit">
-            <button type="submit" name="submit">
-            <span>Войти</span>
-            </button>
-            <label id="remember"><input name="" type="checkbox" value=""/> Запомнить меня</label>
-        </div>
+<c:if test="${not empty alert}">
+    <div class="alert alert-success fade in">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <c:out value="${alert}"/>
+    </div>
+</c:if>
 
-	</form>
+<form action="j_spring_security_check" method="post" role="form">
+    <div class="form-group">
+        <label for="j_username">Email:</label>
+        <input id="j_username" name="j_username" type="email" class="form-control" placeholder="Enter email"/>
+    </div>
+    <div class="form-group">
+        <a href="javascript:forgot()" id="forgot">Забыли пароль?</a>
+        <label for="j_password">Пароль:</label>
+        <input class="form-control" id="j_password" name="j_password" type="password" placeholder="Enter password"/>
+    </div>
+    <div class="checkbox">
+        <label><input type="checkbox"> Запомнить меня</label>
+    </div>
+
+    <button type="submit" class="btn btn-default" name="submit">Войти</button>
+</form>
 
 </body>
 </html>

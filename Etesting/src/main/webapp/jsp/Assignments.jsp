@@ -10,8 +10,6 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript" src="/js/results.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/results.css">
-    <link rel="stylesheet" type="text/css" href="/css/form.css">
-    <link rel="stylesheet" type="text/css" href="/css/table.css">
     <script type="text/javascript">
         function createUserTask(studentId, taskId) {
             $.ajax({
@@ -46,7 +44,7 @@
     </div>
     <br/>
     <br/>
-    <table>
+    <table class="table table-hover">
         <thead>
         <tr>
             <td></td>

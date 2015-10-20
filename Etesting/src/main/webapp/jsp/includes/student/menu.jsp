@@ -5,7 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<%--<div class="home"><a href="<c:url value="/e-Testing/student/MainPage.html"/>"></a></div>--%>
 
 <ul>
     <li class="home"><a href="<c:url value="/e-Testing/student/MainPage.html"/>"></a></li>
