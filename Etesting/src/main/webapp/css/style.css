@@ -8,11 +8,6 @@ body {
     background: #e7e7e7
 }
 
-h1{
-    color: #ff0f09;
-    font-size: 14px;
-}
-
 .span_info {
     width: 150px;
     color: #666;
@@ -25,7 +20,6 @@ h1{
     margin-right: auto;
 }
 
-/* header */
 #page-header {
     width: 970px;
     height: 184px;
@@ -56,8 +50,6 @@ h1{
     font-weight: normal;
     margin-left: 5px;
 }
-
-/* menu */
 
 #navigation {
     clear: both;
@@ -169,25 +161,7 @@ h1{
 }
 
 .option {
-    width: 100px;
-    color: black;
-}
-
-.white {
-    background-color: #f5f6ea;
-}
-
-.yellow {
-    background-color: yellow;
-}
-
-.red {
-    background-color: red;
-}
-
-.green {
-    background-color: green;
-
+    width: 20px;
 }
 
 .wrapper {
