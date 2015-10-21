@@ -25,6 +25,9 @@ public class ProgramFilesEntity {
 //    @JoinColumn(name = "ac_id")
     private AttributeCounting ac;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private UserTask userTask;
+
     @ManyToOne
     @JoinColumn(name="user_id", insertable=false, updatable=false, nullable=false)
     private UserInfoEntity user;
@@ -185,6 +188,15 @@ public class ProgramFilesEntity {
 
     public void setCluster(Long cluster) {
         this.cluster = cluster;
+    }
+
+
+    public UserTask getUserTask() {
+        return userTask;
+    }
+
+    public void setUserTask(UserTask userTask) {
+        this.userTask = userTask;
     }
 
     public LangWrap.Lang getLang() {

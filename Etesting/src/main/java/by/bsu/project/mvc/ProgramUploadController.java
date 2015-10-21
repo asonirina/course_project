@@ -3,7 +3,9 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
+import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
 import by.bsu.project.utils.JsonHelper;
 import by.bsu.project.validator.Validator;
@@ -82,6 +84,15 @@ public class ProgramUploadController extends BaseController {
             programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setRunStatus(ETestingConstants.UPLOADED_FILE);
+
+            Task task = userInfoService.getTask(programFilesEntity);
+            for (UserTask userTask : programFilesEntity.getUser().getUserTasks()) {
+                if (userTask.getTask().getId().equals(task.getId())) {
+                    programFilesEntity.setUserTask(userTask);
+                    userTask.setLastProgram(programFilesEntity);
+                    break;
+                }
+            }
 
             userInfoService.save(userInfoEntity);
             currentFileId = programFilesEntity.getId();

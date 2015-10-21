@@ -11,7 +11,7 @@
     <script type="text/javascript" src="/js/results.js"></script>
 </head>
 <body>
-
+ <div class="fixed-width">
 <div class="form-group">
     <div class="input-group">
         <span style="width: 100px;" class="input-group-addon">Имя </span>
@@ -56,13 +56,19 @@
         <div class="input-group">
             <span style="width: 200px;" class="input-group-addon">Статус</span>
             <c:if test="${program.status == null}">
+            <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/wait.png">
+                </div>
             </c:if>
             <c:if test="${program.status == 'passed'}">
+                <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/passed.png">
+                </div>
             </c:if>
             <c:if test="${program.status == 'failed'}">
+            <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/failed.png">
+                </div>
             </c:if>
         </div>
 
@@ -81,7 +87,7 @@
             <div class="input-group">
                 <span style="width: 200px;" class="input-group-addon"><c:out value="Результаты тестов"/></span>
                 <div>
-                    <a href="#" class="badge" style="background-color: green; color: #ffffff;">Развернуть</a>
+                    <a class="badge" style="background-color: green; color: #ffffff; height: 22px;">Развернуть</a>
 
                     <div class="content">
                         <c:set var="str" value="${program.testResults}"/>
@@ -99,21 +105,6 @@
             </div>
         </c:if>
 
-        <c:if test="${not empty program.plagiat1}">
-
-            <div class="input-group">
-                <span style="width: 200px;" class="input-group-addon">Степень похожести 1</span>
-                <label style="border: none" class="form-control input"><c:out value="${program.plagiat1} %"/></label>
-            </div>
-        </c:if>
-
-        <c:if test="${not empty program.plagiat2}">
-            <div class="input-group">
-                <span style="width: 200px;" class="input-group-addon">Степень похожести 2</span>
-                <label style="border: none" class="form-control input"><c:out value="${program.plagiat2} %"/></label>
-            </div>
-        </c:if>
-
         <HR color="#A8A8A8" size="1">
     </c:forEach>
 
@@ -126,6 +117,7 @@
 
 
 </div>
+ </div>
 </body>
 
 </html>

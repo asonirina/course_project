@@ -19,10 +19,11 @@ CREATE TABLE `user_task` (
   `status` int(3) default 0,
   `task_id` int(11) default NULL,
   `user_id` int(11) default NULL,
+  `program_id` int(11) default NULL,
   PRIMARY KEY (`id`),
--- PRIMARY KEY (`task_id`, `user_id`)
   CONSTRAINT `FK_UT1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
-  CONSTRAINT `FK_UT2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `FK_UT2` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`),
+  CONSTRAINT `FK_UT3` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2365 COMMENT='InnoDB free: 11264 kB';
 
 ALTER TABLE `user_task`

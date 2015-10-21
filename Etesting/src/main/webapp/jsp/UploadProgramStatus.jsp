@@ -24,13 +24,19 @@
         <div class="input-group">
             <span style="width: 200px;" class="input-group-addon">Статус</span>
             <c:if test="${program.status == null}">
+            <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/wait.png">
+                </div>
             </c:if>
             <c:if test="${program.status == 'passed'}">
+            <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/passed.png">
+                </div>
             </c:if>
             <c:if test="${program.status == 'failed'}">
+            <div> &nbsp;
                 <input type="image" value="${program.status}" src="/images/failed.png">
+                </div>
                 <c:if test="${not empty messages}">
                     <div style="margin-left: 200px; color: red;"><c:out value="Ошибка компиляции"/></div>
                     <c:forEach var="line" items="${messages}">

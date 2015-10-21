@@ -18,7 +18,24 @@ function createUserTask(studentId, taskId) {
 function approveTask(studentId, taskId) {
     BootstrapDialog.show({
         title:'Say-hello dialog',
-        message:'Select action',
+        message: function(dialog){
+            var $content = $('<div id="content"/>');
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json',
+                url:'/e-Testing/admin/GetUserTask.html?&userId=' + studentId + '&taskId=' + taskId,
+
+                success:function (userTask) {
+                    document.getElementById('content').textContent = userTask;
+                },
+                error: function (e) {
+                    alert('Something is wrong... Try later ' + e);
+                }
+            });
+            return $content;
+        },
         buttons:[
             {
                 cssClass:'btn-primary',
