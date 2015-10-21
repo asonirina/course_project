@@ -130,7 +130,7 @@ public class ProgramUploadController extends BaseController {
             List<TreeNode> nodes = TreeNode.getTree(content);
             model.addAttribute(ETestingConstants.TREE_NODES, nodes);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
-            return new ModelAndView("tree/ViewTree2");
+            return new ModelAndView("tree/ProgramTree");
         } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }

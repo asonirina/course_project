@@ -8,33 +8,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-
     <link rel="stylesheet" type="text/css" href="/css/tree.css">
-
-
 </head>
 
 <body>
+<div class="wrapper">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+        var data = [
 
-<script>
+            <c:forEach items="${treeNodes}" var="node" varStatus="status">
 
-    var data = [
+            {"name":'${node.id}' + " : " + '${node.name}', "parent":'${node.parentId}' + " : " + '${node.parentName}' }
 
-        <c:forEach items="${treeNodes}" var="node" varStatus="status">
+            <c:if test="${!status.last}"> ,
+            </c:if>
 
-        {"name":'${node.id}' + " : " + '${node.name}', "parent":'${node.parentId}' + " : " + '${node.parentName}' }
-
-        <c:if test="${!status.last}"> ,
-        </c:if>
-
-        </c:forEach>
-    ];
-
-</script>
-
-
-<script src="/js/tree.js"></script>
+            </c:forEach>
+        ];
+    </script>
+    <script src="/js/tree.js"></script>
+</div>
 </body>
 </html>
