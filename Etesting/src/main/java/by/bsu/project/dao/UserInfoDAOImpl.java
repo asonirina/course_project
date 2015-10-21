@@ -69,6 +69,13 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
+    public UserTask getUserTask(Long userId, Long taskId) {
+        return (UserTask) sessionFactory.getCurrentSession().createQuery("from UserTask where user_id = :user_id and task_id = :task_id").
+                setParameter(ETestingConstants.USER_ID, userId).
+                setParameter(ETestingConstants.TASK_ID, taskId).uniqueResult();
+    }
+
+    @Override
     public Long studentsCountList() {
         return (Long) sessionFactory.getCurrentSession().createQuery("select count(*) from UserInfoEntity where form != 'admin'").uniqueResult();
     }

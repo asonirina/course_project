@@ -62,7 +62,8 @@ public class ETestingConstants {
 
     public final static String TREE_NODES = "treeNodes";
     public final static String PROGRAM_NAME = "progrName";
-    public final static String USER_ID = "userId";
+    public final static String USER_ID = "user_id";
+    public final static String TASK_ID = "task_id";
 
     public final static String CURRENT_FORM = "currentForm";
 }

@@ -158,6 +158,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName());
     }
 
+    @Transactional
+    @Override
+    public UserTask getUserTask(UserInfoEntity user, Task task) {
+        return userInfoDAO.getUserTask(user.getId(), task.getId());
+    }
+
     public int setPage(Integer page, Paging paging1, Model model) {
         int pageNumber = 0;
         if (null != page) {

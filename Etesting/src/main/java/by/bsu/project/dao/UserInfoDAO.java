@@ -33,4 +33,5 @@ public interface UserInfoDAO {
     public List<ProgramFilesEntity> getProgramsByName(String name, Long userId);
     public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus);
     public Task getTask(String form, String programName);
+    public UserTask getUserTask(Long userId, Long taskId);
 }

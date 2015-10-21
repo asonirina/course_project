@@ -4,54 +4,10 @@
 <%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-
 <html>
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.5/js/bootstrap-dialog.min.js"></script>
-    <script type="text/javascript">
-        function createUserTask(studentId, taskId) {
-            if (confirm('Вы действительно хотите назначить задачу?')) {
-                $.ajax({
-                    type:"POST",
-                    url:'/e-Testing/admin/AssignTask.html?&userId=' + studentId + '&taskId=' + taskId,
-                    success:function (data) {
-                        document.getElementById(studentId + '_' + taskId).textContent = '~';
-                        document.getElementById(studentId + '_' + taskId).className = 'label label-warning option';
-                        document.getElementById(studentId + '_' + taskId).disabled = 'true';
-                    },
-                    error:function (e) {
-                        alert('Something is wrong... Try later ');
-                    }
-                });
-            }
-        }
-        function approveTask(studentId, taskId) {
-            BootstrapDialog.show({
-                title: 'Say-hello dialog',
-                message: 'Select action',
-                buttons: [{
-                    cssClass: 'btn-primary',
-                    label: 'Approve',
-                    action: function(dialog) {
-                        dialog.setTitle('Title 1');
-                    }
-                }, {
-                    icon: 'glyphicon glyphicon-ban-circle',
-                    label: ' Reject',
-                    cssClass: 'btn-warning',
-                    action: function(dialog) {
-                        dialog.setTitle('Title 2');
-                    }
-                },
-                    {
-                        label: 'Close',
-                        action: function(dialogItself){
-                            dialogItself.close();
-                        }
-                }]
-            });
-        }
-    </script>
+    <script type="text/javascript" src="/js/task_action.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -97,7 +53,7 @@
                     <c:if test="${isSet eq 'true'}">
                         <c:if test="${status == 0}">
                             <td>
-                                <button disabled="true" class="label label-warning option">...</button>
+                                <button disabled="true" class="label label-warning option">~</button>
                             </td>
                         </c:if>
                         <c:if test="${status == 1}">
@@ -107,13 +63,19 @@
                         </c:if>
                         <c:if test="${status == 2}">
                             <td>
-                                <button onclick="approveTask(${student.id}, ${task.id})" class="label label-success  option ">˅</button>
+                                <button id="${student.id}_${task.id}" onclick="approveTask(${student.id}, ${task.id})" class="label label-success  option ">˅</button>
                             </td>
                         </c:if>
 
                         <c:if test="${status == 3}">
                             <td>
                                 <button disabled="true" class="label label-primary option">OK</button>
+                            </td>
+                        </c:if>
+
+                        <c:if test="${status == 4}">
+                            <td>
+                                <button disabled="true" class="label label-default option">ø</button>
                             </td>
                         </c:if>
 
@@ -130,23 +92,6 @@
         </c:forEach>
         </tbody>
     </table>
-</div>
-
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-                <p>This is a small modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 </body>

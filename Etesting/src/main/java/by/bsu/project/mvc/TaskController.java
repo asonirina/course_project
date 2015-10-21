@@ -162,4 +162,32 @@ public class TaskController extends BaseController {
         userInfoService.save(task);
         return "";
     }
+
+    @RequestMapping(value = "/e-Testing/admin/ApproveTask", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String approveTask(@RequestParam(value = "userId", required = true) Long userId,
+                      @RequestParam(value = "taskId", required = true) Long taskId) throws Exception {
+
+        return changeUserTaskStatus(userId, taskId, ETestingConstants.UserTaskStatus.APPROVED);
+    }
+
+    @RequestMapping(value = "/e-Testing/admin/RejectTask", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String rejectTask(@RequestParam(value = "userId", required = true) Long userId,
+                       @RequestParam(value = "taskId", required = true) Long taskId) throws Exception {
+
+        return changeUserTaskStatus(userId, taskId, ETestingConstants.UserTaskStatus.REJECTED);
+    }
+
+    private String changeUserTaskStatus(Long userId, Long taskId, ETestingConstants.UserTaskStatus status) {
+        UserInfoEntity user = userInfoService.getStudentById(userId);
+        Task task = userInfoService.getTaskById(taskId);
+
+        UserTask userTask = userInfoService.getUserTask(user, task);
+        userTask.setStatus(status.getId());
+        userInfoService.save(userTask);
+        return "";
+    }
 }

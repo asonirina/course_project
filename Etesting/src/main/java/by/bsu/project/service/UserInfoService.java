@@ -38,4 +38,5 @@ public interface UserInfoService {
     public List<ProgramFilesEntity> getTestedProgramFiles();
     public List<ProgramFilesEntity> getReadyProgramFiles();
     public Task getTask(ProgramFilesEntity entity);
+    public UserTask getUserTask(UserInfoEntity user, Task task);
 }
