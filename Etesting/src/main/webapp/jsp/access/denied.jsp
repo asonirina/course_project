@@ -17,16 +17,13 @@
         <div id="templatemo_content_top"></div>
         <div id="templatemo_content">
             <div id="content-container">
-                <div style="color: red; font-size:35px"><input type="image" src="/images/error.png"><c:out
-                        value="  Error!"/></div>
-                <br>
-
-                <div style="text-align: center"><c:out value="Доступ запрещен!"/></div>
+                <div style="color: red; font-size:35px; text-align: center;"><input type="image"
+                                                                                    src="/images/error.png"><c:out
+                        value="  Доступ запрещен!"/></div>
+                <br/>
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 <div id="page-footer">

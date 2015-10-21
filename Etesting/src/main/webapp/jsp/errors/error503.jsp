@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 <div style="color: red; font-size:35px"><input type="image" src="/images/error.png"><c:out value="  Error!"/></div>

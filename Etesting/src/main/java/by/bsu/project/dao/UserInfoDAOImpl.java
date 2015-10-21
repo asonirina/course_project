@@ -47,7 +47,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     @Override
     public List<ProgramFilesEntity> getProgramsByName(String name, Long userId) {
         Query query = sessionFactory.getCurrentSession().
-                createQuery("from ProgramFilesEntity where programName = :progrName and runStatus <> 5 and user_id <> :userId").
+                createQuery("from ProgramFilesEntity where programName = :progrName and runStatus <> 5 and user_id <> :user_id").
                 setParameter(ETestingConstants.PROGRAM_NAME, name).
                 setParameter(ETestingConstants.USER_ID, userId);
         return query.list();

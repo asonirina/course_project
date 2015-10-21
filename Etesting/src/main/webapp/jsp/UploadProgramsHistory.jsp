@@ -7,7 +7,7 @@
 
 <html>
 <body>
-<div class="wrapper">
+<div class="fixed-width">
 
     <c:forEach var="program" items="${programList}">
         <div class="form-group">

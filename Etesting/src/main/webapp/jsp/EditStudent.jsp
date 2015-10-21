@@ -14,7 +14,7 @@
         </div>
     </c:forEach>
 </c:if>
-
+<div class="wrapper">
 <form:form method="post" id="form" action="/e-Testing/admin/SaveStudent.html" commandName="student"
            role="form">
 
@@ -56,5 +56,6 @@
 
 
 </form:form>
+</div>
 </body>
 </html>

@@ -6,6 +6,7 @@
 
 <html>
 <body>
+<div class="fixed-width">
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Классы: ${currentForm}
         <span class="caret"></span></button>
@@ -49,6 +50,6 @@
     </c:url>
     <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
 </div>
-
+</div>
 </body>
 </html>

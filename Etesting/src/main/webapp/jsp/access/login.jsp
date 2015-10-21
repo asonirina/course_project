@@ -22,7 +22,7 @@
         <c:out value="${alert}"/>
     </div>
 </c:if>
-
+<div class="wrapper">
 <form action="j_spring_security_check" method="post" role="form">
     <div class="form-group">
         <label for="j_username">Email:</label>
@@ -39,6 +39,6 @@
 
     <button type="submit" class="btn btn-default" name="submit">Войти</button>
 </form>
-
+  </div>
 </body>
 </html>
