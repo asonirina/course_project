@@ -28,11 +28,8 @@
     </div>
 </div>
 
-</div>
-
 <div id="page-footer">
     <jsp:include page="/jsp/includes/footer.jsp"/>
 </div>
-</body>
 </body>
 </html>
