@@ -3,10 +3,8 @@ package by.bsu.project.mvc;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.paging.Paging;
-import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.utils.JsonHelper;
 import by.bsu.project.validator.Validator;
 import org.springframework.stereotype.Controller;
@@ -119,19 +117,6 @@ public class ProgramUploadController extends BaseController {
 
         } catch (Exception ex) {
             logger.error("Unable to display upload file history page " + ex.getMessage());
-            return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/e-Testing/admin/ViewTree")
-    public ModelAndView viewTree(@RequestParam(value = "programId", required = false) Long programId, Model model) {
-        try {
-            byte[] content = userInfoService.getFileById(programId).getTreeContent();
-            List<TreeNode> nodes = TreeNode.getTree(content);
-            model.addAttribute(ETestingConstants.TREE_NODES, nodes);
-            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TREE);
-            return new ModelAndView("tree/ProgramTree");
-        } catch (Exception ex) {
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }

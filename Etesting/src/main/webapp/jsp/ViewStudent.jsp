@@ -77,17 +77,6 @@
 
         </c:if>
 
-
-        <c:if test="${not empty program.treeContent}">
-
-            <div class="input-group">
-                <span style="width: 200px;" class="input-group-addon">Схема программы</span>
-                <a style="border: none;" href="<c:url value="/e-Testing/admin/ViewTree.html?programId=${program.id}"/>"
-                   class="form-control">
-                    <input type="image" value="${program.fileName}" src="/images/tree.png""></a>
-            </div>
-        </c:if>
-
         <c:if test="${not empty program.testResults}">
             <div class="input-group">
                 <span style="width: 200px;" class="input-group-addon"><c:out value="Результаты тестов"/></span>
