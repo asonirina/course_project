@@ -26,11 +26,11 @@
 <form action="j_spring_security_check" method="post" role="form">
     <div class="form-group">
         <label for="j_username">Email:</label>
-        <input id="j_username" name="j_username" type="email" class="form-control" placeholder="Enter email"/>
+        <input id="j_username" name="j_username" type="email" class="form-control" placeholder="Enter email" required/>
     </div>
     <div class="form-group">
         <label for="j_password">Пароль:</label>
-        <input class="form-control" id="j_password" name="j_password" type="password" placeholder="Enter password"/>
+        <input class="form-control" id="j_password" name="j_password" type="password" placeholder="Enter password" required/>
         <a href="javascript:forgot()" id="forgot">Забыли пароль?</a>
     </div>
     <div class="checkbox">

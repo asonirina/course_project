@@ -44,6 +44,10 @@ function approveTask(studentId, taskId) {
                         '<span style="width: 120px;" class="input-group-addon">Номер попытки </span>' +
                         '<label id="try_no" style="border: none" class="form-control input">' + data.tryNo + '</label>' +
                     '</div>' +
+                    ' <div class="input-group">' +
+                        '<span style="width: 120px;" class="input-group-addon">Нейронная сеть </span>' +
+                        '<label id="try_no" style="border: none" class="form-control input">' + data.rightCluster + '</label>' +
+                    '</div>' +
                     '</div>';
             document.body.appendChild(d);
             showDialog(studentId, taskId);

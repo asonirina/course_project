@@ -28,21 +28,21 @@
         </c:if>
 
         <div class="form-group">
-            <form:label path="programName">Название</form:label>
-            <form:input path="programName" value="${task.programName}"
-                        class="form-control" name="programName"/>
+            <form:label path="programName">№ </form:label>
+            <form:input type="number" path="programName" value="${task.programName}"
+                        class="form-control" name="programName" required="true"/>
         </div>
 
         <div class="form-group">
             <form:label path="form">Класс</form:label>
-            <form:input path="form" value="${task.form}"
-                        class="form-control" name="form"/>
+            <form:input type="number" min="6" max="11" path="form" value="${task.form}"
+                        class="form-control" name="form" required="true"/>
         </div>
 
         <div class="form-group">
             <form:label path="description">Описание</form:label>
             <form:textarea path="description" value="${task.description}"
-                           class="form-control" name="description"/>
+                           class="form-control" name="description" required="true"/>
         </div>
 
         <p>

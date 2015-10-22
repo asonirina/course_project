@@ -46,9 +46,9 @@
 
             <div class="form-group">
                 <form:label path="file"><c:out value="Фаил на проверку"/></form:label>
-                <input type="file" value="${program.file}" name="file" class="form-control"><br><br>
+                <input type="file" value="${program.file}" name="file" class="form-control" required><br><br>
             </div>
-            <div style="text-align: right;">
+            <div class="form-group" style="text-align: right;">
                 <input type="submit" class="btn btn-default" value="Отправить"/>
             </div>
         </form:form>

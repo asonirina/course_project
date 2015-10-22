@@ -26,27 +26,27 @@
     <div class="form-group">
         <form:label path="firstName">Имя</form:label>
         <form:input path="firstName" value="${student.firstName}"
-                    class="form-control" name="firstName"/>
+                    class="form-control" name="firstName" required="true"/>
     </div>
     <div class="form-group">
         <form:label path="secondName">Фамилия</form:label>
         <form:input path="secondName" value="${student.secondName}"
-                    class="form-control" name="secondName"/>
+                    class="form-control" name="secondName" required="true"/>
     </div>
     <div class="form-group">
         <form:label path="form">Класс</form:label>
-        <form:input path="form" value="${student.form}"
-                    class="form-control" name="form"/>
+        <form:input type="number" min="6" max="11" path="form" value="${student.form}"
+                    class="form-control" name="form" required="true"/>
     </div>
     <div class="form-group">
         <form:label path="login">Email</form:label>
-        <form:input path="login" value="${student.login}"
-                    class="form-control" name="login"/>
+        <form:input type="email" path="login" value="${student.login}"
+                    class="form-control" name="login" required="true"/>
     </div>
     <div class="form-group">
         <form:label path="password">Пароль</form:label>
         <form:password path="password" value="${student.password}"
-                       class="form-control" name="password"/>
+                       class="form-control" name="password" required="true"/>
     </div>
 
     <div style="text-align: right">
