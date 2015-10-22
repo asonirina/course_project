@@ -147,8 +147,16 @@
 }
 
 .option {
-    width: 25px;
-    text-align: center;
+    width: 27px;
+    color: #ffffff;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+.white {
+    background: #ffffff;
 }
 
 .wrapper {

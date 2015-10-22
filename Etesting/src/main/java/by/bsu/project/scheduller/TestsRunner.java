@@ -42,7 +42,6 @@ public class TestsRunner {
                 programFilesEntity.setTestResults(programFilesUtil.getTestResults());
                 for (UserTask userTask : programFilesEntity.getUser().getUserTasks()) {
                     if (userTask.getTask().getId().equals(task.getId())) {
-                        userTask.incTryNo();
                         userTask.setStatus(programStatus.getId());
                     }
                 }

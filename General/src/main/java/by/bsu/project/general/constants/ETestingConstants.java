@@ -2,20 +2,21 @@ package by.bsu.project.general.constants;
 
 public class ETestingConstants {
     public enum UserTaskStatus {
-        IN_PROGRESS(0L, "in progress"),
-        FAILED(1L, "failed"),
-        PASSED(2L, "passed"),
-        APPROVED(3L, "approved"),
-        REJECTED(4L, "rejected");
-        private Long id;
+        IN_PROGRESS(0, "in progress"),
+        FAILED(1, "failed"),
+        PASSED(2, "passed"),
+        APPROVED(3, "approved"),
+        REJECTED(4, "rejected");
+
+        private Integer id;
         private String name;
 
-        private UserTaskStatus(Long id, String name) {
+        private UserTaskStatus(Integer id, String name) {
             this.id = id;
             this.name = name;
         }
 
-        public Long getId() {
+        public Integer getId() {
             return id;
         }
 

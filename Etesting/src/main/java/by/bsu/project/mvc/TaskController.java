@@ -5,8 +5,8 @@ import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.UserTask;
+import by.bsu.project.general.view.ProgramFileInfo;
 import by.bsu.project.paging.Paging;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -167,13 +167,10 @@ public class TaskController extends BaseController {
     @RequestMapping(value = "/e-Testing/admin/GetUserTask", method = RequestMethod.GET)
     public
     @ResponseBody
-    UserTask getUserTask(@RequestParam(value = "userId", required = true) Long userId,
+    ProgramFileInfo getUserTask(@RequestParam(value = "userId", required = true) Long userId,
                          @RequestParam(value = "taskId", required = true) Long taskId) throws Exception {
-
-        UserInfoEntity user = userInfoService.getStudentById(userId);
-        Task task = userInfoService.getTaskById(taskId);
-
-        return userInfoService.getUserTask(user, task);
+        UserTask userTask = userInfoService.getUserTask(userId, taskId);
+        return ProgramFileInfo.getInfo(userTask);
     }
 
     @RequestMapping(value = "/e-Testing/admin/ApproveTask", method = RequestMethod.POST)

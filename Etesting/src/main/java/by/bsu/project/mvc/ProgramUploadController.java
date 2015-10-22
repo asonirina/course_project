@@ -90,6 +90,7 @@ public class ProgramUploadController extends BaseController {
                 if (userTask.getTask().getId().equals(task.getId())) {
                     programFilesEntity.setUserTask(userTask);
                     userTask.setLastProgram(programFilesEntity);
+                    userTask.incTryNo();
                     break;
                 }
             }

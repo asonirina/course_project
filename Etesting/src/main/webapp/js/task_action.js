@@ -4,9 +4,10 @@ function createUserTask(studentId, taskId) {
             type:"POST",
             url:'/e-Testing/admin/AssignTask.html?&userId=' + studentId + '&taskId=' + taskId,
             success:function (data) {
-                document.getElementById(studentId + '_' + taskId).textContent = '~';
-                document.getElementById(studentId + '_' + taskId).className = 'label label-warning option';
+                document.getElementById(studentId + '_' + taskId).textContent = '☑';
+                document.getElementById(studentId + '_' + taskId).className = 'label white option disabled';
                 document.getElementById(studentId + '_' + taskId).disabled = 'true';
+                document.getElementById(studentId + '_' + taskId).style = 'color: black; font-size: 19px;';
             },
             error:function (e) {
                 alert('Something is wrong... Try later ');
@@ -16,26 +17,48 @@ function createUserTask(studentId, taskId) {
 }
 
 function approveTask(studentId, taskId) {
-    BootstrapDialog.show({
-        title:'Say-hello dialog',
-        message: function(dialog){
-            var $content = $('<div id="content"/>');
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json',
-                mimeType: 'application/json',
-                url:'/e-Testing/admin/GetUserTask.html?&userId=' + studentId + '&taskId=' + taskId,
-
-                success:function (userTask) {
-                    document.getElementById('content').textContent = userTask;
-                },
-                error: function (e) {
-                    alert('Something is wrong... Try later ' + e);
-                }
-            });
-            return $content;
+    $.ajax({
+        url:'/e-Testing/admin/GetUserTask.html',
+        type:'GET',
+        dataType:'json',
+        contentType:'application/json',
+        mimeType:'application/json',
+        data:({
+            userId:studentId,
+            taskId:taskId
+        }),
+        success:function (data) {
+            var d = document.createElement('div');
+            d.setAttribute('id', 'program_info');
+            d.innerHTML =
+                '<div class="form-group wrapper"> ' +
+                    '<div class="input-group">' +
+                        '<span style="width: 120px;" class=\"input-group-addon">Плагиат 1 </span>' +
+                        '<label id="plagiat1" style="border: none" class="form-control input">' + data.plagiat1 + '</label>' +
+                    '</div> ' +
+                    '<div class="input-group">' +
+                        '<span style="width: 120px;" class="input-group-addon">Плагиат 2 </span> ' +
+                        '<label id="plagiat2" style="border: none" class="form-control input">' + data.plagiat2 + '</label>  ' +
+                    '</div>' +
+                    ' <div class="input-group">' +
+                        '<span style="width: 120px;" class="input-group-addon">Номер попытки </span>' +
+                        '<label id="try_no" style="border: none" class="form-control input">' + data.tryNo + '</label>' +
+                    '</div>' +
+                    '</div>';
+            document.body.appendChild(d);
+            showDialog(studentId, taskId);
         },
+        error:function (e) {
+            dialog.close();
+            alert('Something is wrong... Try later ' + e);
+        }
+    });
+}
+
+function showDialog(studentId, taskId) {
+    BootstrapDialog.show({
+        title:'Approve/Reject Program',
+        message:$('#program_info'),
         buttons:[
             {
                 cssClass:'btn-primary',
@@ -43,10 +66,14 @@ function approveTask(studentId, taskId) {
                 action:function (dialog) {
                     $.ajax({
                         type:"POST",
-                        url:'/e-Testing/admin/ApproveTask.html?&userId=' + studentId + '&taskId=' + taskId,
+                        data:({
+                            userId:studentId,
+                            taskId:taskId
+                        }),
+                        url:'/e-Testing/admin/ApproveTask.html',
                         success:function (data) {
-                            document.getElementById(studentId + '_' + taskId).textContent = 'OK';
-                            document.getElementById(studentId + '_' + taskId).className = 'label label-primary option';
+                            document.getElementById(studentId + '_' + taskId).textContent = '\u00a0\u00a0✔\u00a0\u00a0';
+                            document.getElementById(studentId + '_' + taskId).className = 'label label-primary option disabled';
                             document.getElementById(studentId + '_' + taskId).disabled = 'true';
                             dialog.close();
                         },
@@ -63,10 +90,14 @@ function approveTask(studentId, taskId) {
                 action:function (dialog) {
                     $.ajax({
                         type:"POST",
-                        url:'/e-Testing/admin/RejectTask.html?&userId=' + studentId + '&taskId=' + taskId,
+                        data:({
+                            userId:studentId,
+                            taskId:taskId
+                        }),
+                        url:'/e-Testing/admin/RejectTask.html',
                         success:function (data) {
-                            document.getElementById(studentId + '_' + taskId).textContent = 'ø';
-                            document.getElementById(studentId + '_' + taskId).className = 'label label-default option';
+                            document.getElementById(studentId + '_' + taskId).textContent = '\u00a0\u00a0✘\u00a0\u00a0';
+                            document.getElementById(studentId + '_' + taskId).className = 'label label-default option disabled';
                             document.getElementById(studentId + '_' + taskId).disabled = 'true';
                             dialog.close();
                         },
@@ -78,8 +109,8 @@ function approveTask(studentId, taskId) {
             },
             {
                 label:'Close',
-                action:function (dialogItself) {
-                    dialogItself.close();
+                action:function (dialog) {
+                    dialog.close();
                 }
             }
         ]

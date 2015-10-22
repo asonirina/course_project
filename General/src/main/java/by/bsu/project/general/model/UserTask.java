@@ -1,5 +1,7 @@
 package by.bsu.project.general.model;
 
+import by.bsu.project.general.constants.ETestingConstants;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -35,10 +37,10 @@ public class UserTask {
     private Task task;
 
     @Column(name = "try_no")
-    private Long tryNo;
+    private Integer tryNo;
 
     @Column(name = "status")
-    private Long status;
+    private Integer status;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
@@ -46,8 +48,8 @@ public class UserTask {
 
 
     public UserTask() {
-        tryNo = 0L;
-        status = 0L;
+        tryNo = 0;
+        status = ETestingConstants.UserTaskStatus.IN_PROGRESS.getId();
     }
 
     public Long getId() {
@@ -74,19 +76,19 @@ public class UserTask {
         this.task = task;
     }
 
-    public Long getTryNo() {
+    public Integer getTryNo() {
         return tryNo;
     }
 
-    public void setTryNo(Long tryNo) {
+    public void setTryNo(Integer tryNo) {
         this.tryNo = tryNo;
     }
 
-    public Long getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

@@ -53,38 +53,38 @@
                     <c:if test="${isSet eq 'true'}">
                         <c:if test="${status == 0}">
                             <td>
-                                <button disabled="true" class="label label-warning option">~</button>
+                                <a  style="color: #000000; font-size: 19px;" class="white label option disabled">☑</a>
                             </td>
                         </c:if>
                         <c:if test="${status == 1}">
                             <td>
-                                <button disabled="true" class="label label-danger option">×</button>
+                                <a class="label label-danger option disabled">&nbsp;&nbsp;✖&nbsp;&nbsp;</a>
                             </td>
                         </c:if>
                         <c:if test="${status == 2}">
                             <td>
-                                <button id="${student.id}_${task.id}" onclick="approveTask(${student.id}, ${task.id})" class="label label-success  option ">˅</button>
+                                <a id="${student.id}_${task.id}" onclick="approveTask(${student.id}, ${task.id})" class="label label-success  option ">&nbsp;&nbsp;✓&nbsp;&nbsp;</a>
                             </td>
                         </c:if>
 
                         <c:if test="${status == 3}">
                             <td>
-                                <button disabled="true" class="label label-primary option">OK</button>
+                                <a class="label label-primary option disabled">&nbsp;&nbsp;✔&nbsp;&nbsp;</a>
                             </td>
                         </c:if>
 
                         <c:if test="${status == 4}">
                             <td>
-                                <button disabled="true" class="label label-default option">ø</button>
+                                <a class="label label-default option disabled">&nbsp;&nbsp;✘&nbsp;&nbsp;</a>
                             </td>
                         </c:if>
 
                     </c:if>
                     <c:if test="${isSet eq 'false'}">
                         <td>
-                            <button id="${student.id}_${task.id}" style="color: #000000;" class="label option"
-                                    onclick="createUserTask(${student.id}, ${task.id})">+
-                            </button>
+                            <a id="${student.id}_${task.id}" style=" color: #000000; font-size: 19px;" class="white label option"
+                                    onclick="createUserTask(${student.id}, ${task.id})">☐
+                            </a>
                         </td>
                     </c:if>
                 </c:forEach>

@@ -164,6 +164,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoDAO.getUserTask(user.getId(), task.getId());
     }
 
+    @Transactional
+    @Override
+    public UserTask getUserTask(Long userId, Long taskId) {
+        return userInfoDAO.getUserTask(userId, taskId);
+    }
+
     public int setPage(Integer page, Paging paging1, Model model) {
         int pageNumber = 0;
         if (null != page) {

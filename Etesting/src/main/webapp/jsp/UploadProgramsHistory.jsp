@@ -9,7 +9,7 @@
 <body>
 <div class="fixed-width">
 
-    <c:forEach var="program" items="${programList}">
+    <c:forEach var="program" items="${programList}" varStatus="loop">
         <div class="form-group">
 
             <div class="input-group">
@@ -42,8 +42,9 @@
                             </div>
                 </c:if>
             </div>
-
+            <c:if test="${!loop.last}">
             <HR color="#A8A8A8" size="1">
+            </c:if>
         </div>
     </c:forEach>
 

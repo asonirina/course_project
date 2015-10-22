@@ -6,7 +6,7 @@
     <script type="text/javascript" src="/js/results.js"></script>
 </head>
 <body>
-<div class="wrapper">
+<div class="fixed-width">
     <div class="form-group">
 
         <div class="input-group">
