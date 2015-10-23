@@ -59,6 +59,7 @@ public class TreeParser {
             parser.setTreeAdaptor(adaptor);
 
             CommonTree tree = (CommonTree) parser.compilationUnit().getTree();
+            ac.setTokens(parser.getTokenStream().size());
             doTree(tree, null);
             return nodes;
         } catch (Exception ex) {

@@ -33,6 +33,9 @@ public class AttributeCounting {
     @Column(name = "comments")
     private Integer comments = 0;
 
+    @Column(name = "tokens")
+    private Integer tokens = 0;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity entity;
@@ -107,17 +110,27 @@ public class AttributeCounting {
         this.entity = entity;
     }
 
-    public static int getDiff(AttributeCounting ac1, AttributeCounting ac2) {
-         int diff = getAbsSub(ac1.getLines(), ac2.getLines())
-                 +getAbsSub(ac1.getMethods(), ac2.getMethods())
-                 +getAbsSub(ac1.getSpaces(), ac2.getSpaces())
-                 +getAbsSub(ac1.getTabs(), ac2.getTabs())
-                 +getAbsSub(ac1.getIdent(), ac2.getIdent())
-                 +getAbsSub(ac1.getComments(), ac2.getComments());
-        return (int)(Math.exp(-diff/4.0) * 100);
+    public Integer getTokens() {
+        return tokens;
     }
 
-    private static int getAbsSub(int i1, int i2) {
+    public void setTokens(Integer tokens) {
+        this.tokens = tokens;
+    }
+
+    public static int getDiff(AttributeCounting ac1, AttributeCounting ac2) {
+        double size1 = ac1.getTokens();
+        double size2 = ac2.getTokens();
+        double diff = getAbsSub(ac1.getLines()/size1, ac2.getLines()/size2)
+                + getAbsSub(ac1.getMethods()/size1, ac2.getMethods()/size2)
+                + getAbsSub(ac1.getSpaces()/size1, ac2.getSpaces()/size2)
+                + getAbsSub(ac1.getTabs()/size1, ac2.getTabs()/size2)
+                + getAbsSub(ac1.getIdent()/size1, ac2.getIdent()/size2)
+                + getAbsSub(ac1.getComments()/size1, ac2.getComments());
+        return (int) (Math.exp(-diff / 4.0) * 100);
+    }
+
+    private static double getAbsSub(double i1, double i2) {
         return Math.abs(i1 - i2);
     }
 }
