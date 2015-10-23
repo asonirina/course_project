@@ -2,7 +2,7 @@ package by.bsu.project.scheduller;
 
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.tree.TreeParser;
-import by.bsu.project.antlr.util.JavaCCNodesUtil;
+import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.AttributeCounting;
@@ -44,7 +44,7 @@ public class PlagiarismRunner {
                 spacesExtractor.extractSpaces(ac);
 
                 List<ProgramFilesEntity> programFilesEntities = userInfoService.getProgramsByName(programFilesEntity);
-                int plagiat1 = JavaCCNodesUtil.checkNodes(programFilesEntities, programFilesEntity);
+                int plagiat1 = AttributeCountingUtil.checkAttributes(programFilesEntities, ac);
                 programFilesEntity.setAc(ac);
                 ac.setEntity(programFilesEntity);
 

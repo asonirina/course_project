@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class TestRTED {
     public static void main(String[] args) throws Exception{
-        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test1.pas"));
-        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test2.pas"));
-        TreeParser helper1 = new TreeParser(LangWrap.Lang.PASCAL);
+        byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/123/Test.c"));
+        byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/123/Test1234.java"));
+        TreeParser helper1 = new TreeParser(LangWrap.Lang.CPP);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
-        TreeParser helper2 = new TreeParser(LangWrap.Lang.PASCAL);
+        TreeParser helper2 = new TreeParser(LangWrap.Lang.JAVA);
         List<TreeNode> nodes2 = helper2.getTree(bytes2);
 
         TreeEditDistance.numerateTree(nodes1.get(0));

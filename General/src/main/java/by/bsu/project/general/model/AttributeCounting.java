@@ -106,4 +106,18 @@ public class AttributeCounting {
     public void setEntity(ProgramFilesEntity entity) {
         this.entity = entity;
     }
+
+    public static int getDiff(AttributeCounting ac1, AttributeCounting ac2) {
+         int diff = getAbsSub(ac1.getLines(), ac2.getLines())
+                 +getAbsSub(ac1.getMethods(), ac2.getMethods())
+                 +getAbsSub(ac1.getSpaces(), ac2.getSpaces())
+                 +getAbsSub(ac1.getTabs(), ac2.getTabs())
+                 +getAbsSub(ac1.getIdent(), ac2.getIdent())
+                 +getAbsSub(ac1.getComments(), ac2.getComments());
+        return (int)(Math.exp(-diff/4.0) * 100);
+    }
+
+    private static int getAbsSub(int i1, int i2) {
+        return Math.abs(i1 - i2);
+    }
 }

@@ -402,7 +402,8 @@ public class RTED {
                         && (it2.info[POST2_LLD][j1 + joff] == it2.info[POST2_LLD][j])) {
                     double u = 0.0;
                     if (it1.info[POST2_LABEL][i1 + ioff] != it2.info[POST2_LABEL][j1 + joff]) {
-                        u = it1.getOrder().equals(Order.FIRST) ? deltaBit[i1 + ioff][j1 + joff] : deltaBit[j1 + joff][i1 + ioff];
+//                        u = it1.getOrder().equals(Order.FIRST) ? deltaBit[i1 + ioff][j1 + joff] : deltaBit[j1 + joff][i1 + ioff];
+                        u = switched ? deltaBit[j1 + joff][i1 + ioff] : deltaBit[i1 + ioff][j1 + joff] ;
                     }
                     da = forestdist[i1 - 1][j1] + map.delete();
                     db = forestdist[i1][j1 - 1] + map.insert();
@@ -417,8 +418,7 @@ public class RTED {
                                     - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
                             switched);
                 } else {
-                    double u = 0.0;
-                    u = switched ? deltaBit[j1 + joff][i1 + ioff] //* costMatch
+                    double u = switched ? deltaBit[j1 + joff][i1 + ioff] //* costMatch
                             : deltaBit[i1 + ioff][j1 + joff];// * costMatch;
 
                     da = forestdist[i1 - 1][j1] + map.delete();
@@ -483,7 +483,8 @@ public class RTED {
                         && (it2.info[RPOST2_RLD][j1 + joff] == it2.info[RPOST2_RLD][j])) {
                     double u = 0.0;
                     if (it1.info[POST2_LABEL][it1.info[RPOST2_POST][i1 + ioff]] != it2.info[POST2_LABEL][it2.info[RPOST2_POST][j1+ joff]]) {
-                        u =  deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1+ joff]];
+                        u =  switched ? deltaBit[it2.info[RPOST2_POST][j1+ joff]][it1.info[RPOST2_POST][i1 + ioff]] :
+                                deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1+ joff]];
                                 //costMatch;
                     }
                     da = forestdist[i1 - 1][j1] + map.delete();
@@ -501,8 +502,7 @@ public class RTED {
                                     - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
                             switched);
                 } else {
-                    double u = 0.0;
-                    u = switched ? deltaBit[it2.info[RPOST2_POST][j1 + joff]][it1.info[RPOST2_POST][i1 + ioff]] //* costMatch
+                    double u = switched ? deltaBit[it2.info[RPOST2_POST][j1 + joff]][it1.info[RPOST2_POST][i1 + ioff]] //* costMatch
                             : deltaBit[it1.info[RPOST2_POST][i1 + ioff]][it2.info[RPOST2_POST][j1 + joff]];//* costMatch;
 
                     da = forestdist[i1 - 1][j1] + map.delete();
