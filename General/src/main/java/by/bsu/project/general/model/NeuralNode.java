@@ -39,7 +39,7 @@ public class NeuralNode {
     @Column(name = "comments")
     private Integer comments = 0;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserInfoEntity entity;
 

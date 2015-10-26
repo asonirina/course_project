@@ -137,9 +137,7 @@ public class UserInfoController extends BaseController {
     public ModelAndView deleteStudent(@RequestParam(value = "id", required = false) Long id) {
         try {
             userInfoService.deleteStudentById(id);
-
             return new ModelAndView("redirect:/e-Testing/admin/StudentList.html", ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
-
         } catch (Exception ex) {
             logger.error("Unable to delete student " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
@@ -147,45 +145,18 @@ public class UserInfoController extends BaseController {
     }
 
     @RequestMapping("/e-Testing/admin/Download")
-    public String download(@RequestParam(value = "programId", required = false) Long programId,
-                           HttpServletResponse response,
-                           ProgramFilesEntity programFilesEntity) {
+    public ModelAndView download(@RequestParam(value = "programId", required = false) Long programId,
+                           Model model) {
         try {
-            programFilesEntity = userInfoService.getFileById(programId);
-            response.setHeader("Content-Disposition", "inline;filename=\"" + programFilesEntity.getFileName() + "\"");
-            response.setContentType(programFilesEntity.getContentType());
-
-            byte[] file = programFilesEntity.getFile();
-            response.setContentLength(file.length);
-
-            FileCopyUtils.copy(file, response.getOutputStream());
-
-            return null;
-
+            ProgramFilesEntity programFilesEntity = userInfoService.getFileById(programId);
+            String file  = new String(programFilesEntity.getFile());
+            model.addAttribute(ETestingConstants.MODEL_FILE, file);
+            model.addAttribute(ETestingConstants.MODEL_LANG, programFilesEntity.getLang().lang());
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SOURCE_CODE);
+            return new ModelAndView("DownloadCode", ETestingConstants.MODEL_FILE, file);
         } catch (Exception ex) {
             logger.error("Unable to download program file " + ex.getMessage());
-            return "redirect:/e-Testing/error503.html";
-        }
-    }
-
-    @RequestMapping("/e-Testing/admin/DownloadResults")
-    public String downloadResults(@RequestParam(value = "programId", required = false) Long programId,
-                                  HttpServletResponse response,
-                                  ProgramFilesEntity programFilesEntity) {
-        try {
-            programFilesEntity = userInfoService.getFileById(programId);
-            response.setHeader("Content-Disposition", "inline;filename=\"" + ETestingConstants.MODEL_TEST_RESULTS + ".txt\"");
-            response.setContentType(programFilesEntity.getContentType());
-
-            byte[] file = programFilesEntity.getTestResults().getBytes();
-            response.setContentLength(file.length);
-
-            FileCopyUtils.copy(file, response.getOutputStream());
-            return null;
-
-        } catch (Exception ex) {
-            logger.error("Unable to download test results file " + ex.getMessage());
-            return "redirect:/e-Testing/error503.html";
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
         }
     }
 

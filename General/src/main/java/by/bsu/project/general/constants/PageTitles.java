@@ -22,4 +22,5 @@ public class PageTitles {
     public static final String ADD_TASK                  = "Добавить задание";
     public static final String VIEW_STUDENT              = "Профиль";
     public static final String VIEW_TASK                 = "Лабораторная";
+    public static final String SOURCE_CODE               = "Исходный код";
 }

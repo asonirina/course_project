@@ -42,7 +42,7 @@ public class UserTask {
     @Column(name = "status")
     private Integer status;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity lastProgram;
 

@@ -22,12 +22,12 @@ public class UserInfoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     @IndexColumn(name="idx")
     private List<ProgramFilesEntity> programFiles;
 
-    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     @IndexColumn(name="idx_1")
     private List<UserTask> userTasks;
@@ -47,7 +47,7 @@ public class UserInfoEntity {
     @Column(name = "Password")
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "neuralNode_id")
     private NeuralNode neuralNode;
 

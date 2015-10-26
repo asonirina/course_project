@@ -16,6 +16,10 @@ public class LangWrap {
         public int getId() {
             return id;
         }
+
+        public String lang() {
+            return name().toLowerCase();
+        }
     }
 
     public static enum Type{

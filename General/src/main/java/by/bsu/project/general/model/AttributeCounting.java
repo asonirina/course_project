@@ -36,7 +36,7 @@ public class AttributeCounting {
     @Column(name = "tokens")
     private Integer tokens = 0;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramFilesEntity entity;
 

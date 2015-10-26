@@ -28,12 +28,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="task_id")
     @IndexColumn(name="idx")
     private List<SingleTest> tests;
 
-    @OneToMany(cascade= CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade= CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="task_id")
     @IndexColumn(name="idx_2")
     private List<UserTask> userTasks;

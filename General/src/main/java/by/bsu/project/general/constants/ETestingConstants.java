@@ -54,6 +54,8 @@ public class ETestingConstants {
     public final static String MODEL_TASKS = "tasks";
     public final static String MODEL_TITLE = "title";
     public final static String MODEL_NEWS = "news";
+    public final static String MODEL_FILE = "file";
+    public final static String MODEL_LANG = "lang";
 
     public final static String TABLE_FIELD_LOGIN = "login";
     public final static String TABLE_FIELD_ID = "id";
