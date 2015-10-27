@@ -24,7 +24,7 @@ public interface UserInfoService {
     public void deleteTaskById(Long id);
     public ProgramFilesEntity getFileById(Long id);
     public List<UserInfoEntity> studentsList(int pageNumber);
-    public List<UserInfoEntity> studentsList();
+    public List<UserInfoEntity> studentsList(FieldToLoad ... fields);
     public Long studentsCountList();
     public UserInfoEntity findStudentByLogin(String login);
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id);
@@ -39,7 +39,7 @@ public interface UserInfoService {
     public List<ProgramFilesEntity> getUploadedProgramFiles();
     public List<ProgramFilesEntity> getTestedProgramFiles();
     public List<ProgramFilesEntity> getReadyProgramFiles();
-    public Task getTask(ProgramFilesEntity entity);
+    public Task getTask(ProgramFilesEntity entity, FieldToLoad ... fields);
     public UserTask getUserTask(UserInfoEntity user, Task task);
     public UserTask getUserTask(Long userId, Long taskId);
 }

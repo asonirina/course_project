@@ -64,11 +64,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     public Task getTaskById(Long id, FieldToLoad... fields) {
-        Task task = userInfoDAO.getTaskById(id);
-        for (FieldToLoad f : fields) {
-            Hibernate.initialize(task.get(f));
-        }
-        return task;
+        return userInfoDAO.getTaskById(id, fields);
     }
 
     @Transactional
@@ -87,8 +83,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public List<UserInfoEntity> studentsList() {
-        return userInfoDAO.studentsList();
+    public List<UserInfoEntity> studentsList(FieldToLoad ... fields) {
+        return userInfoDAO.studentsList(fields);
     }
 
 
@@ -111,8 +107,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
         return userInfoDAO.studentListByForm(pageNumber, form);
     }
-
-
 
     @Transactional
     public List<UserInfoEntity> studentListByForm(String form) {
@@ -171,8 +165,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
-    public Task getTask(ProgramFilesEntity entity) {
-        return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName());
+    public Task getTask(ProgramFilesEntity entity, FieldToLoad ... fields) {
+        return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName(), fields);
     }
 
     @Transactional
