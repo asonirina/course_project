@@ -31,8 +31,8 @@ public interface UserInfoDAO {
     public List<UserInfoEntity> studentListByForm(String form);
     public List<Task> taskListByForm(Integer pageNumber, String form);
     public Long studentsByFormCountList(String form);
-    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId);
-    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus);
+    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId, FieldToLoad ... fields);
+    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus, FieldToLoad ... fieldToLoads);
     public Task getTask(String form, String programName, FieldToLoad ... fields);
     public UserTask getUserTask(Long userId, Long taskId);
 }

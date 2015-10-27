@@ -24,11 +24,18 @@ import java.util.List;
 
 @Repository
 public class UserInfoDAOImpl implements UserInfoDAO {
+    private static final String ASC = "ASC";
+    private static final String DESC = "DESC";
 
     private static final String ID = "id";
+    private static final String USER_ID = "user_id";
+    private static final String TASK_ID = "task_id";
+    private static final String LOGIN = "login";
     private static final String FORM = "form";
     private static final String PROGRAM_NAME = "programName";
     private static final String SECOND_NAME = "secondName";
+    private static final String RUN_STATUS = "runStatus";
+    private static final String UPLOAD_PROGRAM_TIME = "uploadProgramTime";
 
     private final static int PAGE_SIZE = 3;
 
@@ -79,6 +86,39 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         }
     }
 
+    private static class Order {
+        String type;
+        String col;
+
+        public static Order of(String col, String type) {
+            Order o = new Order();
+            o.setCol(col);
+            o.setType(type);
+            return o;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getCol() {
+            return col;
+        }
+
+        public void setCol(String col) {
+            this.col = col;
+        }
+
+        @Override
+        public String toString() {
+            return col + " " + type;
+        }
+    }
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -90,7 +130,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public List<UserInfoEntity> studentsList(FieldToLoad... fields) {
-        String query1 = generateQuery(UserInfoEntity.class, new Param[]{Param.of(FORM, Op.NOT_EQ)}, SECOND_NAME, fields);
+        String query1 = generateQuery(UserInfoEntity.class, new Param[]{Param.of(FORM, Op.NOT_EQ)}, Order.of(SECOND_NAME, ASC), fields);
         return sessionFactory.getCurrentSession().createQuery(query1).setParameter(FORM, "admin").list();
     }
 
@@ -102,20 +142,16 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId) {
-        Query query = sessionFactory.getCurrentSession().
-                createQuery("from ProgramFilesEntity where programName = :progrName and runStatus <> 5 and user_id <> :user_id").
-                setParameter(ETestingConstants.PROGRAM_NAME, name).
-                setParameter(ETestingConstants.USER_ID, userId);
-        return query.list();
+    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId, FieldToLoad... fields) {
+        String query = generateQuery(ProgramFilesEntity.class, new Param[]{Param.of(PROGRAM_NAME, Op.EQ), Param.of(RUN_STATUS, Op.NOT_EQ), Param.of(USER_ID, Op.NOT_EQ)}, fields);
+        return sessionFactory.getCurrentSession().createQuery(query).setParameter(PROGRAM_NAME, name).setParameter(USER_ID, userId).list();
 
     }
 
     @Override
-    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where runStatus = :run_status order by uploadProgramTime desc").
-                setParameter(ETestingConstants.TABLE_FIELD_RUN_STATUS, runStatus);
-        return query.list();
+    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus, FieldToLoad... fields) {
+        String query = generateQuery(ProgramFilesEntity.class, new Param[]{Param.of(RUN_STATUS, Op.EQ)}, Order.of(UPLOAD_PROGRAM_TIME, DESC), fields);
+        return sessionFactory.getCurrentSession().createQuery(query).setParameter(RUN_STATUS, runStatus).list();
     }
 
     @Override
@@ -210,8 +246,8 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public UserInfoEntity findStudentByLogin(String login) {
-        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where login = :login").
-                setParameter(ETestingConstants.TABLE_FIELD_LOGIN, login).uniqueResult();
+        String query = generateQuery(UserInfoEntity.class, new Param[]{Param.of(LOGIN, Op.EQ)});
+        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery(query).setParameter(LOGIN, login).uniqueResult();
     }
 
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
@@ -245,7 +281,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return generateQuery(c, params, null, fields);
     }
 
-    private static String generateQuery(Class c, Param params[], String orderBy, FieldToLoad... fields) {
+    private static String generateQuery(Class c, Param params[], Order order, FieldToLoad... fields) {
         String uqId = RandomStringUtils.randomAlphabetic(5);
         StringBuilder builder = new StringBuilder("FROM " + c.getSimpleName() + " " + uqId);
         for (FieldToLoad f : fields) {
@@ -259,8 +295,8 @@ public class UserInfoDAOImpl implements UserInfoDAO {
             list.add(uqId + p.toString());
         }
         builder.append(StringUtils.join(list, " AND "));
-        if (orderBy != null) {
-            builder.append(" ORDER BY " + uqId + "." + orderBy);
+        if (order != null) {
+            builder.append(" ORDER BY " + uqId + "." + order);
         }
         return builder.toString();
     }

@@ -8,7 +8,6 @@ import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,7 +141,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
-        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId());
+        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId(), FieldToLoad.ATTRIBUTE_COUNTING);
     }
 
     @Transactional
@@ -160,7 +159,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getReadyProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE);
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE, FieldToLoad.ATTRIBUTE_COUNTING);
     }
 
     @Transactional
