@@ -2,11 +2,13 @@ package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
 import by.bsu.project.general.constants.ETestingConstants;
+import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,17 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
+    public void createUserTask (UserInfoEntity user, Task task) {
+        UserTask userTask = new UserTask();
+        userTask.setUser(user);
+        userTask.setTask(task);
+        user.getUserTasks().add(userTask);
+        task.getUserTasks().add(userTask);
+        userInfoDAO.save(user);
+        userInfoDAO.save(task);
+    }
+
+    @Transactional
     public ProgramFilesEntity getFileById(Long id) {
         return userInfoDAO.getFileById(id);
     }
@@ -50,8 +63,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public Task getTaskById(Long id) {
-        return userInfoDAO.getTaskById(id);
+    public Task getTaskById(Long id, FieldToLoad... fields) {
+        Task task = userInfoDAO.getTaskById(id);
+        for (FieldToLoad f : fields) {
+            Hibernate.initialize(task.get(f));
+        }
+        return task;
     }
 
     @Transactional

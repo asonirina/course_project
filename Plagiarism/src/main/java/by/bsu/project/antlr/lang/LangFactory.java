@@ -1,6 +1,6 @@
 package by.bsu.project.antlr.lang;
 
-import  by.bsu.project.general.lang.LangWrap.Lang;
+import by.bsu.project.general.lang.LangWrap.Lang;
 import by.bsu.project.antlr.parser.cpp.CPPGrammarLexer;
 import by.bsu.project.antlr.parser.cpp.CPPGrammarParser;
 import by.bsu.project.antlr.parser.java.JavaLexer;
