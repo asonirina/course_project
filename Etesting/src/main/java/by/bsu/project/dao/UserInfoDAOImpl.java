@@ -7,7 +7,6 @@ import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.UserTask;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -92,6 +91,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
                 setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
     }
 
+    @Override
     public void save(UserInfoEntity userInfoEntity) {
         if (isExist(UserInfoEntity.class, userInfoEntity.getId())) {
             sessionFactory.getCurrentSession().update(userInfoEntity);
@@ -100,6 +100,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         }
     }
 
+    @Override
     public void save(Task task) {
         if (isExist(Task.class, task.getId())) {
             sessionFactory.getCurrentSession().update(task);
@@ -130,19 +131,17 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public UserInfoEntity getStudentById(Long id) {
-        return (UserInfoEntity) sessionFactory.getCurrentSession().createCriteria(UserInfoEntity.class).add(Restrictions.idEq(id)).uniqueResult();
+        return (UserInfoEntity) sessionFactory.getCurrentSession().get(UserInfoEntity.class, id);
     }
 
     @Override
     public Task getTaskById(Long id) {
-        return (Task) sessionFactory.getCurrentSession().createQuery("from Task where id = :id").
-                setParameter(ETestingConstants.TABLE_FIELD_ID, id).uniqueResult();
+        return  (Task)sessionFactory.getCurrentSession().get(Task.class, id);
     }
 
     @Override
     public ProgramFilesEntity getFileById(Long id) {
-        return (ProgramFilesEntity) sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where id = :id").
-                setParameter(ETestingConstants.TABLE_FIELD_ID, id).uniqueResult();
+        return (ProgramFilesEntity) sessionFactory.getCurrentSession().get(ProgramFilesEntity.class, id);
     }
 
     @Override
