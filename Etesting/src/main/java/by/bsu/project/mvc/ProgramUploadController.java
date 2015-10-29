@@ -26,6 +26,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -193,15 +194,22 @@ public class ProgramUploadController extends BaseController {
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SHOW_DIFF);
                 return new ModelAndView("DiffCode");
             }
-            List<int[]> map = SerializableUtil.getMap(programFilesEntity.getCompareMap());
+            List<int[]> mapDB = SerializableUtil.getMap(programFilesEntity.getCompareMap());
+
+            List<int[]> map = new ArrayList<>();
+            for(int k = 0; k<mapDB.size(); k++) {
+                int [] temp = mapDB.get(k);
+                int[] arr = new int[5];
+                arr[0] = temp[0];
+                arr[1] = temp[1];
+                arr[2] = temp[2];
+                arr[3] = temp[3];
+                arr[4] = k;
+                map.add(arr);
+            }
             Collections.sort(map, new SourceFileComparator());
             String file1  = new String(programFilesEntity.getFile());
             String file2  = new String(programFilesEntity.getMatched().getFile());
-
-
-//            String file1 = "12331 123131 1231313 <span style='background-color:#FF9999;'>12222222222</span>\n gggg";
-//            String file2 = "<span style='background-color:#99EBC2;'>12222222222 \n mmmm</span>";
-
 
             for (int[] arr : map) {
                 if (arr[0] > 0) {
@@ -212,7 +220,7 @@ public class ProgramUploadController extends BaseController {
                     if(arr[3] == -1) {
                         diff = String.format("<span style='background-color:#99EBC2;'>%s</span>", diff);
                     } else if(arr[3] > 0) {
-                        diff = String.format("<span style='background-color:#FFFFB2;'>%s</span>", diff);
+                        diff = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>", arr[4], arr[4], arr[4], diff);
                     }
                     file1 = before + diff + after;
                 } else {
@@ -232,7 +240,7 @@ public class ProgramUploadController extends BaseController {
                     if(arr[0] == -1) {
                         diff = String.format("<span style='background-color:#FF9999;'>%s</span>", diff);
                     } else if(arr[0] > 0) {
-                        diff = String.format("<span style='background-color:#FFFFB2;'>%s</span>", diff);
+                        diff = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>", arr[4],arr[4], arr[4], diff);
                     }
                     file2 = before + diff + after;
                 } else {
