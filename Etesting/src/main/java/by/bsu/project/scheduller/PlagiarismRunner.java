@@ -31,36 +31,39 @@ public class PlagiarismRunner {
     @Autowired
     private UserInfoService userInfoService;
 
-//    @Scheduled(cron = "0 20 * * * ?")
+    //    @Scheduled(cron = "0 20 * * * ?")
     @Scheduled(cron = "20 * * * * ?")
     protected void executeInternal() {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
                 try {
-                TreeParser parser = new TreeParser(programFilesEntity.getLang());
-                List<TreeNode> nodes = parser.getTree(programFilesEntity.getFile());
-                AttributeCounting ac = parser.getAc();
+                    TreeParser parser = new TreeParser(programFilesEntity.getLang());
+                    List<TreeNode> nodes = parser.getTree(programFilesEntity.getFile());
+                    AttributeCounting ac = parser.getAc();
 
-                SpacesCommentExtractor spacesExtractor = new SpacesCommentExtractor(programFilesEntity.getFile());
-                spacesExtractor.extractSpaces(ac);
+                    SpacesCommentExtractor spacesExtractor = new SpacesCommentExtractor(programFilesEntity.getFile());
+                    spacesExtractor.extractSpaces(ac);
 
-                List<ProgramFilesEntity> programFilesEntities = userInfoService.getProgramsByName(programFilesEntity);
-                int plagiat1 = AttributeCountingUtil.checkAttributes(programFilesEntities, ac);
-                programFilesEntity.setAc(ac);
-                ac.setEntity(programFilesEntity);
+                    List<ProgramFilesEntity> programFilesEntities = userInfoService.getProgramsByName(programFilesEntity);
+                    int plagiat1 = AttributeCountingUtil.checkAttributes(programFilesEntities, ac);
+                    programFilesEntity.setAc(ac);
+                    ac.setEntity(programFilesEntity);
 
-                Map<String, Object> map = TreeCompareUtil.checkTrees(programFilesEntities, nodes);
-                int plagiat2 = (Integer)map.get("max");
-                List<int[]>  compareMap = (List<int[]> )map.get("compare");
-                programFilesEntity.setPlagiat1(plagiat1);
-                programFilesEntity.setPlagiat2(plagiat2);
-                programFilesEntity.setTreeContent(SerializableUtil.getTreeBytes(nodes));
-                programFilesEntity.setCompareMap(SerializableUtil.getMapBytes(compareMap));
+                    Map<String, Object> map = TreeCompareUtil.checkTrees(programFilesEntities, nodes);
+                    int plagiat2 = (Integer) map.get("max");
+                    List<int[]> compareMap = (List<int[]>) map.get("compare");
+                    ProgramFilesEntity matched = (ProgramFilesEntity) map.get("matched");
 
-                programFilesEntity.setRunStatus(ETestingConstants.READY_FILE);
-                userInfoService.save(programFilesEntity.getUser());
-                } catch (ParseException|UnsupportedLanguageException ex) {
+                    programFilesEntity.setPlagiat1(plagiat1);
+                    programFilesEntity.setPlagiat2(plagiat2);
+                    programFilesEntity.setTreeContent(SerializableUtil.getTreeBytes(nodes));
+                    programFilesEntity.setCompareMap(SerializableUtil.getMapBytes(compareMap));
+                    programFilesEntity.setMatched(matched);
+
+                    programFilesEntity.setRunStatus(ETestingConstants.READY_FILE);
+                    userInfoService.save(programFilesEntity.getUser());
+                } catch (ParseException | UnsupportedLanguageException ex) {
                     programFilesEntity.setRunStatus(ETestingConstants.FAILED_FILE);
                     userInfoService.save(programFilesEntity.getUser());
                 }

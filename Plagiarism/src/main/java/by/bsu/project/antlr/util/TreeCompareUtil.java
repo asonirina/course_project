@@ -3,7 +3,6 @@ package by.bsu.project.antlr.util;
 import by.bsu.project.antlr.model.SerializableUtil;
 import by.bsu.project.antlr.rted.RTED;
 import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
 
 import java.util.Collections;
@@ -19,10 +18,9 @@ public class TreeCompareUtil {
     public static Map<String, Object> checkTrees(List<ProgramFilesEntity> programs, List<TreeNode> tree) throws Exception{
         Map<String, Object> map = new HashMap<>();
         List<int[]> compare = null;
-
         int max = 0;
+        ProgramFilesEntity matched = null;
         for (ProgramFilesEntity entity : programs) {
-            TreeParser builder = new TreeParser(entity.getLang());
             List<TreeNode> nodes = SerializableUtil.getTree(entity.getTreeContent());
 
             TreeEditDistance.numerateTree(nodes.get(0));
@@ -35,11 +33,13 @@ public class TreeCompareUtil {
             if (max < sim) {
                 compare = c.computeEditMapping();
                 max = sim;
+                matched = entity;
             }
         }
 
         map.put("max", max);
         map.put("compare", compare);
+        map.put("matched", matched);
         return map;
     }
 }

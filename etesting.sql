@@ -97,9 +97,11 @@ CREATE TABLE `program_files` (
   `tree_content` longblob,
   `compare_map` longblob,
   `user_id` int(11) NULL default NULL,
+  `matched_id` int(11) NULL default NULL,
   PRIMARY KEY  (`id`),
   INDEX `FK_DEPT` (`user_id`),
-  CONSTRAINT `FK_DEPT` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `FK_DEPT` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`),
+  CONSTRAINT `FK_MP` FOREIGN KEY (`matched_id`) REFERENCES `program_files` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=2340 COMMENT='InnoDB free: 11264 kB';
 
 

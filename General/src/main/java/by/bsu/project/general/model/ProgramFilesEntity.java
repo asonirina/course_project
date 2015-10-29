@@ -32,6 +32,10 @@ public class ProgramFilesEntity {
     @JoinColumn(name="user_id", insertable=false, updatable=false, nullable=false)
     private UserInfoEntity user;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "matched_id", nullable = true)
+    private ProgramFilesEntity matched;
+
     @Column(name = "status")
     private String status;
 
@@ -70,6 +74,14 @@ public class ProgramFilesEntity {
 
     @Column(name = "cluster")
     private Long cluster;
+
+    public ProgramFilesEntity getMatched() {
+        return matched;
+    }
+
+    public void setMatched(ProgramFilesEntity matched) {
+        this.matched = matched;
+    }
 
     public ProgramFilesEntity(){}
 
