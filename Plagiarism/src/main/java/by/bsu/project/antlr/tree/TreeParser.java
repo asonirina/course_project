@@ -492,6 +492,8 @@ public class TreeParser {
         }
         bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
         bin.setOperation(operation);
+        bin.setStart(((CommonToken)t.getToken()).getStartIndex());
+        bin.setStop(((CommonToken)t.getToken()).getStopIndex());
         nodes.add(bin);
         return bin.getName();
     }
@@ -635,6 +637,7 @@ public class TreeParser {
                 }
                 case IDENT: {
                     methodNode.setStart(((CommonToken) child.getToken()).getStartIndex());
+                    methodNode.setStop(((CommonToken)child.getToken()).getStopIndex());
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -643,7 +646,6 @@ public class TreeParser {
                     break;
                 }
                 case BLOCK_SCOPE: {
-                    methodNode.setStop(((CommonToken)child.getToken()).getStartIndex());
                     doBlockScope(child, methodNode);
                     break;
                 }
@@ -843,6 +845,7 @@ public class TreeParser {
     private void doIf(CommonTree t, TreeNode node) {
         TreeNode ifNode = new TreeNode(h++, "", node);
         ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
         String c1 = "", c2 = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -872,7 +875,6 @@ public class TreeParser {
                 break;
             }
             case BLOCK_SCOPE: {
-                node.setStop(((CommonToken) t.getToken()).getStartIndex());
                 doBlockScope(t, node);
                 break;
             }
@@ -901,6 +903,7 @@ public class TreeParser {
     private void doWhile(CommonTree t, TreeNode node) {
         TreeNode whileNode = new TreeNode(h++, "", node);
         whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
+        whileNode.setStop(((CommonToken)t.getToken()).getStopIndex());
         String c1 = "", c2 = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
