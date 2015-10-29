@@ -6,6 +6,7 @@ import by.bsu.project.general.lang.LangWrap;
 import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.general.model.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.*;
@@ -115,7 +116,7 @@ public class TreeParser {
     private void doClass(CommonTree t, TreeNode node) {
         String name = "";
         TreeNode classNode = new TreeNode(h++, "", node);
-
+        classNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
             LangWrap.Operation op = OperationUtil.get(lang, child);
@@ -482,6 +483,8 @@ public class TreeParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
+                    methodCall.setStart(((CommonToken)child.getToken()).getStartIndex());
+                    methodCall.setStop(((CommonToken)child.getToken()).getStopIndex());
                     name = doIdent(child);
                     break;
                 }
@@ -610,6 +613,7 @@ public class TreeParser {
                     break;
                 }
                 case IDENT: {
+                    methodNode.setStart(((CommonToken)child.getToken()).getStartIndex());
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -618,6 +622,7 @@ public class TreeParser {
                     break;
                 }
                 case BLOCK_SCOPE: {
+                    methodNode.setStop(((CommonToken)child.getToken()).getStartIndex());
                     doBlockScope(child, methodNode);
                     break;
                 }
@@ -816,6 +821,7 @@ public class TreeParser {
 
     private void doIf(CommonTree t, TreeNode node) {
         TreeNode ifNode = new TreeNode(h++, "", node);
+        ifNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         String c1 = "", c2 = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -845,6 +851,7 @@ public class TreeParser {
                 break;
             }
             case BLOCK_SCOPE: {
+                node.setStop(((CommonToken)t.getToken()).getStartIndex());
                 doBlockScope(t, node);
                 break;
             }
@@ -872,6 +879,7 @@ public class TreeParser {
 
     private void doWhile(CommonTree t, TreeNode node) {
         TreeNode whileNode = new TreeNode(h++, "", node);
+        whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         String c1 = "", c2 = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -891,6 +899,7 @@ public class TreeParser {
 
     private void doFor(CommonTree t, TreeNode node) {
         TreeNode forNode = new TreeNode(h++, "", node);
+        forNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -917,6 +926,7 @@ public class TreeParser {
                     break;
                 }
                 case BLOCK_SCOPE: {
+                    forNode.setStop(((CommonToken)child.getToken()).getStartIndex());
                     doBlockScope(child, forNode);
                     break;
                 }
@@ -1010,6 +1020,7 @@ public class TreeParser {
     }
 
     private void doClassTopLevelScope(CommonTree t, TreeNode node) {
+        node.setStop(((CommonToken)t.getToken()).getStartIndex());
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
             Operation op = OperationUtil.get(lang, child);

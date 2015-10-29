@@ -59,6 +59,9 @@ public class ProgramFilesEntity {
     @Column(name = "tree_content")
     private byte[] treeContent;
 
+    @Column(name = "compare_map")
+    private byte[] compareMap;
+
     @Column(name = "plagiat1")
     private Integer plagiat1;
 
@@ -197,6 +200,14 @@ public class ProgramFilesEntity {
 
     public void setUserTask(UserTask userTask) {
         this.userTask = userTask;
+    }
+
+    public byte[] getCompareMap() {
+        return compareMap;
+    }
+
+    public void setCompareMap(byte[] compareMap) {
+        this.compareMap = compareMap;
     }
 
     public LangWrap.Lang getLang() {

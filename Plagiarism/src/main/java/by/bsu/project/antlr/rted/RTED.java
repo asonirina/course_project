@@ -988,15 +988,18 @@ public class RTED {
             int row = lastRow;
             int col = lastCol;
             while ((row > firstRow) || (col > firstCol)) {
+                double measure = (row > 0 && col > 0) ? map.rename(it1.getInputTree().get(row - 1),it2.getInputTree().get(col - 1)) : 1.0;
                 if ((row > firstRow)
                         && (forestdist[row - 1][col] + map.delete() == forestdist[row][col])) {
                     // node with postorderID row is deleted from ted1
-                    editMapping.push(new int[]{row, 0});
+                    TreeNode node = it1.getInputTree().get(row - 1);
+                    editMapping.push(new int[]{node.getStart(), node.getStop(), -1, -1});
                     row--;
                 } else if ((col > firstCol)
                         && (forestdist[row][col - 1] + map.insert() == forestdist[row][col])) {
                     // node with postorderID col is inserted into ted2
-                    editMapping.push(new int[]{0, col});
+                    TreeNode node = it2.getInputTree().get(col - 1);
+                    editMapping.push(new int[]{-1, -1, node.getStart(), node.getStop()});
                     col--;
                 } else {
                     // node with postorderID row in ted1 is renamed to node col in ted2
@@ -1004,7 +1007,11 @@ public class RTED {
                     if ((it1.getInfo(POST2_LLD, row - 1) == it1.getInfo(POST2_LLD, lastRow - 1))
                             && (it2.getInfo(POST2_LLD, col - 1) == it2.getInfo(POST2_LLD, lastCol - 1))) {
                         // if both subforests are trees, map nodes
-                        editMapping.push(new int[]{row, col});
+                        if (measure < 1) {
+                            TreeNode node1 = it1.getInputTree().get(row - 1);
+                            TreeNode node2 = it2.getInputTree().get(col - 1);
+                            editMapping.push(new int[]{node1.getStart(), node1.getStop(), node2.getStart(), node2.getStop()});
+                        }
                         row--;
                         col--;
                     } else {

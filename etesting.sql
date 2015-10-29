@@ -95,6 +95,7 @@ CREATE TABLE `program_files` (
   `content_type` varchar(100) default NULL,
   `testResults` varchar(150),
   `tree_content` longblob,
+  `compare_map` longblob,
   `user_id` int(11) NULL default NULL,
   PRIMARY KEY  (`id`),
   INDEX `FK_DEPT` (`user_id`),

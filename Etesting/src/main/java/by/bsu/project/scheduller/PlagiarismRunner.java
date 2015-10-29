@@ -1,5 +1,6 @@
 package by.bsu.project.scheduller;
 
+import by.bsu.project.antlr.model.SerializableUtil;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: iason
@@ -48,11 +50,13 @@ public class PlagiarismRunner {
                 programFilesEntity.setAc(ac);
                 ac.setEntity(programFilesEntity);
 
-                int plagiat2 = TreeCompareUtil.checkTrees(programFilesEntities, nodes);
-
+                Map<String, Object> map = TreeCompareUtil.checkTrees(programFilesEntities, nodes);
+                int plagiat2 = (Integer)map.get("max");
+                List<int[]>  compareMap = (List<int[]> )map.get("compare");
                 programFilesEntity.setPlagiat1(plagiat1);
                 programFilesEntity.setPlagiat2(plagiat2);
-                programFilesEntity.setTreeContent(TreeNode.getBytes(nodes));
+                programFilesEntity.setTreeContent(SerializableUtil.getTreeBytes(nodes));
+                programFilesEntity.setCompareMap(SerializableUtil.getMapBytes(compareMap));
 
                 programFilesEntity.setRunStatus(ETestingConstants.READY_FILE);
                 userInfoService.save(programFilesEntity.getUser());

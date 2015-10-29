@@ -4,8 +4,6 @@ import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.javacc.general.ParseException;
 import by.bsu.project.javacc.general.UnsupportedLanguageException;
-import by.bsu.project.javacc.util.JavaCCNodesExtractor;
-import org.apache.commons.lang.math.RandomUtils;
 
 import java.util.List;
 

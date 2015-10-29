@@ -1,6 +1,8 @@
 package by.bsu.project.antlr.model;
 
 import by.bsu.project.general.lang.LangWrap.Operation;
+import org.antlr.runtime.tree.CommonTree;
+import org.hibernate.type.IntegerType;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,6 +25,9 @@ public class TreeNode implements Serializable {
     private TreeNode parent;
     private String parentName;
     private Integer i;
+
+    private Integer start = -10;
+    private Integer stop = -10;
 
     public TreeNode(Integer id, String name, TreeNode node) {
         this.id = id;
@@ -104,6 +109,14 @@ public class TreeNode implements Serializable {
         return children.isEmpty();
     }
 
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
     public Integer getI() {
         return i;
     }
@@ -128,6 +141,15 @@ public class TreeNode implements Serializable {
         return baos.toByteArray();
     }
 
+    public Integer getStop() {
+        return stop;
+    }
+
+    public void setStop(Integer stop) {
+        this.stop = stop;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,5 +168,14 @@ public class TreeNode implements Serializable {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (operation != null ? operation.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TreeNode{" +
+                "name='" + name + '\'' +
+                ", operation=" + operation +
+                ", i=" + i +
+                '}';
     }
 }

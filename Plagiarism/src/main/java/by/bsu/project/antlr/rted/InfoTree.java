@@ -124,6 +124,10 @@ public class InfoTree {
         return order;
     }
 
+    public List<TreeNode> getInputTree() {
+        return inputTree;
+    }
+
     private int gatherInfo(TreeNode aT, int postorder) {
         int currentSize = 0;
         int childrenCount = 0;
