@@ -33,22 +33,28 @@ function approveTask(studentId, taskId) {
             d.innerHTML =
                 '<div class="form-group wrapper"> ' +
                     '<div class="input-group">' +
-                        '<span style="width: 120px;" class=\"input-group-addon">Плагиат 1 </span>' +
+                        '<span style="width: 150px;" class=\"input-group-addon">Плагиат 1 </span>' +
                         '<label id="plagiat1" style="border: none" class="form-control input">' + data.plagiat1 + '</label>' +
                     '</div> ' +
                     '<div class="input-group">' +
-                        '<span style="width: 120px;" class="input-group-addon">Плагиат 2 </span> ' +
+                        '<span style="width: 150px;" class="input-group-addon">Плагиат 2 </span> ' +
                         '<label id="plagiat2" style="border: none" class="form-control input">' + data.plagiat2 + '</label>  ' +
                     '</div>' +
                     ' <div class="input-group">' +
-                        '<span style="width: 120px;" class="input-group-addon">Номер попытки </span>' +
+                        '<span style="width: 150px;" class="input-group-addon">Номер попытки </span>' +
                         '<label id="try_no" style="border: none" class="form-control input">' + data.tryNo + '</label>' +
                     '</div>' +
                     ' <div class="input-group">' +
-                        '<span style="width: 120px;" class="input-group-addon">Нейронная сеть </span>' +
+                        '<span style="width: 150px;" class="input-group-addon">Нейронная сеть </span>' +
                         '<label id="try_no" style="border: none" class="form-control input">' + data.rightCluster + '</label>' +
                     '</div>' +
+                    ((data.id != -1) ?
+                    '<div class="input-group">' +
+                        '<span style="width: 150px;" class="input-group-addon">Посмотреть различия </span>' +
+                        '<a target="_blank" href="/e-Testing/admin/DiffCode.html?&programId='  + data.id + '" style="border: none" class="btn btn-primary form-control input">Различия</a>' +
+                    '</div>' : '' )+
                     '</div>';
+
             document.body.appendChild(d);
             showDialog(studentId, taskId);
         },

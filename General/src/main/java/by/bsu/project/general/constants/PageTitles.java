@@ -23,4 +23,5 @@ public class PageTitles {
     public static final String VIEW_STUDENT              = "Профиль";
     public static final String VIEW_TASK                 = "Лабораторная";
     public static final String SOURCE_CODE               = "Исходный код";
+    public static final String SHOW_DIFF                 = "Различия";
 }

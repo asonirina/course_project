@@ -135,7 +135,9 @@ pre[class*="language-"] {
 .token.entity {
 	cursor: help;
 }
-
+ pre {
+     display: inline-block;
+ }
 pre.line-numbers {
 	position: relative;
 	padding-left: 3.8em;

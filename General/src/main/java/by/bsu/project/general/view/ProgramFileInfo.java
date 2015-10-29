@@ -8,6 +8,7 @@ import by.bsu.project.general.model.UserTask;
  * Date: 22.10.15
  */
 public class ProgramFileInfo {
+    Long id;
     String plagiat1;
     String plagiat2;
     String tryNo;
@@ -22,6 +23,7 @@ public class ProgramFileInfo {
             return getDefault(userTask.getTryNo());
         }
         ProgramFileInfo info = new ProgramFileInfo();
+        info.setId(programFilesEntity.getId());
         info.setPlagiat1(programFilesEntity.getPlagiat1() + " %");
         info.setPlagiat2(programFilesEntity.getPlagiat2() + " %");
         info.setTryNo(userTask.getTryNo().toString());
@@ -31,11 +33,20 @@ public class ProgramFileInfo {
 
     private static ProgramFileInfo getDefault(Integer tryNo) {
         ProgramFileInfo info = new ProgramFileInfo();
+        info.setId(-1L);
         info.setPlagiat1("Не рассчитан");
         info.setPlagiat2("Не рассчитан");
         info.setTryNo(tryNo.toString());
         info.setRightCluster("Не рассчитано");
         return info;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPlagiat1() {

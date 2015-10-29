@@ -6,7 +6,9 @@ import by.bsu.project.general.constants.ETestingConstants;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Alina Glumova
@@ -32,7 +34,7 @@ public class ProgramFilesEntity {
     @JoinColumn(name="user_id", insertable=false, updatable=false, nullable=false)
     private UserInfoEntity user;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "matched_id", nullable = true)
     private ProgramFilesEntity matched;
 
