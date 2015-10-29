@@ -1,16 +1,22 @@
 package by.bsu.project.dao;
 
 import by.bsu.project.general.constants.ETestingConstants;
+import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.UserTask;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @author Alina Glumova
@@ -18,8 +24,100 @@ import java.util.List;
 
 @Repository
 public class UserInfoDAOImpl implements UserInfoDAO {
+    private static final String ASC = "ASC";
+    private static final String DESC = "DESC";
+
+    private static final String ID = "id";
+    private static final String USER_ID = "user_id";
+    private static final String TASK_ID = "task_id";
+    private static final String LOGIN = "login";
+    private static final String FORM = "form";
+    private static final String PROGRAM_NAME = "programName";
+    private static final String SECOND_NAME = "secondName";
+    private static final String RUN_STATUS = "runStatus";
+    private static final String UPLOAD_PROGRAM_TIME = "uploadProgramTime";
 
     private final static int PAGE_SIZE = 3;
+
+    public static enum Op {
+        EQ(" = "), NOT_EQ(" != ");
+
+        private String op;
+
+        private Op(String op) {
+            this.op = op;
+        }
+
+        public String getOp() {
+            return op;
+        }
+    }
+
+    private static class Param {
+        private String op;
+        private String col;
+
+        public static Param of(String col, Op op) {
+            Param param = new Param();
+            param.setOp(op.getOp());
+            param.setCol(col);
+            return param;
+        }
+
+        public String getOp() {
+            return op;
+        }
+
+        public void setOp(String op) {
+            this.op = op;
+        }
+
+        public String getCol() {
+            return col;
+        }
+
+        public void setCol(String col) {
+            this.col = col;
+        }
+
+        @Override
+        public String toString() {
+            return "." + col + op + ":" + col;
+        }
+    }
+
+    private static class Order {
+        String type;
+        String col;
+
+        public static Order of(String col, String type) {
+            Order o = new Order();
+            o.setCol(col);
+            o.setType(type);
+            return o;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getCol() {
+            return col;
+        }
+
+        public void setCol(String col) {
+            this.col = col;
+        }
+
+        @Override
+        public String toString() {
+            return col + " " + type;
+        }
+    }
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -31,9 +129,9 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public List<UserInfoEntity> studentsList() {
-        Query query = sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where form != 'admin'  order by secondName");
-        return query.list();
+    public List<UserInfoEntity> studentsList(FieldToLoad... fields) {
+        String query1 = generateQuery(UserInfoEntity.class, new Param[]{Param.of(FORM, Op.NOT_EQ)}, Order.of(SECOND_NAME, ASC), fields);
+        return sessionFactory.getCurrentSession().createQuery(query1).setParameter(FORM, "admin").list();
     }
 
     @Override
@@ -44,27 +142,23 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId) {
-        Query query = sessionFactory.getCurrentSession().
-                createQuery("from ProgramFilesEntity where programName = :progrName and runStatus <> 5 and user_id <> :user_id").
-                setParameter(ETestingConstants.PROGRAM_NAME, name).
-                setParameter(ETestingConstants.USER_ID, userId);
-        return query.list();
+    public List<ProgramFilesEntity> getProgramsByName(String name, Long userId, FieldToLoad... fields) {
+        String query = generateQuery(ProgramFilesEntity.class, new Param[]{Param.of(PROGRAM_NAME, Op.EQ), Param.of(RUN_STATUS, Op.NOT_EQ), Param.of(USER_ID, Op.NOT_EQ)}, fields);
+        return sessionFactory.getCurrentSession().createQuery(query).setParameter(PROGRAM_NAME, name).setParameter(USER_ID, userId).list();
 
     }
 
     @Override
-    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus) {
-        Query query = sessionFactory.getCurrentSession().createQuery("from ProgramFilesEntity where runStatus = :run_status order by uploadProgramTime desc").
-                setParameter(ETestingConstants.TABLE_FIELD_RUN_STATUS, runStatus);
-        return query.list();
+    public List<ProgramFilesEntity> getProgramsByRunStatus(int runStatus, FieldToLoad... fields) {
+        String query = generateQuery(ProgramFilesEntity.class, new Param[]{Param.of(RUN_STATUS, Op.EQ)}, Order.of(UPLOAD_PROGRAM_TIME, DESC), fields);
+        return sessionFactory.getCurrentSession().createQuery(query).setParameter(RUN_STATUS, runStatus).list();
     }
 
     @Override
-    public Task getTask(String form, String programName) {
-        return (Task) sessionFactory.getCurrentSession().createQuery("from Task where programName = :program_name and form = :form").
-                setParameter(ETestingConstants.TABLE_FIELD_PROGRAM_NAME, programName).
-                setParameter(ETestingConstants.TABLE_FIELD_FORM, form).uniqueResult();
+    public Task getTask(String form, String programName, FieldToLoad... fields) {
+        String query = generateQuery(Task.class, new Param[]{Param.of(FORM, Op.EQ), Param.of(PROGRAM_NAME, Op.EQ)}, fields);
+        return (Task) sessionFactory.getCurrentSession().createQuery(query).
+                setParameter(PROGRAM_NAME, programName).setParameter(FORM, form).uniqueResult();
     }
 
     @Override
@@ -135,8 +229,9 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public Task getTaskById(Long id) {
-        return  (Task)sessionFactory.getCurrentSession().get(Task.class, id);
+    public Task getTaskById(Long id, FieldToLoad... fields) {
+        String query = generateQuery(Task.class, new Param[]{Param.of(ID, Op.EQ)}, fields);
+        return (Task) sessionFactory.getCurrentSession().createQuery(query).setParameter(ID, id).uniqueResult();
     }
 
     @Override
@@ -151,8 +246,8 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     @Override
     public UserInfoEntity findStudentByLogin(String login) {
-        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery("from UserInfoEntity where login = :login").
-                setParameter(ETestingConstants.TABLE_FIELD_LOGIN, login).uniqueResult();
+        String query = generateQuery(UserInfoEntity.class, new Param[]{Param.of(LOGIN, Op.EQ)});
+        return (UserInfoEntity) sessionFactory.getCurrentSession().createQuery(query).setParameter(LOGIN, login).uniqueResult();
     }
 
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
@@ -168,7 +263,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     public List<Task> taskListByForm(Integer pageNumber, String form) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Task where form = :form order by id").
-                setParameter(ETestingConstants.TABLE_FIELD_FORM, form);
+                setParameter(FORM, form);
         return (pageNumber != null) ? getSubList(query, pageNumber) : query.list();
     }
 
@@ -180,5 +275,29 @@ public class UserInfoDAOImpl implements UserInfoDAO {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    private static String generateQuery(Class c, Param params[], FieldToLoad... fields) {
+        return generateQuery(c, params, null, fields);
+    }
+
+    private static String generateQuery(Class c, Param params[], Order order, FieldToLoad... fields) {
+        String uqId = RandomStringUtils.randomAlphabetic(5);
+        StringBuilder builder = new StringBuilder("FROM " + c.getSimpleName() + " " + uqId);
+        for (FieldToLoad f : fields) {
+            builder.append(String.format(" LEFT JOIN FETCH %s.%s ", uqId, f.getName()));
+        }
+        if (params.length > 0) {
+            builder.append(" WHERE ");
+        }
+        List<String> list = new ArrayList<>();
+        for (Param p : params) {
+            list.add(uqId + p.toString());
+        }
+        builder.append(StringUtils.join(list, " AND "));
+        if (order != null) {
+            builder.append(" ORDER BY " + uqId + "." + order);
+        }
+        return builder.toString();
     }
 }

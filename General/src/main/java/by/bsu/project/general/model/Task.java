@@ -1,5 +1,6 @@
 package by.bsu.project.general.model;
 
+import by.bsu.project.general.constants.FieldToLoad;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.CascadeType;
@@ -28,12 +29,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="task_id")
     @IndexColumn(name="idx")
     private List<SingleTest> tests;
 
-    @OneToMany(cascade= CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade= CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name="task_id")
     @IndexColumn(name="idx_2")
     private List<UserTask> userTasks;
@@ -99,5 +100,16 @@ public class Task {
 
     public void setUserTasks(List<UserTask> userTasks) {
         this.userTasks = userTasks;
+    }
+
+    public Object get(FieldToLoad field) {
+        switch (field) {
+            case SINGLE_TESTS:
+                return getTests();
+            case USER_TASKS:
+                return getUserTasks();
+            default:
+                return null;
+        }
     }
 }

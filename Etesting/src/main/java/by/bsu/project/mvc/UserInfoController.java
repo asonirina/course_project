@@ -12,14 +12,12 @@ import by.bsu.project.utils.NewsHelper;
 import by.bsu.project.validator.Validator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,7 +160,6 @@ public class UserInfoController extends BaseController {
 
     @RequestMapping(value = "/e-Testing/{admin|student}/MainPage")
     public ModelAndView displayMainPage() {
-        UserInfoEntity entity = userInfoService.getStudentById(getUser().getId());
         return newsPage("MainPage");
     }
 

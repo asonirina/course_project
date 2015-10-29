@@ -21,7 +21,7 @@ public class ProgramFilesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "ac_id")
     private AttributeCounting ac;
 
