@@ -1,6 +1,5 @@
 package by.bsu.project.scheduller;
 
-import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.AttributeCounting;
 import by.bsu.project.general.model.NeuralNode;
 import by.bsu.project.general.model.ProgramFilesEntity;
@@ -25,7 +24,7 @@ public class NeuralRunner {
     //    @Scheduled(cron = "0 40 * * * ?")
     @Scheduled(cron = "40 * * * * ?")
     protected void executeInternal() {
-        List<UserInfoEntity> users = userInfoService.studentsList(FieldToLoad.NEURAL_NODE);
+        List<UserInfoEntity> users = userInfoService.studentsList();
         List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();
         for (ProgramFilesEntity programFilesEntity : programs) {
             AttributeCounting ac = programFilesEntity.getAc();

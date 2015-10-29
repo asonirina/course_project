@@ -1,6 +1,5 @@
 package by.bsu.project.general.model;
 
-import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -48,7 +47,7 @@ public class UserInfoEntity {
     @Column(name = "Password")
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "neuralNode_id")
     private NeuralNode neuralNode;
 
@@ -127,14 +126,5 @@ public class UserInfoEntity {
 
     public void setUserTasks(List<UserTask> userTasks) {
         this.userTasks = userTasks;
-    }
-
-    public Object get(FieldToLoad field) {
-        switch (field) {
-            case NEURAL_NODE:
-                return getNeuralNode();
-            default:
-                return null;
-        }
     }
 }

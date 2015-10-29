@@ -1,7 +1,6 @@
 package by.bsu.project.scheduller;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserTask;
@@ -35,7 +34,7 @@ public class TestsRunner {
         try {
             List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
-                Task task = userInfoService.getTask(programFilesEntity, FieldToLoad.SINGLE_TESTS);
+                Task task = userInfoService.getTask(programFilesEntity);
                 ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity, task);
                 UserTaskStatus programStatus = programFilesUtil.checkFile() ? UserTaskStatus.PASSED : UserTaskStatus.FAILED;
                 programFilesEntity.setStatus(programStatus.getName());

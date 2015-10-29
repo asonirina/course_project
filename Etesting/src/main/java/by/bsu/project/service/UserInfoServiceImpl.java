@@ -2,7 +2,6 @@ package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.ProgramFilesEntity;
@@ -41,17 +40,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public void createUserTask (UserInfoEntity user, Task task) {
-        UserTask userTask = new UserTask();
-        userTask.setUser(user);
-        userTask.setTask(task);
-        user.getUserTasks().add(userTask);
-        task.getUserTasks().add(userTask);
-        userInfoDAO.save(user);
-        userInfoDAO.save(task);
-    }
-
-    @Transactional
     public ProgramFilesEntity getFileById(Long id) {
         return userInfoDAO.getFileById(id);
     }
@@ -62,8 +50,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public Task getTaskById(Long id, FieldToLoad... fields) {
-        return userInfoDAO.getTaskById(id, fields);
+    public Task getTaskById(Long id) {
+        return userInfoDAO.getTaskById(id);
     }
 
     @Transactional
@@ -82,8 +70,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional
-    public List<UserInfoEntity> studentsList(FieldToLoad ... fields) {
-        return userInfoDAO.studentsList(fields);
+    public List<UserInfoEntity> studentsList() {
+        return userInfoDAO.studentsList();
     }
 
 
@@ -141,7 +129,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
-        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId(), FieldToLoad.ATTRIBUTE_COUNTING);
+        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId());
     }
 
     @Transactional
@@ -159,13 +147,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public List<ProgramFilesEntity> getReadyProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE, FieldToLoad.ATTRIBUTE_COUNTING);
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE);
     }
 
     @Transactional
     @Override
-    public Task getTask(ProgramFilesEntity entity, FieldToLoad ... fields) {
-        return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName(), fields);
+    public Task getTask(ProgramFilesEntity entity) {
+        return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName());
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package by.bsu.project.mvc;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.constants.FieldToLoad;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
@@ -80,7 +79,7 @@ public class TaskController extends BaseController {
                                     Task task, Model model) {
         try {
             if (null != id) {
-                task = userInfoService.getTaskById(id, FieldToLoad.SINGLE_TESTS);
+                task = userInfoService.getTaskById(id);
                 userTasks = task.getUserTasks();
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.EDIT_TASK);
             } else {
@@ -102,7 +101,7 @@ public class TaskController extends BaseController {
                                  Task task,
                                  Model model) {
         try {
-            task = userInfoService.getTaskById(id, FieldToLoad.SINGLE_TESTS);
+            task = userInfoService.getTaskById(id);
             model.addAttribute(ETestingConstants.MODEL_TASK, task);
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.VIEW_TASK);
             return new ModelAndView("ViewTask");
@@ -153,9 +152,15 @@ public class TaskController extends BaseController {
                       @RequestParam(value = "taskId", required = true) Long taskId) throws Exception {
 
         UserInfoEntity user = userInfoService.getStudentById(userId);
-        Task task = userInfoService.getTaskById(taskId, FieldToLoad.USER_TASKS);
-        userInfoService.createUserTask(user, task);
+        Task task = userInfoService.getTaskById(taskId);
 
+        UserTask userTask = new UserTask();
+        userTask.setUser(user);
+        userTask.setTask(task);
+        user.getUserTasks().add(userTask);
+        task.getUserTasks().add(userTask);
+        userInfoService.save(user);
+        userInfoService.save(task);
         return "";
     }
 
