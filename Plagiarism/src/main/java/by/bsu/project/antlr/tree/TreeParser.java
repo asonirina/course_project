@@ -185,17 +185,22 @@ public class TreeParser {
     private String doVarDeclaration(CommonTree t, TreeNode node) {
         List<Operation> types = doType(t); // try to find any children TYPE (Pascal)
         List<String> names = new ArrayList<>();
+        List<int[]> indexes = new ArrayList<>();
 
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case NAME: {//cpp
+                    int[] temp = new int[2];
+                    temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
+                    temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
+                    indexes.add(temp);
                     names.add(doIdent((CommonTree) child.getChild(0)));
                     break;
                 }
                 case VAR_DECLARATOR_LIST: {
-                    names.addAll(doVarDeclaratorList(child, node));
+                    names.addAll(doVarDeclaratorList(child, node, indexes));
                     break;
                 }
                 case TYPE: {
@@ -211,25 +216,41 @@ public class TreeParser {
                 }
             }
         }
-        for (String name : names) {
+        for (int i = 0; i<names.size(); i++) {
+            String name = names.get(i);
+            int[] temp = indexes.get(i);
             TreeNode varDeclarationNode = new TreeNode(h++, getType(types) + ' ' + name, node);
             varDeclarationNode.setOperation(Operation.VAR_DECLARATION);
+            varDeclarationNode.setStart(temp[0]);
+            varDeclarationNode.setStop(temp[1]);
             nodes.add(varDeclarationNode);
         }
         return getType(types) + StringUtils.join(names.toArray());
     }
 
-    private List<String> doVarDeclaratorList(CommonTree t, TreeNode node) {
+    private List<String> doVarDeclaratorList(CommonTree t, TreeNode node, List<int[]> indexes) {
         List<String> names = new ArrayList<>();
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR: {
+                    if(indexes != null ){
+                        int temp[] = new int[2];
+                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
+                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
+                        indexes.add(temp);
+                    }
                     names.add(doVarDeclarator(child, node));
                     break;
                 }
                 case IDENT: {
+                    if(indexes != null ){
+                        int temp[] = new int[2];
+                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
+                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
+                        indexes.add(temp);
+                    }
                     names.add(doIdent(child));
                     break;
                 }
@@ -613,7 +634,7 @@ public class TreeParser {
                     break;
                 }
                 case IDENT: {
-                    methodNode.setStart(((CommonToken)child.getToken()).getStartIndex());
+                    methodNode.setStart(((CommonToken) child.getToken()).getStartIndex());
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -679,7 +700,7 @@ public class TreeParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR_LIST: { //pascal
-                    names.addAll(doVarDeclaratorList(child, null));
+                    names.addAll(doVarDeclaratorList(child, null, null));
                     break;
                 }
                 case TYPE: {
@@ -821,7 +842,7 @@ public class TreeParser {
 
     private void doIf(CommonTree t, TreeNode node) {
         TreeNode ifNode = new TreeNode(h++, "", node);
-        ifNode.setStart(((CommonToken)t.getToken()).getStartIndex());
+        ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         String c1 = "", c2 = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -851,7 +872,7 @@ public class TreeParser {
                 break;
             }
             case BLOCK_SCOPE: {
-                node.setStop(((CommonToken)t.getToken()).getStartIndex());
+                node.setStop(((CommonToken) t.getToken()).getStartIndex());
                 doBlockScope(t, node);
                 break;
             }
@@ -899,7 +920,7 @@ public class TreeParser {
 
     private void doFor(CommonTree t, TreeNode node) {
         TreeNode forNode = new TreeNode(h++, "", node);
-        forNode.setStart(((CommonToken)t.getToken()).getStartIndex());
+        forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -926,7 +947,7 @@ public class TreeParser {
                     break;
                 }
                 case BLOCK_SCOPE: {
-                    forNode.setStop(((CommonToken)child.getToken()).getStartIndex());
+                    forNode.setStop(((CommonToken) child.getToken()).getStartIndex());
                     doBlockScope(child, forNode);
                     break;
                 }
