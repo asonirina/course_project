@@ -42,7 +42,7 @@
         <span style="background-color: #99EBC2">Вставка</span>   <br/>
         <span style="background-color: #FFFFB2">Копирование или изменение</span>   <br/>
     </div>
-    <div class="wrapper" style="verflow:auto; ">
+    <div class="wrapper" style="overflow:auto; width: 2000px">
 
     <pre class="line-numbers" style="width: 600px; height: ${height}px;">
         <code class="language-${lang1}">

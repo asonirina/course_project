@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Alina Glumova
@@ -159,20 +157,16 @@ public class UserInfoController extends BaseController {
     }
 
     @RequestMapping(value = "/e-Testing/{admin|student}/MainPage")
-    public ModelAndView displayMainPage() {
-        return newsPage("MainPage");
-    }
-
-    private ModelAndView newsPage(String base) {
+    public ModelAndView displayMainPage(Model model) {
         List<News> news = new ArrayList<>();
         try{
             news = NewsHelper.getRandomNews();
         } catch (Exception ex) {
             logger.info("News are not loaded");
         }
-        Map<String, Object> params = new HashMap<>();
-        params.put(ETestingConstants.MODEL_NEWS, news);
-        params.put(ETestingConstants.MODEL_TITLE, PageTitles.HOME_PAGE);
-        return new ModelAndView(base, params);
+
+        model.addAttribute(ETestingConstants.MODEL_NEWS, news);
+        model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.HOME_PAGE);
+        return new ModelAndView("MainPage");
     }
 }

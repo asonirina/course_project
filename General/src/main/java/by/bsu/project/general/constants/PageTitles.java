@@ -7,6 +7,7 @@ package by.bsu.project.general.constants;
 public class PageTitles {
     public static final String CHANGE_PASSWORD           = "Изменить пароль";
     public static final String UPLOAD_PROGRAM            = "Загрузить программу";
+    public static final String UPLOAD_TEST               = "Сравнить файлы";
     public static final String VIEW_TREE                 = "Дерево программы";
     public static final String SHOW_GRAPH                = "Граф программ";
     public static final String ERROR                     = "Ошибка";

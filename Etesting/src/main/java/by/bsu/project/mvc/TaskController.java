@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -96,10 +94,7 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping("/e-Testing/admin/ViewTask")
-    public ModelAndView taskView(@RequestParam(value = "id", required = false) Long id,
-                                 @RequestParam(value = "page", required = false) Integer page,
-                                 Task task,
-                                 Model model) {
+    public ModelAndView taskView(@RequestParam(value = "id", required = false) Long id, Task task, Model model) {
         try {
             task = userInfoService.getTaskById(id);
             model.addAttribute(ETestingConstants.MODEL_TASK, task);
@@ -114,13 +109,12 @@ public class TaskController extends BaseController {
 
     @RequestMapping("/e-Testing/admin/DeleteTask")
     public ModelAndView deleteTask(@RequestParam(value = "id", required = false) Long id,
-                                   @RequestParam(value = "form", required = false) String form) {
+                                   @RequestParam(value = "form", required = false) String form, Model model) {
         try {
             userInfoService.deleteTaskById(id);
-            Map<String, Object> params = new HashMap<>();
-            params.put(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
-            params.put(ETestingConstants.TABLE_FIELD_FORM, form);
-            return new ModelAndView("redirect:/e-Testing/TaskList.html", params);
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.STUDENT_LIST);
+            model.addAttribute(ETestingConstants.TABLE_FIELD_FORM, form);
+            return new ModelAndView("redirect:/e-Testing/TaskList.html");
 
         } catch (Exception ex) {
             logger.error("Unable to delete task " + ex.getMessage());

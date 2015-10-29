@@ -9,6 +9,7 @@
 <ul>
     <li class="home"><a href="<c:url value="/e-Testing/student/MainPage.html"/>"></a></li>
     <li><a href="<c:url value="/e-Testing/student/UploadProgram.html"/>">Проверить программу<span>Загрузить</span></a></li>
+    <li><a href="<c:url value="/e-Testing/student/UploadTest.html"/>">Сравнить файлы<span>Загрузить</span></a></li>
     <li><a href="<c:url value="/e-Testing/student/UploadProgramsHistory.html"/>">Посмотреть историю<span>Посмотреть</span></a></li>
     <li><a href="<c:url value="/e-Testing/student/StudentTasks.html"/>">Список заданий<span>Список</span></a></li>
     <li><a href="<c:url value="/e-Testing/student/ChangePassword.html"/>">Сменить пароль<span>Сменить</span></a></li>

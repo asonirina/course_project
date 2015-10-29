@@ -53,9 +53,6 @@ public class ProgramFilesEntity {
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "content_type")
-    private String contentType;
-
     @Column(name = "added_time")
     private Date uploadProgramTime;
 
@@ -149,14 +146,6 @@ public class ProgramFilesEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public String getTestResults() {

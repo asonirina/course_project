@@ -8,9 +8,8 @@ import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.general.model.UserTask;
 import by.bsu.project.paging.Paging;
+import by.bsu.project.utils.CodeDiffUtil;
 import by.bsu.project.utils.JsonHelper;
-import by.bsu.project.utils.MatchedFileComparator;
-import by.bsu.project.utils.SourceFileComparator;
 import by.bsu.project.validator.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -26,12 +25,8 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Alina Glumova
@@ -56,10 +51,9 @@ public class ProgramUploadController extends BaseController {
             userInfoEntity = userInfoService.getStudentById(getUser().getId());
             programFilesEntity = new ProgramFilesEntity();
             model.addAttribute(ETestingConstants.MODEL_STUDENT, userInfoEntity);
-            Map<String, Object> params = new HashMap<>();
-            params.put(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
-            params.put(ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_PROGRAM);
-            return new ModelAndView("UploadProgram", params);
+            model.addAttribute(ETestingConstants.MODEL_PROGRAM, programFilesEntity);
+            model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_PROGRAM);
+            return new ModelAndView("UploadProgram");
         } catch (Exception ex) {
             logger.error("Unable to display upload file page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
@@ -87,7 +81,6 @@ public class ProgramUploadController extends BaseController {
             programFilesEntity.setUser(userInfoEntity);
             programFilesEntity.setFile(file.getBytes());
             programFilesEntity.setFileName(file.getOriginalFilename());
-            programFilesEntity.setContentType(file.getContentType());
             programFilesEntity.setUploadProgramTime(new Date(System.currentTimeMillis()));
             programFilesEntity.setRunStatus(ETestingConstants.UPLOADED_FILE);
 
@@ -132,7 +125,6 @@ public class ProgramUploadController extends BaseController {
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.PROGRAM_HISTORY);
 
             return new ModelAndView("UploadProgramsHistory");
-
         } catch (Exception ex) {
             logger.error("Unable to display upload file history page " + ex.getMessage());
             return new ModelAndView("errors/error503", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
@@ -194,67 +186,13 @@ public class ProgramUploadController extends BaseController {
                 model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SHOW_DIFF);
                 return new ModelAndView("DiffCode");
             }
-            List<int[]> mapDB = SerializableUtil.getMap(programFilesEntity.getCompareMap());
+            List<int[]> mapBytes = SerializableUtil.getMap(programFilesEntity.getCompareMap());
+            String[] files = CodeDiffUtil.getHighlights(programFilesEntity.getFile(), programFilesEntity.getMatched().getFile(), mapBytes);
+            int height = Math.max(StringUtils.countMatches(files[0], "\n"),StringUtils.countMatches(files[1], "\n")) * 23;
 
-            List<int[]> map = new ArrayList<>();
-            for(int k = 0; k<mapDB.size(); k++) {
-                int [] temp = mapDB.get(k);
-                int[] arr = new int[5];
-                arr[0] = temp[0];
-                arr[1] = temp[1];
-                arr[2] = temp[2];
-                arr[3] = temp[3];
-                arr[4] = k;
-                map.add(arr);
-            }
-            Collections.sort(map, new SourceFileComparator());
-            String file1  = new String(programFilesEntity.getFile());
-            String file2  = new String(programFilesEntity.getMatched().getFile());
-
-            for (int[] arr : map) {
-                if (arr[0] > 0) {
-                    String before = file1.substring(0, arr[0]);
-                    String diff = file1.substring(arr[0], arr[1] + 1);
-                    String after = file1.substring(arr[1] + 1);
-
-                    if(arr[3] == -1) {
-                        diff = String.format("<span style='background-color:#99EBC2;'>%s</span>", diff);
-                    } else if(arr[3] > 0) {
-                        diff = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>", arr[4], arr[4], arr[4], diff);
-                    }
-                    file1 = before + diff + after;
-                } else {
-                    break;
-                }
-            }
-
-
-            Collections.sort(map, new MatchedFileComparator());
-
-            for (int[] arr : map) {
-                if (arr[2] > 0) {
-                    String before = file2.substring(0, arr[2]);
-                    String diff = file2.substring(arr[2], arr[3] + 1);
-                    String after = file2.substring(arr[3] + 1);
-
-                    if(arr[0] == -1) {
-                        diff = String.format("<span style='background-color:#FF9999;'>%s</span>", diff);
-                    } else if(arr[0] > 0) {
-                        diff = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>", arr[4],arr[4], arr[4], diff);
-                    }
-                    file2 = before + diff + after;
-                } else {
-                    break;
-                }
-            }
-
-            int height = Math.max(StringUtils.countMatches(file1, "\n"),StringUtils.countMatches(file2, "\n")) * 23;
-
-            model.addAttribute(ETestingConstants.MODEL_FILE1, file1);
-            model.addAttribute(ETestingConstants.MODEL_FILE2, file2);
-
+            model.addAttribute(ETestingConstants.MODEL_FILE1, files[0]);
+            model.addAttribute(ETestingConstants.MODEL_FILE2, files[1]);
             model.addAttribute(ETestingConstants.MODEL_HEIGHT,  height);
-
             model.addAttribute(ETestingConstants.MODEL_TITLE, PageTitles.SOURCE_CODE);
             return new ModelAndView("DiffCode");
         } catch (Exception ex) {

@@ -46,13 +46,6 @@
     </c:forEach>
 </div>
 
-<div class="paging">
-    <c:url value="/e-Testing/admin/ViewTask.html?id=${task.id}" var="pagedLink">
-        <c:param name="page" value="~"/>
-    </c:url>
-    <tg:paging paging1="${paging1}" pagedLink="${pagedLink}"/>
-</div>
-
 <div style="text-align: right">
     <a class="btn dtn-default" href="<c:url value="/e-Testing/admin/EditTask.html?id=${task.id}"/>">Редактировать</a>
     <a class="btn bet-default"  onclick="return confirm('Вы действительно хотите удалить эту запись?')"

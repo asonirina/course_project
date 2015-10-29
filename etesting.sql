@@ -92,7 +92,6 @@ CREATE TABLE `program_files` (
   `cluster` int(3),
   `file` longblob,
   `file_name` varchar(20) NOT NULL,
-  `content_type` varchar(100) default NULL,
   `testResults` varchar(150),
   `tree_content` longblob,
   `compare_map` longblob,

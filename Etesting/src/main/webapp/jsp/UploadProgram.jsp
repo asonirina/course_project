@@ -7,6 +7,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <html>
+<head>
+    <title>ddd</title>
+</head>
 <body>
 <div class="wrapper">
     <c:if test="${not empty errors}">
@@ -20,7 +23,7 @@
 
 
     <c:if test="${empty student.userTasks}">
-        <p style="margin-left: 230px">На данный момент нет лабораторных работ</p>
+        <p class="wrapper">На данный момент нет лабораторных работ</p>
     </c:if>
 
     <c:if test="${not empty student.userTasks}">
