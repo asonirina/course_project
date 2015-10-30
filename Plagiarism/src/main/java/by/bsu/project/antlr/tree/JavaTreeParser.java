@@ -35,7 +35,7 @@ public class JavaTreeParser extends BaseParser {
 
     private void doClass(CommonTree t, TreeNode node){
         String name = "";
-        TreeNode classNode = new TreeNode(h++, "", node);
+        TreeNode classNode = createTreeNode("", node, Operation.CLASS_DECL);
         classNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         for (CommonTree child : getChildren(t)) {
 
@@ -56,7 +56,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         classNode.setName(Operation.CLASS_DECL.name() + ' ' + name);
-        classNode.setOperation(Operation.CLASS_DECL);
         nodes.add(classNode);
     }
 
@@ -84,8 +83,7 @@ public class JavaTreeParser extends BaseParser {
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
             int[] temp = indexes.get(i);
-            TreeNode varDeclarationNode = new TreeNode(h++, getType(types) + ' ' + name, node);
-            varDeclarationNode.setOperation(Operation.VAR_DECLARATION);
+            TreeNode varDeclarationNode = createTreeNode(getType(types) + ' ' + name, node, Operation.VAR_DECLARATION);
             varDeclarationNode.setStart(temp[0]);
             varDeclarationNode.setStop(temp[1]);
             nodes.add(varDeclarationNode);
@@ -138,8 +136,7 @@ public class JavaTreeParser extends BaseParser {
                 }
                 case EXPR: {
                     String exprName = name + ' ' + Operation.ASSIGN.name() + ' ' + doExpr(child, node);
-                    TreeNode assignNode = new TreeNode(h++, exprName, node);
-                    assignNode.setOperation(Operation.ASSIGN);
+                    TreeNode assignNode = createTreeNode(exprName, node, Operation.ASSIGN);
                     nodes.add(assignNode);
                     break;
                 }
@@ -259,9 +256,8 @@ public class JavaTreeParser extends BaseParser {
                 }
             }
         }
-        TreeNode postInc = new TreeNode(h++, name + ' ' + Operation.POST_INC.name(), node);
+        TreeNode postInc = createTreeNode(name + ' ' + Operation.POST_INC.name(), node, Operation.POST_INC);
         nodes.add(postInc);
-        postInc.setOperation(Operation.POST_INC);
         return postInc.getName();
     }
 
@@ -276,15 +272,14 @@ public class JavaTreeParser extends BaseParser {
             }
         }
 
-        TreeNode postDec = new TreeNode(h++, name + ' ' + Operation.POST_DEC.name(), node);
+        TreeNode postDec = createTreeNode(name + ' ' + Operation.POST_DEC.name(), node, Operation.POST_DEC);
         nodes.add(postDec);
-        postDec.setOperation(Operation.POST_DEC);
         return postDec.getName();
     }
 
     private String doBinOperator(CommonTree t, TreeNode node, Operation operation) {
         List<String> arr = new ArrayList<>();
-        TreeNode bin = new TreeNode(h++, "", node);
+        TreeNode bin = createTreeNode("", node, operation);
         for (CommonTree child : getChildren(t)) {
             String temp = doExpr(child, bin);
             if (StringUtils.isNotBlank(temp)) {
@@ -292,7 +287,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
-        bin.setOperation(operation);
         bin.setStart(((CommonToken) t.getToken()).getStartIndex());
         bin.setStop(((CommonToken) t.getToken()).getStopIndex());
         nodes.add(bin);
@@ -301,7 +295,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doMethodCall(CommonTree t, TreeNode node) {
         String name = "";
-        TreeNode methodCall = new TreeNode(h++, "", node);
+        TreeNode methodCall = createTreeNode("", node, Operation.METHOD_CALL);
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
@@ -321,7 +315,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         methodCall.setName(name);
-        methodCall.setOperation(Operation.METHOD_CALL);
         nodes.add(methodCall);
         return name;
     }
@@ -351,7 +344,7 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private String doConstructorCall(CommonTree t, TreeNode node) {
-        TreeNode constructor = new TreeNode(h++, "", node);
+        TreeNode constructor = createTreeNode("", node, Operation.CLASS_CONSTRUCTOR_CALL);
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
@@ -368,7 +361,6 @@ public class JavaTreeParser extends BaseParser {
                 }
             }
         }
-        constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
         nodes.add(constructor);
         return constructor.getName();
     }
@@ -405,7 +397,7 @@ public class JavaTreeParser extends BaseParser {
         List<String> params = new ArrayList<>();
         String name = "";
         List<Operation> types = new ArrayList<>();
-        TreeNode methodNode = new TreeNode(h++, "", node);
+        TreeNode methodNode = createTreeNode("", node, Operation.FUNCTION_METHOD_DECL);
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
@@ -433,7 +425,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         methodNode.setName(getType(types) + name + ' ' + StringUtils.join(params, ' '));
-        methodNode.setOperation(Operation.FUNCTION_METHOD_DECL);
         nodes.add(methodNode);
         ac.incMethod();
     }
@@ -578,7 +569,7 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private void doIf(CommonTree t, TreeNode node) {
-        TreeNode ifNode = new TreeNode(h++, "", node);
+        TreeNode ifNode = createTreeNode("", node, Operation.IF);
         ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
         String c = "";
@@ -590,7 +581,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         ifNode.setName(Operation.IF.name() + ' ' + c);
-        ifNode.setOperation(Operation.IF);
         nodes.add(ifNode);
     }
 
@@ -615,7 +605,7 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private void doWhile(CommonTree t, TreeNode node) {
-        TreeNode whileNode = new TreeNode(h++, "", node);
+        TreeNode whileNode = createTreeNode("", node, Operation.WHILE);
         whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         whileNode.setStop(((CommonToken) t.getToken()).getStopIndex());
         String c = "";
@@ -626,12 +616,11 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         whileNode.setName(Operation.WHILE.name() + ' ' + c);
-        whileNode.setOperation(Operation.WHILE);
         nodes.add(whileNode);
     }
 
     private void doFor(CommonTree t, TreeNode node) {
-        TreeNode forNode = new TreeNode(h++, "", node);
+        TreeNode forNode = createTreeNode("", node, Operation.FOR);
         forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         String name = "";
         for (CommonTree child : getChildren(t)) {
@@ -660,7 +649,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         forNode.setName(Operation.FOR.name() + ' ' + name);
-        forNode.setOperation(Operation.FOR);
         nodes.add(forNode);
     }
 

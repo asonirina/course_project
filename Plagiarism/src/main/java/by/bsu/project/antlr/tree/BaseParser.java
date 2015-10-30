@@ -91,6 +91,10 @@ public abstract class BaseParser {
         }
     }
 
+    protected TreeNode createTreeNode(String name, TreeNode parent, LangWrap.Operation operation) {
+        return new TreeNode(h++, name, parent, operation);
+    }
+
 
     protected String doIdent(CommonTree t) {
         ac.incIdent(t.getText().length());
