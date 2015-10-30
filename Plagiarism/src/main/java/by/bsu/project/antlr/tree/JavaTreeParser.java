@@ -525,17 +525,11 @@ public class JavaTreeParser extends BaseParser {
     private void doMethod(CommonTree t, TreeNode node) {
         List<String> params = new ArrayList<>();
         String name = "";
-        List<Operation> types = doType(t); //pascal
+        List<Operation> types = new ArrayList<>();
         TreeNode methodNode = new TreeNode(h++, "", node);
-
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case RETURN_TYPE: { //cpp
-                    types = doType(child);
-                    break;
-                }
                 case TYPE: { //java
                     types = doType(child);
                     break;
@@ -546,20 +540,12 @@ public class JavaTreeParser extends BaseParser {
                     name = doIdent(child) + " ";
                     break;
                 }
-                case FUNCTION_NAME: {
-                    name = doIdent((CommonTree) child.getChild(0)) + " ";
-                    break;
-                }
                 case BLOCK_SCOPE: {
                     doBlockScope(child, methodNode);
                     break;
                 }
                 case FORMAL_PARAM_LIST: {
                     params = doFormalParamList(child);
-                    break;
-                }
-                case VAR: {
-                    doVar(child, methodNode);
                     break;
                 }
                 default: {
@@ -633,15 +619,10 @@ public class JavaTreeParser extends BaseParser {
     private List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
         Operation array = Operation.NULL;
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case QUALIFIED_TYPE_IDENT: {   //custom type
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
-                case TYPE_NAME: {
                     type = Operation.QUALIFIED_TYPE_IDENT;
                     break;
                 }

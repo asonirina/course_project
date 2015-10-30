@@ -41,7 +41,7 @@ public class LangWrap {
         FUNCTION_NAME, //cpp
         VAR,  //pascal
         TYPE, //cpp
-        TYPE_NAME,
+        TYPE_NAME(Type.TYPE),           //cpp
         NAME,
         FORMAL_PARAM_LIST,
         BLOCK_SCOPE,
