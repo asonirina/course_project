@@ -45,7 +45,8 @@ public class LangWrap {
         NAME,
         FORMAL_PARAM_LIST,
         BLOCK_SCOPE,
-        RETURN(Type.JUMP), JUMP_STATEMENT(Type.JUMP),
+        RETURN(Type.JUMP),
+        JUMP_STATEMENT(Type.JUMP), //cpp
         RETURN_TYPE,
         FUNCTION_METHOD_DECL(Type.METHOD),    //java, cpp
         VOID_METHOD_DECL(Type.METHOD), //java
@@ -73,7 +74,7 @@ public class LangWrap {
         PARENTESIZED_EXPR,
         IF(Type.IF), WHILE(Type.ITERATION), FOR(Type.ITERATION),
         FOR_INIT, FOR_UPDATE,FOR_CONDITION,
-        ITERATION,
+        ITERATION, //cpp
         TO;
 
         private Type type;

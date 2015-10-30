@@ -246,22 +246,6 @@ public class JavaTreeParser extends BaseParser {
         String res = "";
         Operation op = OperationUtil.get(lang, t);
         switch (op) {
-            case FIELD: { // cpp
-                res = doCppLinearExpression(t, node);
-                break;
-            }
-            case LVAL: { // cpp
-                res = doCppLinearExpression(t, node);
-                break;
-            }
-            case RVAL: { // cpp
-                res = doCppLinearExpression(t, node);
-                break;
-            }
-            case EXPR: { // cpp
-                res = doCppLinearExpression(t, node);
-                break;
-            }
             case CLASS_CONSTRUCTOR_CALL: {
                 res = doConstructorCall(t, node);
                 break;
@@ -286,22 +270,18 @@ public class JavaTreeParser extends BaseParser {
                 res = doLiteral(t, node, Operation.INT);
                 break;
             }
-
             case FLOATING_POINT_LITERAL: {
                 res = doLiteral(t, node, Operation.DOUBLE);
                 break;
             }
-
             case STRING_LITERAL: {
                 res = doLiteral(t, node, Operation.STRING);
                 break;
             }
-
             case TRUE: {
                 res = doLiteral(t, node, Operation.BOOLEAN);
                 break;
             }
-
             case FALSE: {
                 res = doLiteral(t, node, Operation.BOOLEAN);
                 break;
@@ -314,7 +294,6 @@ public class JavaTreeParser extends BaseParser {
                 res = doBinOperator(t, node, Operation.PLUS);
                 break;
             }
-
             case MINUS: {
                 res = doBinOperator(t, node, Operation.MINUS);
                 break;
@@ -323,7 +302,6 @@ public class JavaTreeParser extends BaseParser {
                 res = doBinOperator(t, node, Operation.EQUAL);
                 break;
             }
-
             case NOT_EQUAL: {
                 res = doBinOperator(t, node, Operation.NOT_EQUAL);
                 break;
@@ -332,12 +310,10 @@ public class JavaTreeParser extends BaseParser {
                 res = doBinOperator(t, node, Operation.LOGICAL_AND);
                 break;
             }
-
             case LESS_THAN: {
                 res = doBinOperator(t, node, Operation.LESS_THAN);
                 break;
             }
-
             case GREATER_THAN: {
                 res = doBinOperator(t, node, Operation.GREATER_THAN);
                 break;
@@ -670,21 +646,9 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private void doBlockScope(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL)) {
-                doExpr(child, node);
-            }
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case SIMPLE_DECL: {  //cpp
-                    doSimpleDeclaration(child, node);
-                    break;
-                }
-                case BLOCK_SCOPE: {  //cpp
-                    doBlockScope(child, node);
-                    break;
-                }
                 case VAR_DECLARATION: {
                     doVarDeclaration(child, node);
                     break;
@@ -693,16 +657,8 @@ public class JavaTreeParser extends BaseParser {
                     doExpr(child, node);
                     break;
                 }
-                case EXPR_STATEMENT: {  //cpp
-                    doExpr((CommonTree) child.getChild(0), node);
-                    break;
-                }
                 case IF: {
                     doIf(child, node);
-                    break;
-                }
-                case ITERATION: {
-                    doIteration(child, node);
                     break;
                 }
                 case WHILE: {
@@ -715,10 +671,6 @@ public class JavaTreeParser extends BaseParser {
                 }
                 case RETURN: {
                     doExpr((CommonTree) child.getChild(0), node);
-                    break;
-                }
-                case JUMP_STATEMENT: {
-                    doExpr((CommonTree) child.getChild(1).getChild(0), node);
                     break;
                 }
                 default: {
@@ -766,24 +718,6 @@ public class JavaTreeParser extends BaseParser {
             }
         }
         return condition;
-    }
-
-    private void doIteration(CommonTree t, TreeNode node) {
-        CommonTree type = (CommonTree) t.getChild(0).getChild(0);
-        Operation op = OperationUtil.get(lang, type);
-        switch (op) {
-            case WHILE: {
-                doWhile(t, node);
-                break;
-            }
-            case FOR: {
-                doFor(t, node);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
     }
 
     private void doWhile(CommonTree t, TreeNode node) {
