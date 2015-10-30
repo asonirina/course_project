@@ -8,11 +8,13 @@ import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.general.lang.LangWrap;
 import by.bsu.project.general.model.AttributeCounting;
 import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.TreeAdaptor;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -52,10 +54,14 @@ public abstract class BaseParser {
     }
 
     protected static List<CommonTree> getChildren(CommonTree tree) {
+        if(tree.getChildren() == null) {
+            return new ArrayList<>();
+        }
         return (List<CommonTree>) tree.getChildren();
     }
 
     protected abstract void doTree(CommonTree t, TreeNode node);
+    protected abstract String doExpr(CommonTree t, TreeNode node);
 
     // try to find ROOT ELEMENT
     protected void doRoot(CommonTree t) {
@@ -68,8 +74,8 @@ public abstract class BaseParser {
             root.setOperation(LangWrap.Operation.ROOT);
             nodes.add(root);
 
-            for (int i = 0; i < t.getChildCount(); i++) {
-                doTree((CommonTree) t.getChild(i), root);
+            for (CommonTree child : getChildren(t)) {
+                doTree(child, root);
             }
         }
     }
@@ -95,6 +101,25 @@ public abstract class BaseParser {
         return new TreeNode(h++, name, parent, operation);
     }
 
+
+    protected String doBinOperator(CommonTree t, TreeNode node, LangWrap.Operation operation) {
+        List<String> arr = new ArrayList<>();
+        TreeNode bin = createTreeNode("", node, operation);
+        for (CommonTree child : getChildren(t)) {
+            String temp = doExpr(child, bin);
+            if (StringUtils.isNotBlank(temp)) {
+                arr.add(temp);
+            }
+        }
+        bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
+        bin.setStart(((CommonToken) t.getToken()).getStartIndex());
+        bin.setStop(((CommonToken) t.getToken()).getStopIndex());
+        nodes.add(bin);
+        return bin.getName();
+    }
+    protected String doLiteral(CommonTree t, LangWrap.Operation operation) {
+        return operation.name() + ' ' + doIdent(t);
+    }
 
     protected String doIdent(CommonTree t) {
         ac.incIdent(t.getText().length());
