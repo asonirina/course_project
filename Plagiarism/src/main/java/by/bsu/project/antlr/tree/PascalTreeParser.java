@@ -1,22 +1,12 @@
 package by.bsu.project.antlr.tree;
 
-import by.bsu.project.antlr.lang.LangFactory;
-import by.bsu.project.antlr.lang.LangLexer;
-import by.bsu.project.antlr.lang.LangParser;
 import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.general.model.AttributeCounting;
-import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.TreeAdaptor;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,19 +31,19 @@ public class PascalTreeParser extends BaseParser {
     protected void doTree(CommonTree t, TreeNode node) {
             Operation op = OperationUtil.get(lang, t);
             switch (op) {
-                case VAR: { //pascal
+                case VAR: {
                     doVar(t, node);
                     break;
                 }
-                case PROCEDURE: { //pascal
+                case PROCEDURE: {
                     doMethod(t, node);
                     break;
                 }
-                case FUNCTION_METHOD_DECL: { //pascal
+                case FUNCTION_METHOD_DECL: {
                     doMethod(t, node);
                     break;
                 }
-                case BLOCK_SCOPE: { //pascal
+                case BLOCK_SCOPE: {
                     doBlockScope(t, node);
                     break;
                 }
@@ -63,10 +53,8 @@ public class PascalTreeParser extends BaseParser {
             }
     }
 
-
     private void doVar(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATION: {
@@ -81,35 +69,19 @@ public class PascalTreeParser extends BaseParser {
     }
 
     private String doVarDeclaration(CommonTree t, TreeNode node) {
-        List<Operation> types = doType(t); // try to find any children TYPE (Pascal)
+        Operation type = Operation.NULL;
         List<String> names = new ArrayList<>();
         List<int[]> indexes = new ArrayList<>();
 
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case NAME: {//cpp
-                    int[] temp = new int[2];
-                    temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
-                    temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
-                    indexes.add(temp);
-                    names.add(doIdent((CommonTree) child.getChild(0)));
-                    break;
-                }
                 case VAR_DECLARATOR_LIST: {
-                    names.addAll(doVarDeclaratorList(child, node, indexes));
-                    break;
-                }
-                case TYPE: {
-                    types = doType(child);
-                    break;
-                }
-                case INIT: {
-                    doExpr(child, node);
+                    names.addAll(doVarDeclaratorList(child, indexes));
                     break;
                 }
                 default: {
+                    type = doSingleType(child);
                     break;
                 }
             }
@@ -117,38 +89,24 @@ public class PascalTreeParser extends BaseParser {
         for (int i = 0; i<names.size(); i++) {
             String name = names.get(i);
             int[] temp = indexes.get(i);
-            TreeNode varDeclarationNode = new TreeNode(h++, getType(types) + ' ' + name, node);
-            varDeclarationNode.setOperation(Operation.VAR_DECLARATION);
+            TreeNode varDeclarationNode = createTreeNode(type.name() + ' ' + name, node, Operation.VAR_DECLARATION);
             varDeclarationNode.setStart(temp[0]);
             varDeclarationNode.setStop(temp[1]);
             nodes.add(varDeclarationNode);
         }
-        return getType(types) + StringUtils.join(names.toArray());
+        return type.name() + StringUtils.join(names.toArray());
     }
 
-    private List<String> doVarDeclaratorList(CommonTree t, TreeNode node, List<int[]> indexes) {
+    private List<String> doVarDeclaratorList(CommonTree t,  List<int[]> indexes) {
         List<String> names = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case VAR_DECLARATOR: {
-                    if(indexes != null ){
-                        int temp[] = new int[2];
-                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
-                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
-                        indexes.add(temp);
-                    }
-                    names.add(doVarDeclarator(child, node));
-                    break;
-                }
                 case IDENT: {
-                    if(indexes != null ){
-                        int temp[] = new int[2];
-                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
-                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
-                        indexes.add(temp);
-                    }
+                    int temp[] = new int[2];
+                    temp[0] = ((CommonToken) child.getToken()).getStartIndex();
+                    temp[1] = ((CommonToken) child.getToken()).getStopIndex();
+                    indexes.add(temp);
                     names.add(doIdent(child));
                     break;
                 }
@@ -160,135 +118,7 @@ public class PascalTreeParser extends BaseParser {
         return names;
     }
 
-    private String doVarDeclarator(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = doIdent(child);
-                    break;
-                }
-                case EXPR: {
-                    String exprName = name + ' ' + Operation.ASSIGN.name() + ' ' + doExpr(child, node);
-                    TreeNode assignNode = new TreeNode(h++, exprName, node);
-                    assignNode.setOperation(Operation.ASSIGN);
-                    nodes.add(assignNode);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-        return name;
-    }
-
-    protected String doExpr(CommonTree t, TreeNode node) {
-        String res = doCommonExpression(t, node);
-        if (StringUtils.isNotBlank(res)) {
-            return res;
-        }
-        for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            res = doCommonExpression((CommonTree) child, node);
-            if (StringUtils.isNotBlank(res)) {
-                break;
-            }
-        }
-
-        return res;
-    }
-
-    private String doCommonExpression(CommonTree t, TreeNode node) {
-        String res = "";
-        Operation op = OperationUtil.get(lang, t);
-        switch (op) {
-            case POST_INC: {
-                res = doPostInc(t, node);
-                break;
-            }
-            case POST_DEC: {
-                res = doPostDec(t, node);
-                break;
-            }
-            case METHOD_CALL: {
-                res = doMethodCall(t, node);
-                break;
-            }
-            case IDENT: {
-                res = doIdent(t);
-                break;
-            }
-            case DECIMAL_LITERAL: {
-                res = doLiteral(t, Operation.INT);
-                break;
-            }
-
-            case FLOATING_POINT_LITERAL: {
-                res = doLiteral(t, Operation.DOUBLE);
-                break;
-            }
-
-            case STRING_LITERAL: {
-                res = doLiteral(t, Operation.STRING);
-                break;
-            }
-
-            case TRUE: {
-                res = doLiteral(t, Operation.BOOLEAN);
-                break;
-            }
-
-            case FALSE: {
-                res = doLiteral(t, Operation.BOOLEAN);
-                break;
-            }
-            case ASSIGN: {
-                res = doBinOperator(t, node, Operation.ASSIGN);
-                break;
-            }
-            case PLUS: {
-                res = doBinOperator(t, node, Operation.PLUS);
-                break;
-            }
-
-            case MINUS: {
-                res = doBinOperator(t, node, Operation.MINUS);
-                break;
-            }
-            case EQUAL: {
-                res = doBinOperator(t, node, Operation.EQUAL);
-                break;
-            }
-
-            case NOT_EQUAL: {
-                res = doBinOperator(t, node, Operation.NOT_EQUAL);
-                break;
-            }
-            case LOGICAL_AND: {
-                res = doBinOperator(t, node, Operation.LOGICAL_AND);
-                break;
-            }
-
-            case LESS_THAN: {
-                res = doBinOperator(t, node, Operation.LESS_THAN);
-                break;
-            }
-
-            case GREATER_THAN: {
-                res = doBinOperator(t, node, Operation.GREATER_THAN);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return res;
-    }
-
-    private String doPostInc(CommonTree t, TreeNode node) {
+    protected String doPostInc(CommonTree t, TreeNode node) {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -306,7 +136,7 @@ public class PascalTreeParser extends BaseParser {
         return postInc.getName();
     }
 
-    private String doPostDec(CommonTree t, TreeNode node) {
+    protected String doPostDec(CommonTree t, TreeNode node) {
         String name = "";
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
@@ -324,11 +154,10 @@ public class PascalTreeParser extends BaseParser {
         return postDec.getName();
     }
 
-    private String doMethodCall(CommonTree t, TreeNode node) {
+    protected String doMethodCall(CommonTree t, TreeNode node) {
         String name = "";
-        TreeNode methodCall = new TreeNode(h++, "", node);
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        TreeNode methodCall = createTreeNode("", node, Operation.METHOD_CALL);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -337,79 +166,31 @@ public class PascalTreeParser extends BaseParser {
                     name = doIdent(child);
                     break;
                 }
-                case DOT: {
-                    name = doDot(child);
-                    break;
-                }
                 case ARGUMENT_LIST: {
                     doArgumentList(child, methodCall);
                 }
             }
         }
         methodCall.setName(name);
-        methodCall.setOperation(Operation.METHOD_CALL);
         nodes.add(methodCall);
         return name;
     }
 
-    private String doDot(CommonTree t) {
-        List<String> names = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    names.add(doIdent(child));
-                    break;
-                }
-                case DOT: {
-                    names.add(doDot(child));
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-        return StringUtils.join(names, '.');
-    }
-
     private void doArgumentList(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL)) {
-                doExpr(child, node);
-            }
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    doExpr(child, node);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
+        for (CommonTree child : getChildren(t)) {
+            doExpr(child, node);
         }
     }
 
     private void doMethod(CommonTree t, TreeNode node) {
         List<String> params = new ArrayList<>();
         String name = "";
-        List<Operation> types = doType(t); //pascal
-        TreeNode methodNode = new TreeNode(h++, "", node);
+        Operation type = Operation.NULL;
+        TreeNode methodNode = createTreeNode("", node, Operation.FUNCTION_METHOD_DECL);
 
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case RETURN_TYPE: { //cpp
-                    types = doType(child);
-                    break;
-                }
-                case TYPE: { //java
-                    types = doType(child);
-                    break;
-                }
                 case IDENT: {
                     methodNode.setStart(((CommonToken) child.getToken()).getStartIndex());
                     methodNode.setStop(((CommonToken)child.getToken()).getStopIndex());
@@ -433,31 +214,22 @@ public class PascalTreeParser extends BaseParser {
                     break;
                 }
                 default: {
+                    type = doSingleType(child);
                     break;
                 }
             }
         }
-        methodNode.setName(getType(types) + name + ' ' + StringUtils.join(params, ' '));
-        methodNode.setOperation(Operation.FUNCTION_METHOD_DECL);
+        methodNode.setName(type.name() + ' ' + name + ' ' + StringUtils.join(params, ' '));
         nodes.add(methodNode);
         ac.incMethod();
     }
 
-    private static String getType(List<Operation> types) {
-        String res = "";
-        for (Operation op : types) {
-            res += op.name() + ' ';
-        }
-        return res;
-    }
-
     private List<String> doFormalParamList(CommonTree t) {
         List<String> params = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case FORMAL_PARAM_STD_DECL: {  //identifier
+                case FORMAL_PARAM_STD_DECL: {
                     params.add(doFormalParam(child));
                     break;
                 }
@@ -471,91 +243,81 @@ public class PascalTreeParser extends BaseParser {
 
     private String doFormalParam(CommonTree t) {
         List<String> names = new ArrayList<>();
-        List<Operation> types = doType(t);  //pascal !!!
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        Operation type = Operation.NULL;
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case VAR_DECLARATOR_LIST: { //pascal
-                    names.addAll(doVarDeclaratorList(child, null, null));
+                case VAR_DECLARATOR_LIST: {
+                    names.addAll(doVarDeclaratorList(child, new ArrayList<int[]>()));
                     break;
                 }
-                case TYPE: {
-                    types = doType(child);
-                    break;
-                }
-                case IDENT: {
-                    names.add(doIdent(child));
-                    break;
-                }
+
                 default: {
+                    type = doSingleType(child);
                     break;
                 }
             }
         }
         String res = "";
         for (String s : names) {
-            res += getType(types) + " " + s + ", ";
+            res += type.name() + " " + s + ", ";
         }
         return res.substring(0, res.length() - 2);
     }
 
     private List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
-        Operation array = Operation.NULL;
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case QUALIFIED_TYPE_IDENT: {   //custom type
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
-                case TYPE_NAME: {
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
-                case ARRAY: {
-                    array = Operation.ARRAY;
-                    break;
-                }
-                case INT: {
-                    type = Operation.INT;
-                    break;
-                }
-                case FLOAT: {
-                    type = Operation.FLOAT;
-                    break;
-                }
-                case CHAR: {
-                    type = Operation.CHAR;
-                    break;
-                }
-                case DOUBLE: {
-                    type = Operation.DOUBLE;
-                    break;
-                }
-                case BOOLEAN: {
-                    type = Operation.BOOLEAN;
-                    break;
-                }
-                case STRING: {
-                    type = Operation.STRING;
-                    break;
-                }
-                default: {
-                    break;
-                }
+        boolean array = false;
+        for (CommonTree child : getChildren(t)) {
+            Operation op = doSingleType(child);
+            if(op.equals(Operation.ARRAY)) {
+                array = true;
+            } else {
+                type = op;
             }
         }
         List<Operation> types = new ArrayList<>();
         if (!type.equals(Operation.NULL)) {
             types.add(type);
         }
-        if (!array.equals(Operation.NULL)) {
-            types.add(array);
+        if (array) {
+            types.add(Operation.ARRAY);
         }
         return types;
+    }
+
+    private Operation doSingleType(CommonTree t) {
+        Operation op = OperationUtil.get(lang, t);
+        switch (op) {
+            case TYPE_NAME: {
+                return Operation.QUALIFIED_TYPE_IDENT;
+            }
+            case ARRAY: {
+                return Operation.ARRAY;
+            }
+            case INT: {
+                return Operation.INT;
+            }
+            case FLOAT: {
+                return Operation.FLOAT;
+            }
+            case CHAR: {
+                return Operation.CHAR;
+            }
+            case DOUBLE: {
+                return Operation.DOUBLE;
+            }
+            case BOOLEAN: {
+                return  Operation.BOOLEAN;
+            }
+            case STRING: {
+                return Operation.STRING;
+            }
+            default: {
+                break;
+            }
+        }
+        return Operation.NULL;
     }
 
     private void doBlockScope(CommonTree t, TreeNode node) {
@@ -567,20 +329,12 @@ public class PascalTreeParser extends BaseParser {
                     doBlockScope(child, node);
                     break;
                 }
-                case VAR_DECLARATION: {
-                    doVarDeclaration(child, node);
-                    break;
-                }
                 case EXPR: {
                     doExpr(child, node);
                     break;
                 }
                 case IF: {
                     doIf(child, node);
-                    break;
-                }
-                case ITERATION: {
-                    doIteration(child, node);
                     break;
                 }
                 case WHILE: {
@@ -607,200 +361,99 @@ public class PascalTreeParser extends BaseParser {
     }
 
     private void doIf(CommonTree t, TreeNode node) {
-        TreeNode ifNode = new TreeNode(h++, "", node);
+        TreeNode ifNode = createTreeNode("", node, Operation.IF);
         ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, ifNode);
-            }
-            String temp = doIfWhileBlock(child, ifNode);
-            if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
-            }
+        String name = "";
+        for (CommonTree child : getChildren(t)) {
+         Operation op = OperationUtil.get(lang, child);
+           switch (op){
+               case BLOCK_SCOPE:{
+                   doIfWhileBlock(child, ifNode);
+                   break;
+               }
+               default:{
+                   name = doExpr(child, ifNode);
+                   break;
+               }
+           }
         }
-        ifNode.setName(Operation.IF.name() + ' ' + c1 + ' ' + c2);
-        ifNode.setOperation(Operation.IF);
+        ifNode.setName(Operation.IF.name() + ' ' + name);
         nodes.add(ifNode);
     }
 
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
-        String condition = "";
         Operation op = OperationUtil.get(lang, t);
         switch (op) {
-            case PARENTESIZED_EXPR: {
-                condition = doParenthesizedExpr(t, node);
-                break;
-            }
-            case CONDITION: {
-                condition = doExpr((CommonTree) t.getChild(0), node);
-                break;
-            }
             case BLOCK_SCOPE: {
                 doBlockScope(t, node);
-                break;
-            }
-        }
-        return condition;
-    }
-
-    private void doIteration(CommonTree t, TreeNode node) {
-        CommonTree type = (CommonTree) t.getChild(0).getChild(0);
-        Operation op = OperationUtil.get(lang, type);
-        switch (op) {
-            case WHILE: {
-                doWhile(t, node);
-                break;
-            }
-            case FOR: {
-                doFor(t, node);
                 break;
             }
             default: {
                 break;
             }
         }
+        return null;
     }
 
     private void doWhile(CommonTree t, TreeNode node) {
-        TreeNode whileNode = new TreeNode(h++, "", node);
-        whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
-        whileNode.setStop(((CommonToken)t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            //pascal
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, whileNode);
-            }
-            String temp = doIfWhileBlock(child, whileNode);
-            if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
+        TreeNode whileNode = createTreeNode("", node, Operation.WHILE);
+        whileNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        whileNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        String name = "";
+        for (CommonTree child : getChildren(t)) {
+            Operation op = OperationUtil.get(lang, child);
+            switch (op) {
+                case BLOCK_SCOPE: {
+                    doIfWhileBlock(child, whileNode);
+                    break;
+                }
+                default: {
+                    name = doExpr(child, whileNode);
+                    break;
+                }
             }
         }
-        whileNode.setName(Operation.WHILE.name() + ' ' + c1 + ' ' + c2);
-        whileNode.setOperation(Operation.WHILE);
+        whileNode.setName(Operation.WHILE.name() + ' ' + name);
         nodes.add(whileNode);
     }
 
     private void doFor(CommonTree t, TreeNode node) {
-        TreeNode forNode = new TreeNode(h++, "", node);
+        TreeNode forNode = createTreeNode("", node, Operation.FOR);
         forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        forNode.setStop(((CommonToken) t.getToken()).getStopIndex());
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case FOR_INIT: {
-                    doForInit(child, forNode);
-                    break;
-                }
-                case FOR_CONDITION: {
-                    name += doForCondition(child, forNode) + ' ';
-                    break;
-                }
-                case CONDITION: {
-                    name += doExpr((CommonTree) child.getChild(0), node) + ' ';
-                    break;
-                }
-                case FOR_UPDATE: {
-                    name += doForUpdate(child, forNode);
-                    break;
-                }
                 case TO: {
                     name += doTo(child, forNode);
                     break;
                 }
                 case BLOCK_SCOPE: {
-                    forNode.setStop(((CommonToken) child.getToken()).getStartIndex());
                     doBlockScope(child, forNode);
                     break;
                 }
                 default: {
+                    name +=doIdent(child) + ' ';
                     break;
                 }
             }
         }
         forNode.setName(Operation.FOR.name() + ' ' + name);
-        forNode.setOperation(Operation.FOR);
         nodes.add(forNode);
     }
 
     private String doTo(CommonTree t, TreeNode node) {
-        CommonTree init = (CommonTree) t.getChild(0);
+        List<CommonTree> children = getChildren(t);
+        CommonTree init = children.get(0);
         String assign = doExpr(init, node);
-        TreeNode assignNode = new TreeNode(h++, Operation.ASSIGN.name() + ' ' + assign, node);
-        assignNode.setOperation(Operation.ASSIGN);
+        TreeNode assignNode = createTreeNode(Operation.ASSIGN.name() + ' ' + assign, node, Operation.ASSIGN);
         nodes.add(assignNode);
-        CommonTree con = (CommonTree) t.getChild(1);
+        CommonTree con = children.get(1);
         String condition = doExpr(con, node);
-        TreeNode conditionNode = new TreeNode(h++, Operation.LESS_THAN.name() + ' ' + condition, node);
-        conditionNode.setOperation(Operation.LESS_THAN);
+        TreeNode conditionNode = createTreeNode(Operation.LESS_THAN.name() + ' ' + condition, node, Operation.LESS_THAN);
         nodes.add(conditionNode);
-        return assign + condition;
-    }
-
-    private void doForInit(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case VAR_DECLARATION: {
-                    doVarDeclaration(child, node);
-                    break;
-                }
-
-                default: {
-                    break;
-                }
-            }
-        }
-    }
-
-    private String doForCondition(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    name = doExpr(child, node);
-                    break;
-                }
-            }
-        }
-        return name;
-    }
-
-    private String doForUpdate(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    name = doExpr(child, node);
-                    break;
-                }
-            }
-        }
-        return name;
-    }
-
-    private String doParenthesizedExpr(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    name = doExpr(child, node);
-                    break;
-                }
-            }
-        }
-        return name;
+        return assign + ' ' + condition;
     }
 }

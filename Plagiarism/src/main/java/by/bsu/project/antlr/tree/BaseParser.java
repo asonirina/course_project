@@ -61,7 +61,10 @@ public abstract class BaseParser {
     }
 
     protected abstract void doTree(CommonTree t, TreeNode node);
-    protected abstract String doExpr(CommonTree t, TreeNode node);
+
+    protected abstract String doPostInc(CommonTree t, TreeNode node);
+    protected abstract String doPostDec(CommonTree t, TreeNode node);
+    protected abstract String doMethodCall(CommonTree t, TreeNode node);
 
     // try to find ROOT ELEMENT
     protected void doRoot(CommonTree t) {
@@ -101,6 +104,20 @@ public abstract class BaseParser {
         return new TreeNode(h++, name, parent, operation);
     }
 
+    protected String doExpr(CommonTree t, TreeNode node) {
+        String res = doCommonExpression(t, node);
+        if (StringUtils.isNotBlank(res)) {
+            return res;
+        }
+        for (CommonTree child : getChildren(t)) {
+            res = doCommonExpression(child, node);
+            if (StringUtils.isNotBlank(res)) {
+                break;
+            }
+        }
+
+        return res;
+    }
 
     protected String doBinOperator(CommonTree t, TreeNode node, LangWrap.Operation operation) {
         List<String> arr = new ArrayList<>();
@@ -117,6 +134,94 @@ public abstract class BaseParser {
         nodes.add(bin);
         return bin.getName();
     }
+
+    protected String doCommonExpression(CommonTree t, TreeNode node) {
+        String res = "";
+        LangWrap.Operation op = OperationUtil.get(lang, t);
+        switch (op) {
+            case POST_INC: {
+                res = doPostInc(t, node);
+                break;
+            }
+            case POST_DEC: {
+                res = doPostDec(t, node);
+                break;
+            }
+            case METHOD_CALL: {
+                res = doMethodCall(t, node);
+                break;
+            }
+            case IDENT: {
+                res = doIdent(t);
+                break;
+            }
+            case DECIMAL_LITERAL: {
+                res = doLiteral(t, LangWrap.Operation.INT);
+                break;
+            }
+
+            case FLOATING_POINT_LITERAL: {
+                res = doLiteral(t, LangWrap.Operation.DOUBLE);
+                break;
+            }
+
+            case STRING_LITERAL: {
+                res = doLiteral(t, LangWrap.Operation.STRING);
+                break;
+            }
+
+            case TRUE: {
+                res = doLiteral(t, LangWrap.Operation.BOOLEAN);
+                break;
+            }
+
+            case FALSE: {
+                res = doLiteral(t, LangWrap.Operation.BOOLEAN);
+                break;
+            }
+            case ASSIGN: {
+                res = doBinOperator(t, node, LangWrap.Operation.ASSIGN);
+                break;
+            }
+            case PLUS: {
+                res = doBinOperator(t, node, LangWrap.Operation.PLUS);
+                break;
+            }
+
+            case MINUS: {
+                res = doBinOperator(t, node, LangWrap.Operation.MINUS);
+                break;
+            }
+            case EQUAL: {
+                res = doBinOperator(t, node, LangWrap.Operation.EQUAL);
+                break;
+            }
+
+            case NOT_EQUAL: {
+                res = doBinOperator(t, node, LangWrap.Operation.NOT_EQUAL);
+                break;
+            }
+            case LOGICAL_AND: {
+                res = doBinOperator(t, node, LangWrap.Operation.LOGICAL_AND);
+                break;
+            }
+
+            case LESS_THAN: {
+                res = doBinOperator(t, node, LangWrap.Operation.LESS_THAN);
+                break;
+            }
+
+            case GREATER_THAN: {
+                res = doBinOperator(t, node, LangWrap.Operation.GREATER_THAN);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        return res;
+    }
+
     protected String doLiteral(CommonTree t, LangWrap.Operation operation) {
         return operation.name() + ' ' + doIdent(t);
     }
