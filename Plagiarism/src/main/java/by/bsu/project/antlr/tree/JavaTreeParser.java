@@ -4,7 +4,6 @@ import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.antlr.model.TreeNode;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -59,45 +58,6 @@ public class JavaTreeParser extends BaseParser {
         classNode.setName(Operation.CLASS_DECL.name() + ' ' + name);
         classNode.setOperation(Operation.CLASS_DECL);
         nodes.add(classNode);
-    }
-
-
-    private void doSimpleDeclaration(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-
-                case CLASS_DECL: {
-                    doClass((CommonTree) child.getChild(0), node);
-                    break;
-                }
-                case VAR_DECLARATION: {
-                    doVarDeclaration(child, node);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-    }
-
-    //pascal
-    private void doVar(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case VAR_DECLARATION: {
-                    doVarDeclaration(child, node);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
     }
 
     private String doVarDeclaration(CommonTree t, TreeNode node) {
@@ -169,8 +129,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doVarDeclarator(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -192,54 +151,19 @@ public class JavaTreeParser extends BaseParser {
         return name;
     }
 
-    private String doExpr(CommonTree t, TreeNode node) {
+    private String doExpr(CommonTree t, TreeNode node) {     //?????
         String res = doCommonExpression(t, node);
         if (StringUtils.isNotBlank(res)) {
             return res;
         }
-        for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            res = doCommonExpression((CommonTree) child, node);
+        for (CommonTree child : getChildren(t)) {
+            res = doCommonExpression(child, node);
             if (StringUtils.isNotBlank(res)) {
                 break;
             }
         }
 
         return res;
-    }
-
-    private String doCppLinearExpression(CommonTree t, TreeNode node) {
-        if (t.getChildCount() == 1) {
-            return doExpr((CommonTree) t.getChild(0), node);
-        }
-        Operation current = Operation.NULL;
-        List<String> arr = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case FIELD: {
-                    arr.add(doExpr(child, node));
-                    break;
-                }
-                case IDENT: {
-                    arr.add(doIdent(child));
-                    break;
-                }
-                default: {
-                    if (child.getChildCount() == 0) {
-                        current = op;
-                    } else {
-                        current = OperationUtil.get(lang, (CommonTree) child.getChild(0));
-                    }
-                    break;
-                }
-            }
-        }
-        TreeNode bin = new TreeNode(h++, current.name() + ' ' + StringUtils.join(arr, ' '), node);
-        bin.setOperation(current);
-        nodes.add(bin);
-        return bin.getName();
     }
 
     private String doCommonExpression(CommonTree t, TreeNode node) {
@@ -327,8 +251,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doPostInc(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -336,7 +259,6 @@ public class JavaTreeParser extends BaseParser {
                 }
             }
         }
-
         TreeNode postInc = new TreeNode(h++, name + ' ' + Operation.POST_INC.name(), node);
         nodes.add(postInc);
         postInc.setOperation(Operation.POST_INC);
@@ -345,8 +267,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doPostDec(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -364,9 +285,8 @@ public class JavaTreeParser extends BaseParser {
     private String doBinOperator(CommonTree t, TreeNode node, Operation operation) {
         List<String> arr = new ArrayList<>();
         TreeNode bin = new TreeNode(h++, "", node);
-        for (int i = 0; i < t.getChildCount(); i++) {
-            Tree child = t.getChild(i);
-            String temp = doExpr((CommonTree) child, bin);
+        for (CommonTree child : getChildren(t)) {
+            String temp = doExpr(child, bin);
             if (StringUtils.isNotBlank(temp)) {
                 arr.add(temp);
             }
@@ -382,22 +302,13 @@ public class JavaTreeParser extends BaseParser {
     private String doMethodCall(CommonTree t, TreeNode node) {
         String name = "";
         TreeNode methodCall = new TreeNode(h++, "", node);
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     methodCall.setStart(((CommonToken)child.getToken()).getStartIndex());
                     methodCall.setStop(((CommonToken)child.getToken()).getStopIndex());
                     name = doIdent(child);
-                    break;
-                }
-                case CALLEE: {
-                    name = doDot(child);
-                    break;
-                }
-                case ARGUMENT: {
-                    doCppLinearExpression(child, methodCall);
                     break;
                 }
                 case DOT: {
@@ -417,8 +328,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doDot(CommonTree t) {
         List<String> names = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -437,13 +347,12 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private String doLiteral(CommonTree t, TreeNode node, Operation operation) {
-        return operation.name() + ' ' + (checkIdentifiers ? t.getText() : "");
+        return operation.name() + ' ' + doIdent(t);
     }
 
     private String doConstructorCall(CommonTree t, TreeNode node) {
         TreeNode constructor = new TreeNode(h++, "", node);
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case QUALIFIED_TYPE_IDENT: {
@@ -461,18 +370,16 @@ public class JavaTreeParser extends BaseParser {
         }
         constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
         nodes.add(constructor);
-
         return constructor.getName();
     }
 
     private String doQualifiedTypeIdent(CommonTree t) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    name = Operation.QUALIFIED_TYPE_IDENT.name() + ' ' + (checkIdentifiers ? child.getText() : "");
+                    name = Operation.QUALIFIED_TYPE_IDENT.name() + ' ' + doIdent(child);
                 }
             }
         }
@@ -480,11 +387,7 @@ public class JavaTreeParser extends BaseParser {
     }
 
     private void doArgumentList(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL)) {
-                doExpr(child, node);
-            }
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
@@ -545,8 +448,7 @@ public class JavaTreeParser extends BaseParser {
 
     private List<String> doFormalParamList(CommonTree t) {
         List<String> params = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case FORMAL_PARAM_STD_DECL: {  //identifier
@@ -563,15 +465,10 @@ public class JavaTreeParser extends BaseParser {
 
     private String doFormalParam(CommonTree t) {
         List<String> names = new ArrayList<>();
-        List<Operation> types = doType(t);  //pascal !!!
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        List<Operation> types = new ArrayList<>();
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case VAR_DECLARATOR_LIST: { //pascal
-                    names.addAll(doVarDeclaratorList(child, null, null));
-                    break;
-                }
                 case TYPE: {
                     types = doType(child);
                     break;
@@ -684,18 +581,15 @@ public class JavaTreeParser extends BaseParser {
         TreeNode ifNode = new TreeNode(h++, "", node);
         ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, ifNode);
-            }
+        String c = "";
+        for (CommonTree child : getChildren(t)) {
+
             String temp = doIfWhileBlock(child, ifNode);
             if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
+                c = temp;
             }
         }
-        ifNode.setName(Operation.IF.name() + ' ' + c1 + ' ' + c2);
+        ifNode.setName(Operation.IF.name() + ' ' + c);
         ifNode.setOperation(Operation.IF);
         nodes.add(ifNode);
     }
@@ -724,19 +618,14 @@ public class JavaTreeParser extends BaseParser {
         TreeNode whileNode = new TreeNode(h++, "", node);
         whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
         whileNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            //pascal
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, whileNode);
-            }
+        String c = "";
+        for (CommonTree child : getChildren(t)) {
             String temp = doIfWhileBlock(child, whileNode);
             if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
+                c = temp;
             }
         }
-        whileNode.setName(Operation.WHILE.name() + ' ' + c1 + ' ' + c2);
+        whileNode.setName(Operation.WHILE.name() + ' ' + c);
         whileNode.setOperation(Operation.WHILE);
         nodes.add(whileNode);
     }
@@ -745,8 +634,7 @@ public class JavaTreeParser extends BaseParser {
         TreeNode forNode = new TreeNode(h++, "", node);
         forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case FOR_INIT: {
@@ -757,16 +645,8 @@ public class JavaTreeParser extends BaseParser {
                     name += doForCondition(child, forNode) + ' ';
                     break;
                 }
-                case CONDITION: {
-                    name += doExpr((CommonTree) child.getChild(0), node) + ' ';
-                    break;
-                }
                 case FOR_UPDATE: {
                     name += doForUpdate(child, forNode);
-                    break;
-                }
-                case TO: {
-                    name += doTo(child, forNode);
                     break;
                 }
                 case BLOCK_SCOPE: {
@@ -784,31 +664,16 @@ public class JavaTreeParser extends BaseParser {
         nodes.add(forNode);
     }
 
-    private String doTo(CommonTree t, TreeNode node) {
-        CommonTree init = (CommonTree) t.getChild(0);
-        String assign = doExpr(init, node);
-        TreeNode assignNode = new TreeNode(h++, Operation.ASSIGN.name() + ' ' + assign, node);
-        assignNode.setOperation(Operation.ASSIGN);
-        nodes.add(assignNode);
-        CommonTree con = (CommonTree) t.getChild(1);
-        String condition = doExpr(con, node);
-        TreeNode conditionNode = new TreeNode(h++, Operation.LESS_THAN.name() + ' ' + condition, node);
-        conditionNode.setOperation(Operation.LESS_THAN);
-        nodes.add(conditionNode);
-        return assign + condition;
-    }
-
     private void doForInit(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATION: {
                     doVarDeclaration(child, node);
                     break;
                 }
-                case SIMPLE_DECL: {
-                    doSimpleDeclaration(child, node);
+                case EXPR: {
+                    doExpr(child, node);
                     break;
                 }
                 default: {
@@ -820,12 +685,14 @@ public class JavaTreeParser extends BaseParser {
 
     private String doForCondition(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr(child, node);
+                    break;
+                }
+                default:{
                     break;
                 }
             }
@@ -835,12 +702,14 @@ public class JavaTreeParser extends BaseParser {
 
     private String doForUpdate(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr(child, node);
+                    break;
+                }
+                default:{
                     break;
                 }
             }
@@ -850,8 +719,7 @@ public class JavaTreeParser extends BaseParser {
 
     private String doParenthesizedExpr(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
@@ -885,5 +753,4 @@ public class JavaTreeParser extends BaseParser {
             }
         }
     }
-
 }
