@@ -61,27 +61,33 @@ public class TreeParser {
 
             CommonTree tree = (CommonTree) parser.compilationUnit().getTree();
             ac.setTokens(parser.getTokenStream().size());
-            doTree(tree, null);
+            doRoot(tree);
             return nodes;
         } catch (Exception ex) {
             return null;
         }
     }
 
+    // try to find ROOT ELEMENT
+    private void doRoot(CommonTree t) {
+        if (t == null) {
+            return;
+        }
+        Operation op = OperationUtil.get(lang, t);
+        if(op.equals(Operation.ROOT)) {
+            TreeNode root = new TreeNode(h++, Operation.ROOT.name(), null);
+            root.setOperation(Operation.ROOT);
+            nodes.add(root);
+
+            for (int i = 0; i < t.getChildCount(); i++) {
+                doTree((CommonTree) t.getChild(i), root);
+            }
+        }
+    }
+
     private void doTree(CommonTree t, TreeNode node) {
-        if (t != null) {
             Operation op = OperationUtil.get(lang, t);
             switch (op) {
-                case ROOT: {
-                    TreeNode root = new TreeNode(h++, Operation.ROOT.name(), null);
-                    root.setOperation(Operation.ROOT);
-                    nodes.add(root);
-
-                    for (int i = 0; i < t.getChildCount(); i++) {
-                        doTree((CommonTree) t.getChild(i), root);
-                    }
-                    break;
-                }
                 case CLASS_DECL: {
                     doClass(t, node);
                     break;
@@ -110,7 +116,6 @@ public class TreeParser {
                     break;
                 }
             }
-        }
     }
 
     private void doClass(CommonTree t, TreeNode node) {
