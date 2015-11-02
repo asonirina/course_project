@@ -3,7 +3,6 @@ package by.bsu.project.antlr.tree;
 import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.general.lang.LangWrap;
-import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.StringUtils;
 
