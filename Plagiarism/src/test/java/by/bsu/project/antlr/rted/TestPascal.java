@@ -1,6 +1,8 @@
 package by.bsu.project.antlr.rted;
 
 import by.bsu.project.antlr.model.TreeNode;
+import by.bsu.project.antlr.tree.BaseParser;
+import by.bsu.project.antlr.tree.PascalTreeParser;
 import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.util.OrderComparator;
 import by.bsu.project.antlr.util.TreeEditDistance;
@@ -18,8 +20,8 @@ import java.util.List;
  */
 public class TestPascal {
     public static void main(String[] args) throws Exception{
-        byte bytes[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/123/Test.pas"));
-        TreeParser helper1 = new TreeParser(LangWrap.Lang.PASCAL, true);
+        byte bytes[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/Test1.pas"));
+        BaseParser helper1 = new PascalTreeParser(LangWrap.Lang.PASCAL, true);
         List<TreeNode> nodes = helper1.getTree(bytes);
     }
 }
