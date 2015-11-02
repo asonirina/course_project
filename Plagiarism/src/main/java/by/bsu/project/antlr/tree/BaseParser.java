@@ -48,7 +48,6 @@ public abstract class BaseParser {
         this.factory = new LangFactory(lang);
     }
 
-
     protected BaseParser(LangWrap.Lang lang, boolean checkIdentifiers) {
         this(lang);
         this.checkIdentifiers = checkIdentifiers;
@@ -267,6 +266,8 @@ public abstract class BaseParser {
         }
 
         TreeNode post = createTreeNode(name + ' ' + LangWrap.Operation.POST_DEC.name(), node, o);
+        post.setStart(getStartIndex(t));
+        post.setStop(getStopIndex(t));
         nodes.add(post);
         return post.getName();
     }
