@@ -36,13 +36,13 @@ public class JavaTreeParser extends BaseParser {
     private void doClass(CommonTree t, TreeNode node){
         String name = "";
         TreeNode classNode = createTreeNode("", node, Operation.CLASS_DECL);
-        classNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        classNode.setStart(getStartIndex(t));
         for (CommonTree child : getChildren(t)) {
 
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    classNode.setStop(((CommonToken) child.getToken()).getStopIndex());
+                    classNode.setStop(getStopIndex(child));
                     name = doIdent(child);
                     break;
                 }
@@ -93,15 +93,14 @@ public class JavaTreeParser extends BaseParser {
 
     private List<String> doVarDeclaratorList(CommonTree t, TreeNode node, List<int[]> indexes) {
         List<String> names = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR: {
                     if(indexes != null ){
                         int temp[] = new int[2];
-                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
-                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
+                        temp[0] = getStartIndex(child.getChild(0));
+                        temp[1] = getStopIndex(child.getChild(0));
                         indexes.add(temp);
                     }
                     names.add(doVarDeclarator(child, node));
@@ -110,8 +109,8 @@ public class JavaTreeParser extends BaseParser {
                 case IDENT: {
                     if(indexes != null ){
                         int temp[] = new int[2];
-                        temp[0] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
-                        temp[1] = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex();
+                        temp[0] = getStartIndex(child.getChild(0));
+                        temp[1] = getStopIndex(child.getChild(0));
                         indexes.add(temp);
                     }
                     names.add(doIdent(child));
@@ -155,8 +154,8 @@ public class JavaTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    methodCall.setStart(((CommonToken)child.getToken()).getStartIndex());
-                    methodCall.setStop(((CommonToken)child.getToken()).getStopIndex());
+                    methodCall.setStart(getStartIndex(child));
+                    methodCall.setStop(getStopIndex(child));
                     name = doIdent(child);
                     break;
                 }
@@ -283,8 +282,8 @@ public class JavaTreeParser extends BaseParser {
                     break;
                 }
                 case IDENT: {
-                    methodNode.setStart(((CommonToken) child.getToken()).getStartIndex());
-                    methodNode.setStop(((CommonToken) child.getToken()).getStopIndex());
+                    methodNode.setStart(getStartIndex(child));
+                    methodNode.setStop(getStopIndex(child));
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -410,8 +409,8 @@ public class JavaTreeParser extends BaseParser {
 
     protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
         TreeNode commonNode = createTreeNode("", node, o);
-        commonNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        commonNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        commonNode.setStart(getStartIndex(t));
+        commonNode.setStop(getStopIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             String temp = doIfWhileBlock(child, commonNode);
@@ -425,8 +424,8 @@ public class JavaTreeParser extends BaseParser {
 
     private void doFor(CommonTree t, TreeNode node) {
         TreeNode forNode = createTreeNode("", node, Operation.FOR);
-        forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        forNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        forNode.setStart(getStartIndex(t));
+        forNode.setStop(getStopIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);

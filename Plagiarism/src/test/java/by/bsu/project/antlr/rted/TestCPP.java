@@ -3,7 +3,6 @@ package by.bsu.project.antlr.rted;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.tree.BaseParser;
 import by.bsu.project.antlr.tree.CppTreeParser;
-import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.util.OrderComparator;
 import by.bsu.project.antlr.util.TreeEditDistance;
 import by.bsu.project.general.lang.LangWrap;

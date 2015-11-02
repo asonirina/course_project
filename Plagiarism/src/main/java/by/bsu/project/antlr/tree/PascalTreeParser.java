@@ -102,8 +102,8 @@ public class PascalTreeParser extends BaseParser {
             switch (op) {
                 case IDENT: {
                     int temp[] = new int[2];
-                    temp[0] = ((CommonToken) child.getToken()).getStartIndex();
-                    temp[1] = ((CommonToken) child.getToken()).getStopIndex();
+                    temp[0] = getStartIndex(child);
+                    temp[1] = getStopIndex(child);
                     indexes.add(temp);
                     names.add(doIdent(child));
                     break;
@@ -123,8 +123,8 @@ public class PascalTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    methodCall.setStart(((CommonToken)child.getToken()).getStartIndex());
-                    methodCall.setStop(((CommonToken)child.getToken()).getStopIndex());
+                    methodCall.setStart(getStartIndex(child));
+                    methodCall.setStop(getStopIndex(child));
                     name = doIdent(child);
                     break;
                 }
@@ -154,8 +154,8 @@ public class PascalTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    methodNode.setStart(((CommonToken) child.getToken()).getStartIndex());
-                    methodNode.setStop(((CommonToken)child.getToken()).getStopIndex());
+                    methodNode.setStart(getStartIndex(child));
+                    methodNode.setStop(getStopIndex(child));
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -232,7 +232,6 @@ public class PascalTreeParser extends BaseParser {
 
     private void doBlockScope(CommonTree t, TreeNode node) {
         for (CommonTree child : getChildren(t)) {
-            doExpr(child, node);
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case BLOCK_SCOPE: {
@@ -264,6 +263,7 @@ public class PascalTreeParser extends BaseParser {
                     break;
                 }
                 default: {
+                    doExpr(child, node);
                     break;
                 }
             }
@@ -286,8 +286,8 @@ public class PascalTreeParser extends BaseParser {
 
     protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
         TreeNode commonNode = createTreeNode("", node, o);
-        commonNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        commonNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        commonNode.setStart(getStartIndex(t));
+        commonNode.setStop(getStopIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
@@ -308,8 +308,8 @@ public class PascalTreeParser extends BaseParser {
 
     private void doFor(CommonTree t, TreeNode node) {
         TreeNode forNode = createTreeNode("", node, Operation.FOR);
-        forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        forNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        forNode.setStart(getStartIndex(t));
+        forNode.setStop(getStopIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);

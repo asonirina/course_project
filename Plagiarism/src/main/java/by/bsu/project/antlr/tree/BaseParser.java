@@ -13,6 +13,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.apache.commons.lang.StringUtils;
 
@@ -65,6 +66,14 @@ public abstract class BaseParser {
     protected abstract String doFormalParam(CommonTree t);
     protected abstract List<LangWrap.Operation> doType(CommonTree t);
     protected abstract void doCommonIfWhile(CommonTree t, TreeNode node, LangWrap.Operation o);
+
+    protected int getStartIndex (Tree tree) {
+        return ((CommonToken)((CommonTree)tree).getToken()).getStartIndex();
+    }
+
+    protected int getStopIndex (Tree tree) {
+        return ((CommonToken)((CommonTree)tree).getToken()).getStopIndex();
+    }
 
     protected void doRoot(CommonTree t) {
         if (t == null) {

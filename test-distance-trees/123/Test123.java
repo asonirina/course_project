@@ -7,6 +7,7 @@ import java.io.Writer;
 
 public class Test123 {
     public static void main(String[] args) {
+int y = 1 + 9;
         Writer writer = null;
 
         try {
