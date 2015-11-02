@@ -5,23 +5,23 @@ class Person
 
 public:
 
+  int v;
+Person(int i) {}
 
-  string name;
-  int number;
+void s(iny u, iny q)
+{
+return;
+}
 };
 
 
-void aa(int* x, int r)
-{
-
-int u = x;
-}
-
 int main()
 {
+Person p(123);
+
    std::ofstream fout("out.txt");
    fout << "1 2 3";
 
-   fout << std::endl;
+  // fout << std::endl;
 
 }

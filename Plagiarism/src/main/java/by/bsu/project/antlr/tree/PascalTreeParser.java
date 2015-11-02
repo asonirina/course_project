@@ -118,42 +118,6 @@ public class PascalTreeParser extends BaseParser {
         return names;
     }
 
-    protected String doPostInc(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = doIdent(child);
-                }
-            }
-        }
-
-        TreeNode postInc = new TreeNode(h++, name + ' ' + Operation.POST_INC.name(), node);
-        nodes.add(postInc);
-        postInc.setOperation(Operation.POST_INC);
-        return postInc.getName();
-    }
-
-    protected String doPostDec(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = doIdent(child);
-                }
-            }
-        }
-
-        TreeNode postDec = new TreeNode(h++, name + ' ' + Operation.POST_DEC.name(), node);
-        nodes.add(postDec);
-        postDec.setOperation(Operation.POST_DEC);
-        return postDec.getName();
-    }
-
     protected String doMethodCall(CommonTree t, TreeNode node) {
         String name = "";
         TreeNode methodCall = createTreeNode("", node, Operation.METHOD_CALL);

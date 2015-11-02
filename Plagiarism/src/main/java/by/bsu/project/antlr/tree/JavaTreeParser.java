@@ -148,40 +148,6 @@ public class JavaTreeParser extends BaseParser {
         return name;
     }
 
-
-
-    protected String doPostInc(CommonTree t, TreeNode node) {
-        String name = "";
-        for (CommonTree child : getChildren(t)) {
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = doIdent(child);
-                }
-            }
-        }
-        TreeNode postInc = createTreeNode(name + ' ' + Operation.POST_INC.name(), node, Operation.POST_INC);
-        nodes.add(postInc);
-        return postInc.getName();
-    }
-
-    protected String doPostDec(CommonTree t, TreeNode node) {
-        String name = "";
-        for (CommonTree child : getChildren(t)) {
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = doIdent(child);
-                }
-            }
-        }
-
-        TreeNode postDec = createTreeNode(name + ' ' + Operation.POST_DEC.name(), node, Operation.POST_DEC);
-        nodes.add(postDec);
-        return postDec.getName();
-    }
-
-
     protected String doMethodCall(CommonTree t, TreeNode node) {
         String name = "";
         TreeNode methodCall = createTreeNode("", node, Operation.METHOD_CALL);
@@ -312,14 +278,6 @@ public class JavaTreeParser extends BaseParser {
         methodNode.setName(getType(types) + name + ' ' + StringUtils.join(params, ' '));
         nodes.add(methodNode);
         ac.incMethod();
-    }
-
-    private static String getType(List<Operation> types) {
-        String res = "";
-        for (Operation op : types) {
-            res += op.name() + ' ';
-        }
-        return res;
     }
 
     protected String doFormalParam(CommonTree t) {

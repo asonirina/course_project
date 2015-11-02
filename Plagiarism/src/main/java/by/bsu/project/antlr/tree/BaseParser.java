@@ -62,8 +62,6 @@ public abstract class BaseParser {
 
     protected abstract void doTree(CommonTree t, TreeNode node);
 
-    protected abstract String doPostInc(CommonTree t, TreeNode node);
-    protected abstract String doPostDec(CommonTree t, TreeNode node);
     protected abstract String doMethodCall(CommonTree t, TreeNode node);
     protected abstract String doFormalParam(CommonTree t);
     // try to find ROOT ELEMENT
@@ -105,6 +103,9 @@ public abstract class BaseParser {
     }
 
     protected String doExpr(CommonTree t, TreeNode node) {
+        if(t == null){
+            return "";
+        }
         String res = doCommonExpression(t, node);
         if (StringUtils.isNotBlank(res)) {
             return res;
@@ -156,6 +157,7 @@ public abstract class BaseParser {
         String res = "";
         LangWrap.Operation op = OperationUtil.get(lang, t);
         switch (op) {
+
             case POST_INC: {
                 res = doPostInc(t, node);
                 break;
@@ -232,6 +234,7 @@ public abstract class BaseParser {
                 res = doBinOperator(t, node, LangWrap.Operation.GREATER_THAN);
                 break;
             }
+
             default: {
                 break;
             }
@@ -243,8 +246,40 @@ public abstract class BaseParser {
         return operation.name() + ' ' + doIdent(t);
     }
 
+    protected String doPostInc(CommonTree t, TreeNode node) {
+        return doCommonPost(t, node, LangWrap.Operation.POST_INC);
+    }
+
+    protected String doPostDec(CommonTree t, TreeNode node) {
+        return doCommonPost(t, node, LangWrap.Operation.POST_DEC);
+    }
+
+    private String doCommonPost(CommonTree t, TreeNode node, LangWrap.Operation o) {
+        String name = "";
+        for (CommonTree child : getChildren(t)) {
+            LangWrap.Operation op = OperationUtil.get(lang, child);
+            switch (op) {
+                case IDENT: {
+                    name = doIdent(child);
+                }
+            }
+        }
+
+        TreeNode post = createTreeNode(name + ' ' + LangWrap.Operation.POST_DEC.name(), node, o);
+        nodes.add(post);
+        return post.getName();
+    }
+
     protected String doIdent(CommonTree t) {
         ac.incIdent(t.getText().length());
         return checkIdentifiers ? t.getText() : LangWrap.Operation.IDENT.name();
+    }
+
+    protected static String getType(List<LangWrap.Operation> types) {
+        String res = "";
+        for (LangWrap.Operation op : types) {
+            res += op.name() + ' ';
+        }
+        return res;
     }
 }
