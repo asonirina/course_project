@@ -1,7 +1,8 @@
 package by.bsu.project.antlr.rted;
 
+import by.bsu.project.antlr.lang.LangFactory;
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.antlr.tree.TreeParser;
+import by.bsu.project.antlr.tree.BaseParser;
 import by.bsu.project.antlr.util.OrderComparator;
 import by.bsu.project.antlr.util.TreeEditDistance;
 import by.bsu.project.general.lang.LangWrap;
@@ -21,9 +22,9 @@ public class TestRTED {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/123/Test.c"));
         byte bytes2[] = IOUtils.toByteArray(new FileInputStream("test-distance-trees/123/Test1234.java"));
-        TreeParser helper1 = new TreeParser(LangWrap.Lang.CPP);
+        BaseParser helper1 = LangFactory.createParser(LangWrap.Lang.CPP);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
-        TreeParser helper2 = new TreeParser(LangWrap.Lang.JAVA);
+        BaseParser helper2 = LangFactory.createParser(LangWrap.Lang.JAVA);
         List<TreeNode> nodes2 = helper2.getTree(bytes2);
 
         TreeEditDistance.numerateTree(nodes1.get(0));

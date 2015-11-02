@@ -1,8 +1,9 @@
 package by.bsu.project.scheduller;
 
+import by.bsu.project.antlr.lang.LangFactory;
 import by.bsu.project.antlr.model.SerializableUtil;
 import by.bsu.project.antlr.model.TreeNode;
-import by.bsu.project.antlr.tree.TreeParser;
+import by.bsu.project.antlr.tree.BaseParser;
 import by.bsu.project.antlr.util.AttributeCountingUtil;
 import by.bsu.project.antlr.util.TreeCompareUtil;
 import by.bsu.project.general.constants.ETestingConstants;
@@ -38,7 +39,7 @@ public class PlagiarismRunner {
             List<ProgramFilesEntity> programs = userInfoService.getTestedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
                 try {
-                    TreeParser parser = new TreeParser(programFilesEntity.getLang());
+                    BaseParser parser = LangFactory.createParser(programFilesEntity.getLang());
                     List<TreeNode> nodes = parser.getTree(programFilesEntity.getFile());
                     AttributeCounting ac = parser.getAc();
 

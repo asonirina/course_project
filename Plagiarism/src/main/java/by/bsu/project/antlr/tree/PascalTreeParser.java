@@ -4,7 +4,6 @@ import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.antlr.model.TreeNode;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class PascalTreeParser extends BaseParser {
     public PascalTreeParser(Lang lang, boolean checkIdentifiers) {
         super(lang, checkIdentifiers);
     }
-
 
     protected void doTree(CommonTree t, TreeNode node) {
             Operation op = OperationUtil.get(lang, t);

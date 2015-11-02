@@ -1,5 +1,9 @@
 package by.bsu.project.antlr.lang;
 
+import by.bsu.project.antlr.tree.BaseParser;
+import by.bsu.project.antlr.tree.CppTreeParser;
+import by.bsu.project.antlr.tree.JavaTreeParser;
+import by.bsu.project.antlr.tree.PascalTreeParser;
 import by.bsu.project.general.lang.LangWrap.Lang;
 import by.bsu.project.antlr.parser.cpp.CPPGrammarLexer;
 import by.bsu.project.antlr.parser.cpp.CPPGrammarParser;
@@ -41,6 +45,19 @@ public class LangFactory {
                 return new CPPGrammarLexer(in);
             case PASCAL:
                 return new PascalLexer(in);
+            default:
+                return null;
+        }
+    }
+
+    public static BaseParser createParser(Lang lang) {
+        switch (lang) {
+            case JAVA:
+                return new JavaTreeParser(lang);
+            case CPP:
+                return new CppTreeParser(lang);
+            case PASCAL:
+                return new PascalTreeParser(lang);
             default:
                 return null;
         }

@@ -1,7 +1,8 @@
 package by.bsu.project.antlr.parser.pascal;
 
+import by.bsu.project.antlr.lang.LangFactory;
+import by.bsu.project.antlr.tree.BaseParser;
 import by.bsu.project.general.lang.LangWrap.Lang;
-import by.bsu.project.antlr.tree.TreeParser;
 import by.bsu.project.antlr.model.TreeNode;
 import org.apache.commons.io.IOUtils;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class TreePascalTest {
     public static void main(String[] args) throws Exception{
         byte bytes1[] = IOUtils.toByteArray(new FileInputStream("test-files/Test.pas"));
-        TreeParser helper1 = new TreeParser(Lang.PASCAL);
+        BaseParser helper1 = LangFactory.createParser(Lang.PASCAL);
         List<TreeNode> nodes1 = helper1.getTree(bytes1);
     }
 }

@@ -1,8 +1,9 @@
 package by.bsu.project.mvc;
 
+import by.bsu.project.antlr.lang.LangFactory;
 import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.antlr.rted.RTED;
-import by.bsu.project.antlr.tree.TreeParser;
+import by.bsu.project.antlr.tree.BaseParser;
 import by.bsu.project.antlr.util.OrderComparator;
 import by.bsu.project.antlr.util.TreeEditDistance;
 import by.bsu.project.general.constants.ETestingConstants;
@@ -53,10 +54,10 @@ public class TestController extends BaseController {
         e1.setFile(file1.getBytes());
         e2.setFile(file2.getBytes());
 
-        TreeParser parser1 = new TreeParser(e1.getLang());
+        BaseParser parser1 = LangFactory.createParser(e1.getLang());
         List<TreeNode> nodes1 = parser1.getTree(e1.getFile());
 
-        TreeParser parser2 = new TreeParser(e2.getLang());
+        BaseParser parser2 = LangFactory.createParser(e2.getLang());
         List<TreeNode> nodes2 = parser2.getTree(e2.getFile());
 
         TreeEditDistance.numerateTree(nodes1.get(0));

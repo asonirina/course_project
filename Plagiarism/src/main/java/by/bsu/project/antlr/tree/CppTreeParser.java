@@ -398,7 +398,6 @@ public class CppTreeParser extends BaseParser {
         }
     }
 
-
     protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
         TreeNode commonNode = createTreeNode("", node, o);
         String name = "";
