@@ -61,10 +61,11 @@ public abstract class BaseParser {
     }
 
     protected abstract void doTree(CommonTree t, TreeNode node);
-
     protected abstract String doMethodCall(CommonTree t, TreeNode node);
     protected abstract String doFormalParam(CommonTree t);
-    // try to find ROOT ELEMENT
+    protected abstract List<LangWrap.Operation> doType(CommonTree t);
+    protected abstract void doCommonIfWhile(CommonTree t, TreeNode node, LangWrap.Operation o);
+
     protected void doRoot(CommonTree t) {
         if (t == null) {
             return;
@@ -157,15 +158,6 @@ public abstract class BaseParser {
         String res = "";
         LangWrap.Operation op = OperationUtil.get(lang, t);
         switch (op) {
-
-            case POST_INC: {
-                res = doPostInc(t, node);
-                break;
-            }
-            case POST_DEC: {
-                res = doPostDec(t, node);
-                break;
-            }
             case METHOD_CALL: {
                 res = doMethodCall(t, node);
                 break;
@@ -281,5 +273,53 @@ public abstract class BaseParser {
             res += op.name() + ' ';
         }
         return res;
+    }
+
+    protected LangWrap.Operation doSingleType(CommonTree t) {
+        LangWrap.Operation op = OperationUtil.get(lang, t);
+        switch (op) {
+            case QUALIFIED_TYPE_IDENT: {
+                return LangWrap.Operation.QUALIFIED_TYPE_IDENT;
+            }
+            case TYPE_NAME: {
+                return LangWrap.Operation.QUALIFIED_TYPE_IDENT;
+            }
+            case ARRAY: {
+                return LangWrap.Operation.ARRAY;
+            }
+            case INT: {
+                return LangWrap.Operation.INT;
+            }
+            case FLOAT: {
+                return LangWrap.Operation.FLOAT;
+            }
+            case CHAR: {
+                return LangWrap.Operation.CHAR;
+            }
+            case DOUBLE: {
+                return LangWrap.Operation.DOUBLE;
+            }
+            case BOOLEAN: {
+                return  LangWrap.Operation.BOOLEAN;
+            }
+            case STRING: {
+                return LangWrap.Operation.STRING;
+            }
+            case POINTER: {
+                return LangWrap.Operation.POINTER;
+            }
+            default: {
+                break;
+            }
+        }
+        return LangWrap.Operation.NULL;
+    }
+
+    protected void doWhile(CommonTree t, TreeNode node) {
+        doCommonIfWhile(t, node, LangWrap.Operation.WHILE);
+    }
+
+    protected void doIf(CommonTree t, TreeNode node) {
+        doCommonIfWhile(t, node, LangWrap.Operation.IF);
     }
 }

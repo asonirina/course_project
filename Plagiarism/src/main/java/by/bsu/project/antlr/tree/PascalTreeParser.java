@@ -211,7 +211,7 @@ public class PascalTreeParser extends BaseParser {
         return res.substring(0, res.length() - 2);
     }
 
-    private List<Operation> doType(CommonTree t) {
+    protected List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
         boolean array = false;
         for (CommonTree child : getChildren(t)) {
@@ -230,40 +230,6 @@ public class PascalTreeParser extends BaseParser {
             types.add(Operation.ARRAY);
         }
         return types;
-    }
-
-    private Operation doSingleType(CommonTree t) {
-        Operation op = OperationUtil.get(lang, t);
-        switch (op) {
-            case TYPE_NAME: {
-                return Operation.QUALIFIED_TYPE_IDENT;
-            }
-            case ARRAY: {
-                return Operation.ARRAY;
-            }
-            case INT: {
-                return Operation.INT;
-            }
-            case FLOAT: {
-                return Operation.FLOAT;
-            }
-            case CHAR: {
-                return Operation.CHAR;
-            }
-            case DOUBLE: {
-                return Operation.DOUBLE;
-            }
-            case BOOLEAN: {
-                return  Operation.BOOLEAN;
-            }
-            case STRING: {
-                return Operation.STRING;
-            }
-            default: {
-                break;
-            }
-        }
-        return Operation.NULL;
     }
 
     private void doBlockScope(CommonTree t, TreeNode node) {
@@ -306,28 +272,6 @@ public class PascalTreeParser extends BaseParser {
         }
     }
 
-    private void doIf(CommonTree t, TreeNode node) {
-        TreeNode ifNode = createTreeNode("", node, Operation.IF);
-        ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String name = "";
-        for (CommonTree child : getChildren(t)) {
-         Operation op = OperationUtil.get(lang, child);
-           switch (op){
-               case BLOCK_SCOPE:{
-                   doIfWhileBlock(child, ifNode);
-                   break;
-               }
-               default:{
-                   name = doExpr(child, ifNode);
-                   break;
-               }
-           }
-        }
-        ifNode.setName(Operation.IF.name() + ' ' + name);
-        nodes.add(ifNode);
-    }
-
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
         Operation op = OperationUtil.get(lang, t);
         switch (op) {
@@ -342,26 +286,26 @@ public class PascalTreeParser extends BaseParser {
         return null;
     }
 
-    private void doWhile(CommonTree t, TreeNode node) {
-        TreeNode whileNode = createTreeNode("", node, Operation.WHILE);
-        whileNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        whileNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+    protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
+        TreeNode commonNode = createTreeNode("", node, o);
+        commonNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        commonNode.setStop(((CommonToken) t.getToken()).getStopIndex());
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case BLOCK_SCOPE: {
-                    doIfWhileBlock(child, whileNode);
+                    doIfWhileBlock(child, commonNode);
                     break;
                 }
                 default: {
-                    name = doExpr(child, whileNode);
+                    name = doExpr(child, commonNode);
                     break;
                 }
             }
         }
-        whileNode.setName(Operation.WHILE.name() + ' ' + name);
-        nodes.add(whileNode);
+        commonNode.setName(o.name() + ' ' + name);
+        nodes.add(commonNode);
     }
 
     private void doFor(CommonTree t, TreeNode node) {

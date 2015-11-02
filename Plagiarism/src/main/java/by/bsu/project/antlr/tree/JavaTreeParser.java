@@ -216,6 +216,32 @@ public class JavaTreeParser extends BaseParser {
         return constructor.getName();
     }
 
+    protected String doCommonExpression(CommonTree t, TreeNode node) {
+        String res = super.doCommonExpression(t, node);
+        if(StringUtils.isNotBlank(res)) {
+            return res;
+        }
+        Operation op = OperationUtil.get(lang, t);
+        switch (op) {
+            case POST_INC: {
+                res = doPostInc(t, node);
+                break;
+            }
+            case POST_DEC: {
+                res = doPostDec(t, node);
+                break;
+            }
+            case CLASS_CONSTRUCTOR_CALL: {
+                res = doConstructorCall(t, node);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        return res;
+    }
+
     private String doQualifiedTypeIdent(CommonTree t) {
         String name = "";
         for (CommonTree child : getChildren(t)) {
@@ -306,55 +332,23 @@ public class JavaTreeParser extends BaseParser {
         return res.substring(0, res.length() - 2);
     }
 
-    private List<Operation> doType(CommonTree t) {
+    protected List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
-        Operation array = Operation.NULL;
+        boolean array = false;
         for (CommonTree child : getChildren(t)) {
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case QUALIFIED_TYPE_IDENT: {   //custom type
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
-                case ARRAY: {
-                    array = Operation.ARRAY;
-                    break;
-                }
-                case INT: {
-                    type = Operation.INT;
-                    break;
-                }
-                case FLOAT: {
-                    type = Operation.FLOAT;
-                    break;
-                }
-                case CHAR: {
-                    type = Operation.CHAR;
-                    break;
-                }
-                case DOUBLE: {
-                    type = Operation.DOUBLE;
-                    break;
-                }
-                case BOOLEAN: {
-                    type = Operation.BOOLEAN;
-                    break;
-                }
-                case STRING: {
-                    type = Operation.STRING;
-                    break;
-                }
-                default: {
-                    break;
-                }
+            Operation op = doSingleType(child);
+            if(op.equals(Operation.ARRAY)) {
+                array = true;
+            } else {
+                type = op;
             }
         }
         List<Operation> types = new ArrayList<>();
         if (!type.equals(Operation.NULL)) {
             types.add(type);
         }
-        if (!array.equals(Operation.NULL)) {
-            types.add(array);
+        if (array) {
+            types.add(Operation.ARRAY);
         }
         return types;
     }
@@ -394,21 +388,6 @@ public class JavaTreeParser extends BaseParser {
         }
     }
 
-    private void doIf(CommonTree t, TreeNode node) {
-        TreeNode ifNode = createTreeNode("", node, Operation.IF);
-        ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String name = "";
-        for (CommonTree child : getChildren(t)) {
-            String temp = doIfWhileBlock(child, ifNode);
-            if (StringUtils.isNotBlank(temp)) {
-                name = temp;
-            }
-        }
-        ifNode.setName(Operation.IF.name() + ' ' + name);
-        nodes.add(ifNode);
-    }
-
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
         String condition = "";
         Operation op = OperationUtil.get(lang, t);
@@ -429,19 +408,19 @@ public class JavaTreeParser extends BaseParser {
         return condition;
     }
 
-    private void doWhile(CommonTree t, TreeNode node) {
-        TreeNode whileNode = createTreeNode("", node, Operation.WHILE);
-        whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
-        whileNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String c = "";
+    protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
+        TreeNode commonNode = createTreeNode("", node, o);
+        commonNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        commonNode.setStop(((CommonToken) t.getToken()).getStopIndex());
+        String name = "";
         for (CommonTree child : getChildren(t)) {
-            String temp = doIfWhileBlock(child, whileNode);
+            String temp = doIfWhileBlock(child, commonNode);
             if (StringUtils.isNotBlank(temp)) {
-                c = temp;
+                name = temp;
             }
         }
-        whileNode.setName(Operation.WHILE.name() + ' ' + c);
-        nodes.add(whileNode);
+        commonNode.setName(o.name() + ' ' + name);
+        nodes.add(commonNode);
     }
 
     private void doFor(CommonTree t, TreeNode node) {

@@ -5,7 +5,6 @@ import by.bsu.project.antlr.model.TreeNode;
 import by.bsu.project.general.lang.LangWrap;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -179,7 +178,10 @@ public class CppTreeParser extends BaseParser {
     }
 
     protected String doCommonExpression(CommonTree t, TreeNode node) {
-        String res = "";
+        String res = super.doCommonExpression(t, node);
+        if(StringUtils.isNotBlank(res)) {
+            return res;
+        }
         Operation op = OperationUtil.get(lang, t);
         switch (op) {
             case FIELD: { // cpp
@@ -206,95 +208,11 @@ public class CppTreeParser extends BaseParser {
                 res = doPostDec(t, node);
                 break;
             }
-            case METHOD_CALL: {
-                res = doMethodCall(t, node);
-                break;
-            }
-            case IDENT: {
-                res = doIdent(t);
-                break;
-            }
-            case DECIMAL_LITERAL: {
-                res = doLiteral(t, Operation.INT);
-                break;
-            }
-
-            case FLOATING_POINT_LITERAL: {
-                res = doLiteral(t, Operation.DOUBLE);
-                break;
-            }
-
-            case STRING_LITERAL: {
-                res = doLiteral(t, Operation.STRING);
-                break;
-            }
-
-            case TRUE: {
-                res = doLiteral(t, Operation.BOOLEAN);
-                break;
-            }
-
-            case FALSE: {
-                res = doLiteral(t, Operation.BOOLEAN);
-                break;
-            }
-            case ASSIGN: {
-                res = doBinOperator(t, node, Operation.ASSIGN);
-                break;
-            }
-            case PLUS: {
-                res = doBinOperator(t, node, Operation.PLUS);
-                break;
-            }
-
-            case MINUS: {
-                res = doBinOperator(t, node, Operation.MINUS);
-                break;
-            }
-            case EQUAL: {
-                res = doBinOperator(t, node, Operation.EQUAL);
-                break;
-            }
-
-            case NOT_EQUAL: {
-                res = doBinOperator(t, node, Operation.NOT_EQUAL);
-                break;
-            }
-            case LOGICAL_AND: {
-                res = doBinOperator(t, node, Operation.LOGICAL_AND);
-                break;
-            }
-
-            case LESS_THAN: {
-                res = doBinOperator(t, node, Operation.LESS_THAN);
-                break;
-            }
-
-            case GREATER_THAN: {
-                res = doBinOperator(t, node, Operation.GREATER_THAN);
-                break;
-            }
             default: {
                 break;
             }
         }
         return res;
-    }
-
-    protected String doBinOperator(CommonTree t, TreeNode node, Operation operation) {
-        List<String> arr = new ArrayList<>();
-        TreeNode bin = createTreeNode("", node, operation);
-        for (CommonTree child : getChildren(t)) {
-            String temp = doExpr(child, bin);
-            if (StringUtils.isNotBlank(temp)) {
-                arr.add(temp);
-            }
-        }
-        bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
-        bin.setStart(((CommonToken)t.getToken()).getStartIndex());
-        bin.setStop(((CommonToken)t.getToken()).getStopIndex());
-        nodes.add(bin);
-        return bin.getName();
     }
 
     protected String doMethodCall(CommonTree t, TreeNode node) {
@@ -323,8 +241,7 @@ public class CppTreeParser extends BaseParser {
 
     private String doDot(CommonTree t) {
         List<String> names = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
@@ -340,64 +257,6 @@ public class CppTreeParser extends BaseParser {
             }
         }
         return StringUtils.join(names, '.');
-    }
-
-    private String doConstructorCall(CommonTree t, TreeNode node) {
-        TreeNode constructor = new TreeNode(h++, "", node);
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case QUALIFIED_TYPE_IDENT: {
-                    constructor.setName(Operation.NEW.name() + ' ' + doQualifiedTypeIdent(child));
-                    break;
-                }
-                case ARGUMENT_LIST: {
-                    doArgumentList(child, constructor);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-        constructor.setOperation(Operation.CLASS_CONSTRUCTOR_CALL);
-        nodes.add(constructor);
-
-        return constructor.getName();
-    }
-
-    private String doQualifiedTypeIdent(CommonTree t) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case IDENT: {
-                    name = Operation.QUALIFIED_TYPE_IDENT.name() + ' ' + (checkIdentifiers ? child.getText() : "");
-                }
-            }
-        }
-        return name;
-    }
-
-    private void doArgumentList(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL)) {
-                doExpr(child, node);
-            }
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    doExpr(child, node);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
     }
 
     private void doMethod(CommonTree t, TreeNode node) {
@@ -463,59 +322,23 @@ public class CppTreeParser extends BaseParser {
         return res.substring(0, res.length() - 2);
     }
 
-    private List<Operation> doType(CommonTree t) {
+    protected List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
-        Operation array = Operation.NULL;
-        for (CommonTree child :getChildren(t)) {
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case TYPE_NAME: {
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
-                case ARRAY: {
-                    array = Operation.ARRAY;
-                    break;
-                }
-                case POINTER: {
-                    array = Operation.ARRAY;
-                    break;
-                }
-                case INT: {
-                    type = Operation.INT;
-                    break;
-                }
-                case FLOAT: {
-                    type = Operation.FLOAT;
-                    break;
-                }
-                case CHAR: {
-                    type = Operation.CHAR;
-                    break;
-                }
-                case DOUBLE: {
-                    type = Operation.DOUBLE;
-                    break;
-                }
-                case BOOLEAN: {
-                    type = Operation.BOOLEAN;
-                    break;
-                }
-                case STRING: {
-                    type = Operation.STRING;
-                    break;
-                }
-                default: {
-                    break;
-                }
+        boolean array = false;
+        for (CommonTree child : getChildren(t)) {
+            Operation op = doSingleType(child);
+            if (op.equals(Operation.ARRAY) || op.equals(Operation.POINTER)) {
+                array = true;
+            } else {
+                type = op;
             }
         }
         List<Operation> types = new ArrayList<>();
         if (!type.equals(Operation.NULL)) {
             types.add(type);
         }
-        if (!array.equals(Operation.NULL)) {
-            types.add(array);
+        if (array) {
+            types.add(Operation.ARRAY);
         }
         return types;
     }
@@ -575,34 +398,35 @@ public class CppTreeParser extends BaseParser {
         }
     }
 
-    private void doIf(CommonTree t, TreeNode node) {
-        TreeNode ifNode = new TreeNode(h++, "", node);
-        ifNode.setStart(((CommonToken) t.getToken()).getStartIndex());
-        ifNode.setStop(((CommonToken) t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, ifNode);
-            }
-            String temp = doIfWhileBlock(child, ifNode);
-            if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
+
+    protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
+        TreeNode commonNode = createTreeNode("", node, o);
+        String name = "";
+        for (CommonTree child : getChildren(t)) {
+            Operation op = OperationUtil.get(lang, child);
+            switch (op) {
+                case KEYWORD:{
+                    commonNode.setStart(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                    commonNode.setStop(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex());
+                    break;
+                }
+                default:  {
+                    String temp = doIfWhileBlock(child, commonNode);
+                    if(StringUtils.isNotBlank(temp)) {
+                        name = temp;
+                    }
+                    break;
+                }
             }
         }
-        ifNode.setName(Operation.IF.name() + ' ' + c1 + ' ' + c2);
-        ifNode.setOperation(Operation.IF);
-        nodes.add(ifNode);
+        commonNode.setName(o.name() + ' ' + name);
+        nodes.add(commonNode);
     }
 
     private String doIfWhileBlock(CommonTree t, TreeNode node) {
         String condition = "";
         Operation op = OperationUtil.get(lang, t);
         switch (op) {
-            case PARENTESIZED_EXPR: {
-                condition = doParenthesizedExpr(t, node);
-                break;
-            }
             case CONDITION: {
                 condition = doExpr((CommonTree) t.getChild(0), node);
                 break;
@@ -633,41 +457,20 @@ public class CppTreeParser extends BaseParser {
         }
     }
 
-    private void doWhile(CommonTree t, TreeNode node) {
-        TreeNode whileNode = new TreeNode(h++, "", node);
-        whileNode.setStart(((CommonToken)t.getToken()).getStartIndex());
-        whileNode.setStop(((CommonToken)t.getToken()).getStopIndex());
-        String c1 = "", c2 = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            //pascal
-            if (lang.equals(Lang.PASCAL) && StringUtils.isBlank(c1)) {
-                c1 = doExpr(child, whileNode);
-            }
-            String temp = doIfWhileBlock(child, whileNode);
-            if (StringUtils.isNotBlank(temp)) {
-                c2 = temp;
-            }
-        }
-        whileNode.setName(Operation.WHILE.name() + ' ' + c1 + ' ' + c2);
-        whileNode.setOperation(Operation.WHILE);
-        nodes.add(whileNode);
-    }
-
     private void doFor(CommonTree t, TreeNode node) {
-        TreeNode forNode = new TreeNode(h++, "", node);
-        forNode.setStart(((CommonToken) t.getToken()).getStartIndex());
+        TreeNode forNode = createTreeNode("", node, Operation.FOR);
+
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case FOR_INIT: {
-                    doForInit(child, forNode);
+                case KEYWORD:{
+                    forNode.setStart(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                    forNode.setStop(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex());
                     break;
                 }
-                case FOR_CONDITION: {
-                    name += doForCondition(child, forNode) + ' ';
+                case FOR_INIT: {
+                    doForInit(child, forNode);
                     break;
                 }
                 case CONDITION: {
@@ -678,12 +481,7 @@ public class CppTreeParser extends BaseParser {
                     name += doForUpdate(child, forNode);
                     break;
                 }
-                case TO: {
-                    name += doTo(child, forNode);
-                    break;
-                }
                 case BLOCK_SCOPE: {
-                    forNode.setStop(((CommonToken) child.getToken()).getStartIndex());
                     doBlockScope(child, forNode);
                     break;
                 }
@@ -693,31 +491,15 @@ public class CppTreeParser extends BaseParser {
             }
         }
         forNode.setName(Operation.FOR.name() + ' ' + name);
-        forNode.setOperation(Operation.FOR);
         nodes.add(forNode);
     }
 
-    private String doTo(CommonTree t, TreeNode node) {
-        CommonTree init = (CommonTree) t.getChild(0);
-        String assign = doExpr(init, node);
-        TreeNode assignNode = new TreeNode(h++, Operation.ASSIGN.name() + ' ' + assign, node);
-        assignNode.setOperation(Operation.ASSIGN);
-        nodes.add(assignNode);
-        CommonTree con = (CommonTree) t.getChild(1);
-        String condition = doExpr(con, node);
-        TreeNode conditionNode = new TreeNode(h++, Operation.LESS_THAN.name() + ' ' + condition, node);
-        conditionNode.setOperation(Operation.LESS_THAN);
-        nodes.add(conditionNode);
-        return assign + condition;
-    }
-
     private void doForInit(CommonTree t, TreeNode node) {
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case VAR_DECLARATION: {
-                    doVarDeclaration(child, node);
+                case EXPR: {
+                    doExpr(child, node);
                     break;
                 }
                 case SIMPLE_DECL: {
@@ -731,44 +513,16 @@ public class CppTreeParser extends BaseParser {
         }
     }
 
-    private String doForCondition(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    name = doExpr(child, node);
-                    break;
-                }
-            }
-        }
-        return name;
-    }
-
     private String doForUpdate(CommonTree t, TreeNode node) {
         String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case EXPR: {
                     name = doExpr(child, node);
                     break;
                 }
-            }
-        }
-        return name;
-    }
-
-    private String doParenthesizedExpr(CommonTree t, TreeNode node) {
-        String name = "";
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case EXPR: {
-                    name = doExpr(child, node);
+                default:{
                     break;
                 }
             }

@@ -76,7 +76,8 @@ public class LangWrap {
         FOR_INIT, FOR_UPDATE,FOR_CONDITION,
         ITERATION, //cpp
         TO,              //pascal
-        OUT(Type.METHOD_CALL);
+        OUT(Type.METHOD_CALL),
+        KEYWORD;
 
         private Type type;
 
