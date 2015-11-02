@@ -65,7 +65,7 @@ public abstract class BaseParser {
     protected abstract String doPostInc(CommonTree t, TreeNode node);
     protected abstract String doPostDec(CommonTree t, TreeNode node);
     protected abstract String doMethodCall(CommonTree t, TreeNode node);
-
+    protected abstract String doFormalParam(CommonTree t);
     // try to find ROOT ELEMENT
     protected void doRoot(CommonTree t) {
         if (t == null) {
@@ -117,6 +117,23 @@ public abstract class BaseParser {
         }
 
         return res;
+    }
+
+    protected List<String> doFormalParamList(CommonTree t) {
+        List<String> params = new ArrayList<>();
+        for (CommonTree child : getChildren(t)) {
+            LangWrap.Operation op = OperationUtil.get(lang, child);
+            switch (op) {
+                case FORMAL_PARAM_STD_DECL: {  //identifier
+                    params.add(doFormalParam(child));
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        return params;
     }
 
     protected String doBinOperator(CommonTree t, TreeNode node, LangWrap.Operation operation) {

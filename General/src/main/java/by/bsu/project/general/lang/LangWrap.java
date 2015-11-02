@@ -54,7 +54,7 @@ public class LangWrap {
         PROCEDURE(Type.METHOD) ,     //pascal
         INT(Type.TYPE), CHAR(Type.TYPE), DOUBLE(Type.TYPE), BOOLEAN(Type.TYPE), FLOAT(Type.TYPE), STRING(Type.TYPE),
         QUALIFIED_TYPE_IDENT(Type.TYPE),
-        ARRAY(Type.TYPE), //cpp
+        ARRAY(Type.TYPE), POINTER(Type.TYPE), //cpp
         EXPR, EXPR_STATEMENT,
         INIT,  //cpp
         ASSIGN(Type.ASSIGN) ,

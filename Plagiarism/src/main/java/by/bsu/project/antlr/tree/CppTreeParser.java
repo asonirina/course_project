@@ -1,17 +1,12 @@
 package by.bsu.project.antlr.tree;
 
-import by.bsu.project.antlr.lang.LangLexer;
-import by.bsu.project.antlr.lang.LangParser;
 import by.bsu.project.antlr.lang.OperationUtil;
 import by.bsu.project.antlr.model.TreeNode;
-import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +15,7 @@ import static by.bsu.project.general.lang.LangWrap.Operation;
 
 /**
  * User: iason
- * Date: 26.03.14
+ * Date: 02.11.15
  */
 public class CppTreeParser extends BaseParser {
 
@@ -33,53 +28,32 @@ public class CppTreeParser extends BaseParser {
     }
 
     protected void doTree(CommonTree t, TreeNode node) {
-            Operation op = OperationUtil.get(lang, t);
-            switch (op) {
-                case CLASS_DECL: {
-                    doClass(t, node);
-                    break;
-                }
-                case SIMPLE_DECL: { //cpp
-                    doSimpleDeclaration(t, node);
-                    break;
-                }
-                case VAR: { //pascal
-                    doVar(t, node);
-                    break;
-                }
-                case PROCEDURE: { //pascal
-                    doMethod(t, node);
-                    break;
-                }
-                case FUNCTION_METHOD_DECL: {
-                    doMethod(t, node);
-                    break;
-                }
-                case BLOCK_SCOPE: { //pascal
-                    doBlockScope(t, node);
-                    break;
-                }
-                default: {
-                    break;
-                }
+        Operation op = OperationUtil.get(lang, t);
+        switch (op) {
+            case SIMPLE_DECL: {
+                doSimpleDeclaration(t, node);
+                break;
             }
+            case FUNCTION_METHOD_DECL: {
+                doMethod(t, node);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 
     private void doClass(CommonTree t, TreeNode node) {
         String name = "";
-        TreeNode classNode = new TreeNode(h++, "", node);
+        TreeNode classNode = createTreeNode("", node, Operation.CLASS_DECL);
         classNode.setStart(((CommonToken)t.getToken()).getStartIndex());
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-
                 case CLASS_NAME: {
+                    classNode.setStop(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex());
                     name = doIdent((CommonTree) child.getChild(0));
-                    break;
-                }
-                case IDENT: {
-                    name = doIdent(child);
                     break;
                 }
                 case CLASS_CONTENT: {
@@ -92,7 +66,6 @@ public class CppTreeParser extends BaseParser {
             }
         }
         classNode.setName(Operation.CLASS_DECL.name() + ' ' + name);
-        classNode.setOperation(Operation.CLASS_DECL);
         nodes.add(classNode);
     }
 
@@ -101,7 +74,6 @@ public class CppTreeParser extends BaseParser {
             CommonTree child = (CommonTree) t.getChild(i);
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-
                 case CLASS_DECL: {
                     doClass((CommonTree) child.getChild(0), node);
                     break;
@@ -583,8 +555,8 @@ public class CppTreeParser extends BaseParser {
                     break;
                 }
                 case FUNCTION_NAME: {
-                    methodNode.setStart(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-                    methodNode.setStop(((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStopIndex());
+                    methodNode.setStart(((CommonToken) ((CommonTree) child.getChild(0)).getToken()).getStartIndex());
+                    methodNode.setStop(((CommonToken) ((CommonTree) child.getChild(0)).getToken()).getStopIndex());
                     name = doIdent((CommonTree) child.getChild(0)) + " ";
                     break;
                 }
@@ -614,41 +586,18 @@ public class CppTreeParser extends BaseParser {
         return res;
     }
 
-    private List<String> doFormalParamList(CommonTree t) {
-        List<String> params = new ArrayList<>();
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case FORMAL_PARAM_STD_DECL: {  //identifier
-                    params.add(doFormalParam(child));
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-        return params;
-    }
-
-    private String doFormalParam(CommonTree t) {
+    protected String doFormalParam(CommonTree t) {
         List<String> names = new ArrayList<>();
-        List<Operation> types = doType(t);  //pascal !!!
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        List<Operation> types = new ArrayList<>();
+        for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case VAR_DECLARATOR_LIST: { //pascal
-                    names.addAll(doVarDeclaratorList(child, null, null));
-                    break;
-                }
                 case TYPE: {
                     types = doType(child);
                     break;
                 }
-                case IDENT: {
-                    names.add(doIdent(child));
+                case NAME: {
+                    names.add(doIdent((CommonTree)child.getChild(0)));
                     break;
                 }
                 default: {
@@ -666,19 +615,18 @@ public class CppTreeParser extends BaseParser {
     private List<Operation> doType(CommonTree t) {
         Operation type = Operation.NULL;
         Operation array = Operation.NULL;
-        for (int i = 0; i < t.getChildCount(); i++) {
-            CommonTree child = (CommonTree) t.getChild(i);
+        for (CommonTree child :getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
-                case QUALIFIED_TYPE_IDENT: {   //custom type
-                    type = Operation.QUALIFIED_TYPE_IDENT;
-                    break;
-                }
                 case TYPE_NAME: {
                     type = Operation.QUALIFIED_TYPE_IDENT;
                     break;
                 }
                 case ARRAY: {
+                    array = Operation.ARRAY;
+                    break;
+                }
+                case POINTER: {
                     array = Operation.ARRAY;
                     break;
                 }
@@ -982,7 +930,6 @@ public class CppTreeParser extends BaseParser {
     }
 
     private void doClassTopLevelScope(CommonTree t, TreeNode node) {
-        node.setStop(((CommonToken)t.getToken()).getStartIndex());
         for (int i = 0; i < t.getChildCount(); i++) {
             CommonTree child = (CommonTree) t.getChild(i);
             Operation op = OperationUtil.get(lang, child);

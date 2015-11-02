@@ -224,24 +224,7 @@ public class PascalTreeParser extends BaseParser {
         ac.incMethod();
     }
 
-    private List<String> doFormalParamList(CommonTree t) {
-        List<String> params = new ArrayList<>();
-        for (CommonTree child : getChildren(t)) {
-            Operation op = OperationUtil.get(lang, child);
-            switch (op) {
-                case FORMAL_PARAM_STD_DECL: {
-                    params.add(doFormalParam(child));
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        }
-        return params;
-    }
-
-    private String doFormalParam(CommonTree t) {
+    protected String doFormalParam(CommonTree t) {
         List<String> names = new ArrayList<>();
         Operation type = Operation.NULL;
         for (CommonTree child : getChildren(t)) {
@@ -251,7 +234,6 @@ public class PascalTreeParser extends BaseParser {
                     names.addAll(doVarDeclaratorList(child, new ArrayList<int[]>()));
                     break;
                 }
-
                 default: {
                     type = doSingleType(child);
                     break;
