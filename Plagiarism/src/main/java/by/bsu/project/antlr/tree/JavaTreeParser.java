@@ -113,16 +113,19 @@ public class JavaTreeParser extends BaseParser {
 
     private String doVarDeclarator(CommonTree t, TreeNode node) {
         String name = "";
+        int index = -10;
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
                     name = doIdent(child);
+                    index = getIndex(child) + 2;
                     break;
                 }
                 case EXPR: {
                     String exprName = name + ' ' + Operation.ASSIGN.name() + ' ' + doExpr(child, node);
                     TreeNode assignNode = createTreeNode(exprName, node, Operation.ASSIGN);
+                    assignNode.setTokenIndex(index);
                     nodes.add(assignNode);
                     break;
                 }
