@@ -187,7 +187,7 @@ public class ProgramUploadController extends BaseController {
                 return new ModelAndView("DiffCode");
             }
             List<int[]> mapBytes = SerializableUtil.getMap(programFilesEntity.getCompareMap());
-            String[] files = CodeDiffUtil.getHighlights(programFilesEntity.getFile(), programFilesEntity.getMatched().getFile(), mapBytes);
+            String[] files = CodeDiffUtil.getHighlights(programFilesEntity, programFilesEntity.getMatched(), mapBytes);
             int height = Math.max(StringUtils.countMatches(files[0], "\n"),StringUtils.countMatches(files[1], "\n")) * 23;
 
             model.addAttribute(ETestingConstants.MODEL_FILE1, files[0]);

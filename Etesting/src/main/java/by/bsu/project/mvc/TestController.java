@@ -69,7 +69,7 @@ public class TestController extends BaseController {
         c.nonNormalizedTreeDist(nodes1, nodes2);
         List<int[]> byteMap = c.computeEditMapping();
 
-        String[] files = CodeDiffUtil.getHighlights(e1.getFile(), e2.getFile(), byteMap);
+        String[] files = CodeDiffUtil.getHighlights(e1, e2, byteMap);
 
         int height = Math.max(StringUtils.countMatches(files[0], "\n"),StringUtils.countMatches(files[1], "\n")) * 23;
 

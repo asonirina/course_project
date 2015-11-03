@@ -1,5 +1,11 @@
 package by.bsu.project.utils;
 
+import by.bsu.project.antlr.lang.LangFactory;
+import by.bsu.project.antlr.tree.BaseParser;
+import by.bsu.project.general.model.ProgramFilesEntity;
+import org.antlr.runtime.CommonToken;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +16,7 @@ import java.util.List;
  */
 public class CodeDiffUtil {
     private enum Order {
-        DIRECT(0, 2, "#99EBC2"), REVERSE(2, 0, "#FF9999");
+        DIRECT(4, 5, "#99EBC2"), REVERSE(5, 4, "#FF9999");
         private int i1;
         private int i2;
         private String color;
@@ -22,42 +28,43 @@ public class CodeDiffUtil {
         }
     }
 
-    public static String[] getHighlights(byte b1[], byte b2[], List<int[]> byteMap) {
-        String res[] = new String[2];
-
+    public static String[] getHighlights(ProgramFilesEntity e1, ProgramFilesEntity e2, List<int[]> byteMap) {
         List<CompareIndex> indexes = new ArrayList<>();
         for (int i = 0; i < byteMap.size(); i++) {
             indexes.add(new CompareIndex(i, byteMap.get(i)));
         }
-        Collections.sort(indexes, new CompareMapComparator(Order.DIRECT.i1));
-        res[0] = getHighlightedString(b1, indexes, Order.DIRECT);
 
-        Collections.sort(indexes, new CompareMapComparator(Order.REVERSE.i1));
-        res[1] = getHighlightedString(b2, indexes, Order.REVERSE);
 
+        String res[] = new String[2];
+        res[0] = getTaggedString(e1, indexes,Order.DIRECT);
+        res[1] = getTaggedString(e2, indexes, Order.REVERSE);
         return res;
     }
 
-    private static String getHighlightedString(byte bytes[], List<CompareIndex> indexes, Order o) {
-        String file = new String(bytes);
-        for (CompareIndex index : indexes) {
-            int arr[] = index.getIndexes();
-            if (arr[o.i1] > 0) {
-                String before = file.substring(0, arr[o.i1]);
-                String diff = file.substring(arr[o.i1], arr[o.i1 + 1] + 1);
-                String after = file.substring(arr[o.i1 + 1] + 1);
+    public static String getTaggedString(ProgramFilesEntity e, List<CompareIndex> indexes,  Order o) {
+        try {
+            BaseParser parser = LangFactory.createParser(e.getLang());
+            String tokens[] = parser.getTokens(e.getFile());
 
-                if (arr[o.i2] == -1) {
-                    diff = String.format("<span style='background-color:%s;'>%s</span>", o.color, diff);
-                } else if (arr[o.i2] > 0) {
-                    diff = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>",
-                            index.getId(), index.getId(), index.getId(), diff);
+            for (CompareIndex index : indexes) {
+                int arr[] = index.getIndexes();
+                if (arr[o.i1] >= 0) {
+                    if (arr[o.i2] == -1) {
+                        tokens[arr[o.i1]] = String.format("<span style='background-color:%s;'>%s</span>", o.color, tokens[arr[o.i1]]);
+                    } else if (arr[o.i2] > 0) {
+                        tokens[arr[o.i1]] = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>",
+                                index.getId(), index.getId(), index.getId(), tokens[arr[o.i1]]);
+                    }
+                } else {
+                  //  break;
                 }
-                file = before + diff + after;
-            } else {
-                break;
             }
+
+            return StringUtils.join(tokens);
+        } catch (Exception ex) {
+            return "";
         }
-        return file;
     }
+
+
 }
