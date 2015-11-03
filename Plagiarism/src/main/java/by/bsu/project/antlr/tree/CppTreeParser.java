@@ -46,12 +46,11 @@ public class CppTreeParser extends BaseParser {
     private void doClass(CommonTree t, TreeNode node) {
         String name = "";
         TreeNode classNode = createTreeNode("", node, Operation.CLASS_DECL);
-        classNode.setStart(getStartIndex(t));
+        classNode.setTokenIndex(getIndex(t));
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case CLASS_NAME: {
-                    classNode.setStop(getStopIndex(child.getChild(0)));
                     name = doIdent((CommonTree) child.getChild(0));
                     break;
                 }
@@ -81,7 +80,7 @@ public class CppTreeParser extends BaseParser {
                     break;
                 }
                 case VAR_DECLARATOR_LIST: {
-                    doVarDeclaratorList(child, node, new ArrayList<int[]>());
+                    doVarDeclaratorList(child, node, new ArrayList<Integer>());
                     break;
                 }
                 default: {
@@ -99,8 +98,7 @@ public class CppTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case NAME: {
-                    varDeclarationNode.setStart(getStartIndex(child.getChild(0)));
-                    varDeclarationNode.setStop(getStopIndex(child.getChild(0)));
+                    varDeclarationNode.setTokenIndex(getIndex(child.getChild(0)));
                     name = doIdent((CommonTree) child.getChild(0));
                     break;
                 }
@@ -123,7 +121,7 @@ public class CppTreeParser extends BaseParser {
         return varDeclarationNode.getName();
     }
 
-    private List<String> doVarDeclaratorList(CommonTree t, TreeNode node, List<int[]> indexes) {
+    private List<String> doVarDeclaratorList(CommonTree t, TreeNode node, List<Integer> indexes) {
         List<String> names = new ArrayList<>();
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
@@ -133,10 +131,7 @@ public class CppTreeParser extends BaseParser {
                     break;
                 }
                 case IDENT: {
-                    int temp[] = new int[2];
-                    temp[0] = getStartIndex(child.getChild(0));
-                    temp[1] = getStopIndex(child.getChild(0));
-                    indexes.add(temp);
+                    indexes.add(getIndex(child.getChild(0)));
                     names.add(doIdent(child));
                     break;
                 }
@@ -222,8 +217,7 @@ public class CppTreeParser extends BaseParser {
             switch (op) {
                 case CALLEE: {
                     List<CommonTree> list = getChildren(child);
-                    methodCall.setStart(getStartIndex(list.get(0)));
-                    methodCall.setStop(getStopIndex(list.get(list.size() - 1)));
+                    methodCall.setTokenIndex(getIndex(list.get(list.size() - 1)));
                     name = doDot(child);
                     break;
                 }
@@ -272,8 +266,7 @@ public class CppTreeParser extends BaseParser {
                     break;
                 }
                 case FUNCTION_NAME: {
-                    methodNode.setStart(getStartIndex(child.getChild(0)));
-                    methodNode.setStop(getStopIndex(child.getChild(0)));
+                    methodNode.setTokenIndex(getIndex(child.getChild(0)));
                     name = doIdent((CommonTree) child.getChild(0)) + " ";
                     break;
                 }
@@ -404,8 +397,7 @@ public class CppTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case KEYWORD:{
-                    commonNode.setStart(getStartIndex(child.getChild(0)));
-                    commonNode.setStop(getStopIndex(child.getChild(0)));
+                    commonNode.setTokenIndex(getIndex(child.getChild(0)));
                     break;
                 }
                 default:  {
@@ -463,8 +455,7 @@ public class CppTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case KEYWORD:{
-                    forNode.setStart(getStartIndex(child.getChild(0)));
-                    forNode.setStop(getStopIndex(child.getChild(0)));
+                    forNode.setTokenIndex(getIndex(child.getChild(0)));
                     break;
                 }
                 case FOR_INIT: {

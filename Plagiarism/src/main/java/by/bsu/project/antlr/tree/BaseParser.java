@@ -66,14 +66,6 @@ public abstract class BaseParser {
     protected abstract List<LangWrap.Operation> doType(CommonTree t);
     protected abstract void doCommonIfWhile(CommonTree t, TreeNode node, LangWrap.Operation o);
 
-    protected int getStartIndex (Tree tree) {
-        return ((CommonToken)((CommonTree)tree).getToken()).getStartIndex();
-    }
-
-    protected int getStopIndex (Tree tree) {
-        return ((CommonToken)((CommonTree)tree).getToken()).getStopIndex();
-    }
-
     protected int getIndex (Tree tree) {
         return ((CommonTree)tree).getToken().getTokenIndex();
     }
@@ -178,8 +170,6 @@ public abstract class BaseParser {
             }
         }
         bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
-        bin.setStart(getStartIndex(t));
-        bin.setStop(getStopIndex(t));
         bin.setTokenIndex(getIndex(t));
         nodes.add(bin);
         return bin.getName();
@@ -289,8 +279,6 @@ public abstract class BaseParser {
         }
 
         TreeNode post = createTreeNode(name + ' ' + LangWrap.Operation.POST_DEC.name(), node, o);
-        post.setStart(getStartIndex(t));
-        post.setStop(getStopIndex(t));
         post.setTokenIndex(getIndex(t));
         nodes.add(post);
         return post.getName();

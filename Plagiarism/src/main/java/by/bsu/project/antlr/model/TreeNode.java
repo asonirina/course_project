@@ -26,8 +26,6 @@ public class TreeNode implements Serializable {
     private String parentName;
     private Integer i;
 
-    private Integer start = -10;
-    private Integer stop = -10;
     private Integer tokenIndex = -10;
 
     public TreeNode(Integer id, String name, TreeNode node) {
@@ -110,14 +108,6 @@ public class TreeNode implements Serializable {
         return children.isEmpty();
     }
 
-    public Integer getStart() {
-        return start;
-    }
-
-    public void setStart(Integer start) {
-        this.start = start;
-    }
-
     public Integer getTokenIndex() {
         return tokenIndex;
     }
@@ -149,15 +139,6 @@ public class TreeNode implements Serializable {
         oos.close();
         return baos.toByteArray();
     }
-
-    public Integer getStop() {
-        return stop;
-    }
-
-    public void setStop(Integer stop) {
-        this.stop = stop;
-    }
-
 
     @Override
     public boolean equals(Object o) {

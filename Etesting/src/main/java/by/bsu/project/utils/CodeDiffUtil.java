@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CodeDiffUtil {
     private enum Order {
-        DIRECT(4, 5, "#99EBC2"), REVERSE(5, 4, "#FF9999");
+        DIRECT(0, 1, "#99EBC2"), REVERSE(1, 0, "#FF9999");
         private int i1;
         private int i2;
         private String color;
@@ -55,8 +55,6 @@ public class CodeDiffUtil {
                         tokens[arr[o.i1]] = String.format("<a onmouseout='returnBack(%d)' onmousemove='highlightMatches(%d)' name='%d'><span style='background-color:#FFFFB2;'>%s</span></a>",
                                 index.getId(), index.getId(), index.getId(), tokens[arr[o.i1]]);
                     }
-                } else {
-                  //  break;
                 }
             }
 

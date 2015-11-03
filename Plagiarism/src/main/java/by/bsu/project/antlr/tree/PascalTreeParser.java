@@ -68,7 +68,7 @@ public class PascalTreeParser extends BaseParser {
     private String doVarDeclaration(CommonTree t, TreeNode node) {
         Operation type = Operation.NULL;
         List<String> names = new ArrayList<>();
-        List<int[]> indexes = new ArrayList<>();
+        List<Integer> indexes = new ArrayList<>();
 
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
@@ -85,25 +85,21 @@ public class PascalTreeParser extends BaseParser {
         }
         for (int i = 0; i<names.size(); i++) {
             String name = names.get(i);
-            int[] temp = indexes.get(i);
+            int index = indexes.get(i);
             TreeNode varDeclarationNode = createTreeNode(type.name() + ' ' + name, node, Operation.VAR_DECLARATION);
-            varDeclarationNode.setStart(temp[0]);
-            varDeclarationNode.setStop(temp[1]);
+            varDeclarationNode.setTokenIndex(index);
             nodes.add(varDeclarationNode);
         }
         return type.name() + StringUtils.join(names.toArray());
     }
 
-    private List<String> doVarDeclaratorList(CommonTree t,  List<int[]> indexes) {
+    private List<String> doVarDeclaratorList(CommonTree t,  List<Integer> indexes) {
         List<String> names = new ArrayList<>();
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    int temp[] = new int[2];
-                    temp[0] = getStartIndex(child);
-                    temp[1] = getStopIndex(child);
-                    indexes.add(temp);
+                    indexes.add(getIndex(child));
                     names.add(doIdent(child));
                     break;
                 }
@@ -122,8 +118,7 @@ public class PascalTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    methodCall.setStart(getStartIndex(child));
-                    methodCall.setStop(getStopIndex(child));
+                    methodCall.setTokenIndex(getIndex(child));
                     name = doIdent(child);
                     break;
                 }
@@ -153,8 +148,7 @@ public class PascalTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case IDENT: {
-                    methodNode.setStart(getStartIndex(child));
-                    methodNode.setStop(getStopIndex(child));
+                    methodNode.setTokenIndex(getIndex(child));
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -192,7 +186,7 @@ public class PascalTreeParser extends BaseParser {
             Operation op = OperationUtil.get(lang, child);
             switch (op) {
                 case VAR_DECLARATOR_LIST: {
-                    names.addAll(doVarDeclaratorList(child, new ArrayList<int[]>()));
+                    names.addAll(doVarDeclaratorList(child, new ArrayList<Integer>()));
                     break;
                 }
                 default: {
@@ -285,8 +279,7 @@ public class PascalTreeParser extends BaseParser {
 
     protected void doCommonIfWhile(CommonTree t, TreeNode node, Operation o) {
         TreeNode commonNode = createTreeNode("", node, o);
-        commonNode.setStart(getStartIndex(t));
-        commonNode.setStop(getStopIndex(t));
+        commonNode.setTokenIndex(getIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
@@ -307,8 +300,7 @@ public class PascalTreeParser extends BaseParser {
 
     private void doFor(CommonTree t, TreeNode node) {
         TreeNode forNode = createTreeNode("", node, Operation.FOR);
-        forNode.setStart(getStartIndex(t));
-        forNode.setStop(getStopIndex(t));
+        forNode.setTokenIndex(getIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);
