@@ -36,6 +36,7 @@ public class JavaTreeParser extends BaseParser {
         String name = "";
         TreeNode classNode = createTreeNode("", node, Operation.CLASS_DECL);
         classNode.setStart(getStartIndex(t));
+        classNode.setTokenIndex(getIndex(t));
         for (CommonTree child : getChildren(t)) {
 
             Operation op = OperationUtil.get(lang, child);
@@ -85,6 +86,7 @@ public class JavaTreeParser extends BaseParser {
             TreeNode varDeclarationNode = createTreeNode(getType(types) + ' ' + name, node, Operation.VAR_DECLARATION);
             varDeclarationNode.setStart(temp[0]);
             varDeclarationNode.setStop(temp[1]);
+            varDeclarationNode.setTokenIndex(temp[2]);
             nodes.add(varDeclarationNode);
         }
         return getType(types) + StringUtils.join(names.toArray());
@@ -97,9 +99,10 @@ public class JavaTreeParser extends BaseParser {
             switch (op) {
                 case VAR_DECLARATOR: {
                     if(indexes != null ){
-                        int temp[] = new int[2];
+                        int temp[] = new int[3];
                         temp[0] = getStartIndex(child.getChild(0));
                         temp[1] = getStopIndex(child.getChild(0));
+                        temp[2] = getIndex(child.getChild(0));
                         indexes.add(temp);
                     }
                     names.add(doVarDeclarator(child, node));
@@ -107,9 +110,10 @@ public class JavaTreeParser extends BaseParser {
                 }
                 case IDENT: {
                     if(indexes != null ){
-                        int temp[] = new int[2];
+                        int temp[] = new int[3];
                         temp[0] = getStartIndex(child.getChild(0));
                         temp[1] = getStopIndex(child.getChild(0));
+                        temp[2] = getIndex(child.getChild(0));
                         indexes.add(temp);
                     }
                     names.add(doIdent(child));
@@ -155,6 +159,7 @@ public class JavaTreeParser extends BaseParser {
                 case IDENT: {
                     methodCall.setStart(getStartIndex(child));
                     methodCall.setStop(getStopIndex(child));
+                    methodCall.setTokenIndex(getIndex(child));
                     name = doIdent(child);
                     break;
                 }
@@ -283,6 +288,7 @@ public class JavaTreeParser extends BaseParser {
                 case IDENT: {
                     methodNode.setStart(getStartIndex(child));
                     methodNode.setStop(getStopIndex(child));
+                    methodNode.setTokenIndex(getIndex(child));
                     name = doIdent(child) + " ";
                     break;
                 }
@@ -410,6 +416,7 @@ public class JavaTreeParser extends BaseParser {
         TreeNode commonNode = createTreeNode("", node, o);
         commonNode.setStart(getStartIndex(t));
         commonNode.setStop(getStopIndex(t));
+        commonNode.setTokenIndex(getIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             String temp = doIfWhileBlock(child, commonNode);
@@ -425,6 +432,7 @@ public class JavaTreeParser extends BaseParser {
         TreeNode forNode = createTreeNode("", node, Operation.FOR);
         forNode.setStart(getStartIndex(t));
         forNode.setStop(getStopIndex(t));
+        forNode.setTokenIndex(getIndex(t));
         String name = "";
         for (CommonTree child : getChildren(t)) {
             Operation op = OperationUtil.get(lang, child);

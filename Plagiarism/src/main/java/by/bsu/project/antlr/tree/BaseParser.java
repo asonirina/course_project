@@ -74,6 +74,10 @@ public abstract class BaseParser {
         return ((CommonToken)((CommonTree)tree).getToken()).getStopIndex();
     }
 
+    protected int getIndex (Tree tree) {
+        return ((CommonTree)tree).getToken().getTokenIndex();
+    }
+
     protected void doRoot(CommonTree t) {
         if (t == null) {
             return;
@@ -160,8 +164,9 @@ public abstract class BaseParser {
             }
         }
         bin.setName(operation.name() + ' ' + StringUtils.join(arr, ' '));
-        bin.setStart(((CommonToken) t.getToken()).getStartIndex());
-        bin.setStop(((CommonToken) t.getToken()).getStopIndex());
+        bin.setStart(getStartIndex(t));
+        bin.setStop(getStopIndex(t));
+        bin.setTokenIndex(getIndex(t));
         nodes.add(bin);
         return bin.getName();
     }
@@ -272,6 +277,7 @@ public abstract class BaseParser {
         TreeNode post = createTreeNode(name + ' ' + LangWrap.Operation.POST_DEC.name(), node, o);
         post.setStart(getStartIndex(t));
         post.setStop(getStopIndex(t));
+        post.setTokenIndex(getIndex(t));
         nodes.add(post);
         return post.getName();
     }
