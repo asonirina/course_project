@@ -53,11 +53,11 @@ public class LangFactory {
     public static BaseParser createParser(Lang lang) {
         switch (lang) {
             case JAVA:
-                return new JavaTreeParser(lang);
+                return new JavaTreeParser(lang, true);
             case CPP:
-                return new CppTreeParser(lang);
+                return new CppTreeParser(lang, true);
             case PASCAL:
-                return new PascalTreeParser(lang);
+                return new PascalTreeParser(lang, true);
             default:
                 return null;
         }
