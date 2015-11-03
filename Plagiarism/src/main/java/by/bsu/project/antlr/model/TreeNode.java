@@ -28,6 +28,7 @@ public class TreeNode implements Serializable {
 
     private Integer start = -10;
     private Integer stop = -10;
+    private Integer tokenIndex = -10;
 
     public TreeNode(Integer id, String name, TreeNode node) {
         this.id = id;
@@ -115,6 +116,14 @@ public class TreeNode implements Serializable {
 
     public void setStart(Integer start) {
         this.start = start;
+    }
+
+    public Integer getTokenIndex() {
+        return tokenIndex;
+    }
+
+    public void setTokenIndex(Integer tokenIndex) {
+        this.tokenIndex = tokenIndex;
     }
 
     public Integer getI() {
