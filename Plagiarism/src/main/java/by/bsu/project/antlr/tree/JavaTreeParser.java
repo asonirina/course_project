@@ -150,6 +150,7 @@ public class JavaTreeParser extends BaseParser {
                 }
                 case DOT: {
                     name = doDot(child);
+                    methodCall.setTokenIndex(getIndex(child.getChild(1)));
                     break;
                 }
                 case ARGUMENT_LIST: {
