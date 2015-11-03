@@ -92,9 +92,7 @@ public abstract class BaseParser {
 
     public List<TreeNode> getTree(byte[] bytes) {
         try {
-            ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(bytes));
-            LangLexer lexer = factory.createLexer(in);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            CommonTokenStream tokens = getTokenStream(bytes);
             LangParser parser = factory.createParser(tokens);
             parser.setTreeAdaptor(adaptor);
 
@@ -105,6 +103,12 @@ public abstract class BaseParser {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public CommonTokenStream getTokenStream(byte[] bytes) throws Exception{
+        ANTLRInputStream in = new ANTLRInputStream(new ByteArrayInputStream(bytes));
+        LangLexer lexer = factory.createLexer(in);
+        return new CommonTokenStream(lexer);
     }
 
     protected TreeNode createTreeNode(String name, TreeNode parent, LangWrap.Operation operation) {
