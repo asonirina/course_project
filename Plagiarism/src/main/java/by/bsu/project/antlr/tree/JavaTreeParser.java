@@ -190,6 +190,7 @@ public class JavaTreeParser extends BaseParser {
             switch (op) {
                 case QUALIFIED_TYPE_IDENT: {
                     constructor.setName(Operation.NEW.name() + ' ' + doQualifiedTypeIdent(child));
+                    constructor.setTokenIndex(getIndex(child.getChild(0)));
                     break;
                 }
                 case ARGUMENT_LIST: {
