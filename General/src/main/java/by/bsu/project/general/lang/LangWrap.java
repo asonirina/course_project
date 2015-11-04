@@ -77,7 +77,8 @@ public class LangWrap {
         ITERATION, //cpp
         TO,              //pascal
         OUT(Type.METHOD_CALL),
-        KEYWORD;
+        KEYWORD,
+        TRY;                  //java
 
         private Type type;
 

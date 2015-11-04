@@ -369,6 +369,9 @@ public class JavaTreeParser extends BaseParser {
                     doExpr((CommonTree) child.getChild(0), node);
                     break;
                 }
+                case TRY: {
+                    doBlockScope((CommonTree)child.getChild(0), node);
+                }
                 default: {
                     break;
                 }
