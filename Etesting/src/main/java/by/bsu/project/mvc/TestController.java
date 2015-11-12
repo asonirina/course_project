@@ -9,6 +9,7 @@ import by.bsu.project.antlr.util.TreeEditDistance;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.neural.Node;
 import by.bsu.project.utils.CodeDiffUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,41 @@ public class TestController extends BaseController {
     public ModelAndView displayUploadTest(Model model) {
         try {
             return new ModelAndView("UploadTest", ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_TEST);
+        } catch (Exception ex) {
+            logger.error("Unable to display upload file page " + ex.getMessage());
+            return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/e-Testing/admin/Canvas")
+    public ModelAndView displayCanvas(Model model) {
+        try {
+            List<Node> nodes = new ArrayList<>();
+            nodes.add(new Node(new double[]{0,0,0,0,0}));
+            nodes.add(new Node(new double[]{0,0,0,0,1}));
+            nodes.add(new Node(new double[]{0,0,0,0.5,0.5}));
+            nodes.add(new Node(new double[]{0,0,0,0.5,0.5}));
+            nodes.add(new Node(new double[]{0,0,0,1,0}));
+            nodes.add(new Node(new double[]{0,0,1,0,0}));
+            nodes.add(new Node(new double[]{0,1,0,0,0}));
+            nodes.add(new Node(new double[]{1,0,0,0,0}));
+
+            nodes.add(new Node(new double[]{1,1,0,0,0}));
+            nodes.add(new Node(new double[]{1,0,1,0,0}));
+            nodes.add(new Node(new double[]{1,0,0,1,0}));
+            nodes.add(new Node(new double[]{1,0,0,0,1}));
+            nodes.add(new Node(new double[]{1,1,1,0,0}));
+            nodes.add(new Node(new double[]{1,0,1,1,0}));
+            nodes.add(new Node(new double[]{1,0,1,1,1}));
+
+            nodes.add(new Node(new double[]{1,0,0.5,0.5,1}));
+            nodes.add(new Node(new double[]{1,0.5,1,1,1}));
+            nodes.add(new Node(new double[]{1,0,1,0.5,0.4}));
+            nodes.add(new Node(new double[]{1,0,0.7,1,0.8}));
+            nodes.add(new Node(new double[]{1,0,0.1,0.2,0.3}));
+
+            model.addAttribute("nodes", nodes);
+            return new ModelAndView("graph/Canvas", ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_TEST);
         } catch (Exception ex) {
             logger.error("Unable to display upload file page " + ex.getMessage());
             return new ModelAndView("redirect:/e-Testing/error503.html", ETestingConstants.MODEL_TITLE, PageTitles.ERROR);

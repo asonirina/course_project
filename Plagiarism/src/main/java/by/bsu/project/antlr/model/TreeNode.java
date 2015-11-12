@@ -1,14 +1,6 @@
 package by.bsu.project.antlr.model;
 
 import by.bsu.project.general.lang.LangWrap.Operation;
-import org.antlr.runtime.tree.CommonTree;
-import org.hibernate.type.IntegerType;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,22 +114,6 @@ public class TreeNode implements Serializable {
 
     public void setI(Integer i) {
         this.i = i;
-    }
-
-    public static List<TreeNode> getTree(byte data[]) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(
-                new ByteArrayInputStream(data));
-        List<TreeNode> list = (List<TreeNode>) ois.readObject();
-        ois.close();
-        return list;
-    }
-
-    public static byte[] getBytes(List<TreeNode> list) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(list);
-        oos.close();
-        return baos.toByteArray();
     }
 
     @Override
