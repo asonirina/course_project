@@ -45,30 +45,11 @@ public class TestController extends BaseController {
     @RequestMapping(value = "/e-Testing/admin/Canvas")
     public ModelAndView displayCanvas(Model model) {
         try {
+            List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();
             List<Node> nodes = new ArrayList<>();
-            nodes.add(new Node(new double[]{0,0,0,0,0}));
-            nodes.add(new Node(new double[]{0,0,0,0,1}));
-            nodes.add(new Node(new double[]{0,0,0,0.5,0.5}));
-            nodes.add(new Node(new double[]{0,0,0,0.5,0.5}));
-            nodes.add(new Node(new double[]{0,0,0,1,0}));
-            nodes.add(new Node(new double[]{0,0,1,0,0}));
-            nodes.add(new Node(new double[]{0,1,0,0,0}));
-            nodes.add(new Node(new double[]{1,0,0,0,0}));
-
-            nodes.add(new Node(new double[]{1,1,0,0,0}));
-            nodes.add(new Node(new double[]{1,0,1,0,0}));
-            nodes.add(new Node(new double[]{1,0,0,1,0}));
-            nodes.add(new Node(new double[]{1,0,0,0,1}));
-            nodes.add(new Node(new double[]{1,1,1,0,0}));
-            nodes.add(new Node(new double[]{1,0,1,1,0}));
-            nodes.add(new Node(new double[]{1,0,1,1,1}));
-
-            nodes.add(new Node(new double[]{1,0,0.5,0.5,1}));
-            nodes.add(new Node(new double[]{1,0.5,1,1,1}));
-            nodes.add(new Node(new double[]{1,0,1,0.5,0.4}));
-            nodes.add(new Node(new double[]{1,0,0.7,1,0.8}));
-            nodes.add(new Node(new double[]{1,0,0.1,0.2,0.3}));
-
+            for(ProgramFilesEntity entity : programs) {
+                nodes.add(new Node(entity.getAc()));
+            }
             model.addAttribute("nodes", nodes);
             return new ModelAndView("graph/Canvas", ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_TEST);
         } catch (Exception ex) {
