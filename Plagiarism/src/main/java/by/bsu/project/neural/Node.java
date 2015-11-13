@@ -1,6 +1,7 @@
 package by.bsu.project.neural;
 
 import by.bsu.project.general.model.AttributeCounting;
+import by.bsu.project.general.model.NeuralNode;
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -13,9 +14,29 @@ import java.util.Map;
  * on 11/12/2015.
  */
 public class Node {
-    private double m[];
+    private double m[];    // normalized input data
     private Integer x = 0;
     private Integer y = 0;
+    private double angle = 0;
+    private double weight = 0;
+
+    public Node (NeuralNode nn) {
+        m = new double[5];
+        m[0] = nn.getSpaces()/10.0;
+        m[1] = nn.getTabs()/10.0;
+        m[2] = nn.getIdent()/10.0;
+        m[3] = nn.getComments()/10.0;
+        m[4] = nn.getMethods()/10.0;
+
+        Map<String, Double> params = getParams(m, 1);
+        double angle = params.get("angle");
+        double radius = params.get("radius");
+        double weight = params.get("weight");
+        x = (int)(radius* Math.cos((Math.PI/2) * Math.pow(angle/(Math.PI/2), 1.)));
+        y = (int)(radius* Math.sin((Math.PI / 2) * Math.pow(angle / (Math.PI / 2),  1.)));
+        this.angle = angle;
+        this.weight = weight;
+    }
 
     public Node(AttributeCounting ac) {
         m = new double[5];
@@ -31,8 +52,11 @@ public class Node {
         Map<String, Double> params = getParams(m, max);
         double angle = params.get("angle");
         double radius = params.get("radius");
-        x = (int)(radius* Math.cos(angle));
-        y = (int)(radius* Math.sin(angle));
+        double weight = params.get("weight");
+        x = (int)(radius* Math.cos((Math.PI/2) * Math.pow(angle/(Math.PI/2), 1.)));
+        y = (int)(radius* Math.sin((Math.PI / 2) * Math.pow(angle / (Math.PI / 2),  1.)));
+        this.angle = angle;
+        this.weight = weight;
     }
 
     /**
@@ -43,8 +67,12 @@ public class Node {
         Map<String, Double> params = getParams(m, 100);
         double angle = params.get("angle");
         double radius = params.get("radius");
-        x = (int)(radius* Math.cos((Math.PI/2) * Math.pow(angle/(Math.PI/2), 0.7)));
-        y = (int)(radius* Math.sin((Math.PI/2) * Math.pow(angle/(Math.PI/2), 0.7)));
+        double weight = params.get("weight");
+        x = (int)(radius* Math.cos((Math.PI/2) * Math.pow(angle/(Math.PI/2), 2)));
+        y = (int)(radius* Math.sin((Math.PI / 2) * Math.pow(angle / (Math.PI / 2), 2)));
+        this.angle = angle;
+        this.weight = weight;
+
     }
 
     private static double value(double r) {
@@ -52,7 +80,7 @@ public class Node {
     }
 
     private static Map<String, Double> getParams(double m[], double max) {
-        int mult = 1;
+        long mult = 10;
         double radius = 0;
         double weight = 0;
         for (int i = 0; i < 5; i++) {
@@ -71,6 +99,7 @@ public class Node {
         Map<String, Double> res = new HashMap<>();
         res.put("angle", (Math.PI * weight) / (2 * maxWeight));
         res.put("radius", radius * max);
+        res.put("weight", weight);
         return res;
     }
     public double[] getM() {
@@ -95,5 +124,21 @@ public class Node {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

@@ -15,6 +15,12 @@ public class AttributeCounting {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
+    @Column(name = "input_data")
+    private Long inputData = 0L;
+
+    @Column(name = "angle")
+    private Double angle = 0.0;
+
     @Column(name = "line_count")
     private Integer lines = 0;
 
@@ -116,6 +122,22 @@ public class AttributeCounting {
 
     public void setTokens(Integer tokens) {
         this.tokens = tokens;
+    }
+
+    public Long getInputData() {
+        return inputData;
+    }
+
+    public void setInputData(Long inputData) {
+        this.inputData = inputData;
+    }
+
+    public Double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(Double angle) {
+        this.angle = angle;
     }
 
     public static int getDiff(AttributeCounting ac1, AttributeCounting ac2) {

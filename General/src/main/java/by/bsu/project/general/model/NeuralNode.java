@@ -114,13 +114,11 @@ public class NeuralNode {
         this.entity = entity;
     }
 
-    public static NeuralNode createRandom() {
-        NeuralNode res = new NeuralNode();
-        res.setSpaces(RandomUtils.nextInt(20));
-        res.setTabs(RandomUtils.nextInt(20));
-        res.setIdent(RandomUtils.nextInt(20));
-        res.setComments(RandomUtils.nextInt(20));
-        res.setMethods(RandomUtils.nextInt(5));
-        return res;
+    public static NeuralNode createDefault() {
+        return new NeuralNode();
+    }
+
+    public boolean isEmpty() {
+        return methods==0 && spaces==0 && tabs ==0 && ident==0 && comments ==0;
     }
 }

@@ -4,8 +4,8 @@ INSERT INTO `user_info` (`id`, `FirstName`, `SecondName`, `Form`, `Login`, `Pass
    (3,'XXX','XXX','11','asonirina@mail.ru','111');
 
 INSERT INTO `neural_node`  (`id`, `methods`, `spaces`, `tabs`, `ident`, `comments`, `user_id`) VALUES
-(1,1,1,1,1,1,2),
-(2,1,1,1,1,1,3);
+(1,0,0,0,0,0,2),
+(2,0,0,0,0,0,3);
 
 INSERT INTO `task` (`id`, `form`, `program_name`, `description`) values
 (1, '11', '1', 'Lab 1'),

@@ -60,6 +60,8 @@ CREATE TABLE `attribute_countings` (
   `ident` int(3) NOT NULL,
   `comments` int(3) NOT NULL,
   `program_id` int(11) default NULL,
+  `input_data` int(11) default NULL,
+  `angle` FLOAT(5, 4) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_AC` FOREIGN KEY (`program_id`) REFERENCES `program_files` (`id`)
 

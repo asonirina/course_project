@@ -2,16 +2,6 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <script type="application/javascript">
-        function draw() {
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
-            ctx.beginPath();
-//            ctx.arc(95,50,40,0,2*Math.PI);
-            ctx.strokeRect(10,10,1,1);
-            ctx.stroke();
-        }
-    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -23,6 +13,7 @@
         var ctx = canvas.getContext("2d");
         ctx.beginPath();
         <c:forEach items="${nodes}" var="node" varStatus="status">
+        ctx.fillText(${node.x}, ${node.x} + 10, ${node.y} + 10, 100);
         ctx.strokeRect(${node.x}, ${node.y}, 2, 2);
         </c:forEach>
         ctx.stroke();
