@@ -71,11 +71,11 @@ CREATE TABLE `attribute_countings` (
 
 CREATE TABLE `neural_node` (
   `id` int(11) NOT NULL auto_increment,
-  `methods` int(3) NOT NULL,
-  `spaces` int(3) NOT NULL,
-  `tabs` int(3) NOT NULL,
-  `ident` int(3) NOT NULL,
-  `comments` int(3) NOT NULL,
+  `methods` FLOAT (5, 4) NOT NULL,
+  `spaces` FLOAT (5, 4) NOT NULL,
+  `tabs` FLOAT (5, 4) NOT NULL,
+  `ident` FLOAT (5, 4) NOT NULL,
+  `comments` FLOAT (5, 4) NOT NULL,
   `user_id` int(11) default NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_NN` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)

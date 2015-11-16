@@ -22,11 +22,11 @@ public class Node {
 
     public Node (NeuralNode nn) {
         m = new double[5];
-        m[0] = nn.getSpaces()/10.0;
-        m[1] = nn.getTabs()/10.0;
-        m[2] = nn.getIdent()/10.0;
-        m[3] = nn.getComments()/10.0;
-        m[4] = nn.getMethods()/10.0;
+        m[0] = nn.getSpaces();
+        m[1] = nn.getTabs();
+        m[2] = nn.getIdent();
+        m[3] = nn.getComments();
+        m[4] = nn.getMethods();
 
         Map<String, Double> params = getParams(m, 1);
         double angle = params.get("angle");

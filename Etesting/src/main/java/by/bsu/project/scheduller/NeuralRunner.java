@@ -6,7 +6,6 @@ import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.neural.Node;
 import by.bsu.project.service.UserInfoService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,51 +28,56 @@ public class NeuralRunner {
         List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();
         for (ProgramFilesEntity programFilesEntity : programs) {
             AttributeCounting ac = programFilesEntity.getAc();
-            Node n = new Node(ac);
-            ac.setAngle(n.getAngle());
-            ac.setInputData((long)n.getWeight());
+            Node current = new Node(ac);
+            ac.setAngle(current.getAngle());
+            ac.setInputData((long)current.getWeight());
 
-            UserInfoEntity winner = null;
+            UserInfoEntity winner = programFilesEntity.getUser();
             double measure = 2.0;
             for (UserInfoEntity entity : users) {
                 NeuralNode node = entity.getNeuralNode();
-                Node checkingNode = new Node(node);
-                if (!node.isEmpty()) {
-                    double temp = Math.abs(checkingNode.getAngle() - n.getAngle());
+                if (node != null) {
+                    Node checkingNode = new Node(node);
+                    double temp = Math.abs(checkingNode.getAngle() - current.getAngle());
                     if (temp <= measure) {
                         measure = temp;
                         winner = entity;
                     }
                 }
             }
-            if (winner == null) {
-                NeuralNode nn = programFilesEntity.getUser().getNeuralNode();
-                double m[] = n.getM();
-                nn.setSpaces((int)(10 * m[0]));
-                nn.setTabs((int)(10 * m[1]));
-                nn.setIdent((int)(10 * m[2]));
-                nn.setComments((int)(10 * m[3]));
-                nn.setMethods((int)(10 * m[4]));
 
+            if (winner.getNeuralNode() == null) {
+                createNewNeuralNode(current, programFilesEntity);
             } else if (winner.getId().equals(programFilesEntity.getUser().getId())) {
-//                double h = Math.sqrt(1.0 / ac.getId()) * Math.exp(-measure*measure);
-//                changeWinner(winner.getNeuralNode(), checkingNode, h);
-//                userInfoService.save(winner);
+                double h = Math.sqrt(1.0 / ac.getId()) * Math.exp(-measure * measure / (2 * sigma(ac.getId())));
+                changeWinner(programFilesEntity.getUser().getNeuralNode(), current, h);
             }
             programFilesEntity.setRunStatus(3);
-            programFilesEntity.setCluster(winner.getNeuralNode().getId());
+            programFilesEntity.setCluster(winner.getId());
             userInfoService.save(programFilesEntity.getUser());
         }
     }
 
-    private void changeWinner(NeuralNode winner, NeuralNode current, double h) {
-        winner.incSpaces((int)(h * (current.getSpaces() - winner.getSpaces())));
-        winner.incTabs((int)(h * (current.getTabs() - winner.getTabs())));
-        winner.incIdent((int)(h * (current.getIdent() - winner.getIdent())));
-        winner.incComments((int)(h * (current.getComments() - winner.getComments())));
-        winner.incMethods((int)(h * (current.getMethods() - winner.getMethods())));
+    private void createNewNeuralNode(Node current, ProgramFilesEntity programFilesEntity) {
+        NeuralNode nn = new NeuralNode();
+        double m[] = current.getM();
+        nn.setSpaces(m[0]);
+        nn.setTabs(m[1]);
+        nn.setIdent(m[2]);
+        nn.setComments(m[3]);
+        nn.setMethods(m[4]);
+        nn.setEntity(programFilesEntity.getUser());
+        programFilesEntity.getUser().setNeuralNode(nn);
     }
 
+    private void changeWinner(NeuralNode winner, Node current, double h) {
+        double m[] = current.getM();
+        winner.incSpaces(h * (m[0] - winner.getSpaces()));
+        winner.incTabs(h * (m[1] - winner.getTabs()));
+        winner.incIdent(h * (m[2] - winner.getIdent()));
+        winner.incComments(h * (m[3] - winner.getComments()));
+        winner.incMethods(h * (m[4] - winner.getMethods()));
+    }
 
     private static long sigma(long t) {
         return 5 + 10 / t;

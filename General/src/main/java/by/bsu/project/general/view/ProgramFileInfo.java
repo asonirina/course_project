@@ -27,7 +27,7 @@ public class ProgramFileInfo {
         info.setPlagiat1(programFilesEntity.getPlagiat1() + " %");
         info.setPlagiat2(programFilesEntity.getPlagiat2() + " %");
         info.setTryNo(userTask.getTryNo().toString());
-        info.setRightCluster(programFilesEntity.getCluster().equals(programFilesEntity.getUser().getNeuralNode().getId()) ? "Да" : "Нет");
+        info.setRightCluster(programFilesEntity.getCluster().equals(programFilesEntity.getUser().getId()) ? "Да" : "Нет");
         return info;
     }
 
