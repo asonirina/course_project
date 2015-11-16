@@ -9,6 +9,7 @@ import by.bsu.project.antlr.util.TreeEditDistance;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.constants.PageTitles;
 import by.bsu.project.general.model.ProgramFilesEntity;
+import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.neural.Node;
 import by.bsu.project.utils.CodeDiffUtil;
 import org.apache.commons.lang.StringUtils;
@@ -45,10 +46,16 @@ public class TestController extends BaseController {
     @RequestMapping(value = "/e-Testing/admin/Canvas")
     public ModelAndView displayCanvas(Model model) {
         try {
-            List<ProgramFilesEntity> programs = userInfoService.getReadyProgramFiles();
+            List<ProgramFilesEntity> programs = userInfoService.getCompletedProgramFiles();
+            List<UserInfoEntity> users = userInfoService.studentsList();
             List<Node> nodes = new ArrayList<>();
-            for(ProgramFilesEntity entity : programs) {
+            for (ProgramFilesEntity entity : programs) {
                 nodes.add(new Node(entity.getAc()));
+            }
+            for (UserInfoEntity entity : users) {
+                if (entity.getNeuralNode() != null) {
+                    nodes.add(new Node(entity.getNeuralNode(), true, 100));
+                }
             }
             model.addAttribute("nodes", nodes);
             return new ModelAndView("graph/Canvas", ETestingConstants.MODEL_TITLE, PageTitles.UPLOAD_TEST);

@@ -152,6 +152,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
+    public List<ProgramFilesEntity> getCompletedProgramFiles() {
+        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.COMPLETE_FILE);
+    }
+
+    @Transactional
+    @Override
     public Task getTask(ProgramFilesEntity entity) {
         return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName());
     }

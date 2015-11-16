@@ -29,8 +29,7 @@ public class JsonHelper {
                     JSONObject programFile = new JSONObject();
                     programFile.put("name", "Lab #" + program.getProgramName() + ", Plagiarism = " + program.getPlagiat2());
                     programFile.put("size", String.valueOf(50 + program.getPlagiat2()));
-//                    programFile.put("color", user.getNeuralNode().getId().equals(program.getCluster()) ? "white" : "orange");
-                    programFile.put("color", RandomUtils.nextBoolean() ? "white" : "orange");
+                    programFile.put("color", user.getId().equals(program.getCluster()) ? "white" : "orange");
                     programFiles.add(programFile);
                 }
             }

@@ -37,6 +37,7 @@ public interface UserInfoService {
     public List<ProgramFilesEntity> getUploadedProgramFiles();
     public List<ProgramFilesEntity> getTestedProgramFiles();
     public List<ProgramFilesEntity> getReadyProgramFiles();
+    public List<ProgramFilesEntity> getCompletedProgramFiles();
     public Task getTask(ProgramFilesEntity entity);
     public UserTask getUserTask(UserInfoEntity user, Task task);
     public UserTask getUserTask(Long userId, Long taskId);

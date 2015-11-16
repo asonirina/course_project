@@ -33,7 +33,7 @@ public class NeuralRunner {
             ac.setInputData((long)current.getWeight());
 
             UserInfoEntity winner = programFilesEntity.getUser();
-            double measure = 2.0;
+            double measure = Math.PI / 18;
             for (UserInfoEntity entity : users) {
                 NeuralNode node = entity.getNeuralNode();
                 if (node != null) {

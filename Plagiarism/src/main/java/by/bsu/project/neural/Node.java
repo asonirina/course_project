@@ -20,7 +20,13 @@ public class Node {
     private double angle = 0;
     private double weight = 0;
 
+    boolean grid;
+
     public Node (NeuralNode nn) {
+        this(nn, false, 1);
+    }
+    public Node (NeuralNode nn, boolean isGrid, double max) {
+        this.grid = isGrid;
         m = new double[5];
         m[0] = nn.getSpaces();
         m[1] = nn.getTabs();
@@ -28,7 +34,7 @@ public class Node {
         m[3] = nn.getComments();
         m[4] = nn.getMethods();
 
-        Map<String, Double> params = getParams(m, 1);
+        Map<String, Double> params = getParams(m, max);
         double angle = params.get("angle");
         double radius = params.get("radius");
         double weight = params.get("weight");
@@ -140,5 +146,13 @@ public class Node {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public boolean isGrid() {
+        return grid;
+    }
+
+    public void setGrid(boolean grid) {
+        this.grid = grid;
     }
 }

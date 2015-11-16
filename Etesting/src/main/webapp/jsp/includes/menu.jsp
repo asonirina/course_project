@@ -12,6 +12,7 @@
         <li><a href="<c:url value="/e-Testing/admin/StudentList.html"/>">Список учеников<span>Список</span></a></li>
         <li><a href="<c:url value="/e-Testing/admin/TaskList.html"/>">Список заданий<span>Список</span></a></li>
         <li><a href="<c:url value="/e-Testing/admin/Assignments.html"/>">Задачи<span>Таблица</span></a></li>
+        <li><a href="<c:url value="/e-Testing/admin/Canvas.html"/>">Проверка<span>График</span></a></li>
         <li><a href="<c:url value="/e-Testing/admin/ShowGraph.html"/>">Проверка<span>Плагиат</span></a></li>
         <li><a href="<c:url value="/e-Testing/admin/ChangePassword.html"/>">Сменить пароль<span>Сменить</span></a></li>
         <li><a href="<c:url value="/e-Testing/Logout/Success.html"/>"><sec:authentication property="principal.username"/><span>Выйти</span></a></li>

@@ -13,8 +13,15 @@
         var ctx = canvas.getContext("2d");
         ctx.beginPath();
         <c:forEach items="${nodes}" var="node" varStatus="status">
-        ctx.fillText(${node.x}, ${node.x} + 10, ${node.y} + 10, 100);
-        ctx.strokeRect(${node.x}, ${node.y}, 2, 2);
+        <c:if test="${node.grid}">
+            var rad = 500.0 / Math.sqrt(${node.x} * ${node.x} + ${node.y} * ${node.y});
+            ctx.beginPath();
+            ctx.setLineDash([5, 10]);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(rad * ${node.x}, rad * ${node.y});
+            ctx.stroke();
+        </c:if>
+        ctx.fillRect(${node.x}, ${node.y}, 6, 6);
         </c:forEach>
         ctx.stroke();
     </script>
