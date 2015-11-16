@@ -1,10 +1,7 @@
 package by.bsu.project.dao;
 
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.general.model.Task;
-import by.bsu.project.general.model.UserInfoEntity;
-import by.bsu.project.general.model.UserTask;
+import by.bsu.project.general.model.*;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +69,11 @@ public class UserInfoDAOImpl implements UserInfoDAO {
         return (UserTask) sessionFactory.getCurrentSession().createQuery("from UserTask where user_id = :user_id and task_id = :task_id").
                 setParameter(ETestingConstants.USER_ID, userId).
                 setParameter(ETestingConstants.TASK_ID, taskId).uniqueResult();
+    }
+
+    @Override
+    public AttributeCounting getAC(Long acId) {
+        return (AttributeCounting)sessionFactory.getCurrentSession().get(AttributeCounting.class, acId);
     }
 
     @Override

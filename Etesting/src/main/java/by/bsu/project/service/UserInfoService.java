@@ -1,9 +1,6 @@
 package by.bsu.project.service;
 
-import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.general.model.Task;
-import by.bsu.project.general.model.UserInfoEntity;
-import by.bsu.project.general.model.UserTask;
+import by.bsu.project.general.model.*;
 import by.bsu.project.paging.Paging;
 import org.springframework.ui.Model;
 
@@ -41,4 +38,5 @@ public interface UserInfoService {
     public Task getTask(ProgramFilesEntity entity);
     public UserTask getUserTask(UserInfoEntity user, Task task);
     public UserTask getUserTask(Long userId, Long taskId);
+    public AttributeCounting getAC(Long acId);
 }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <body>
+<div class="wrapper">
 <table>
 
     <c:forEach var="n" varStatus="loop" items="${news}">
@@ -44,5 +45,5 @@
          </c:forEach>
 
 </table>
-
+</div>
 </body>

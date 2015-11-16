@@ -2,10 +2,7 @@ package by.bsu.project.service;
 
 import by.bsu.project.dao.UserInfoDAO;
 import by.bsu.project.general.constants.ETestingConstants;
-import by.bsu.project.general.model.Task;
-import by.bsu.project.general.model.UserInfoEntity;
-import by.bsu.project.general.model.ProgramFilesEntity;
-import by.bsu.project.general.model.UserTask;
+import by.bsu.project.general.model.*;
 import by.bsu.project.paging.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -172,6 +169,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserTask getUserTask(Long userId, Long taskId) {
         return userInfoDAO.getUserTask(userId, taskId);
+    }
+
+    @Transactional
+    @Override
+    public AttributeCounting getAC(Long acId) {
+        return userInfoDAO.getAC(acId);
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {

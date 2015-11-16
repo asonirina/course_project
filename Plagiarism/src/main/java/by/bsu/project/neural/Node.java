@@ -21,6 +21,7 @@ public class Node {
     private double weight = 0;
 
     boolean grid;
+    private Long acId = 0L;
 
     public Node (NeuralNode nn) {
         this(nn, false, 1);
@@ -60,9 +61,10 @@ public class Node {
         double radius = params.get("radius");
         double weight = params.get("weight");
         x = (int)(radius* Math.cos((Math.PI/2) * Math.pow(angle/(Math.PI/2), 1.)));
-        y = (int)(radius* Math.sin((Math.PI / 2) * Math.pow(angle / (Math.PI / 2),  1.)));
+        y = (int)(radius* Math.sin((Math.PI / 2) * Math.pow(angle / (Math.PI / 2), 1.)));
         this.angle = angle;
         this.weight = weight;
+        this.acId = ac.getId();
     }
 
     /**
@@ -154,5 +156,13 @@ public class Node {
 
     public void setGrid(boolean grid) {
         this.grid = grid;
+    }
+
+    public long getAcId() {
+        return acId;
+    }
+
+    public void setAcId(long acId) {
+        this.acId = acId;
     }
 }
