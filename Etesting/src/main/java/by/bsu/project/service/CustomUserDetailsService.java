@@ -1,6 +1,7 @@
 package by.bsu.project.service;
 
 import by.bsu.project.general.constants.ETestingConstants;
+import by.bsu.project.general.dao.UserInfoRepository;
 import by.bsu.project.general.model.UserInfoEntity;
 import by.bsu.project.model.SpringUser;
 import org.apache.log4j.Logger;
@@ -26,11 +27,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UserInfoRepository userInfoRepository;
 
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         try {
-            UserInfoEntity entity = userInfoService.findStudentByLogin(login);
+            UserInfoEntity entity = userInfoRepository.findOneByLogin(login);
 
             boolean enabled = true;
             boolean accountNonExpired = true;
