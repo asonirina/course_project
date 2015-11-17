@@ -22,6 +22,7 @@ public class Node {
 
     boolean grid;
     private Long acId = 0L;
+    private boolean right = true;
 
     public Node (NeuralNode nn) {
         this(nn, false, 1);
@@ -65,6 +66,7 @@ public class Node {
         this.angle = angle;
         this.weight = weight;
         this.acId = ac.getId();
+        this.right = (ac.getEntity().getCluster()== null) ? true : ac.getEntity().getCluster().equals(ac.getEntity().getUser().getId());
     }
 
     /**
@@ -164,5 +166,13 @@ public class Node {
 
     public void setAcId(long acId) {
         this.acId = acId;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
     }
 }

@@ -15,16 +15,17 @@
 
         var Links = new Array();
         var id = "";
-        ctx.fillStyle = "#0000ff";
+
 
         ctx.textBaseline = "top";
 
 
-        function drawLink(x,y,href){
+        function drawLink(x,y,href, color){
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+
             ctx.beginPath();
             ctx.fillRect(x, y, 6, 6);
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = 'blue';
             ctx.stroke();
 
             canvas.addEventListener("mousemove", on_mousemove, true);
@@ -116,15 +117,16 @@
 
 
         <c:forEach items="${nodes}" var="node" varStatus="status">
-        <c:if test="${node.grid}">
-            ctx.beginPath();
-            ctx.setLineDash([5, 10]);
-            ctx.moveTo(0, 0);
-            ctx.lineTo(${node.x}, ${node.y});
-            ctx.strokeStyle = 'black';
-            ctx.stroke();
-        </c:if>
-        drawLink( ${node.x}, ${node.y} ,${node.acId});
+            <c:if test="${node.grid}">
+                ctx.beginPath();
+                ctx.setLineDash([5, 10]);
+                ctx.moveTo(0, 0);
+                ctx.lineTo(${node.x}, ${node.y});
+                ctx.strokeStyle = 'green';
+                ctx.stroke();
+            </c:if>
+            var color = ${node.right} ? 'black' : 'red';
+            drawLink( ${node.x}, ${node.y} ,${node.acId}, color);
         </c:forEach>
 
     </script>

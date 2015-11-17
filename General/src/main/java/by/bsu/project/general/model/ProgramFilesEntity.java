@@ -23,11 +23,11 @@ public class ProgramFilesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "entity")
 //    @JoinColumn(name = "ac_id")
     private AttributeCounting ac;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "lastProgram")
     private UserTask userTask;
 
     @ManyToOne
