@@ -1,10 +1,11 @@
 package by.bsu.project.service;
 
-import by.bsu.project.dao.UserInfoDAO;
+import by.bsu.project.general.dao.*;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.*;
 import by.bsu.project.paging.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,90 +19,105 @@ import java.util.List;
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
 
+    private final static int PAGE_SIZE = 3;
+
     @Autowired
-    private UserInfoDAO userInfoDAO;
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private UserTaskRepository userTaskRepository;
+
+    @Autowired
+    private AttributeCountingRepository attributeCountingRepository;
+
+    @Autowired
+    private ProgramFileInfoRepository programFileInfoRepository;
 
     @Transactional
     public void save(UserInfoEntity userInfoEntity) {
-        userInfoDAO.save(userInfoEntity);
+        userInfoRepository.save(userInfoEntity);
     }
 
     @Transactional
     public void save(Task task) {
-        userInfoDAO.save(task);
+        taskRepository.save(task);
     }
 
     @Transactional
     public void save(UserTask userTask) {
-        userInfoDAO.save(userTask);
+        userTaskRepository.save(userTask);
     }
 
     @Transactional
     public ProgramFilesEntity getFileById(Long id) {
-        return userInfoDAO.getFileById(id);
+        return programFileInfoRepository.findOne(id);
     }
 
     @Transactional
     public UserInfoEntity getStudentById(Long id) {
-        return userInfoDAO.getStudentById(id);
+        return userInfoRepository.findOne(id);
     }
 
     @Transactional
     public Task getTaskById(Long id) {
-        return userInfoDAO.getTaskById(id);
+        return taskRepository.findOne(id);
     }
 
     @Transactional
     public void deleteStudentById(Long id) {
-        userInfoDAO.deleteStudentById(id);
+        userInfoRepository.delete(id);
     }
 
     @Transactional
     public void deleteTaskById(Long id) {
-        userInfoDAO.deleteTaskById(id);
+        taskRepository.delete(id);
     }
 
     @Transactional
     public List<UserInfoEntity> studentsList(int pageNumber) {
-        return userInfoDAO.studentsList(pageNumber);
+        return userInfoRepository.findByFormNot("admin", new PageRequest(pageNumber, PAGE_SIZE));
     }
 
     @Transactional
     public List<UserInfoEntity> studentsList() {
-        return userInfoDAO.studentsList();
+        return userInfoRepository.findByFormNot("admin");
     }
 
 
     @Transactional
     public List<ProgramFilesEntity> programsList(int pageNumber, Long id) {
-        return userInfoDAO.programsList(pageNumber, id);
+        return programFileInfoRepository.findByUserId(id, new PageRequest(pageNumber, PAGE_SIZE));
     }
 
     @Transactional
     public Long studentsCountList() {
-        return userInfoDAO.studentsCountList();
+        return userInfoRepository.countByFormNot("admin");
     }
 
     @Transactional
     public UserInfoEntity findStudentByLogin(String login) {
-        return userInfoDAO.findStudentByLogin(login);
+        return userInfoRepository.findOneByLogin(login);
     }
 
     @Transactional
     public List<UserInfoEntity> studentListByForm(int pageNumber, String form) {
-        return userInfoDAO.studentListByForm(pageNumber, form);
+        return userInfoRepository.findByForm(form, new PageRequest(pageNumber, PAGE_SIZE));
     }
 
     @Transactional
     public List<UserInfoEntity> studentListByForm(String form) {
-        return userInfoDAO.studentListByForm(form);
+        return userInfoRepository.findByForm(form);
     }
+
     @Transactional
     public List<Task> taskListByForm(int pageNumber, String form) {
         if(form.equals("admin")) {
             form = "11";
         }
-        return userInfoDAO.taskListByForm(pageNumber, form);
+        return taskRepository.findByForm(form, new PageRequest(pageNumber, PAGE_SIZE));
     }
 
     @Transactional
@@ -109,72 +125,72 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (form.equals("admin")) {
             form = "11";
         }
-        return userInfoDAO.taskListByForm(null, form);
+        return taskRepository.findByForm(form);
     }
 
     @Transactional
     public Long studentsByFormCountList(String form) {
-        return userInfoDAO.studentsByFormCountList(form);
+        return userInfoRepository.countByForm(form);
     }
 
     @Transactional
     @Override
     public Long taskCountList(String form) {
-        return userInfoDAO.taskCountList(form);
+        return taskRepository.countByForm(form);
     }
 
     @Transactional
     @Override
     public List<ProgramFilesEntity> getProgramsByName(ProgramFilesEntity entity) {
-        return userInfoDAO.getProgramsByName(entity.getProgramName(), entity.getUser().getId());
+        return programFileInfoRepository.findByProgramNameAndUserIdNot(entity.getProgramName(), entity.getUser().getId());
     }
 
     @Transactional
     @Override
     public List<ProgramFilesEntity> getUploadedProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.UPLOADED_FILE);
+        return programFileInfoRepository.findByRunStatus(ETestingConstants.UPLOADED_FILE);
     }
 
     @Transactional
     @Override
     public List<ProgramFilesEntity> getTestedProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.TESTED_FILE);
+        return programFileInfoRepository.findByRunStatus(ETestingConstants.TESTED_FILE);
     }
 
     @Transactional
     @Override
     public List<ProgramFilesEntity> getReadyProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.READY_FILE);
+        return programFileInfoRepository.findByRunStatus(ETestingConstants.READY_FILE);
     }
 
     @Transactional
     @Override
     public List<ProgramFilesEntity> getCompletedProgramFiles() {
-        return userInfoDAO.getProgramsByRunStatus(ETestingConstants.COMPLETE_FILE);
+        return programFileInfoRepository.findByRunStatus(ETestingConstants.COMPLETE_FILE);
     }
 
     @Transactional
     @Override
     public Task getTask(ProgramFilesEntity entity) {
-        return userInfoDAO.getTask(entity.getUser().getForm(), entity.getProgramName());
+        return taskRepository.findOneByFormAndProgramName(entity.getUser().getForm(), entity.getProgramName());
     }
 
     @Transactional
     @Override
     public UserTask getUserTask(UserInfoEntity user, Task task) {
-        return userInfoDAO.getUserTask(user.getId(), task.getId());
+        return userTaskRepository.findByUserIdAndTaskId(user.getId(), task.getId());
     }
 
     @Transactional
     @Override
     public UserTask getUserTask(Long userId, Long taskId) {
-        return userInfoDAO.getUserTask(userId, taskId);
+        return userTaskRepository.findByUserIdAndTaskId(userId, taskId);
     }
 
     @Transactional
     @Override
     public AttributeCounting getAC(Long acId) {
-        return userInfoDAO.getAC(acId);
+        return attributeCountingRepository.findOne(acId);
     }
 
     public int setPage(Integer page, Paging paging1, Model model) {
@@ -200,7 +216,4 @@ public class UserInfoServiceImpl implements UserInfoService {
         model.addAttribute("paging1", paging1);
     }
 
-    public void setUserInfoDAO(UserInfoDAO userInfoDAO) {
-        this.userInfoDAO = userInfoDAO;
-    }
 }
