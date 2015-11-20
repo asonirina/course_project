@@ -1,11 +1,12 @@
 package by.bsu.project.scheduller;
 
+import by.bsu.project.checker.ProgramsChecker;
+import by.bsu.project.checker.ProgramsCheckerFactory;
 import by.bsu.project.general.constants.ETestingConstants;
 import by.bsu.project.general.model.ProgramFilesEntity;
 import by.bsu.project.general.model.Task;
 import by.bsu.project.general.model.UserTask;
 import by.bsu.project.service.UserInfoService;
-import by.bsu.project.utils.ProgramFilesUtil;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,11 @@ public class TestsRunner {
             List<ProgramFilesEntity> programs = userInfoService.getUploadedProgramFiles();
             for (ProgramFilesEntity programFilesEntity : programs) {
                 Task task = userInfoService.getTask(programFilesEntity);
-                ProgramFilesUtil programFilesUtil = new ProgramFilesUtil(programFilesEntity, task);
-                UserTaskStatus programStatus = programFilesUtil.checkFile() ? UserTaskStatus.PASSED : UserTaskStatus.FAILED;
+                ProgramsChecker checker = ProgramsCheckerFactory.createChecker(programFilesEntity, task);
+                UserTaskStatus programStatus = checker.check() ? UserTaskStatus.PASSED : UserTaskStatus.FAILED;
                 programFilesEntity.setStatus(programStatus.getName());
                 programFilesEntity.setRunStatus(ETestingConstants.TESTED_FILE);
-                programFilesEntity.setTestResults(programFilesUtil.getTestResults());
+                programFilesEntity.setTestResults(checker.getTestResults());
                 for (UserTask userTask : programFilesEntity.getUser().getUserTasks()) {
                     if (userTask.getTask().getId().equals(task.getId())) {
                         userTask.setStatus(programStatus.getId());
@@ -47,7 +48,7 @@ public class TestsRunner {
                 }
                 userInfoService.save(programFilesEntity.getUser());
             }
-        } catch (ConfigurationException | IOException | InterruptedException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package by.bsu.project.utils;
+package by.bsu.project.checker;
 
 
 /**
